@@ -11,11 +11,11 @@
 development:
   adapter: mysql2
   encoding: utf8
-  database: isma_development
+  database: isma
   pool: 5
-  username: root
-  password:
-  host: localhost
+  username: markovnin
+  password: I8Ar|%@9}Ke?
+  host: 10.0.3.118
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
@@ -32,8 +32,8 @@ test:
 production:
   adapter: mysql2
   encoding: utf8
-  database: isma_production
+  database: isma
   pool: 5
-  username: root
-  password:
-  host: localhost
+  username: ror
+  password: ZVrs9FkC
+  host: 10.0.3.226
