@@ -8,7 +8,7 @@ class CreateProfiles < ActiveRecord::Migration
       t.references :degree, index: true
       t.references :academic_title, index: true
       t.string :phone, :default => ""
-      t.text :about, :default => ""
+      t.text :about
 
       t.timestamps
     end

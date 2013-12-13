@@ -4,9 +4,9 @@ class CreateAttachments < ActiveRecord::Migration
       t.references :article, index: true
       t.string :title, :null => false, :default => ""
       t.string :mime_type, :null => false, :default => ""
-      t.binary :data, :null => false, :default => ""
-      t.binary :thumbnail, :null => false, :default => ""
-      t.text :content, :null => false, :default => ""
+      t.binary :data
+      t.binary :thumbnail
+      t.text :content
 
       t.timestamps
     end

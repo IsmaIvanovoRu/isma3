@@ -3,7 +3,7 @@ class CreateArticles < ActiveRecord::Migration
     create_table :articles do |t|
       t.references :user, index: true
       t.string :title, :null => false, :default => ""
-      t.text :content, :null => false, :default => ""
+      t.text :content
       t.date :exp_date
       t.boolean :published, :default => false
       t.boolean :fixed, :default => false
