@@ -1,0 +1,2 @@
+<%= render partial: 'articles/image_attachments', locals: { article: article } if @image_attachments.count > 0 %>
+<%= render partial: 'articles/not_image_attachments', locals: { article: article } if @not_image_attachments.count > 0 %>

@@ -1,0 +1,8 @@
+<li class='pdf-thumb'>
+<%= link_to not_image_attachment do %>
+  <p>
+  <%= image_tag("application-pdf.png", size: '32x32', class: "pull-left") if not_image_attachment.mime_type =~ /pdf/ %>
+  <%= not_image_attachment.title_sen_dot %>
+  </p>
+<% end %>
+</li>

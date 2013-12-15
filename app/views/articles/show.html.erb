@@ -1,0 +1,18 @@
+<article class="panel">
+<%= render partial: 'article', locals: { article: @article } %>
+</article>
+<%  if @editor_permission %>
+<%= form_for(@attachment, :url => attachments_path) do |f| %>
+  <div style="display: none;">
+    <%= text_field_tag :article_id, @article.id %>
+  </div>  
+  <div class="filefild">
+    <%= f.file_field :file %>
+  </div>
+  <div class="actions">
+    <%= f.submit 'Прикрепить файл' %>
+  </div>
+<% end %>
+<% end %>
+<%= link_to 'Edit', edit_article_path(@article) if @moderator_permission %>
+<%= link_to 'Back', articles_path if @moderator_permission %>

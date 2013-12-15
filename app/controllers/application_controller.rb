@@ -8,14 +8,14 @@ class ApplicationController < ActionController::Base
   before_action :set_menus
 
   def require_reader
-    unless current_user_viewer?
+    unless current_user_reader?
       flash[:error] = "You mast have readers`s permissions"
       redirect_to :back
     end
   end
   
   def require_writer
-    unless current_user_editor?
+    unless current_user_writer?
       flash[:error] = "You mast have writer`s permissions"
       redirect_to :back
     end

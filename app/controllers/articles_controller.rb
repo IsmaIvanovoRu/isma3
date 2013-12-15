@@ -86,6 +86,6 @@ class ArticlesController < ApplicationController
     end
     
     def set_moderator_permission
-      @editor_permission = current_user_moderator?
+      @moderator_permission = current_user_moderator?
     end
 end

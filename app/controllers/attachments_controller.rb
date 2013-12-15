@@ -14,6 +14,10 @@ class AttachmentsController < ApplicationController
   def show
       send_data @attachment.data, :filename => @attachment.title, :type => @attachment.mime_type, :disposition => "inline"
   end
+  
+  def inline
+    send_data @attachment.data, :filename => @attachment.title, :type => @attachment.mime_type, :disposition => "inline"
+  end
 
   # POST /attachments
   # POST /attachments.json

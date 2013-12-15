@@ -1,0 +1,26 @@
+<header>
+<% if controller.action_name == 'index' %>
+<p class="timestamp hidden">
+  <% case article.updated_at.to_date %>
+  <% when Time.now.to_date %>
+    <%= time_tag article.updated_at, :pubdate => true, :format => '%R' %>
+  <% else %>
+    <%= time_tag article.updated_at, :pubdate => true, :format => '%e.%m.%Y %R' %>
+  <% end %>
+<h1>
+<%= article.title %>
+</h1>
+<% else %>
+<p class="timestamp hidden">
+  <% case article.updated_at.to_date %>
+  <% when Time.now.to_date %>
+    <%= time_tag article.updated_at, :pubdate => true, :format => '%R' %>
+  <% else %>
+    <%= time_tag article.updated_at, :pubdate => true, :format => '%e.%m.%Y %R' %>
+  <% end %>
+<h1><span id="article_title" data-mercury="simple">
+<%= article.title %></span>
+</h1>  
+<% end %>
+<p>
+</header>

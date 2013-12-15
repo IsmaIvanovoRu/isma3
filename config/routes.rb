@@ -1,5 +1,13 @@
 Isma::Application.routes.draw do
   devise_for :users
+  
+  resources :articles
+
+  resources :attachments
+
+  resources :users
+
+  resources :groups
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
@@ -11,7 +19,9 @@ Isma::Application.routes.draw do
 
   # Example of named route that can be invoked with purchase_url(id: product.id)
   #   get 'products/:id/purchase' => 'catalog#purchase', as: :purchase
-
+  get 'attachments/:id/minify_img' => 'attachments#minify_img', :as => :minify_img
+  get 'attachments/:id/inline' => 'attachments#inline', :as => :inline
+  
   # Example resource route (maps HTTP verbs to controller actions automatically):
   #   resources :products
 
