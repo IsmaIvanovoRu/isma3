@@ -2,6 +2,7 @@ class ArticlesController < ApplicationController
   skip_before_filter :authenticate_user!, only: [:index, :show]
   before_action :require_writer, only: [:edit, :update, :create, :destroy]
   before_action :set_moderator_permission, only: [:index, :show]
+  before_action :set_writer_permission, only: [:show]
   before_action :set_article, only: [:show, :edit, :update, :mercury_update, :destroy]
   before_action :set_article_types, only: [:new, :edit]
 
@@ -23,6 +24,8 @@ class ArticlesController < ApplicationController
   # GET /articles/new
   def new
     @article = Article.new
+    @divisions = current_user.divisions unless current_user
+    @groups = current_user.groups.uniq + current_user.groups.map {|g| g.parent}.select {|g| !g.nil?}.uniq
   end
 
   # GET /articles/1/edit
@@ -96,5 +99,8 @@ class ArticlesController < ApplicationController
     
     def set_moderator_permission
       @moderator_permission = current_user_moderator?
+    end
+    def set_writer_permission
+      @writer_permission = current_user_writer?
     end
 end

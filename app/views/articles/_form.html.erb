@@ -10,7 +10,16 @@
       </ul>
     </div>
   <% end %>
-
+  <% unless @divisions.nil? %>
+  <div class="field">
+    <%= f.label 'division_id' %>
+    <%= f.select :division_id, options_for_select= @divisions.collect {|p| [t(p.name, :scope => [:divisions]), p.id] }, {:include_blank => ''} %>
+  </div>
+  <% end %>
+  <div class="field">
+    <%= f.label 'group_id' %>
+    <%= f.select :group_id, options_for_select= @groups.collect {|p| [t(p.name, :scope => [:groups]), p.id] }, {:include_blank => ''} %>
+  </div>
   <div class="field">
     <%= f.label :article_type_id %><br>
     <%= f.select :article_type_id, options_for_select= @article_types.collect {|p| [t(p.name, :scope => [:article_types]), p.id] }, {:include_blank => ''} %>

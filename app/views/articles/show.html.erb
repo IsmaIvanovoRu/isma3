@@ -1,7 +1,7 @@
 <article class="panel">
 <%= render partial: 'article', locals: { article: @article } %>
 </article>
-<%  if @editor_permission %>
+<%  if @writer_permission %>
 <%= form_for(@attachment, :url => attachments_path) do |f| %>
   <div style="display: none;">
     <%= text_field_tag :article_id, @article.id %>
