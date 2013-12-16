@@ -14,5 +14,5 @@
   </div>
 <% end %>
 <% end %>
-<%= link_to 'Edit', edit_article_path(@article) if @moderator_permission %>
+<%= link_to 'Edit', "/editor" + request.path if @moderator_permission %>
 <%= link_to 'Back', articles_path if @moderator_permission %>

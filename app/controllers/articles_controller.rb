@@ -2,7 +2,7 @@ class ArticlesController < ApplicationController
   skip_before_filter :authenticate_user!, only: [:index, :show]
   before_action :require_writer, only: [:edit, :update, :create, :destroy]
   before_action :set_moderator_permission, only: [:index, :show]
-  before_action :set_article, only: [:show, :edit, :update, :destroy]
+  before_action :set_article, only: [:show, :edit, :update, :mercury_update, :destroy]
   before_action :set_article_types, only: [:new, :edit]
 
   # GET /articles
@@ -34,10 +34,12 @@ class ArticlesController < ApplicationController
   def create
     @article = Article.new(article_params)
     @article.user_id = current_user.id
-
+    @article.title = ""
+    @article.content = ""
     respond_to do |format|
       if @article.save
-        format.html { redirect_to @article, notice: 'Article was successfully created.' }
+	redirect_path = '/editor' + article_path(@article)
+        format.html { redirect_to redirect_path, notice: 'Article was successfully created.' }
         format.json { render action: 'show', status: :created, location: @article }
       else
         format.html { render action: 'new' }
@@ -59,7 +61,14 @@ class ArticlesController < ApplicationController
       end
     end
   end
-
+   
+  def mercury_update
+    @article.title = params[:content][:article_title][:value]
+    @article.content = params[:content][:article_content][:value]
+    @article.save!
+    render text: ""
+  end
+    
   # DELETE /articles/1
   # DELETE /articles/1.json
   def destroy

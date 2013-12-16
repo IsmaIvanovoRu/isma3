@@ -56,3 +56,5 @@ gem 'redcarpet'
 gem 'thinking-sphinx'
 
 gem 'devise'
+
+gem 'mercury-rails', git: 'https://github.com/jejacks0n/mercury.git'

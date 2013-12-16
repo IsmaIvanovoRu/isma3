@@ -20,5 +20,8 @@
       </div>
     </div>
     <%= javascript_include_tag "application" %>
+    <script>
+      jQuery(window).on('mercury:ready', function() { Mercury.saveUrl = '/articles/' + <%= @article.id %> +"/mercury_update"; });
+    </script>
   </body>
 </html>

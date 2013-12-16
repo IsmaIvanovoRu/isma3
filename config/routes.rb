@@ -1,7 +1,10 @@
 Isma::Application.routes.draw do
+  mount Mercury::Engine => '/'
   devise_for :users
   
-  resources :articles
+  resources :articles do
+    member {put :mercury_update}
+  end
 
   resources :attachments
 

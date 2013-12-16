@@ -12,14 +12,6 @@
   <% end %>
 
   <div class="field">
-    <%= f.label :title %><br>
-    <%= f.text_area :title %>
-  </div>
-  <div class="field">
-    <%= f.label :content %><br>
-    <%= f.text_area :content %>
-  </div>
-  <div class="field">
     <%= f.label :article_type_id %><br>
     <%= f.select :article_type_id, options_for_select= @article_types.collect {|p| [t(p.name, :scope => [:article_types]), p.id] }, {:include_blank => ''} %>
   </div>

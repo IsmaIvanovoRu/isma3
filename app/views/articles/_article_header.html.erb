@@ -7,6 +7,7 @@
   <% else %>
     <%= time_tag article.updated_at, :pubdate => true, :format => '%e.%m.%Y %R' %>
   <% end %>
+</p>
 <h1>
 <%= article.title %>
 </h1>
@@ -18,9 +19,9 @@
   <% else %>
     <%= time_tag article.updated_at, :pubdate => true, :format => '%e.%m.%Y %R' %>
   <% end %>
-<h1><span id="article_title" data-mercury="simple">
-<%= article.title %></span>
+</p>
+<h1 id="article_title" data-mercury="simple">
+<%= article.title %>
 </h1>  
 <% end %>
-<p>
 </header>
