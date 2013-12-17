@@ -90,6 +90,7 @@
 	</div>
       </div>
     </footer>
+    <%= javascript_include_tag "http://api-maps.yandex.ru/2.0-stable/?load=package.standard&lang=ru-RU" %>
     <%= javascript_include_tag "application" %>
     <% if controller_name == 'articles' && action_name == 'show' %>
     <script>
