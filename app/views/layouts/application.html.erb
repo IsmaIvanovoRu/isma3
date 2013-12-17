@@ -39,6 +39,7 @@
 	<!-- Left Nav Section -->
 	<ul class="left">
 	  <li><%= link_to 'Статьи', articles_path %></li>
+	  <li><%= link_to 'Группы', groups_path %></li>
 	</ul>
       </section>
     </nav>
@@ -60,7 +61,7 @@
       </div>
     </div>
     <%= javascript_include_tag "application" %>
-    <% if controller_name == 'articles' %>
+    <% if controller_name == 'articles' && action_name == 'show' %>
     <script>
       jQuery(window).on('mercury:ready', function() { Mercury.saveUrl = '/articles/' + <%= @article.id %> +"/mercury_update"; });
     </script>
