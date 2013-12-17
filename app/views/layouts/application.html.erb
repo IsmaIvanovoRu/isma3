@@ -12,10 +12,50 @@
   </head>
 
   <body>
+    <nav class="top-bar" data-topbar>
+      <ul class="title-area">
+	<li class="name">
+	  <h1><a href="#">ИвГМА</a></h1>
+	</li>
+	<li class="toggle-topbar menu-icon"><a href="#"><span>Menu</span></a></li>
+      </ul>
+
+      <section class="top-bar-section">
+	<!-- Right Nav Section -->
+	<ul class="right">
+	  <li class="has-form">
+	    <div class="row collapse">
+	      <div class="large-8 small-9 columns">
+		<input type="text" placeholder="Find Stuff">
+	      </div>
+	      <div class="large-4 small-3 columns">
+		<a href="#" class="alert button expand">Search</a>
+	      </div>
+	    </div>
+	  </li>
+	  <li><a href="#">Right Nav Button Active</a></li>
+	</ul>
+
+	<!-- Left Nav Section -->
+	<ul class="left">
+	  <li><%= link_to 'Статьи', articles_path %></li>
+	</ul>
+      </section>
+    </nav>
     <div class="row">
-      <div class="small-12 large-12 columns">
+    <div class="small-2 large-2 columns">
+    <ul class="side-nav">
+      <li class="active"><a href="#">Link 1</a></li>
+      <li><a href="#">Link 2</a></li>
+      <li class="divider"></li>
+      <li><a href="#">Link 3</a></li>
+      <li><a href="#">Link 4</a></li>
+    </ul>
+    </div>
+      <div class="small-10 large-10 columns">
 	<p class="notice"><%= notice %></p>
 	<p class="alert"><%= alert %></p>
+	<h1>Заголовок</h1>
 	<%= yield %>
       </div>
     </div>
