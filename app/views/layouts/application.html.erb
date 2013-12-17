@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <title><%= content_for?(:title) ? yield(:title) : "foundation-rails" %></title>
+    <title><%= content_for?(:title) ? yield(:title) : "ISMA" %></title>
 
     <%= stylesheet_link_tag    "application" %>
     <%= javascript_include_tag "vendor/modernizr" %>
@@ -20,8 +20,10 @@
       </div>
     </div>
     <%= javascript_include_tag "application" %>
+    <% if controller_name == 'articles' %>
     <script>
       jQuery(window).on('mercury:ready', function() { Mercury.saveUrl = '/articles/' + <%= @article.id %> +"/mercury_update"; });
     </script>
+    <% end %>
   </body>
 </html>
