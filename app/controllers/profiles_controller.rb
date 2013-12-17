@@ -1,7 +1,9 @@
 class ProfilesController < UsersController
   skip_before_filter :authenticate_user!, only: [:show]
+  before_action :set_user, only: [:show, :edit, :update, :destroy, :new, :create]
   before_action :set_profile, only: [:show, :edit, :update, :destroy]
-  before_action :set_user, only: [:show, :edit, :update, :destroy]
+  before_action :set_degrees, only: [:new, :edit]
+  before_action :set_academic_titles, only: [:new, :edit]
   def index
     @profiles = Profile.all
   end
@@ -14,10 +16,11 @@ class ProfilesController < UsersController
   end
   
   def create
-    @profile = @profiles.new(profile_params)
+    @profile = Profile.new(profile_params)
+    @profile.user_id = params[:user_id]
     respond_to do |format|
       if @profile.save
-        format.html { redirect_to :back, notice: 'Profile was successfully created.' }
+        format.html { redirect_to user_profile_path(@profile), notice: 'Profile was successfully created.' }
       else
         format.html { render action: "new" }
       end
@@ -42,19 +45,28 @@ class ProfilesController < UsersController
   end
   
   private
-  def set_profile
-    @profile = Profile.find(params[:id])
+  def set_user
+    @user = User.find(params[:user_id])
   end
   
-  def set_user
-    @user = @profile.user
+  def set_profile
+    @profile = @user.profile
   end
+  
   
   def profile_params
-    params.require(:article).permit(:id, :user_id, :first_name, :middle_name, :last_name, :degree_id, :academic_title_id, :email, :phone, :avatar)
+    params.require(:profile).permit(:id, :user_id, :first_name, :middle_name, :last_name, :degree_id, :academic_title_id, :phone, :about)
   end
   
   def current_user_owner?
     current_user.id == @profile.user_id unless current_user.nil?
+  end
+  
+  def set_degrees
+    @degrees = Degree.all
+  end
+  
+  def set_academic_titles
+    @academic_titles = AcademicTitle.all
   end
 end

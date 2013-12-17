@@ -1,0 +1,6 @@
+<dt>Ф.И.О.</dt>
+<dd><%= @profile.full_name %></dd>
+<dt>Ученая степень</dt>
+<dd><%= @profile.degree ? @profile.degree.name : 'нет'%></dd>
+<dt>Ученое звание</dt>
+<dd><%= @profile.academic_title ? @profile.academic_title.name : 'нет' %></dd>

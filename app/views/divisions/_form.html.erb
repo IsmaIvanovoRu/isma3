@@ -1,0 +1,37 @@
+<%= form_for(@division) do |f| %>
+  <% if @division.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@division.errors.count, "error") %> prohibited this division from being saved:</h2>
+
+      <ul>
+      <% @division.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :name %><br />
+    <%= f.text_field :name %>
+  </div>
+  <div class="field">
+    <%= f.label 'division_type_id', 'Тип подразделения' %>
+    <%= f.select :division_type_id, options_for_select= @division_types.collect {|p| [t(p.name, :scope => [:division_types]), p.id] }, {:include_blank => ''} %>
+  </div>
+  <div class="field">
+    <%= f.label 'Адрес' %><br />
+    <%= f.text_field :address %>
+  </div>
+  <div class="field">
+    <%= f.label 'Широта' %><br />
+    <%= f.text_field :latitude %>
+  </div>
+  <div class="field">
+    <%= f.label 'Долгота' %><br />
+    <%= f.text_field :longitude %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

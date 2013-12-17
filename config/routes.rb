@@ -1,6 +1,12 @@
 Isma::Application.routes.draw do
+  get "users/index"
+  get "users/show"
   mount Mercury::Engine => '/'
   devise_for :users
+  
+  resources :users do 
+    resource :profile
+  end
   
   resources :articles do
     member {put :mercury_update}
@@ -11,6 +17,8 @@ Isma::Application.routes.draw do
   resources :users
 
   resources :groups
+  
+  resources :divisions
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

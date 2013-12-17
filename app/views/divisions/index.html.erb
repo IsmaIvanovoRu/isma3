@@ -1,0 +1,23 @@
+<h1>Перечень подразделений</h1>
+<%= link_to 'Новое подразделение', new_division_path %>
+<table>
+  <tr>
+    <th>Название</th>
+    <th>Адрес</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @divisions.each do |division| %>
+  <tr>
+    <td><%= link_to division.name, division %></td>
+    <td><%= division.address %></td>
+    <td><%= link_to 'Show', division %></td>
+    <td><%= link_to 'Edit', edit_division_path(division) %></td>
+    <td><%= link_to 'Destroy', division, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+  </tr>
+<% end %>
+</table>
+
+
