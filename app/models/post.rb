@@ -6,4 +6,8 @@ class Post < ActiveRecord::Base
   
   validates :name, :user_id, :division_id, :presence => true
   validates :name, :length => { :maximum => 255 }
+  
+  def is_head?
+    parent.nil? || (parent.nil? ? false : parent.division != division)
+  end
 end

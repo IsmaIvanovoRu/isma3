@@ -1,8 +1,7 @@
 class Division < ActiveRecord::Base
   belongs_to :division_type
   has_many :posts
-  has_many :profiles, :through => :posts
-  has_many :users, :through => :profiles
+  has_many :users, :through => :posts
     
   validates :name, :presence => true, 
             :length => { :maximum => 255 }

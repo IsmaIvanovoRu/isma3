@@ -5,7 +5,9 @@ Isma::Application.routes.draw do
   devise_for :users
   
   resources :users do 
-    resource :profile
+    resource :profile do
+      resources :attachments
+    end
   end
   
   resources :articles do
