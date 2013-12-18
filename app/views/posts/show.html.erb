@@ -1,0 +1,28 @@
+<p>
+  <b>Name:</b>
+  <%= @post.name %>
+</p>
+
+<p>
+  <b>Post type:</b>
+  <%= @post.post_type.name %>
+</p>
+
+<p>
+  <b>Division:</b>
+  <%= @post.division.name %>
+</p>
+
+<p>
+  <b>Parent:</b>
+  <%= @post.parent.name if @post.parent%>
+</p>
+
+<p>
+  <b>User:</b>
+  <%= "#{@post.user.profile.full_name}" %>
+</p>
+
+
+<%= link_to 'Edit', edit_division_post_path(@division, @post) %> |
+<%= link_to 'Back', division_posts_path(@division) %>

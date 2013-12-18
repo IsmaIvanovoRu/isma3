@@ -5,6 +5,7 @@
 #
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
-DivisionType.create(name: 'managment')
-DivisionType.create(name: 'education')
-DivisionType.create(name: 'science')
+PostType.create(name: 'managment')
+PostType.create(name: 'education')
+PostType.create(name: 'science')
+PostType.create(name: 'support')

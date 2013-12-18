@@ -1,0 +1,33 @@
+<%= form_for @post, url: controller.action_name == 'edit' ? division_post_path(@division, @post) : division_posts_path(@division) do |f| %>
+  <% if @post.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@post.errors.count, "error") %> prohibited this post from being saved:</h2>
+
+      <ul>
+      <% @post.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :name %><br />
+    <%= f.text_field :name %>
+  </div>
+  <div class="field">
+    <%= f.label :post_type_id %><br />
+    <%= f.select :post_type_id, options_for_select= @post_types.collect {|p| [t(p.name, :scope => [:post_types]), p.id] }, {:include_blank => ''} %>
+  </div>
+  <div class="field">
+    <%= f.label :parent_id %><br />
+    <%= f.select :parent_id, options_for_select= @posts.collect {|p| [t(p.name, :scope => [:posts]), p.id] }, {:include_blank => ''} %>
+  </div>
+  <div class="field">
+    <%= f.label :user_id %><br />
+    <%= f.select :user_id, options_for_select= @users.collect {|p| [p.profile.full_name, p.id] }, {:include_blank => ''} %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>
