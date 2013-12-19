@@ -9,6 +9,7 @@ class ProfilesController < UsersController
   end
   
   def show
+    @last_image_attachment = @profile.attachments.last
   end
   
   def new
@@ -29,7 +30,15 @@ class ProfilesController < UsersController
   
   def update
     if @profile.update(profile_params)
-      redirect_to @profile, notice: 'Profile was successfully updated.'
+      if params[:attachment]
+	@attachment = @profile.attachments.new
+	@attachment.uploaded_file = params[:attachment]
+	@attachment.thumbnail = thumb(@attachment.data, 0.25) if @attachment.mime_type =~ /image/
+	if @attachment.save
+	  @profile.attachments << @attachment
+	end
+      end
+      redirect_to user_profile_path(@profile), notice: 'Profile was successfully updated.'
     else
       render action: 'edit'
     end
@@ -53,7 +62,6 @@ class ProfilesController < UsersController
     @profile = @user.profile
   end
   
-  
   def profile_params
     params.require(:profile).permit(:id, :user_id, :first_name, :middle_name, :last_name, :degree_id, :academic_title_id, :phone, :about)
   end
@@ -68,5 +76,10 @@ class ProfilesController < UsersController
   
   def set_academic_titles
     @academic_titles = AcademicTitle.all
+  end
+  
+  def thumb(image, size)
+    img = Magick::Image.from_blob(image).first
+    img.scale!(size).to_blob
   end
 end

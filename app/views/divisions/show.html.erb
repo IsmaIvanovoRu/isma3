@@ -6,7 +6,7 @@
     <dl>
     <dt>Руководитель
     </dt>
-    <dd><%= link_to @head.first.user.profile.full_name, user_profile_path(@head.first.user.profile) %>
+    <dd><%= link_to @head.first.user.profile.full_name, user_profile_path(@head.first.user.profile) if @head.first %>
     </dd>
     </dl>
     <% if @posts.count > 1 %>

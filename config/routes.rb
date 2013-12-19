@@ -12,9 +12,9 @@ Isma::Application.routes.draw do
   
   resources :articles do
     member {put :mercury_update}
+    resources :attachments
   end
 
-  resources :attachments
 
   resources :users
 

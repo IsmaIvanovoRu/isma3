@@ -8,7 +8,7 @@ class Attachment < ActiveRecord::Base
       self.mime_type = incoming_file[:file].content_type
       if incoming_file[:file].content_type =~ /image/
 	img = Magick::Image.read(incoming_file[:file].tempfile.path).first
-	img.scale!(img.columns > img.rows ? 1024 / img.columns.to_f : 1024 / img.rows.to_f)
+	img.scale!(img.columns > img.rows ? 1024 / img.columns.to_f : 1024 / img.rows.to_f) if img.rows > 1024 || img.columns > 1024
 	img.write(incoming_file[:file].tempfile.path)
       end
       self.data = incoming_file[:file].read

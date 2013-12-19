@@ -9,7 +9,7 @@ class DivisionsController < ApplicationController
   end
   
   def show
-    @articles = current_user.articles
+    @articles = @division.articles
     @posts = @division.posts
     @head = @posts.select{|e| e if e.is_head?}
     @employees = @posts - @head

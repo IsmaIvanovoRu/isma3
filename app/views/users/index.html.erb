@@ -1,4 +1,4 @@
 <h1>Список пользователей</h1>
 <% @users.each do |user| %>
-<p><%= user.email %>
+<p><%= link_to user.profile.full_name, user_profile_path(user) if user.profile %>
 <% end %>
