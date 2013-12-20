@@ -6,8 +6,13 @@ class Profile < ActiveRecord::Base
   
   validates :first_name, :last_name, :presence => true, 
             :length => { :maximum => 50 }
+  
   def full_name
-  [first_name, middle_name, last_name].compact.join(' ')
+  [last_name, first_name, middle_name].compact.join(' ')
+  end
+  
+  def full_name_reg
+  "#{[last_name, first_name, middle_name].compact.join(' ')} - #{[(degree.short_name if degree), (academic_title.name if academic_title)].compact.join(', ')}"
   end
   
 end

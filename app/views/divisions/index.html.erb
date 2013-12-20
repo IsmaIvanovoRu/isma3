@@ -11,7 +11,7 @@
 
 <% @divisions.each do |division| %>
   <tr>
-    <td><%= link_to division.name, division %></td>
+    <td><%= link_to division.name, division, class: (division.posts.count > 0 ? "label" : "label secondary") %></td>
     <td><%= division.address %></td>
     <td><%= link_to 'Show', division %></td>
     <td><%= link_to 'Edit', edit_division_path(division) %></td>

@@ -4,6 +4,9 @@ body {
   background-repeat: no-repeat;
   background-size: 100% auto;
 }
+#container {
+  margin-top: 45px;
+}
 article {
   font-size : 0.9em;
   line-height : normal;

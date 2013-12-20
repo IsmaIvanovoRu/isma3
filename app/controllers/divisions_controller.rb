@@ -13,6 +13,7 @@ class DivisionsController < ApplicationController
     @posts = @division.posts
     @head = @posts.select{|e| e if e.is_head?}
     @employees = @posts - @head
+    @childs = Post.where(parent_id: @head.first.id).where.not(division_id: @head.first.division_id) unless @head.empty?
   end
   
   def new

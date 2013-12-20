@@ -3,10 +3,11 @@
     <header>
       <h1><%= @division.name %></h1>
     </header>
+    <%= link_to 'Добавить должность', new_division_post_path(@division), class: "button small" %>
     <dl>
     <dt>Руководитель
     </dt>
-    <dd><%= link_to @head.first.user.profile.full_name, user_profile_path(@head.first.user.profile) if @head.first %>
+    <dd><%= link_to @head.first.user.profile.full_name_reg, user_profile_path(@head.first.user.profile) if @head.first %>
     </dd>
     </dl>
     <% if @posts.count > 1 %>
@@ -18,13 +19,27 @@
       <% @employees.each do |employee| %>
 	<dt><%= employee.name %>
 	</dt>
-	<dd><%= link_to employee.user.profile.full_name, user_profile_path(employee.user.profile) %>
+	<dd><%= link_to employee.user.profile.full_name_reg, user_profile_path(employee.user.profile) %>
 	</dd>
       <% end %>
       </dl>
     </div>
   </dd>
   </dl>
+  <% end %>
+  <% if @childs && @childs.count > 0 %>
+    <dl class="accordion" data-accordion>
+      <dd>
+	<a href="#childs">Подразделения</a>
+	<div id="childs" class="content">
+	  <ul>
+	  <% @childs.each do |child| %>
+	    <li><%= link_to child.division.name, child.division %>
+	  <% end %>
+	  </ul>
+	</div>
+      </dd>
+    </dl>
   <% end %>
     <%= render partial: 'articles/island', collection: @articles %>
   </div>

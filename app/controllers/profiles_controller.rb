@@ -33,7 +33,7 @@ class ProfilesController < UsersController
       if params[:attachment]
 	@attachment = @profile.attachments.new
 	@attachment.uploaded_file = params[:attachment]
-	@attachment.thumbnail = thumb(@attachment.data, 0.25) if @attachment.mime_type =~ /image/
+	@attachment.thumbnail = thumb(@attachment.data, 150) if @attachment.mime_type =~ /image/
 	if @attachment.save
 	  @profile.attachments << @attachment
 	end
@@ -80,6 +80,6 @@ class ProfilesController < UsersController
   
   def thumb(image, size)
     img = Magick::Image.from_blob(image).first
-    img.scale!(size).to_blob
+    img.resize_to_fill!(size).to_blob
   end
 end

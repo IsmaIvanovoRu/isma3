@@ -9,7 +9,7 @@ class PostsController < DivisionsController
   before_action :current_user_administrator?, only: [:new, :create, :edit, :destroy]
   
   def index
-    @posts = Post.order(:name).all
+    @posts = @division.posts.order(:name).all
   end
   
   def show
