@@ -18,4 +18,15 @@
 </ul>
 </dd>
 <% end %>
+<% if @profile.user.groups.count > 0 %>
+<dt>Членство в группах</dt>
+<dd>
+<ul>
+<% @profile.user.groups.each do |group| %>
+  <li>
+    <%= group.name %>
+<% end %>
+</ul>
+</dd>
+<% end %>
 </dl>
