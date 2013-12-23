@@ -6,6 +6,8 @@ class ApplicationController < ActionController::Base
   before_action :current_user
   before_action :set_menu_and_path
   before_action :set_menus
+  before_action :profile_empty?
+  before_action :set_alert
 
   def require_reader
     unless current_user_reader?
@@ -63,5 +65,19 @@ class ApplicationController < ActionController::Base
       @menus = Menu.order(:weigth).where(private: false)
     end
   end
+  
+  def profile_empty?
+    current_user.profile.full_name == ""
+  end
+  
+  def set_alert
+    case
+      when profile_empty?
+	flash[:alert] = "Your profile is empty"
+      else 
+	flash[:alert]=  ""
+    end
+  end
+  
 end
 

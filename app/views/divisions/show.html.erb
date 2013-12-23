@@ -5,9 +5,9 @@
     </header>
     <%= link_to 'Добавить должность', new_division_post_path(@division), class: "button small" %>
     <dl>
-    <dt>Руководитель
+    <dt><%= @head.first.name if @head.first %>
     </dt>
-    <dd><%= link_to @head.first.user.profile.full_name_reg, user_profile_path(@head.first.user.profile) if @head.first %>
+    <dd><%= link_to @head.first.user.profile.full_name_reg, user_profile_path(@head.first.user) if @head.first.user %>
     </dd>
     </dl>
     <% if @posts.count > 1 %>
@@ -17,9 +17,9 @@
     <div id="employees" class="content">
       <dl>
       <% @employees.each do |employee| %>
-	<dt><%= employee.name %>
+	<dt><%= link_to employee.name, division_post_path(@division, employee) %>
 	</dt>
-	<dd><%= link_to employee.user.profile.full_name_reg, user_profile_path(employee.user.profile) %>
+	<dd><%= link_to employee.user.profile.full_name_reg, user_profile_path(employee.user) %>
 	</dd>
       <% end %>
       </dl>

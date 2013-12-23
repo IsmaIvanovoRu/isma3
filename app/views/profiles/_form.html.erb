@@ -1,4 +1,4 @@
-<%= form_for @profile, url: user_profile_path(@user, @profile), :html => {:multipart => true} do |f| %>
+<%= form_for @profile, url: user_profile_path(@user), :html => {:multipart => true} do |f| %>
   <% if @user.errors.any? %>
     <div id="error_explanation">
       <h2><%= pluralize(@user.errors.count, "error") %> prohibited this user from being saved:</h2>
@@ -28,8 +28,8 @@
     <%= f.select :degree_id, options_for_select= @degrees.collect {|p| [t(p.name, :scope => [:degrees]), p.id] }, {:include_blank => ''} %>
   </div>
   <div class="field">
-    <%= f.label :academic_title, 'Ученое звание' %><br>
-    <%= f.select :academic_title, options_for_select= @academic_titles.collect {|p| [t(p.name, :scope => [:academic_titles]), p.id] }, {:include_blank => ''} %>
+    <%= f.label :academic_title_id, 'Ученое звание' %><br>
+    <%= f.select :academic_title_id, options_for_select= @academic_titles.collect {|p| [t(p.name, :scope => [:academic_titles]), p.id] }, {:include_blank => ''} %>
   </div>
   <div class="field">
     <%= f.label :phone, 'Телефон' %><br />
@@ -39,6 +39,10 @@
     <%= f.label :about, 'О себе' %><br />
     <%= f.text_area :about %>
   </div>
+  <div class='field'>
+    <%= label_tag :entrant %>
+    <%= check_box_tag :entrant %>
+  </div> 
   <%= fields_for @profile.attachments.new, url: user_profile_attachments_path(@user, @profile) do |a| %>
   <div class="filefild">
     <%= a.file_field :file %>

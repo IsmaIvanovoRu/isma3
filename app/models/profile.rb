@@ -4,8 +4,7 @@ class Profile < ActiveRecord::Base
   belongs_to :academic_title
   has_and_belongs_to_many :attachments
   
-  validates :first_name, :last_name, :presence => true, 
-            :length => { :maximum => 50 }
+  validates :first_name, :last_name, :middle_name, :length => { :maximum => 50 }
   
   def full_name
   [last_name, first_name, middle_name].compact.join(' ')

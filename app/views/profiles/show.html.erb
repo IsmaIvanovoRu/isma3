@@ -7,4 +7,15 @@
 <dd><%= @profile.academic_title ? @profile.academic_title.name : 'нет' %></dd>
 <dt>О себе</dt>
 <dd><%= @profile.about %></dd>
+<% if @posts.count > 0 %>
+<dt>Занимаемые должности</dt>
+<dd>
+<ul>
+<% @posts.each do |post| %>
+  <li>
+    <%= link_to "#{post.division.name} - #{post.name}", division_post_path(post.division, post) %>
+<% end %>
+</ul>
+</dd>
+<% end %>
 </dl>

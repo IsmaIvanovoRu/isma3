@@ -1,4 +1,11 @@
 <h1>Список пользователей</h1>
-<% @users.each do |user| %>
-<p><%= link_to user.profile.full_name, user_profile_path(user) if user.profile %>
-<% end %>
+<dl>
+  <% @users.each do |user| %>
+    <dt>
+    <%= user.email %>
+    </dt>
+    <dd>
+    <%= user.profile.last_name.empty? ? (link_to 'Профиль не заполнен', edit_user_profile_path(user)) : (link_to user.profile.full_name, user_profile_path(user)) %>
+    </dd>
+  <% end %>
+<dl>

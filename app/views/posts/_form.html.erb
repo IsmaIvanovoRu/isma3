@@ -21,7 +21,7 @@
   </div>
   <div class="field">
     <%= f.label :parent_id %><br />
-    <%= f.select :parent_id, options_for_select= @posts.collect {|p| [t(p.name, :scope => [:posts]), p.id] }, {:include_blank => ''} %>
+    <%= f.select :parent_id, options_for_select= @posts.collect {|p| ["#{p.name} (#{p.division.name})", p.id] }, {:include_blank => ''} %>
   </div>
   <div class="field">
     <%= f.label :user_id %><br />
