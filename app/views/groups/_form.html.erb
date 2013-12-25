@@ -6,21 +6,33 @@
     </div>
   </div>
   <div class="control-group">
+    <%= f.label 'parent_id', :class => 'control-label'  %>
+        <div class="controls">
+    <%= f.select :parent_id, options_for_select= @groups.collect {|p| [t(p.name, :scope => [:groups]), p.id] }, {:include_blank => ''} %>
+    </div>
+    </div>
+  <div class="control-group">
     <%= f.label :administrator, :class => 'control-label' %>
     <div class="controls">
       <%= f.check_box :administrator, :class => 'check_box_field' %>
     </div>
   </div>
   <div class="control-group">
-    <%= f.label :editor, :class => 'control-label' %>
+    <%= f.label :moderator, :class => 'control-label' %>
     <div class="controls">
-      <%= f.check_box :editor, :class => 'check_box_field' %>
+      <%= f.check_box :moderator, :class => 'check_box_field' %>
+    </div>
+  </div>
+    <div class="control-group">
+    <%= f.label :writer, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.check_box :writer, :class => 'check_box_field' %>
     </div>
   </div>
   <div class="control-group">
-    <%= f.label :viewer, :class => 'control-label' %>
+    <%= f.label :reader, :class => 'control-label' %>
     <div class="controls">
-      <%= f.check_box :viewer, :class => 'check_box_field' %>
+      <%= f.check_box :reader, :class => 'check_box_field' %>
     </div>
   </div>
 
