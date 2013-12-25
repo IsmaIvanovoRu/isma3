@@ -1,6 +1,5 @@
-<%= link_to island do %>
-<article class="panel island">
+<article>
 <%= image_tag(minify_img_path(island.first_image_attachment), size: '96x96', class: 'left') if island.first_image_attachment %>
 <%= render partial: '/articles/article_header', locals: { article: island } %>
+<%= render partial: '/articles/article_content', locals: { article: island } %>
 </article>
-<% end %>

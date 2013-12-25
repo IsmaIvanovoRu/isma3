@@ -1,6 +1,6 @@
 <header>
 <% if controller.action_name == 'index' %>
-<p class="timestamp hidden">
+<p class="timestamp">
   <% case article.updated_at.to_date %>
   <% when Time.now.to_date %>
     <%= time_tag article.updated_at, :pubdate => true, :format => '%R' %>
@@ -12,7 +12,7 @@
 <%= article.title %>
 </h1>
 <% else %>
-<p class="timestamp hidden">
+<p class="timestamp">
   <% case article.updated_at.to_date %>
   <% when Time.now.to_date %>
     <%= time_tag article.updated_at, :pubdate => true, :format => '%R' %>

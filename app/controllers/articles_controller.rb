@@ -9,7 +9,14 @@ class ArticlesController < ApplicationController
   # GET /articles
   # GET /articles.json
   def index
-    @articles = ArticleType.where(name: 'articles').first.articles.limit(5)
+    if current_user.nil?
+      @articles = Article.order('updated_at DESC').includes(:article_type).where(published: true, group_id: nil).where("exp_date >= ? or exp_date IS ?", Time.now.to_date, nil).group_by{|a| a.article_type.name}     
+    else
+      @last_news_articles = Article.order("updated_at DESC").where("article_type_id = ? and (exp_date >= ? or exp_date IS ?) and published = ?", 2, Time.now.to_date, nil, true).where(group_id: current_user.groups + current_user.groups.map {|g| g.parent}.select {|g| !g.nil?}.uniq  + [nil]).limit(5)
+      @anounces_articles = Article.order("updated_at DESC").where("article_type_id = ? and exp_date >= ? and published = ?", 3, Time.now.to_date, true).where(group_id: current_user.groups + current_user.groups.map {|g| g.parent}.select {|g| !g.nil?}.uniq  + [nil]).limit(5)
+      @articles = Article.order("updated_at DESC").where("article_type_id = ? and (exp_date >= ? or exp_date IS ?) and published = ?", 1, Time.now.to_date, nil, true).where(group_id: current_user.groups + current_user.groups.map {|g| g.parent}.select {|g| !g.nil?}.uniq  + [nil]).limit(10)
+      @personal_articles
+    end
   end
 
   # GET /articles/1

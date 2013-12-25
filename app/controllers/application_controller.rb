@@ -67,7 +67,7 @@ class ApplicationController < ActionController::Base
   end
   
   def profile_empty?
-    current_user.profile.full_name == ""
+    current_user.profile.full_name == "" if current_user
   end
   
   def set_alert

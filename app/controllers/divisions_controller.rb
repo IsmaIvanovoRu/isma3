@@ -5,7 +5,7 @@ class DivisionsController < ApplicationController
   before_action :set_division_types, only: [:new, :edit]
   
   def index
-    @divisions = Division.order(:name).all
+    @divisions = Division.order(:name).includes(:division_type).all.group_by{|d| d.division_type.name}.sort
   end
   
   def show
