@@ -1,23 +1,10 @@
 <div class="row">
   <div class="small-8 large-8 columns">
-    <section id="news">
-      <h1>Новости</h1>
-      <%= render partial: 'island', collection: @articles['news'] %>
-    </section>
-    <section id="articles">
-      <h1>Статьи</h1>
-      <%= render partial: 'island', collection: @articles['articles'] %>
-    </section>
+    <%= render partial: 'block', locals: {title: 'Новости', articles: @articles['news'] } if @articles['news']%>
+    <%= render partial: 'block', locals: {title: 'Статьи', articles: @articles['articles'] } if @articles['articles']%>
   </div>
   <div class="small-4 large-4 columns">
-    <section id="recomendations">
-      <h1>Рекомендации</h1>
-      
-    </section>
-    <section id="anounces">
-      <h1>Анонсы</h1>
-      <%= render partial: 'island', collection: @articles['announcements'] %>
-    </section>
+    <%= render partial: 'block', locals: {title: 'Анонсы событий', articles: @articles['announcements'] } if @articles['announcements']%>
   </div>
 </div>
 <%= link_to 'New Article', new_article_path %>
