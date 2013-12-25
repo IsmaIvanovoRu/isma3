@@ -1,0 +1,32 @@
+<%= form_for(@menu) do |f| %>
+  <% if @menu.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@menu.errors.count, "error") %> prohibited this menu from being saved:</h2>
+
+      <ul>
+      <% @menu.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+  <div class="field">
+    <%= f.label 'location' %>
+    <%= f.select :location, options_for_select = ["up", "left", "down"] %>
+  </div>
+  <div class="field">
+    <%= f.label :title %><br>
+    <%= f.text_field :title %>
+  </div>
+  <div class="field">
+    <%= f.label :path %><br>
+    <%= f.text_field :path %>
+  </div>
+  <div class="field">
+    <%= f.label :weigth %><br>
+    <%= f.number_field :weigth %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>
