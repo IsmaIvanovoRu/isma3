@@ -1,70 +1,62 @@
 body {
-  background-image: url("/assets/isma.jpg");
+  background-image: url("/assets/isma.jpeg");
   background-attachment: fixed;
   background-repeat: no-repeat;
   background-size: 100% auto;
 }
+.panel {
+  background-color: rgba(255,255,255, 0.6);
+}
+.subtitle {
+  margin-top: 15px;
+}
 #container {
   margin-top: 45px;
 }
-article {
-  font-size : 0.9em;
-  line-height : normal;
+.article_content, p {
   text-align : justify;
+  font-size: 0.9em;
+  line-height: 1.2;
 }
-
+.article_title {
+  text-align : justify;
+  font-size: 1em;
+  line-height: 1.2;
+}
 ul, ol {
   list-style-position: inside;
   font-size: 0.9em;
 }
-.timestamp, .authors {
+.side-nav {
+  line-height: 1;
+}
+.timestamp, .author {
   font-size : 0.7em;
   line-height: normal;
   font-style : italic;
-  margin-left: 10px;
-  margin-top: 10px;
+  margin-top: 5px;
   margin-bottom: 5px;
+  text-align: right;
 }
-.island > header > h1 {
-  font-size : 1em;
-  text-align : left;
-  margin-left: 10px;
-  margin-right: 10px;
-}
-.news > h1 {
-  font-size : 1.5em;
-}
-article > a {
-  margin-right : 1em;
-}
-article > h2 {
+.block {
   font-size : 1.2em;
+  width: 7em;
+  background-color: rgba(204,0,0,0.5);
+  margin: 0;
+  padding: 2px;
+  text-align : center;
+  -webkit-border-top-left-radius: 15px;
+  -webkit-border-top-right-radius: 15px;
+  -moz-border-radius-topleft: 15px;
+  -moz-border-radius-topright: 15px;
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
 }
-.island {
-width: 24%;
-float: left;
-overflow: hidden;
-height: 96px;
-margin: 0.5%;
-padding: 0;
-}
-.island > img {
-  margin-right: 1em;
-}
-h1 {
-  text-align : left;
-}
-.title > h1 {
+.title {
   color : #cd2626;
   font-family : Garamond, serif;
   font-size : 250%;
-}
-
-.title > img {
-  margin-right: 1em;
-}
-table {
-  text-align: center;
+  text-align : left;
 }
 .rows-40 {
   height: 40em;
@@ -74,9 +66,6 @@ table {
 }
 .pink {
   box-shadow: 0 0 10px rgba(204,0,0,0.5);
-}
-#first_image_attachment {
-  text-align: center;
 }
 .content {
   width: 100%;
@@ -92,4 +81,7 @@ overflow: hidden;
 height: 32px;
 margin: 0.5%;
 padding: 0;
+}
+footer {
+  margin-bottom: 0;
 }

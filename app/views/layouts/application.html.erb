@@ -24,76 +24,146 @@
       <section class="top-bar-section">
 	<!-- Right Nav Section -->
 	<ul class="right">
-	  <li class="has-form">
-	    <div class="row collapse">
-	      <div class="large-8 small-9 columns">
-		<input type="text" placeholder="Find Stuff">
-	      </div>
-	      <div class="large-4 small-3 columns">
-		<a href="#" class="alert button expand">Search</a>
-	      </div>
-	    </div>
-	  </li>
 	  <% if user_signed_in? %>
 	  <li><%= link_to 'Выйти', destroy_user_session_path, method: "delete" %></li>
 	  <% else %>
-	  <li><%= link_to 'Войти', new_user_session_path %></li>
-	  <li><%= link_to 'Зарегистрироваться', new_user_registration_path %></li>
+	  <li><%= link_to 'Вход', new_user_session_path %></li>
+	  <li><%= link_to 'Регистрация', new_user_registration_path %></li>
 	  <% end %>
 	</ul>
 
 	<!-- Left Nav Section -->
 	<ul class="left">
-	  <li><%= link_to 'Статьи', articles_path %></li>
-	  <li><%= link_to 'Группы', groups_path %></li>
-	  <li><%= link_to 'Подразделения', divisions_path %></li>
+	  <li class="has-dropdown">
+	    <a href="#">Об академии</a>
+	    <ul class="dropdown">
+	      <li><a href="#">Слово ректора</a></li>
+	      <li><a href="#">История</a></li>
+	      <li><a href="#">Структура</a></li>
+	      <li><a href="#">Основные сведения</a></li>
+	      <li><a href="#">Карта сайта</a></li>
+	    </ul>
+	  </li>
+	  <li class="has-dropdown">
+	    <a href="#">Абитуриенту</a>
+	    <ul class="dropdown">
+	      <li><a href="#">Приемная комиссия</a></li>
+	      <li><a href="#">Довузовская подготовка</a></li>
+	      <li><a href="#">Информация для иностранных граждан</a></li>
+	    </ul>
+	  </li>
+	  <li class="has-dropdown">
+	    <a href="#">Обучающемуся</a>
+	    <ul class="dropdown">
+	      <li class="has-dropdown">
+		<a href="#">Интерну и ординатору</a>
+		<ul class="dropdown">
+		  <li><a href="#">Тесты для самоподготовки</a></li>
+		</ul>
+	      </li>
+	      <li class="has-dropdown">
+		<a href="#">Аспиранту</a>
+		<ul class="dropdown">
+		  <li><a href="#">Диссертационный совет</a></li>
+		  <li><a href="#">Этический комитет</a></li>
+		  <li><a href="#">Научно-исследовательский центр</a></li>
+		  <li><a href="#">Отдел организации научных исследований</a></li>
+		  <li><a href="#">Молодая наука</a></li>
+		</ul>
+	      </li>
+	      <li><a href="#">Расписание</a></li>
+	      <li><a href="#">Библиотека</a></li>
+	      <li><a href="#">Социальная поддержка</a></li>
+	      <li><a href="#">Допуск к медицинской деятельности</a></li>
+	      <li><a href="#">Студенческая наука</a></li>
+	      <li><a href="#">Совет студентов</a></li>
+	      <li><a href="#">ЦНППО</a></li>
+	      <li><a href="#">Кафедры</a></li>
+	      <li><a href="#">Практика</a></li>
+	      <li><a href="#">Досуг</a></li>
+	    </ul>
+	  </li>
+	  <li class="has-dropdown">
+	    <a href="#">Сотруднику</a>
+	    <ul class="dropdown">
+	      <li><a href="#">Аттестация работников</a></li>
+	      <li><a href="#">Методическое обеспечение</a></li>
+	      <li><a href="#">Междисциплинарные связи</a></li>
+	      <li><a href="#">Центр менеджмента качества</a></li>
+	    </ul>
+	  </li>
+	  <li class="has-dropdown">
+	    <a href="#">Пациенту</a>
+	    <ul class="dropdown">
+	      <li><a href="#">Клиника ИвГМА</a></li>
+	    </ul>
+	  </li>
 	  </ul>
       </section>
     </nav>
     </div>
     <div class="row" id="container">
     <div class="small-12 large-12 columns">
-    <div class="small-2 large-2 columns">
+    <div class="small-2 large-2 columns panel">
     <ul class="side-nav">
-      <li class="active"><a href="#">Факультет послевузовского профессионального образования</a></li>
-      <li><a href="#">Факультет менеджмента и высшего сестринского образования</a></li>
+      <li><a href="#">Ученый совет</a></li>
+      <li><a href="#">Образование</a></li>
+      <li><a href="#">Наука</a></li>
+      <li><a href="#">Клиническая работа</a></li>
+      <li><a href="#">Воспитательная работа</a></li>
       <li class="divider"></li>
+      <li><a href="#">Лечебный факультет</a></li>
+      <li><a href="#">Педиатрический факультет</a></li>
+      <li><a href="#">Стоматологический факультет</a></li>
+      <li><a href="#">Факультет менеджмента и высшего сестринского образвоания</a></li>
+      <li><a href="#">Факультет послевузовского профессионального образвоания</a></li>
       <li><a href="#">Факультет дополнительного профессионального образования</a></li>
-      <li><a href="#">Link 4</a></li>
+      <li class="divider"></li>
+      <li><a href="#">Учебно-методическое управление</a></li>
+      <li><a href="#">Библиотека</a></li>
+      <li><a href="#">Редакционно-издательский отдел</a></li>
+      <li><a href="#">Центр информатизации</a></li>
     </ul>
     </div>
       <div class="small-10 large-10 columns">
 	<p class="notice"><%= notice %></p>
 	<p class="alert"><%= alert %></p>
-	<h1>Заголовок</h1>
+	<div class="row">
+	  <div class="small-10 large-10 columns">
+	    <h1 class="title">Ивановская государственная медицинская академия</h1>
+	  </div>
+	  <div class="large-2 small-2 columns">
+	    <%= form_tag("/search", method: "get") do %>
+	      <%= search_field_tag :search, nil, :placeholder => "Найти..." %>
+	      <%= submit_tag 'Найти', class: "button prefix hidden" %>
+	    <% end %>
+	  </div>
+	</div>
 	<%= yield %>
       </div>
     </div>
     </div>
     <footer>
       <div class="row">
-	<div class="small-4 large-4 columns">
+	<div class="small-4 large-4 columns panel">
 	  <ul class="side-nav">
-	    <li><a href="#">Link 1</a></li>
-	    <li><a href="#">Link 2</a></li>
-	    <li><a href="#">Link 3</a></li>
-	    <li><a href="#">Link 4</a></li>
+	    <li><a href="#">Министерство образования Российской Федерации</a></li>
+	    <li><a href="#">Министерство здравоохранения Российской федерации</a></li>
+	    <li><a href="#">Департамент здравоохранения Ивановской области</a></li>
 	  </ul>
 	</div>
-	<div class="small-4 large-4 columns">
+	<div class="small-4 large-4 columns panel">
 	  <ul class="side-nav">
-	    <li><a href="#">Link 1</a></li>
-	    <li><a href="#">Link 2</a></li>
-	    <li><a href="#">Link 3</a></li>
-	    <li><a href="#">Link 4</a></li>
+	    <li><a href="#">Совет ректоров России</a></li>
+	    <li><a href="#">Совет ректоров медицинских и фармацевтических вузов</a></li>
+	    <li><a href="#">Департамент культуры Ивановской области</a></li>
 	  </ul>
 	</div>
-	<div class="small-4 large-4 columns">
+	<div class="small-4 large-4 columns panel">
 	  <ul class="side-nav">
-	    <li><a href="#">Link 1</a></li>
-	    <li><a href="#">Link 2</a></li>
-	    <li><a href="#">Link 3</a></li>
-	    <li><a href="#">Link 4</a></li>
+	    <li><a href="#">Здоровая Россия</a></li>
+	    <li><a href="#">IACE</a></li>
+	    <li><a href="#">MEDI.RU</a></li>
 	  </ul>
 	</div>
       </div>

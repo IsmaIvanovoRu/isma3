@@ -10,10 +10,10 @@ class ArticlesController < ApplicationController
   # GET /articles.json
   def index
     if current_user.nil?
-      @articles = Article.order('updated_at DESC').includes(:article_type).where(published: true, group_id: nil).where("exp_date >= ? or exp_date IS ?", Time.now.to_date, nil).group_by{|a| a.article_type.name}     
+      @articles = Article.includes(:attachments).order('updated_at DESC').includes(:article_type).where(published: true, group_id: nil).where("exp_date >= ? or exp_date IS ?", Time.now.to_date, nil).group_by{|a| a.article_type.name}     
     else
       current_user_groups = current_user.groups + current_user.groups.joins(:parent).map{|g| g.parent} + [nil]
-      @articles = Article.order('updated_at DESC').includes(:article_type).where(published: true, group_id: current_user_groups).where("exp_date >= ? or exp_date IS ?", Time.now.to_date, nil).group_by{|a| a.article_type.name} 
+      @articles = Article.includes(:attachments).order('updated_at DESC').includes(:article_type).where(published: true, group_id: current_user_groups).where("exp_date >= ? or exp_date IS ?", Time.now.to_date, nil).group_by{|a| a.article_type.name} 
     end
   end
 
@@ -90,7 +90,7 @@ class ArticlesController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_article
-      @article = Article.find(params[:id])
+      @article = Article.includes(:attachments).find(params[:id])
     end
     
     def set_article_types

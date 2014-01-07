@@ -1,14 +1,6 @@
 <header>
 <% if controller.action_name == 'index' %>
-<p class="timestamp">
-  <% case article.updated_at.to_date %>
-  <% when Time.now.to_date %>
-    <%= time_tag article.updated_at, :pubdate => true, :format => '%R' %>
-  <% else %>
-    <%= time_tag article.updated_at, :pubdate => true, :format => '%e.%m.%Y %R' %>
-  <% end %>
-</p>
-<h1>
+<h1 class="article_title">
 <%= link_to article.title, article %>
 </h1>
 <% else %>

@@ -1,7 +1,9 @@
+<%= render partial: 'first_image_attachment', locals: {image_attachment: article.first_image_attachment } if article.first_image_attachment %>
 <% if controller.action_name == 'index' %>
-    <%= sanitize_truncate markdown(article.content) %>
+  <div class="article_content">
+  <%= sanitize_truncate markdown(article.content) %>
+  </div>
 <% else %>
-  <%= render partial: 'first_image_attachment', locals: {image_attachment: @first_image_attachment } if @first_image_attachment %>
   <div id="article_content" data-mercury="full">
   <%= sanitize_full markdown(article.content) %>
   </div>

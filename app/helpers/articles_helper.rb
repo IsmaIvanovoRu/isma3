@@ -3,6 +3,6 @@ module ArticlesHelper
     Sanitize.clean(text, Sanitize::Config::RELAXED).html_safe
   end
   def sanitize_truncate(text)
-    truncate(Sanitize.clean(text), :length => 255, :omission => '... ', :separator => ' ')
+    truncate(Sanitize.clean(text), :length => 400, :omission => '... ', :separator => ' ')
   end
 end
