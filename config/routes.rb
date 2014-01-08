@@ -1,6 +1,9 @@
 Isma::Application.routes.draw do
   get "users/index"
   get "users/show"
+  controller :search do
+    get 'search' => :index
+  end
   mount Mercury::Engine => '/'
   devise_for :users
   

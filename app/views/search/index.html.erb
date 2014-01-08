@@ -2,7 +2,7 @@
 <p><%= "Вы искали: \"#{params[:search]}\". Найдено совпадений - #{@search.count}" %>
 <ol start=<%= (params[:page].to_i - 1) * 30 + 1  if params[:page] %>>
 <% @search.each do |search| %>
-  <li><%= search.class == Attachment ? (link_to search.title, search) : (link_to search.title_ru, issue_publication_path(search.issue, search)) %>
+  <li><%= search.class == Attachment ? (link_to search.title, search) : (link_to search.title, article_path(search)) %>
 <% end %>
 </ol>
 <%= will_paginate @search %>
