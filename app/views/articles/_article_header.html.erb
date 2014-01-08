@@ -1,5 +1,5 @@
 <header>
-<% if controller.action_name == 'index' %>
+<% if controller.controller_name == 'archives' || controller.action_name == 'index' %>
 <h1 class="article_title">
 <%= link_to article.title, article %>
 </h1>

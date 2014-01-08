@@ -2,7 +2,7 @@ class ArticlesController < ApplicationController
   skip_before_filter :authenticate_user!, only: [:index, :show]
   before_action :require_writer, only: [:edit, :update, :create, :destroy]
   before_action :set_moderator_permission, only: [:index, :show]
-  before_action :set_writer_permission, only: [:show]
+  before_action :set_writer_permission, only: [:index, :show]
   before_action :set_article, only: [:show, :edit, :update, :mercury_update, :destroy]
   before_action :set_article_types, only: [:new, :edit]
 

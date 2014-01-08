@@ -1,5 +1,5 @@
-<%= render partial: 'first_image_attachment', locals: {image_attachment: article.first_image_attachment } if article.first_image_attachment %>
-<% if controller.action_name == 'index' %>
+<%= render partial: 'articles/first_image_attachment', locals: {image_attachment: article.first_image_attachment } if article.first_image_attachment %>
+<% if controller.controller_name == 'archives' || controller.action_name == 'index' %>
   <div class="article_content">
   <%= sanitize_truncate markdown(article.content) %>
   </div>

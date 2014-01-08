@@ -1,4 +1,12 @@
-  <h1 class="block"><%= title %></h1>
+<h1 class="block"><%= title %></h1>
 <section class="panel">
-  <%= render partial: 'island', collection: articles %>
+  <%= render partial: 'articles/island', collection: articles %>
+<% case title %>
+<% when 'Новости' %>
+<%= link_to 'Архив новостей', archives_news_path %>
+<% when 'Статьи' %>
+<%= link_to 'Архив статей', archives_articles_path %>
+<% when 'Анонсы' %>
+<%= link_to 'Архив анонсов', archives_announcements_path %>
+<% end %>
 </section>
