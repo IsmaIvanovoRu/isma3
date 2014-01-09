@@ -1,5 +1,5 @@
 <li class='pdf-thumb'>
-<%= link_to article_attachment_path(@article, not_image_attachment), target: '_blank' do %>
+<%= link_to attachment_path(not_image_attachment), target: '_blank' do %>
   <p>
   <%= image_tag("application-pdf.png", size: '32x32', class: "pull-left") if not_image_attachment.mime_type =~ /pdf/ %>
   <%= not_image_attachment.title_sen_dot %>

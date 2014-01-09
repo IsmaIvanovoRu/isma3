@@ -1,5 +1,5 @@
 class AttachmentsController < ApplicationController
-  skip_before_filter :authenticate_user!, only: [:show, :minify_img]
+  skip_before_filter :authenticate_user!, only: [:show, :inline, :minify_img]
   before_action :set_attachment, only: [:show, :destroy, :minify_img, :inline]
   before_action :require_administrator, only: [:index]
 

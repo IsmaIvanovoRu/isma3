@@ -1,11 +1,11 @@
-<div class="row">
+<div class="row panel">
   <div class="small-8 large-8 columns">
     <header>
       <h1><%= @division.name %></h1>
     </header>
     <%= link_to 'Добавить должность', new_division_post_path(@division), class: "button small" %>
     <dl>
-    <dt><%= @head.first.name if @head.first %>
+    <dt><%= link_to @head.first.name, division_post_path(@division, @head.first) if @head.first %>
     </dt>
     <dd><%= link_to @head.first.user.profile.full_name_reg, user_profile_path(@head.first.user) if @head.first.user %>
     </dd>
@@ -45,9 +45,8 @@
   </div>
   
   <div class="small-4 large-4 columns">
-  
-  
     <address><%= @division.address %></address>
+    <%= mail_to @division.email, 'Написать письмо' unless @division.email.empty? %>
     <div id="map" style="width: 100%; height: 200px" data-name="<%= @division.name %>" data-address="<%= @division.address %>" data-latitude="<%= @division.latitude %>" data-longitude="<%= @division.longitude %>"></div>
   </div>
 </div>

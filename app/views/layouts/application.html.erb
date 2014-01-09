@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -18,12 +18,18 @@
 	<li class="name">
 	  <h1><%= link_to 'ИвГМА', root_path %></a></h1>
 	</li>
-	<li class="toggle-topbar menu-icon"><a href="#"><span>Menu</span></a></li>
+	<li class="toggle-topbar menu-icon"><a href="#"><span>Меню</span></a></li>
       </ul>
 
       <section class="top-bar-section">
 	<!-- Right Nav Section -->
 	<ul class="right">
+	  <li class="has-dropdown">
+	    <a href="#">Меню</a>
+	    <ul class="dropdown">
+	      <li><%= link_to 'Добавить пункт меню', "#", "data-reveal-id" => 'add_menu' %></li>
+	    </ul>
+	  </li>
 	  <% if user_signed_in? %>
 	  <li><%= link_to 'Выйти', destroy_user_session_path, method: "delete" %></li>
 	  <% else %>
@@ -34,6 +40,23 @@
 
 	<!-- Left Nav Section -->
 	<ul class="left">
+	<% if @menus['up'] %>
+	<% @menus['up'].group_by(&:parent_id).first.last.each do |p| %>
+	  <% if @menus['up'].group_by(&:parent_id)[p.id] %>
+	  <li class="has-dropdown">
+	    <%= link_to p.title, '#' %>
+	    <ul class="dropdown">
+	    <% @menus['up'].group_by(&:parent_id)[p.id].each do |c| %>
+	      <li><%= link_to c.title, c.path %></li>
+	    <% end %>
+	    </ul>
+	  </li>
+	  <% else %>
+	    <li><%= link_to p.title, p.path %></li>
+	  <% end %>
+	<% end %>
+	<% end %>
+	
 	  <li class="has-dropdown">
 	    <a href="#">Об академии</a>
 	    <ul class="dropdown">
@@ -106,6 +129,22 @@
     <div class="small-12 large-12 columns">
     <div class="small-2 large-2 columns panel">
     <ul class="side-nav">
+    <% if @menus['left'] %>
+    	<% @menus['left'].group_by(&:parent_id).first.last.each do |p| %>
+	  <% if @menus['up'].group_by(&:parent_id)[p.id] %>
+	  <li class="has-dropdown">
+	    <%= link_to p.title, '#' %>
+	    <ul class="dropdown">
+	    <% @menus['up'].group_by(&:parent_id)[p.id].each do |c| %>
+	      <li><%= link_to c.title, c.path %></li>
+	    <% end %>
+	    </ul>
+	  </li>
+	  <% else %>
+	    <li><%= link_to p.title, p.path %></li>
+	  <% end %>
+	<% end %>
+	<% end %>
       <li><a href="#">Ученый совет</a></li>
       <li><a href="#">Образование</a></li>
       <li><a href="#">Наука</a></li>
@@ -168,6 +207,10 @@
 	</div>
       </div>
     </footer>
+<div id="add_menu" class="reveal-modal medium" data-reveal>
+  <%= render partial: 'menus/form' %>
+  <a class="close-reveal-modal">&#215;</a>
+</div>
     <%= javascript_include_tag "http://api-maps.yandex.ru/2.0-stable/?load=package.standard&lang=ru-RU" %>
     <%= javascript_include_tag "application" %>
     <% if controller_name == 'articles' && action_name == 'show' %>

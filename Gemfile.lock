@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/jejacks0n/mercury.git
-  revision: 3da99f61078799dd8975bf54f9c76bd837f88c7f
+  revision: 1cc637b0bccea19085f824d2881c6513ed5ee8ae
   specs:
     mercury-rails (0.9.0)
       coffee-rails (>= 3.2.2)
@@ -83,7 +83,7 @@ GEM
     net-scp (1.1.2)
       net-ssh (>= 2.6.5)
     net-ssh (2.7.0)
-    nokogiri (1.6.0)
+    nokogiri (1.6.1)
       mini_portile (~> 0.5.0)
     orm_adapter (0.5.0)
     polyglot (0.3.3)
@@ -103,7 +103,7 @@ GEM
       activesupport (= 4.0.2)
       rake (>= 0.8.7)
       thor (>= 0.18.1, < 2.0)
-    rake (10.1.0)
+    rake (10.1.1)
     rdoc (3.12.2)
       json (~> 1.4)
     redcarpet (3.0.0)
@@ -111,7 +111,7 @@ GEM
     rmagick (2.13.2)
     sanitize (2.0.6)
       nokogiri (>= 1.4.4)
-    sass (3.2.12)
+    sass (3.2.13)
     sass-rails (4.0.1)
       railties (>= 4.0.0, < 5.0)
       sass (>= 3.1.10)
@@ -128,7 +128,7 @@ GEM
       actionpack (>= 3.0)
       activesupport (>= 3.0)
       sprockets (~> 2.8)
-    sshkit (1.2.0)
+    sshkit (1.3.0)
       net-scp (>= 1.1.2)
       net-ssh
       term-ansicolor
@@ -153,7 +153,7 @@ GEM
       polyglot
       polyglot (>= 0.3.1)
     tzinfo (0.3.38)
-    uglifier (2.3.2)
+    uglifier (2.4.0)
       execjs (>= 0.3.0)
       json (>= 1.8.0)
     warden (1.2.3)

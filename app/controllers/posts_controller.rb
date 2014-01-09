@@ -13,6 +13,8 @@ class PostsController < DivisionsController
   end
   
   def show
+    @profile = @post.user.profile
+    @last_image_attachment = @profile.attachments.last
   end
   
   def new
@@ -69,6 +71,6 @@ class PostsController < DivisionsController
   end
 
   def post_params
-    params.require(:post).permit(:id, :user_id, :parent_id, :division_id, :post_type_id, :name)
+    params.require(:post).permit(:id, :user_id, :parent_id, :division_id, :post_type_id, :name, :phone)
   end
 end

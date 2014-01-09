@@ -10,9 +10,15 @@
       </ul>
     </div>
   <% end %>
-  <div class="field">
-    <%= f.label 'location' %>
-    <%= f.select :location, options_for_select = ["up", "left", "down"] %>
+  <div class="row">
+    <div class="large-12 columns">
+      <%= f.label 'location' %>
+      <%= f.select :location, options_for_select = ["up", "left", "down"] %>
+    </div>
+  </div>
+  <div>
+  <%= f.label :parent_id %><br>
+  <%= f.select :parent_id, options_for_select= @parent_menus.collect {|p| [t(p.title, :scope => [:menus]), p.id]}, {:include_blank => true, placeholder: 'Родитель'} %>
   </div>
   <div class="field">
     <%= f.label :title %><br>
@@ -20,7 +26,7 @@
   </div>
   <div class="field">
     <%= f.label :path %><br>
-    <%= f.text_field :path %>
+    <%= f.text_field :path, value: @url %>
   </div>
   <div class="field">
     <%= f.label :weigth %><br>

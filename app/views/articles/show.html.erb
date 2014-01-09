@@ -2,7 +2,7 @@
 <%= render partial: 'article', locals: { article: @article } %>
 </article>
 <%  if @writer_permission %>
-<%= form_for(@attachment, :url => article_attachments_path(@article)) do |f| %>
+<%= form_for(@attachment) do |f| %>
   <div style="display: none;">
     <%= text_field_tag :article_id, @article.id %>
   </div>  

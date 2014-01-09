@@ -60,10 +60,13 @@ class ApplicationController < ActionController::Base
   
   def set_menus
     if current_user_administrator? 
-      @menus = Menu.order(:weigth).all 
+      @menus = Menu.order(:weigth).load.group_by(&:location) 
+      @parent_menus = Menu.where(parent_id: nil)
     else
-      @menus = Menu.order(:weigth).where(private: false)
+      @menus = Menu.order(:weigth).where(private: false).group_by(&:location) 
+      @parent_menus = Menu.where(parent_id: nil, private: false)
     end
+      @url = request.fullpath
   end
   
   def profile_empty?
@@ -78,6 +81,5 @@ class ApplicationController < ActionController::Base
 	flash[:alert]=  ""
     end
   end
-  
 end
 

@@ -1,6 +1,6 @@
 class CommentsController < ArticlesController
   skip_before_filter :authenticate_user!, only: [:index]
-  before_action :require_editor, only: [:index, :new, :edit, :create, :update, :destroy]
+  before_action :require_writer, only: [:index, :new, :edit, :create, :update, :destroy]
   before_action :set_aritcle, only: [:index, :show, :edit, :create, :update, :destroy]
   before_action :set_comment, only: [:show, :edit, :update, :destroy]
   def index
@@ -15,7 +15,7 @@ class CommentsController < ArticlesController
   end
   
   def create
-    @comment = @comments.new(comment_params)
+    @comment = @article.comments.new(comment_params)
     respond_to do |format|
       if @comment.save
         format.html { redirect_to :back, notice: 'Comment was successfully created.' }

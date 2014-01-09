@@ -8,15 +8,13 @@ Isma::Application.routes.draw do
   devise_for :users
   
   resources :users do 
-    resource :profile do
-      resources :attachments
-    end
+    resource :profile
   end
   
   resources :articles do
     member {put :mercury_update}
-    resources :attachments
   end
+  resources :attachments
   
   controller :archives do
     get '/archives/articles' => :articles

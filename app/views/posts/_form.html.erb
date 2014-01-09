@@ -16,6 +16,10 @@
     <%= f.text_field :name %>
   </div>
   <div class="field">
+    <%= f.label :phone, 'Телефон' %><br />
+    <%= f.phone_field :phone %>
+  </div>  
+  <div class="field">
     <%= f.label :post_type_id %><br />
     <%= f.select :post_type_id, options_for_select= @post_types.collect {|p| [t(p.name, :scope => [:post_types]), p.id] }, {:include_blank => ''} %>
   </div>

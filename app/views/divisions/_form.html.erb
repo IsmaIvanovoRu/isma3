@@ -24,6 +24,10 @@
     <%= f.text_field :address %>
   </div>
   <div class="field">
+    <%= f.label :email, 'Электронная почта' %><br />
+    <%= f.email_field :email %>
+  </div>  
+  <div class="field">
     <%= f.label 'Широта' %><br />
     <%= f.text_field :latitude %>
   </div>

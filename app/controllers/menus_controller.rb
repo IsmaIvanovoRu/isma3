@@ -1,6 +1,7 @@
 class MenusController < ApplicationController
   before_action :require_administrator
   before_action :set_menu, only: [:show, :edit, :update, :destroy]
+  before_action :set_parent_menus, only: [:new, :edit]
 
   # GET /menus
   # GET /menus.json
@@ -16,10 +17,12 @@ class MenusController < ApplicationController
   # GET /menus/new
   def new
     @menu = Menu.new
+    @url = request.fullpath
   end
 
   # GET /menus/1/edit
   def edit
+    @url = params[:url]
   end
 
   # POST /menus
@@ -70,6 +73,6 @@ class MenusController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def menu_params
-      params.require(:menu).permit(:location, :title, :path, :weigth, :private)
+      params.require(:menu).permit(:location, :title, :path, :weigth, :private, :parent_id)
     end
 end

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20131213085247) do
+ActiveRecord::Schema.define(version: 20140109093214) do
 
   create_table "academic_titles", force: true do |t|
     t.string   "name",       default: "", null: false
@@ -52,11 +52,11 @@ ActiveRecord::Schema.define(version: 20131213085247) do
 
   create_table "attachments", force: true do |t|
     t.integer  "article_id"
-    t.string   "title",      default: "", null: false
-    t.string   "mime_type",  default: "", null: false
-    t.binary   "data"
+    t.string   "title",                       default: "", null: false
+    t.string   "mime_type",                   default: "", null: false
+    t.binary   "data",       limit: 16777215
     t.binary   "thumbnail"
-    t.text     "content"
+    t.text     "content",    limit: 16777215
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -96,6 +96,7 @@ ActiveRecord::Schema.define(version: 20131213085247) do
     t.float    "longitude",        default: 0.0
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "email",            default: ""
   end
 
   add_index "divisions", ["division_type_id"], name: "index_divisions_on_division_type_id", using: :btree
@@ -127,8 +128,10 @@ ActiveRecord::Schema.define(version: 20131213085247) do
     t.boolean  "private",    default: false, null: false
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "parent_id"
   end
 
+  add_index "menus", ["parent_id"], name: "index_menus_on_parent_id", using: :btree
   add_index "menus", ["path"], name: "index_menus_on_path", using: :btree
   add_index "menus", ["title"], name: "index_menus_on_title", using: :btree
 
@@ -146,6 +149,7 @@ ActiveRecord::Schema.define(version: 20131213085247) do
     t.string   "name",         default: "", null: false
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "phone",        default: ""
   end
 
   add_index "posts", ["division_id"], name: "index_posts_on_division_id", using: :btree

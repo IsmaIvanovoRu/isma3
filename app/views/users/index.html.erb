@@ -1,5 +1,5 @@
 <h1>Список пользователей</h1>
-<dl>
+<dl class="panel">
   <% @users.each do |user| %>
     <dt>
     <%= user.email %>
@@ -9,3 +9,4 @@
     </dd>
   <% end %>
 <dl>
+<%= will_paginate @users %>
