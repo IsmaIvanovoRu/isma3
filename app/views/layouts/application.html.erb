@@ -24,12 +24,14 @@
       <section class="top-bar-section">
 	<!-- Right Nav Section -->
 	<ul class="right">
+	<% if @administrator_permissiion %>
 	  <li class="has-dropdown">
 	    <a href="#">Меню</a>
 	    <ul class="dropdown">
 	      <li><%= link_to 'Добавить пункт меню', "#", "data-reveal-id" => 'add_menu' %></li>
 	    </ul>
 	  </li>
+	  <% end %>
 	  <% if user_signed_in? %>
 	  <li><%= link_to 'Выйти', destroy_user_session_path, method: "delete" %></li>
 	  <% else %>
