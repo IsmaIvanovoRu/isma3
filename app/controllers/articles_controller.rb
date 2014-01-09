@@ -1,8 +1,6 @@
 class ArticlesController < ApplicationController
   skip_before_filter :authenticate_user!, only: [:index, :show]
   before_action :require_writer, only: [:edit, :update, :create, :destroy]
-  before_action :set_moderator_permission, only: [:index, :show]
-  before_action :set_writer_permission, only: [:index, :show]
   before_action :set_article, only: [:show, :edit, :update, :mercury_update, :destroy]
   before_action :set_article_types, only: [:new, :edit]
 
@@ -100,12 +98,5 @@ class ArticlesController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def article_params
       params.require(:article).permit(:title, :content, :article_type_id, :exp_date, :published, :fixed, :commentable, :division_id, :group_id)
-    end
-    
-    def set_moderator_permission
-      @moderator_permission = current_user_moderator?
-    end
-    def set_writer_permission
-      @writer_permission = current_user_writer?
     end
 end

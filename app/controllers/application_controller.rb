@@ -4,7 +4,7 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
   before_filter :authenticate_user!
   before_action :current_user
-  before_action :set_menu_and_path
+  before_action :set_permissions
   before_action :set_menus
   before_action :profile_empty?
   before_action :set_alert
@@ -53,11 +53,6 @@ class ApplicationController < ActionController::Base
     current_user.groups.where(administrator: true).count > 0 unless current_user.nil?
   end
   
-  def set_menu_and_path
-    @menu = Menu.new
-    @url = request.path
-  end
-  
   def set_menus
     if current_user_administrator? 
       @menus = Menu.order(:weigth).load.group_by(&:location) 
@@ -66,6 +61,7 @@ class ApplicationController < ActionController::Base
       @menus = Menu.order(:weigth).where(private: false).group_by(&:location) 
       @parent_menus = Menu.where(parent_id: nil, private: false)
     end
+      @menu = Menu.new
       @url = request.fullpath
   end
   
@@ -80,6 +76,12 @@ class ApplicationController < ActionController::Base
       else 
 	flash[:alert]=  ""
     end
+  end
+  
+  def set_permissions
+    @administrator_permission = current_user_administrator?
+    @moderator_permission = current_user_moderator?
+    @writer_permission = current_user_writer?
   end
 end
 
