@@ -43,7 +43,7 @@
     <%= label_tag :entrant %>
     <%= check_box_tag :entrant %>
   </div> 
-  <%= fields_for @profile.attachments.new, url: user_profile_attachments_path(@user, @profile) do |a| %>
+  <%= fields_for Attachment.new do |a| %>
   <div class="filefild">
     <%= a.file_field :file %>
   </div>
