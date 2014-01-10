@@ -1,22 +1,14 @@
 <section  class="panel">
 <h1><%= "#{@post.division.name} - #{@post.name}" %></h1>
 <%= render partial: 'articles/first_image_attachment', locals: {image_attachment: @last_image_attachment } if @last_image_attachment %>
+<p><%= link_to @profile.full_name_reg, user_profile_path(@profile.user) if @profile %>
+<p><%= @profile.about %>
 <dl>
-<dt>Подчинение по должности</dt>
-<dd><%= @post.parent.name if @post.parent%></dd>
-<% if @profile %>
-  <dt>Ф.И.О.</dt>
-  <dd><%= link_to @profile.full_name_reg, user_profile_path(@profile.user) %></dd>
-  <dt>О себе</dt>
-  <dd><%= @profile.about %></dd>
-<% end %>
-<dt>Контакты</dt>
-<dd><%= mail_to @division.email, 'Написать письмо', subject: "Для #{@profile.full_name}" unless @division.email.empty? %></dd>
-<dd>Телефон: <%= number_to_phone(@post.phone, country_code: 7) unless @post.phone.empty? %></dd>
-<dd></dd>
+  <dt>Контакты</dt>
+  <dd><p><%= mail_to @division.email, 'Написать письмо', subject: "Для #{@profile.full_name}" unless @division.email.empty? %></dd>
+  <dd><p>Телефон: <%= number_to_phone(@post.phone, country_code: 7) unless @post.phone.empty? %></dd>
 </dl>
+<%= link_to 'Edit', edit_division_post_path(@division, @post), class: 'button small' %> |
+<%= link_to 'Back', division_posts_path(@division), class: 'button small' %>
 </section>
 
-
-<%= link_to 'Edit', edit_division_post_path(@division, @post) %> |
-<%= link_to 'Back', division_posts_path(@division) %>
