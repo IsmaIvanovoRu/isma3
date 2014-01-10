@@ -5,7 +5,7 @@
 <li><%= link_to search.title_sen_dot, attachment_path(search), :target => '_black' if search.class == Attachment %>
 <%= link_to search.title, article_path(search) if search.class == Article %>
 <%= link_to search.profile.full_name, user_profile_path(search) if search.class == User %>
-<%= link_to search.profile.full_name, user_profile_path(search) if search.class == Profile %>
+<%= link_to search.full_name, user_profile_path(search.user) if search.class == Profile %>
 <%= link_to search.name, division_path(search) if search.class == Division %>
 <% end %>
 </ol>
