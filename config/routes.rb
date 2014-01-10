@@ -15,7 +15,7 @@ Isma::Application.routes.draw do
     member {put :mercury_update}
   end
   resources :attachments
-  
+  resources :details  
   controller :archives do
     get '/archives/articles' => :articles
     get '/archives/news' => :news

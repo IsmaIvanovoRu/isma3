@@ -195,8 +195,8 @@
       </div>
     </div>
     </div>
-    <footer>
-      <div class="row panel">
+    <footer class="panel">
+      <div class="row">
       <% if @menus['down'] %>
 	<% @menus['down'].group_by(&:parent_id).first.last.each do |p| %>
 	  <div class="small-<%= @down_block_count %> large-<%= @down_block_count %> columns">
@@ -212,6 +212,12 @@
 	  </div>
 	<% end %>
       <% end %>
+      </div>
+      <div class="row">
+	<div class="large-12 small-12 columns">
+	<p><%= @details_hash['Полное наименование академии'] %>
+	<address><%= @details_hash['Адрес'] %></address>
+	</div>
       </div>
     </footer>
 <div id="add_menu" class="reveal-modal medium" data-reveal>

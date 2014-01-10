@@ -8,6 +8,7 @@ class ApplicationController < ActionController::Base
   before_action :set_menus
   before_action :profile_empty?
   before_action :set_alert
+  before_action :set_details
 
   def require_reader
     unless current_user_reader?
@@ -83,6 +84,12 @@ class ApplicationController < ActionController::Base
     @administrator_permission = current_user_administrator?
     @moderator_permission = current_user_moderator?
     @writer_permission = current_user_writer?
+  end
+  
+  def set_details
+    @details_hash = Hash.new
+    Detail.all.each{|d| @details_hash[d.key] = d.value}
+    @details_hash
   end
 end
 
