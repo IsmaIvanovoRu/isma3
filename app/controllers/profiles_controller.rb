@@ -33,9 +33,9 @@ class ProfilesController < UsersController
     if @profile.update(profile_params)
       @profile.user.groups << Group.where(name: "entrants") if params[:entrant]
       if params[:attachment]
-	@attachment = @profile.attachments.new
+	@attachment = Attachment.new
 	@attachment.uploaded_file = params[:attachment]
-	@attachment.thumbnail = thumb(@attachment.data, 150) if @attachment.mime_type =~ /image/
+	@attachment.thumbnail = avatar(@attachment.data) if @attachment.mime_type =~ /image/
 	if @attachment.save
 	  @profile.attachments << @attachment
 	end
@@ -79,9 +79,9 @@ class ProfilesController < UsersController
   def set_academic_titles
     @academic_titles = AcademicTitle.all
   end
-  
-  def thumb(image, size)
+ 
+  def avatar(image)
     img = Magick::Image.from_blob(image).first
-    img.resize_to_fill!(size).to_blob
+    img.resize_to_fill!(150, 150, ::Magick::NorthGravity).to_blob
   end
 end

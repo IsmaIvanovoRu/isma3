@@ -2,6 +2,7 @@ class Attachment < ActiveRecord::Base
   require 'RMagick'
   has_and_belongs_to_many :articles
   has_and_belongs_to_many :profiles
+  has_and_belongs_to_many :divisions
   
     def uploaded_file=(incoming_file)
       self.title = incoming_file[:file].original_filename

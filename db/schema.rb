@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140109093214) do
+ActiveRecord::Schema.define(version: 20140110164204) do
 
   create_table "academic_titles", force: true do |t|
     t.string   "name",       default: "", null: false
@@ -62,6 +62,11 @@ ActiveRecord::Schema.define(version: 20140109093214) do
   end
 
   add_index "attachments", ["article_id"], name: "index_attachments_on_article_id", using: :btree
+
+  create_table "attachments_divisions", id: false, force: true do |t|
+    t.integer "division_id",   null: false
+    t.integer "attachment_id", null: false
+  end
 
   create_table "attachments_profiles", id: false, force: true do |t|
     t.integer "profile_id",    null: false

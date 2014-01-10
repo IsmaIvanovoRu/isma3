@@ -12,7 +12,7 @@ class AttachmentsController < ApplicationController
   # GET /attachments/1
   # GET /attachments/1.json
   def show
-      send_data @attachment.data, :filename => @attachment.title, :type => @attachment.mime_type, :disposition => "inline"
+    send_data @attachment.data, :filename => @attachment.title, :type => @attachment.mime_type, :disposition => "inline"
   end
   
   def inline
@@ -26,14 +26,14 @@ class AttachmentsController < ApplicationController
 
       @attachment = Attachment.new
       @attachment.uploaded_file = params[:attachment]
-      @attachment.thumbnail = thumb(@attachment.data, 0.25) if @attachment.mime_type =~ /image/
-      case 
-      when params[:article_id]
-        @attachment.articles << Article.find(params[:article_id])
-      when params[:profile_id]
-        @attachment.profiles << Profile.find(params[:profile_id])
-      end
+      @attachment.thumbnail = thumb(@attachment.data) if @attachment.mime_type =~ /image/
       if @attachment.save
+	case 
+	  when params[:article_id]
+	    @attachment.articles << Article.find(params[:article_id])
+	  when params[:division_id]
+	    @attachment.divisions << Division.find(params[:division_id])
+	end
 	  flash[:notice] = "Thank you for your submission..."
 	  redirect_to :back
       else
@@ -67,8 +67,8 @@ class AttachmentsController < ApplicationController
       params.require(:attachment).permit(:title, :data, :mime_type, :thumbnail, :content)
     end
       
-    def thumb(image, size)
+    def thumb(image)
       img = Magick::Image.from_blob(image).first
-      img.scale!(size).to_blob
+      img.resize_to_fill!(150).to_blob
     end
 end
