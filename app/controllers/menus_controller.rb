@@ -1,12 +1,11 @@
 class MenusController < ApplicationController
   before_action :require_administrator
   before_action :set_menu, only: [:show, :edit, :update, :destroy]
-  before_action :set_parent_menus, only: [:new, :edit]
 
   # GET /menus
   # GET /menus.json
   def index
-    @menus = Menu.all
+    @menus_list = Menu.all
   end
 
   # GET /menus/1

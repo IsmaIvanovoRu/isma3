@@ -55,12 +55,13 @@ class ApplicationController < ActionController::Base
   
   def set_menus
     if current_user_administrator? 
-      @menus = Menu.order(:weigth).load.group_by(&:location) 
-      @parent_menus = Menu.where(parent_id: nil)
+      @menus = Menu.order(:weigth).load.group_by(&:location)
+      @parent_menus = Menu.all
     else
-      @menus = Menu.order(:weigth).where(private: false).group_by(&:location) 
-      @parent_menus = Menu.where(parent_id: nil, private: false)
+      @menus = Menu.order(:weigth).where(private: false).group_by(&:location)
+      @parent_menus = Menu.where(private: false)
     end
+      @down_block_count = 12/@menus['down'].group_by(&:parent_id).first.last.count if @menus['down']
       @menu = Menu.new
       @url = request.fullpath
   end
