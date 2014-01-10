@@ -203,10 +203,10 @@
 	      <ul class="side-nav">
 		<% if @menus['down'].group_by(&:parent_id)[p.id] %>
 		  <% @menus['down'].group_by(&:parent_id)[p.id].each do |c| %>
-		    <li><%= link_to c.title, "http://#{c.path}", target: 'blank' %></li>
+		    <li><%= link_to c.title, c.path =~ /^http:\/\// ? c.path : "http://#{c.path}", target: 'blank' %></li>
 		  <% end %>
 		<% else %>
-		  <li><%= link_to p.title, "http://#{p.path}", target: 'blank' %></li>
+		  <li><%= link_to p.title, p.path =~ /^http:\/\// ? p.path : "http://#{p.path}", target: 'blank' %></li>
 		<% end %>
 	      </ul>
 	  </div>
