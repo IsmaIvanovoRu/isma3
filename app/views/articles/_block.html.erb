@@ -1,6 +1,6 @@
 <h1 class="block"><%= title %></h1>
 <section class="panel">
-  <%= render partial: 'articles/island', collection: articles %>
+  <%= render partial: 'articles/article', collection: articles %>
 <% case title %>
 <% when 'Новости' %>
 <%= link_to 'Архив новостей', archives_news_path %>
