@@ -27,12 +27,14 @@ class ArticlesController < ApplicationController
   # GET /articles/new
   def new
     @article = Article.new
-    @divisions = current_user.divisions if current_user
+    @divisions = (current_user_moderator? ? Division.all : current_user.divisions) if current_user
     @groups = current_user.groups.uniq + current_user.groups.map {|g| g.parent}.select {|g| !g.nil?}.uniq
   end
 
   # GET /articles/1/edit
   def edit
+    @divisions = (current_user_moderator? ? Division.order(:name).all : current_user.divisions.order(:name)) if current_user
+    @groups = current_user.groups.uniq + current_user.groups.map {|g| g.parent}.select {|g| !g.nil?}.uniq
   end
 
   # POST /articles

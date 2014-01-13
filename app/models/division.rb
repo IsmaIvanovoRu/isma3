@@ -2,6 +2,7 @@ class Division < ActiveRecord::Base
   belongs_to :division_type
   has_many :posts
   has_many :users, :through => :posts
+  has_many :articles
   has_many :articles, :through => :users
     
   validates :name, :presence => true, 
