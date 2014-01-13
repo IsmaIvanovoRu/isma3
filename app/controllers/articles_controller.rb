@@ -27,7 +27,7 @@ class ArticlesController < ApplicationController
   # GET /articles/new
   def new
     @article = Article.new
-    @divisions = current_user.divisions unless current_user
+    @divisions = current_user.divisions if current_user
     @groups = current_user.groups.uniq + current_user.groups.map {|g| g.parent}.select {|g| !g.nil?}.uniq
   end
 
