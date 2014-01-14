@@ -1,5 +1,12 @@
 class AttachmentsController < ApplicationController
   skip_before_filter :authenticate_user!, only: [:show, :inline, :minify_img]
+  skip_before_filter :current_user, only: [:inline, :minify_img]
+  skip_before_filter :set_permissions, only: [:inline, :minify_img]
+  skip_before_filter :set_menus, only: [:inline, :minify_img]
+  skip_before_filter :profile_empty?, only: [:inline, :minify_img]
+  skip_before_filter :set_alert, only: [:inline, :minify_img]
+  skip_before_filter :set_details, only: [:inline, :minify_img]
+  
   before_action :set_attachment, only: [:show, :destroy, :minify_img, :inline]
   before_action :require_administrator, only: [:index]
 

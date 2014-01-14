@@ -78,27 +78,26 @@
     </nav>
     </div>
     <div class="row" id="container">
-    <div class="small-12 large-12 columns">
-    <div class="small-2 large-2 columns panel">
-    <ul class="side-nav">
-    <% if @menus['left'] %>
-      <% @menus['left'].group_by(&:parent_id).first.last.each do |p| %>
-	<% if @menus['left'].group_by(&:parent_id)[p.id] %>
-	<li class="has-dropdown">
-	  <%= link_to p.title, '#' %>
-	  <ul class="dropdown">
-	  <% @menus['left'].group_by(&:parent_id)[p.id].each do |c| %>
-	    <li><%= link_to c.title, c.path %></li>
+	<div class="small-2 large-2 columns panel">
+	  <ul class="side-nav">
+	  <% if @menus['left'] %>
+	    <% @menus['left'].group_by(&:parent_id).first.last.each do |p| %>
+	      <% if @menus['left'].group_by(&:parent_id)[p.id] %>
+	      <li class="has-dropdown">
+		<%= link_to p.title, '#' %>
+		<ul class="dropdown">
+		<% @menus['left'].group_by(&:parent_id)[p.id].each do |c| %>
+		  <li><%= link_to c.title, c.path %></li>
+		<% end %>
+		</ul>
+	      </li>
+	      <% else %>
+		<li><%= link_to p.title, p.path %></li>
+	      <% end %>
+	    <% end %>
 	  <% end %>
 	  </ul>
-	</li>
-	<% else %>
-	  <li><%= link_to p.title, p.path %></li>
-	<% end %>
-      <% end %>
-    <% end %>
-    </ul>
-    </div>
+	</div>
       <div class="small-10 large-10 columns">
 	<p class="notice"><%= notice %></p>
 	<p class="alert"><%= alert %></p>
@@ -109,13 +108,13 @@
 	  <div class="large-2 small-2 columns">
 	    <%= form_tag("/search", method: "get") do %>
 	      <%= search_field_tag :search, nil, :placeholder => "Найти..." %>
-	      <%= submit_tag 'Найти', class: "button prefix hidden" %>
+	      <%= submit_tag 'Найти', class: "hide" %>
 	    <% end %>
+	    <%= render partial: 'layouts/icons_panel' %>
 	  </div>
 	</div>
 	<%= yield %>
       </div>
-    </div>
     </div>
     <footer class="panel">
       <div class="row">

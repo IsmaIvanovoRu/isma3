@@ -61,9 +61,6 @@ ul, ol {
 .rows-40 {
   height: 40em;
 }
-.hidden {
-  display: none;
-}
 .pink {
   box-shadow: 0 0 10px rgba(204,0,0,0.5);
 }

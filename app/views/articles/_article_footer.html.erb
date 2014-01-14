@@ -1,6 +1,7 @@
 <div class="author">
-<%= article.division_id.nil? ? (link_to article.user.profile.full_name, user_profile_path(article.user)) : (link_to article.division.name, article.division) %>
+<%= article.division_id.nil? ? (article.user && article.user.profile ? (link_to article.user.profile.full_name, user_profile_path(article.user)) : '') : (link_to article.division.name, article.division) %>
 </div>
+<hr />
 <% if controller.controller_name == 'articles' && controller.action_name == 'show' %>
 <%= render partial: 'articles/image_attachments', locals: { article: article } if @image_attachments.count > 0 %>
 <%= render partial: 'articles/not_image_attachments', locals: { article: article } if @not_image_attachments.count > 0 %>

@@ -19,7 +19,7 @@
       <% @employees.each do |employee| %>
 	<dt><%= link_to employee.name, division_post_path(@division, employee) %>
 	</dt>
-	<dd><%= link_to employee.user.profile.full_name_reg, user_profile_path(employee.user) %>
+	<dd><%= link_to employee.user.profile.full_name_reg, user_profile_path(employee.user) if employee.user && employee.user.profile %>
 	</dd>
       <% end %>
       </dl>

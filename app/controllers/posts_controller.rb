@@ -13,8 +13,8 @@ class PostsController < DivisionsController
   end
   
   def show
-    @profile = @post.user.profile
-    @last_image_attachment = @profile.attachments.last
+    @profile = @post.user.profile if @post.user
+    @last_image_attachment = @profile.attachments.last if @profile
   end
   
   def new
@@ -67,7 +67,7 @@ class PostsController < DivisionsController
   end
   
   def set_users
-    @users = User.all.sort_by{|user| user.profile.full_name}
+    @users = User.joins(:groups).where(groups: {name: 'isma'}).sort_by{|user| user.profile.full_name}
   end
 
   def post_params
