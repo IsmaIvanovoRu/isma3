@@ -61,6 +61,16 @@ class GroupsController < ApplicationController
       format.json { head :no_content }
     end
   end
+  
+  def add_to
+    Group.find(params[:id]).users << User.find(params[:user_id])
+    redirect_to :back
+  end
+  
+  def remove_from
+    Group.find(params[:id]).users.delete(User.find(params[:user_id]))
+    redirect_to :back
+  end
 
   private
     # Use callbacks to share common setup or constraints between actions.

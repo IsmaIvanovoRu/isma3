@@ -1,13 +1,12 @@
 Isma::Application.routes.draw do
-  get "users/index"
-  get "users/show"
-  controller :search do
-    get 'search' => :index
-  end
   mount Mercury::Engine => '/'
   devise_for :users
   
-  resources :users do 
+  controller :search do
+    get 'search' => :index
+  end
+  
+  resources :users do
     resource :profile
   end
   
@@ -22,9 +21,16 @@ Isma::Application.routes.draw do
     get '/archives/announcements' => :announcements
   end
 
-  resources :users
+  resources :groups do
+    member do
+      get :add_to
+      delete :remove_from
+    end
+  end
+  
+  controller :groups do 
 
-  resources :groups
+  end
   
   resources :divisions do 
     resources :posts

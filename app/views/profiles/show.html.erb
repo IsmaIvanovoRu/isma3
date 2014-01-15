@@ -22,8 +22,24 @@
 <% @profile.user.groups.each do |group| %>
   <li>
     <%= group.name %>
+    <% if @administrator_permission %>
+      <%= link_to remove_from_group_path(group) + "?user_id=#{@user.id}", title: 'Удалить статью', method: :delete, data: { confirm: 'Are you sure?' } do %>
+	<i class="fi-x"></i>
+      <% end %>
+    <% end %>
 <% end %>
 </ul>
+<% if @administrator_permission %>
+<ul>
+  <% @groups.each do |group| %>
+    <li>
+      <%= group.name %>
+	<%= link_to add_to_group_path(group) + "?user_id=#{@user.id}", title: 'Добавить в группу' do %>
+	  <i class="fi-plus"></i>
+	<% end %>
+  <% end %>
+</ul>
+<% end %>
 </dd>
 <% end %>
 </dl>

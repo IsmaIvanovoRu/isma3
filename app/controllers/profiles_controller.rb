@@ -11,6 +11,7 @@ class ProfilesController < UsersController
   def show
     @last_image_attachment = @profile.attachments.last
     @posts = @user.posts
+    @groups = Group.order(:name).load - @user.groups
   end
   
   def new
