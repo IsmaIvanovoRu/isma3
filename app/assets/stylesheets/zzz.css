@@ -67,6 +67,18 @@ ul, ol {
   font-size : 200%;
   text-align : left;
 }
+.title-super {
+  font-family : Garamond, serif;
+  color: white;
+  text-transform: uppercase;
+  font-size: 0.8125rem;
+  font-weight: bold;
+  position: relative;
+  display: block;
+  padding: 0 15px;
+  height: 45px;
+  line-height: 45px;
+}
 .rows-40 {
   height: 40em;
 }
