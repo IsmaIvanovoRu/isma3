@@ -1,6 +1,6 @@
 <section  class="panel">
 <h1><%= @profile.full_name %></h1>
-<%= render partial: 'articles/first_image_attachment', locals: {image_attachment: @last_image_attachment } if @last_image_attachment %>
+<%= render partial: 'articles/first_image_attachment', locals: {image_attachment: @last_image_attachment, dimension: '150x150' } if @last_image_attachment %>
 <p><%= [(@profile.degree.name if @profile.degree), (@profile.academic_title.name if @profile.academic_title)].compact.join(', ') %>
 <p><%= @profile.about %>
 <dl>

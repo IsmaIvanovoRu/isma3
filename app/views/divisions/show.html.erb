@@ -41,7 +41,7 @@
       </dd>
     </dl>
   <% end %>
-    <%= render partial: 'articles/article', collection: @articles %>
+    <%= render partial: 'articles/article', collection: @articles, locals: { dimension: '75x75' } %>
   </div>
   
   <div class="large-4 columns">
