@@ -34,6 +34,9 @@ Isma::Application.routes.draw do
   
   resources :divisions do 
     resources :posts
+    collection do
+      post :import
+    end
   end
   
   resources :menus

@@ -6,6 +6,10 @@ class DivisionsController < ApplicationController
   
   def index
     @divisions = Division.order(:name).includes(:division_type).all.group_by{|d| d.division_type.name}.sort
+    respond_to do |format|
+      format.html
+      format.xls
+    end
   end
   
   def show
@@ -41,6 +45,11 @@ class DivisionsController < ApplicationController
     @division.destroy
     
     redirect_to divisions_url
+  end
+  
+  def import
+    Division.import(params[:file])
+    redirect_to divisions_url, notice: "Divisions imported."
   end
   
   private

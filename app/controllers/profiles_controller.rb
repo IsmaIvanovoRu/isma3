@@ -12,6 +12,15 @@ class ProfilesController < UsersController
     @last_image_attachment = @profile.attachments.last
     @posts = @user.posts
     @groups = Group.order(:name).load - @user.groups
+    @articles = {}
+    if current_user.nil?
+      ArticleType.all.each do |article_type|
+	@articles = Article.includes(:attachments).includes(:article_type).order('updated_at DESC').where(published: true, group_id: nil).where("exp_date >= ? or exp_date IS ?", Time.now.to_date, nil).paginate(:page => params[:page])
+      end
+    else
+      current_user_groups = @user.groups + @user.groups.joins(:parent).map{|g| g.parent} + [nil]
+	@articles = Article.includes(:attachments).includes(:article_type).order('updated_at DESC').where(published: true, group_id: current_user_groups).where("exp_date >= ? or exp_date IS ?", Time.now.to_date, nil).paginate(:page => params[:page])
+    end
   end
   
   def new

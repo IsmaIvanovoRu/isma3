@@ -3,9 +3,10 @@
 <p class="timestamp">
   <% case article.updated_at.to_date %>
   <% when Time.now.to_date %>
-    <%= time_tag article.updated_at, :pubdate => true, :format => '%R' %>
-  <% else %>
-    <%= time_tag article.updated_at, :pubdate => true, :format => '%e.%m.%Y %R' %>
+    сегодня в 
+      <%= time_tag article.updated_at, :pubdate => true, :format => '%R' %>
+    <% else %>
+      <%= time_tag article.updated_at, :pubdate => true, :format => '%e.%m.%Y %R' %>
   <% end %>
 </p>
 <h1 id="article_title" data-mercury="simple">

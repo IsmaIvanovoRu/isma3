@@ -1,7 +1,13 @@
 <section class="panel">
 <h1>Перечень подразделений</h1>
-<%= link_to 'Новое подразделение', new_division_path %>
-
+<% if @administrator_permission %>
+  <h2>Импорт подразделений</h2>
+  <%= form_tag import_divisions_path, multipart: true do %>
+    <%= file_field_tag :file %>
+    <%= submit_tag "Загрузить" %>
+  <% end %>
+<%= link_to 'Скачать список подразделений', divisions_path(format: :xls) %>
+<% end %>
 <% @divisions.each do |type, divisions| %>
   <h2><%= type %></h2>
   <ul>

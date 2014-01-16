@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
+  xmlns:o="urn:schemas-microsoft-com:office:office"
+  xmlns:x="urn:schemas-microsoft-com:office:excel"
+  xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
+  xmlns:html="http://www.w3.org/TR/REC-html40">
+  <Worksheet ss:Name="Sheet1">
+    <Table>
+      <Row>
+        <Cell><Data ss:Type="String">id</Data></Cell>
+        <Cell><Data ss:Type="String">name</Data></Cell>
+        <Cell><Data ss:Type="String">division_type_id</Data></Cell>
+        <Cell><Data ss:Type="String">address</Data></Cell>
+	<Cell><Data ss:Type="String">latitude</Data></Cell>
+	<Cell><Data ss:Type="String">longitude</Data></Cell>
+	<Cell><Data ss:Type="String">email</Data></Cell>
+      </Row>
+      <% @divisions.each do |type, divisions| %>
+    <% divisions.each do |division| %>
+      <Row>
+        <Cell><Data ss:Type="Number"><%= division.id %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= division.name %></Data></Cell>
+        <Cell><Data ss:Type="Number"><%= division.division_type_id %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= division.address %></Data></Cell>
+	<Cell><Data ss:Type="Number"><%= division.latitude %></Data></Cell>
+	<Cell><Data ss:Type="Number"><%= division.longitude %></Data></Cell>
+	<Cell><Data ss:Type="String"><%= division.email %></Data></Cell>
+      </Row>
+    <% end %>
+      <% end %>
+    </Table>
+  </Worksheet>
+</Workbook>

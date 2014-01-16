@@ -1,5 +1,5 @@
 <article class="panel">
-<%= render partial: 'article', locals: { article: @article } %>
+<%= render partial: 'article', locals: { article: @article, dimension: '150x150' } %>
 </article>
 <%  if @writer_permission %>
 <%= form_for(@attachment) do |f| %>

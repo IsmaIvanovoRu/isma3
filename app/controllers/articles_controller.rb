@@ -7,11 +7,16 @@ class ArticlesController < ApplicationController
   # GET /articles
   # GET /articles.json
   def index
+      @articles = {}
     if current_user.nil?
-      @articles = Article.includes(:attachments).order('updated_at DESC').includes(:article_type).where(published: true, group_id: nil).where("exp_date >= ? or exp_date IS ?", Time.now.to_date, nil).group_by{|a| a.article_type.name}     
+      ArticleType.all.each do |article_type|
+	@articles[article_type.name] = Article.includes(:attachments).order('updated_at DESC').where(published: true, group_id: nil, article_type_id: article_type).where("exp_date >= ? or exp_date IS ?", Time.now.to_date, nil).limit(5)
+      end
     else
       current_user_groups = current_user.groups + current_user.groups.joins(:parent).map{|g| g.parent} + [nil]
-      @articles = Article.includes(:attachments).order('updated_at DESC').includes(:article_type).where(published: true, group_id: current_user_groups).where("exp_date >= ? or exp_date IS ?", Time.now.to_date, nil).group_by{|a| a.article_type.name} 
+      ArticleType.all.each do |article_type|
+	@articles[article_type.name] = Article.includes(:attachments).order('updated_at DESC').where(published: true, group_id: current_user_groups, article_type_id: article_type).where("exp_date >= ? or exp_date IS ?", Time.now.to_date, nil).limit(5)
+      end
     end
   end
 

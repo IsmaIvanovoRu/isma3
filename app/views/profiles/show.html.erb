@@ -1,46 +1,56 @@
-<section  class="panel">
-<h1><%= @profile.full_name %></h1>
-<%= render partial: 'articles/first_image_attachment', locals: {image_attachment: @last_image_attachment, dimension: '150x150' } if @last_image_attachment %>
-<p><%= [(@profile.degree.name if @profile.degree), (@profile.academic_title.name if @profile.academic_title)].compact.join(', ') %>
-<p><%= @profile.about %>
-<dl>
-<% if @posts.count > 0 %>
-<dt>Занимаемые должности</dt>
-<dd>
-<ul>
-<% @posts.each do |post| %>
-  <li>
-    <%= link_to "#{post.division.name} - #{post.name}", division_post_path(post.division, post) %>
-<% end %>
-</ul>
-</dd>
-<% end %>
-<% if @profile.user.groups.count > 0 %>
-<dt>Членство в группах</dt>
-<dd>
-<ul>
-<% @profile.user.groups.each do |group| %>
-  <li>
-    <%= group.name %>
-    <% if @administrator_permission %>
-      <%= link_to remove_from_group_path(group) + "?user_id=#{@user.id}", title: 'Удалить статью', method: :delete, data: { confirm: 'Are you sure?' } do %>
-	<i class="fi-x"></i>
-      <% end %>
-    <% end %>
-<% end %>
-</ul>
-<% if @administrator_permission %>
-<ul>
-  <% @groups.each do |group| %>
-    <li>
-      <%= group.name %>
-	<%= link_to add_to_group_path(group) + "?user_id=#{@user.id}", title: 'Добавить в группу' do %>
-	  <i class="fi-plus"></i>
+<div class="row panel">
+  <div class="small-12 large-10 columns">
+    <h1><%= @profile.full_name %></h1>
+    <%= render partial: 'articles/first_image_attachment', locals: {image_attachment: @last_image_attachment, dimension: '150x150' } if @last_image_attachment %>
+    <p><%= [(@profile.degree.name if @profile.degree), (@profile.academic_title.name if @profile.academic_title)].compact.join(', ') %>
+    <p><%= @profile.about %>
+    <dl>
+      <% if @posts.count > 0 %>
+      <dt>Занимаемые должности</dt>
+      <dd>
+      <ul>
+	<% @posts.each do |post| %>
+	  <li>
+	    <%= link_to "#{post.division.name} - #{post.name}", division_post_path(post.division, post) %>
 	<% end %>
+      </ul>
+    </dd>
+    <% end %>
+  </div>
+  <div class="large-2 columns">
+  <% if @profile.user.groups.count > 0 %>
+    <dl>
+      <dt>Членство в группах</dt>
+      <dd>
+	<ul>
+	<% @profile.user.groups.each do |group| %>
+	  <li>
+	    <%= group.name %>
+	    <% if @administrator_permission %>
+	      <%= link_to remove_from_group_path(group) + "?user_id=#{@user.id}", title: 'Удалить статью', method: :delete, data: { confirm: 'Are you sure?' } do %>
+		<i class="fi-x"></i>
+	      <% end %>
+	    <% end %>
+	<% end %>
+	</ul>
+	<% if @administrator_permission %>
+	<ul>
+	  <% @groups.each do |group| %>
+	    <li>
+	      <%= group.name %>
+		<%= link_to add_to_group_path(group) + "?user_id=#{@user.id}", title: 'Добавить в группу' do %>
+		  <i class="fi-plus"></i>
+		<% end %>
+	  <% end %>
+	</ul>
+      <% end %>
+      </dd>
+    </dl>
   <% end %>
-</ul>
-<% end %>
-</dd>
-<% end %>
-</dl>
-</section>
+  </div>
+  <div class="small-12 large-12 columns">
+  <h2>Публикации на сайте</h2>
+      <%= render partial: 'articles/article', collection: @articles, locals: { dimension: '75x75' } %>
+      <%= will_paginate @articles %>
+  </div>
+</div>
