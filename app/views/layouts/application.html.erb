@@ -81,31 +81,54 @@
     </nav>
     </div>
     <div class="row" id="container">
-	<div class="large-2 columns panel">
-	  <ul class="side-nav">
-	  <% if @menus['left'] %>
-	    <% @menus['left'].group_by(&:parent_id).first.last.each do |p| %>
-	      <% if @menus['left'].group_by(&:parent_id)[p.id] %>
-	      <li class="has-dropdown">
-		<%= link_to p.title, '#' %>
-		<ul class="dropdown">
-		<% @menus['left'].group_by(&:parent_id)[p.id].each do |c| %>
-		  <li><%= link_to c.title, c.path %></li>
-		<% end %>
-		</ul>
-	      </li>
-	      <% else %>
-		<li><%= link_to p.title, p.path %></li>
+    <div class="row hide-for-large-up panel">
+      <div class="small-6 columns">
+	<ul class="side-nav">
+	 <li> <%= link_to "Обучение", '#' %>
+	  <li><%= link_to "Наука", '#' %>
+	  <li><%= link_to "Профессоинальное обучение", '#' %>
+	</ul>
+      </div>
+      <div class="small-6 columns">
+	<ul class="side-nav">
+	 <li> <%= link_to "Воспитательная работа", '#' %>
+	  <li><%= link_to "Клиника", '#' %>
+	  <li><%= link_to "Новости", '#' %>
+	</ul>
+      </div>
+    </div>
+      <div class="small-6 columns">
+      </div>
+    </div>
+      <div class="large-2 columns panel show-for-large-up">
+	<ul class="side-nav">
+	<% if @menus['left'] %>
+	  <% @menus['left'].group_by(&:parent_id).first.last.each do |p| %>
+	    <% if @menus['left'].group_by(&:parent_id)[p.id] %>
+	    <li class="has-dropdown">
+	      <%= link_to p.title, '#' %>
+	      <ul class="dropdown">
+	      <% @menus['left'].group_by(&:parent_id)[p.id].each do |c| %>
+		<li><%= link_to c.title, c.path %></li>
 	      <% end %>
+	      </ul>
+	    </li>
+	    <% else %>
+	      <li><%= link_to p.title, p.path %></li>
 	    <% end %>
 	  <% end %>
-	  </ul>
-	</div>
-      <div class="large-10 columns">
-	<p class="notice"><%= notice %></p>
-	<p class="alert"><%= alert %></p>
+	<% end %>
+	</ul>
+      </div>
+      <div class="small-12 large-10 columns">
+	<% if notice %>
+	  <p class="notice"><%= notice %></p>
+	<% end %>
+	<% if alert %>
+	  <p class="alert"><%= alert %></p>
+	<% end %>
 	<div class="row">
-	  <div class="large-10 columns show-for-medium-up"">
+	  <div class="large-10 columns show-for-medium-up">
 	    <h1 class="title">Ивановская государственная медицинская академия</h1>
 	  </div>
 	  <div class="large-2 small-12 columns">
