@@ -1,7 +1,7 @@
 class ArticlesController < ApplicationController
   skip_before_filter :authenticate_user!, only: [:index, :show]
   before_action :require_writer, only: [:edit, :update, :create, :destroy]
-  before_action :set_article, only: [:show, :edit, :update, :mercury_update, :destroy]
+  before_action :set_article, only: [:show, :edit, :update, :destroy]
   before_action :set_article_types, only: [:new, :edit]
 
   # GET /articles
@@ -75,13 +75,6 @@ class ArticlesController < ApplicationController
     end
   end
    
-  def mercury_update
-    @article.title = params[:content][:article_title][:value]
-    @article.content = params[:content][:article_content][:value]
-    @article.save!
-    render text: ""
-  end
-    
   # DELETE /articles/1
   # DELETE /articles/1.json
   def destroy

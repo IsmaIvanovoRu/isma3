@@ -10,9 +10,6 @@ body {
 .subtitle {
   margin-top: 15px;
 }
-#container {
-  margin-top: 45px;
-}
 .article_content, #article_content, p {
   text-align : justify;
   font-size: 100%;

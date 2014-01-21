@@ -170,10 +170,5 @@
 </div>
     <%= javascript_include_tag "http://api-maps.yandex.ru/2.0-stable/?load=package.standard&lang=ru-RU" %>
     <%= javascript_include_tag "application" %>
-    <% if controller_name == 'articles' && action_name == 'show' %>
-    <script>
-      jQuery(window).on('mercury:ready', function() { Mercury.saveUrl = '/articles/' + <%= @article.id %> +"/mercury_update"; });
-    </script>
-    <% end %>
   </body>
 </html>
