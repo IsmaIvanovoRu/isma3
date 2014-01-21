@@ -1,5 +1,5 @@
 body {
-/*   background-image: url("/assets/isma.jpeg"); */
+  background-image: url("/assets/isma.jpg");
   background-attachment: fixed;
   background-repeat: no-repeat;
   background-size: 100% auto;
@@ -55,7 +55,8 @@ ul, ol {
 .block {
   font-size : 120%;
   width: 7em;
-  background-color: rgba(204,0,0,0.5);
+  background-color: rgba(255,255,255, 0.6);
+  color: rgba(13,40,175, 1);
   margin: 0;
   padding: 2px;
   text-align : center;
@@ -67,10 +68,12 @@ ul, ol {
   border-top-right-radius: 15px;
 }
 .title {
-  color : #cd2626;
+  color : rgb(122,8,3);
   font-family : Garamond, serif;
-  font-size : 175%;
+  font-size : 150%;
   text-align : center;
+  font-weight: bold;
+  text-transform: uppercase
 }
 .title-super {
   font-family : Garamond, serif;

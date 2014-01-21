@@ -6,9 +6,26 @@
 @import "foundation/functions";
 $rem-base: 14px;
 $row-width: rem-calc(1250);
-$topbar-bg: #104e8b;
-$topbar-dropdown-bg: #104e8b;
-$topbar-dropdown-link-bg: #104e8b;
+$primary-color: rgba(13,40,175, 1);
+$topbar-bg: rgba(231,236,241, 1);
+$topbar-dropdown-bg: rgba(255,255,255, 0.01);
+$topbar-dropdown-link-color: rgba(13,40,175, 1);
+$topbar-dropdown-link-bg: rgba(255,255,255, 0.85);
+$topbar-dropdown-toggle-color: rgba(13,40,175, 1);
+
+/* Set the link colors and styles for top-level nav */
+$topbar-link-color: rgba(13,40,175, 1);
+$topbar-link-color-hover: rgba(13,40,175, 1);
+$topbar-link-color-active: rgba(13,40,175, 1);
+$topbar-link-bg-hover: rgba(255,255,255, 1);
+
+$topbar-dropdown-label-color: rgba(255,255,255, 0.85);
+
+/* Top menu icon styles */
+$topbar-menu-link-color: rgba(13,40,175, 1);
+$topbar-menu-icon-color: rgba(13,40,175, 1);
+$topbar-menu-link-color-toggled: rgba(255,255,255, 0.85);
+$topbar-menu-icon-color-toggled: rgba(255,255,255, 0.85);
 
 // $experimental: true;
 
