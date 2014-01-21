@@ -1,5 +1,5 @@
 Isma::Application.routes.draw do
-  mount Ckeditor::Engine => '/ckeditor'
+
   devise_for :users
   
   controller :search do

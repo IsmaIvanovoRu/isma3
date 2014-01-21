@@ -17,9 +17,6 @@
     <% if action_name == 'show' %>
       <% if @moderator_permission || current_user == @article.user %>
 	<%= link_to edit_article_path(@article), title: 'Изменить настройки статьи' do %>
-	  <i class="fi-key"></i>
-	<% end %>
-	<%= link_to "/editor" + request.path, title: 'Редактировать статью' do %>
 	  <i class="fi-page-edit"></i>
 	<% end %>
 	<%= link_to @article, title: 'Удалить статью', method: :delete, data: { confirm: 'Are you sure?' } do %>
