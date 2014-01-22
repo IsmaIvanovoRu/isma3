@@ -57,8 +57,6 @@ gem 'thinking-sphinx'
 
 gem 'devise'
 
-gem 'ckeditor'
-
 gem 'sanitize'
 
 gem 'roo'

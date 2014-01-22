@@ -10,6 +10,14 @@
       </ul>
     </div>
   <% end %>
+  <div class="field">
+    <%= f.label 'title' %>
+    <%= f.text_field :title %>
+  </div>
+  <div class="field">
+    <%= f.label 'content' %>
+    <%= f.text_area :content, class: 'rows-40' %>
+  </div>
   <% unless @divisions.nil? %>
   <div class="field">
     <%= f.label 'division_id' %>

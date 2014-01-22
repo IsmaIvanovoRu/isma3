@@ -47,12 +47,9 @@ class ArticlesController < ApplicationController
   def create
     @article = Article.new(article_params)
     @article.user_id = current_user.id
-    @article.title = ""
-    @article.content = ""
     respond_to do |format|
       if @article.save
-	redirect_path = '/editor' + article_path(@article)
-        format.html { redirect_to redirect_path, notice: 'Article was successfully created.' }
+        format.html { redirect_to @article, notice: 'Article was successfully created.' }
         format.json { render action: 'show', status: :created, location: @article }
       else
         format.html { render action: 'new' }

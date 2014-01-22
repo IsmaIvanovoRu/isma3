@@ -164,11 +164,18 @@
 	</div>
       </div>
     </footer>
-<div id="add_menu" class="reveal-modal medium" data-reveal>
-  <%= render partial: 'menus/form' %>
-  <a class="close-reveal-modal">&#215;</a>
-</div>
-    <%= javascript_include_tag "http://api-maps.yandex.ru/2.0-stable/?load=package.standard&lang=ru-RU" %>
+    <div id="add_menu" class="reveal-modal medium" data-reveal>
+      <%= render partial: 'menus/form' %>
+      <a class="close-reveal-modal">&#215;</a>
+    </div>
     <%= javascript_include_tag "application" %>
+    <% if controller_name == 'divisions' && action_name == 'show' %>
+	<%= javascript_include_tag "http://api-maps.yandex.ru/2.0-stable/?load=package.standard&lang=ru-RU" %>
+    <%= javascript_include_tag "ymap" %>
+    <% end %>
+    <% if controller_name == 'articles' && action_name == 'edit' %>
+      <%= javascript_include_tag "ckeditor/ckeditor" %>
+      <%= javascript_include_tag "article_edit" %>
+    <% end %>
   </body>
 </html>
