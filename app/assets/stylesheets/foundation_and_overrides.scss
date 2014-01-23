@@ -5,6 +5,11 @@
 // Uncomment to use rem-calc() in your settings
 @import "foundation/functions";
 $rem-base: 14px;
+$h1-font-size: rem-calc(18);
+$h2-font-size: rem-calc(16);
+$h3-font-size: rem-calc(14);
+$h4-font-size: rem-calc(12);
+
 $row-width: rem-calc(1250);
 $primary-color: rgba(13,40,175, 1);
 $topbar-bg: rgba(231,236,241, 1);
