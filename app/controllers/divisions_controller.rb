@@ -13,7 +13,14 @@ class DivisionsController < ApplicationController
   end
   
   def show
-    @articles = @division.articles.order('updated_at DESC')
+    if current_user.nil?
+      @articles_fixed = (@division.articles.includes(:attachments).includes(:article_type).order('updated_at DESC').where(published: true, group_id: nil, fixed: true).where("exp_date >= ? or exp_date IS ?", Time.now.to_date, nil) + Article.includes(:attachments).includes(:article_type).order('updated_at DESC').where(published: true, group_id: nil, division_id: @division, fixed: true).where("exp_date >= ? or exp_date IS ?", Time.now.to_date, nil)).uniq
+      @articles_not_fixed = (@division.articles.includes(:attachments).includes(:article_type).order('updated_at DESC').where(published: true, group_id: nil, fixed: false).where("exp_date >= ? or exp_date IS ?", Time.now.to_date, nil) + Article.includes(:attachments).includes(:article_type).order('updated_at DESC').where(published: true, group_id: nil, division_id: @division, fixed: false).where("exp_date >= ? or exp_date IS ?", Time.now.to_date, nil)).uniq.first(5)
+    else
+      current_user_groups = current_user.groups + current_user.groups.joins(:parent).map{|g| g.parent} + [nil]
+      @articles_fixed = (@division.articles.includes(:attachments).includes(:article_type).order('updated_at DESC').where(published: true, group_id: current_user_groups, fixed: true).where("exp_date >= ? or exp_date IS ?", Time.now.to_date, nil) + Article.includes(:attachments).includes(:article_type).order('updated_at DESC').where(published: true, group_id: current_user_groups, division_id: @division, fixed: true).where("exp_date >= ? or exp_date IS ?", Time.now.to_date, nil)).uniq
+      @articles_not_fixed = (@division.articles.includes(:attachments).includes(:article_type).order('updated_at DESC').where(published: true, group_id: current_user_groups, fixed: true).where("exp_date >= ? or exp_date IS ?", Time.now.to_date, nil) + Article.includes(:attachments).includes(:article_type).order('updated_at DESC').where(published: true, group_id: current_user_groups, division_id: @division, fixed: false).where("exp_date >= ? or exp_date IS ?", Time.now.to_date, nil)).uniq.first(5)
+    end
     @posts = @division.posts.order(:name)
     @head = @posts.select{|e| e if e.is_head?}
     @employees = @posts - @head

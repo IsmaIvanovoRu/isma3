@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140110164204) do
+ActiveRecord::Schema.define(version: 20140123132550) do
 
   create_table "academic_titles", force: true do |t|
     t.string   "name",       default: "", null: false
@@ -55,7 +55,7 @@ ActiveRecord::Schema.define(version: 20140110164204) do
     t.string   "title",                       default: "", null: false
     t.string   "mime_type",                   default: "", null: false
     t.binary   "data",       limit: 16777215
-    t.binary   "thumbnail"
+    t.binary   "thumbnail",  limit: 16777215
     t.text     "content",    limit: 16777215
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -180,7 +180,6 @@ ActiveRecord::Schema.define(version: 20140110164204) do
   add_index "profiles", ["user_id"], name: "index_profiles_on_user_id", using: :btree
 
   create_table "users", force: true do |t|
-    t.string   "email",                  default: "", null: false
     t.string   "encrypted_password",     default: "", null: false
     t.string   "reset_password_token"
     t.datetime "reset_password_sent_at"
@@ -192,9 +191,9 @@ ActiveRecord::Schema.define(version: 20140110164204) do
     t.string   "last_sign_in_ip"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "login",                  default: "", null: false
   end
 
-  add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
 
 end

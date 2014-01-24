@@ -12,14 +12,11 @@ class ProfilesController < UsersController
     @last_image_attachment = @profile.attachments.last
     @posts = @user.posts
     @groups = Group.order(:name).load - @user.groups
-    @articles = {}
     if current_user.nil?
-      ArticleType.all.each do |article_type|
-	@articles = Article.includes(:attachments).includes(:article_type).order('updated_at DESC').where(published: true, group_id: nil).where("exp_date >= ? or exp_date IS ?", Time.now.to_date, nil).paginate(:page => params[:page])
-      end
+	@articles = Article.includes(:attachments).includes(:article_type).order('updated_at DESC').where(published: true, group_id: nil, user_id: @user).where("exp_date >= ? or exp_date IS ?", Time.now.to_date, nil).paginate(:page => params[:page])
     else
-      current_user_groups = @user.groups + @user.groups.joins(:parent).map{|g| g.parent} + [nil]
-	@articles = Article.includes(:attachments).includes(:article_type).order('updated_at DESC').where(published: true, group_id: current_user_groups).where("exp_date >= ? or exp_date IS ?", Time.now.to_date, nil).paginate(:page => params[:page])
+      current_user_groups = current_user.groups + current_user.groups.joins(:parent).map{|g| g.parent} + [nil]
+      @articles = (@user == current_user ?  Article.includes(:attachments).includes(:article_type).order('updated_at DESC').where(published: true, group_id: current_user_groups, user_id: @user).where("exp_date >= ? or exp_date IS ?", Time.now.to_date, nil).paginate(:page => params[:page]) : Article.includes(:attachments).includes(:article_type).order('updated_at DESC').where(group_id: current_user_groups, user_id: @user).where("exp_date >= ? or exp_date IS ?", Time.now.to_date, nil).paginate(:page => params[:page]))
     end
   end
   
