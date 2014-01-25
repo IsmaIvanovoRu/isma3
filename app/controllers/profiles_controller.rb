@@ -9,7 +9,7 @@ class ProfilesController < UsersController
   end
   
   def show
-    if @profile.full_name.empty?
+    if current_user.profile == @profile && @profile.full_name.empty?
       redirect_to edit_user_profile_path(@user)
     else
       @last_image_attachment = @profile.attachments.last
