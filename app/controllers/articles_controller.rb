@@ -3,6 +3,8 @@ class ArticlesController < ApplicationController
   before_action :require_writer, only: [:edit, :update, :create, :destroy]
   before_action :set_article, only: [:show, :edit, :update, :destroy]
   before_action :set_article_types, only: [:new, :edit]
+  before_action :set_divisions, only: [:new, :edit]
+  before_action :set_groups, only: [:new, :edit]
 
   # GET /articles
   # GET /articles.json
@@ -32,14 +34,10 @@ class ArticlesController < ApplicationController
   # GET /articles/new
   def new
     @article = Article.new
-    @divisions = (current_user_moderator? ? Division.all : current_user.divisions) if current_user
-    @groups = current_user.groups.uniq + current_user.groups.map {|g| g.parent}.select {|g| !g.nil?}.uniq
   end
 
   # GET /articles/1/edit
   def edit
-    @divisions = (current_user_moderator? ? Division.order(:name).all : current_user.divisions.order(:name)) if current_user
-    @groups = current_user.groups.uniq + current_user.groups.map {|g| g.parent}.select {|g| !g.nil?}.uniq
   end
 
   # POST /articles
@@ -90,6 +88,14 @@ class ArticlesController < ApplicationController
     
     def set_article_types
       @article_types = ArticleType.order(:name).all
+    end
+    
+    def set_divisions
+      @divisions = (current_user_moderator? ? Division.order(:name).all : current_user.divisions.order(:name)) if current_user
+    end
+    
+    def set_groups
+      @groups = (current_user_moderator? ? Group.order(:name).load : current_user.groups + current_user.groups.map {|g| g.parent}.select {|g| !g.nil?}.uniq) if current_user
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

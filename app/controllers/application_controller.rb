@@ -68,15 +68,15 @@ class ApplicationController < ActionController::Base
   end
   
   def profile_empty?
-    current_user.profile.full_name == "" if current_user
+    current_user.profile.full_name.empty? if current_user
   end
   
   def set_alert
     case
       when profile_empty?
 	flash[:alert] = "Your profile is empty"
-      else 
-	flash[:alert]=  ""
+    else
+	flash[:alert] = nil
     end
   end
   

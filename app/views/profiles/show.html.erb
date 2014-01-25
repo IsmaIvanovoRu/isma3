@@ -23,7 +23,7 @@
       <dt>Членство в группах</dt>
       <dd>
 	<ul>
-	<% @profile.user.groups.each do |group| %>
+	<% @user_groups.each do |group| %>
 	  <li>
 	    <%= group.name %>
 	    <% if @administrator_permission %>
@@ -35,7 +35,7 @@
 	</ul>
 	<% if @administrator_permission %>
 	<ul>
-	  <% @groups.each do |group| %>
+	  <% @not_user_groups.each do |group| %>
 	    <li>
 	      <%= group.name %>
 		<%= link_to add_to_group_path(group) + "?user_id=#{@user.id}", title: 'Добавить в группу' do %>

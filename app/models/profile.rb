@@ -7,11 +7,11 @@ class Profile < ActiveRecord::Base
   validates :first_name, :last_name, :middle_name, :length => { :maximum => 50 }
   
   def full_name
-  [last_name, first_name, middle_name].compact.join(' ')
+  [last_name, first_name, middle_name].compact.join(' ').strip
   end
   
   def full_name_reg
-  "#{[last_name, first_name, middle_name].compact.join(' ')} - #{[(degree.short_name if degree), (academic_title.name if academic_title)].compact.join(', ')}"
+  "#{[last_name, first_name, middle_name].compact.join(' ')} - #{[(degree.short_name if degree), (academic_title.name if academic_title)].compact.join(', ')}".strip
   end
   
 end

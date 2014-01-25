@@ -119,10 +119,10 @@
       </div>
       <div class="small-12 large-10 columns">
 	<% if notice %>
-	  <p class="notice"><%= notice %></p>
+	  <p class="success label"><%= notice %></p>
 	<% end %>
 	<% if alert %>
-	  <p class="alert"><%= alert %></p>
+	  <p class="alert label"><%= alert %></p>
 	<% end %>
 	<div class="row">
 	  <div class="large-10 columns show-for-medium-up">
@@ -173,7 +173,7 @@
 	<%= javascript_include_tag "http://api-maps.yandex.ru/2.0-stable/?load=package.standard&lang=ru-RU" %>
     <%= javascript_include_tag "ymap" %>
     <% end %>
-    <% if controller_name == 'articles' && (action_name == 'edit' || action_name == 'new') %>
+    <% if (controller_name == 'articles' || controller_name == 'profiles') && (action_name == 'edit' || action_name == 'new') %>
       <%= javascript_include_tag "ckeditor/ckeditor" %>
       <%= javascript_include_tag "article_edit" %>
     <% end %>

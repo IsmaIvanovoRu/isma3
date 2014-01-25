@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140123132550) do
+ActiveRecord::Schema.define(version: 20140124102309) do
 
   create_table "academic_titles", force: true do |t|
     t.string   "name",       default: "", null: false
@@ -173,6 +173,7 @@ ActiveRecord::Schema.define(version: 20140123132550) do
     t.text     "about"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "email",             default: ""
   end
 
   add_index "profiles", ["academic_title_id"], name: "index_profiles_on_academic_title_id", using: :btree

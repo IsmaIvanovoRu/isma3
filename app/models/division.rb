@@ -3,7 +3,8 @@ class Division < ActiveRecord::Base
   has_many :posts
   has_many :users, :through => :posts
   has_many :articles, :through => :users
-    
+  has_and_belongs_to_many :attachments
+  
   validates :name, :presence => true, 
             :length => { :maximum => 255 }
   validates :latitude, :numericality => { :greater_than_or_equal_to => -90, :less_than_or_equal_to => 90 }

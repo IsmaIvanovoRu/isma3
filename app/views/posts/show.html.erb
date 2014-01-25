@@ -5,7 +5,7 @@
 <p><%= @profile.about if @profile %>
 <dl>
   <dt>Контакты</dt>
-  <dd><p><%= mail_to @division.email, 'Написать письмо', subject: "Для #{@profile.full_name if @profile}" unless @division.email.empty? %></dd>
+  <dd><p><%= mail_to @division.email, 'Написать письмо', encode: "javascript", subject: "Для #{@profile.full_name if @profile}" unless @division.email.empty? %></dd>
   <dd><p><%= "Телефон: #{number_to_phone(@post.phone, country_code: 7)}" unless @post.phone.empty? %>
 </section>
 

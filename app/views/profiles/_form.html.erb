@@ -11,44 +11,53 @@
     </div>
   <% end %>
 
-  <div class="field">
-    <%= f.label :first_name, 'Имя' %><br />
-    <%= f.text_field :first_name %>
+  <div class="row">
+    <div class="large-4 small-12 columns">
+      <%= f.label :last_name, 'Фамилия' %><br />
+      <%= f.text_field :last_name %>
+    </div>
+    <div class="large-4 small-12 columns">
+      <%= f.label :first_name, 'Имя' %><br />
+      <%= f.text_field :first_name %>
+    </div>
+    <div class="large-4 small-12 columns">
+      <%= f.label :middle_name, 'Отчество' %><br />
+      <%= f.text_field :middle_name %>
+    </div>
+    <div class="large-6 small-12 columns">
+      <%= f.label 'degree_id', 'Ученая степень' %>
+      <%= f.select :degree_id, options_for_select= @degrees.collect {|p| [t(p.name, :scope => [:degrees]), p.id] }, {:include_blank => ''} %>
+    </div>
+    <div class="large-6 small-12 columns">
+      <%= f.label :academic_title_id, 'Ученое звание' %>
+      <%= f.select :academic_title_id, options_for_select= @academic_titles.collect {|p| [t(p.name, :scope => [:academic_titles]), p.id] }, {:include_blank => ''} %>
+    </div>
+    <div class="large-6 small-12 columns">
+      <%= f.label :phone, 'Телефон' %>
+      <%= f.phone_field :phone %>
+    </div>
+    <div class="large-6 small-12 columns">
+      <%= f.label :email, 'Адрес электронной почты' %>
+      <%= f.email_field :email %>
+    </div>
+    <div class="large-12 small-12 columns">
+      <%= f.label :about, 'О себе' %>
+      <%= f.text_area :about %>
+    </div>
+    <div class='large-12 small-12 columns'>
+      <%= label_tag :entrant, 'Являюсь абитуриентом' %>
+      <%= check_box_tag :entrant %>
+    </div>
+    <div class="large-12 small-12 columns">
+    <p>Аватар</p>
+    <%= fields_for Attachment.new do |a| %>
+      <div class="filefild">
+	<%= a.file_field :file %>
+      </div>
+      <% end %>
+      <div class="actions">
+	<%= f.submit class: 'small button' %>
+      </div>
+    <% end %>
+    </div>
   </div>
-  <div class="field">
-    <%= f.label :middle_name, 'Отчество' %><br />
-    <%= f.text_field :middle_name %>
-  </div>
-  <div class="field">
-    <%= f.label :last_name, 'Фамилия' %><br />
-    <%= f.text_field :last_name %>
-  </div>
-  <div class="field">
-    <%= f.label 'degree_id', 'Ученая степень' %>
-    <%= f.select :degree_id, options_for_select= @degrees.collect {|p| [t(p.name, :scope => [:degrees]), p.id] }, {:include_blank => ''} %>
-  </div>
-  <div class="field">
-    <%= f.label :academic_title_id, 'Ученое звание' %><br>
-    <%= f.select :academic_title_id, options_for_select= @academic_titles.collect {|p| [t(p.name, :scope => [:academic_titles]), p.id] }, {:include_blank => ''} %>
-  </div>
-  <div class="field">
-    <%= f.label :phone, 'Телефон' %><br />
-    <%= f.phone_field :phone %>
-  </div>  
-  <div class="field">
-    <%= f.label :about, 'О себе' %><br />
-    <%= f.text_area :about %>
-  </div>
-  <div class='field'>
-    <%= label_tag :entrant %>
-    <%= check_box_tag :entrant %>
-  </div> 
-  <%= fields_for Attachment.new do |a| %>
-  <div class="filefild">
-    <%= a.file_field :file %>
-  </div>
-  <% end %>
-  <div class="actions">
-    <%= f.submit %>
-  </div>
-<% end %>
