@@ -15,7 +15,11 @@ class ArticlesController < ApplicationController
 	@articles[article_type.name] = Article.includes(:attachments).order('updated_at DESC').where(published: true, group_id: nil, article_type_id: article_type).where("exp_date >= ? or exp_date IS ?", Time.now.to_date, nil).limit(5)
       end
     else
-      current_user_groups = current_user.groups + current_user.groups.joins(:parent).map{|g| g.parent} + [nil]
+      if current_user_moderator?
+	current_user_groups = Group.all + [nil]
+      else
+	current_user_groups = current_user.groups + current_user.groups.joins(:parent).map{|g| g.parent} + [nil]
+      end
       ArticleType.all.each do |article_type|
 	@articles[article_type.name] = Article.includes(:attachments).order('updated_at DESC').where(published: true, group_id: current_user_groups, article_type_id: article_type).where("exp_date >= ? or exp_date IS ?", Time.now.to_date, nil).limit(5)
       end
