@@ -124,6 +124,9 @@
 	<% if alert %>
 	  <p class="alert label"><%= alert %></p>
 	<% end %>
+	<% if flash[:error] %>
+	  <p class="alert label"><%= flash[:error] %></p>
+	<% end %>
 	<div class="row">
 	  <div class="large-10 columns show-for-medium-up">
 	    <h1 class="title">Ивановская государственная медицинская академия</h1>

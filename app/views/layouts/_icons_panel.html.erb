@@ -57,7 +57,7 @@
       <i class="fi-list"></i>
     <% end %>
     <% if action_name == 'show' %>
-      <% if @administrator_permission || current_user == @head.first.user %>
+      <% if @administrator_permission || (@head.first && current_user == @head.first.user) %>
 	<%= link_to edit_division_path(@division), title: 'Редактировать подразделение' do %>
 	  <i class="fi-page-edit"></i>
 	<% end %>

@@ -13,28 +13,28 @@ class ApplicationController < ActionController::Base
   def require_reader
     unless current_user_reader?
       flash[:error] = "You mast have readers`s permissions"
-      redirect_to :back
+      redirect_to root_path
     end
   end
   
   def require_writer
     unless current_user_writer?
       flash[:error] = "You mast have writer`s permissions"
-      redirect_to :back
+      redirect_to root_path
     end
   end
   
   def require_moderator
     unless current_user_moderator?
       flash[:error] = "You mast have moderator`s permissions"
-      redirect_to :back
+      redirect_to root_path
     end
   end 
   
   def require_administrator
     unless current_user_administrator?
       flash[:error] = "You mast have administrator`s permissions"
-      redirect_to :back
+      redirect_to root_path
     end
   end 
   
@@ -72,11 +72,11 @@ class ApplicationController < ActionController::Base
   end
   
   def set_alert
+    flash[:error] ||= nil
+    flash[:alert] ||= nil
     case
       when profile_empty?
 	flash[:alert] = "Your profile is empty"
-    else
-	flash[:alert] = nil
     end
   end
   

@@ -1,6 +1,6 @@
 class DivisionsController < ApplicationController
   skip_before_filter :authenticate_user!, only: [:index, :show]
-  #before_action :current_user_administrator?, only: [:new, :create, :edit, :destroy]
+  before_action :recuire_administrator?, only: [:new, :create, :edit, :destroy]
   before_action :set_division, only: [:show, :edit, :update, :destroy]
   before_action :set_division_types, only: [:new, :edit]
   
@@ -26,6 +26,7 @@ class DivisionsController < ApplicationController
     @employees = @posts - @head
     @childs = Post.where(parent_id: @head.first.id).where.not(division_id: @head.first.division_id) unless @head.empty?
     @attachment = Attachment.new
+    @last_image_attachment = @division.attachments.last
   end
   
   def new

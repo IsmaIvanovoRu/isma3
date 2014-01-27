@@ -1,7 +1,9 @@
 class ProfilesController < UsersController
   skip_before_filter :authenticate_user!, only: [:show]
+  skip_before_filter :require_administrator, only: [:show, :edit, :update, :destroy,]
   before_action :set_user, only: [:show, :edit, :update, :destroy, :new, :create]
   before_action :set_profile, only: [:show, :edit, :update, :destroy]
+  before_action :can, only: [:edit, :update, :destroy]
   before_action :set_degrees, only: [:new, :edit]
   before_action :set_academic_titles, only: [:new, :edit]
   def index
@@ -9,7 +11,7 @@ class ProfilesController < UsersController
   end
   
   def show
-    if current_user.profile == @profile && @profile.full_name.empty?
+    if @profile.full_name.empty? && current_user_owner?
       redirect_to edit_user_profile_path(@user)
     else
       @last_image_attachment = @profile.attachments.last
@@ -82,7 +84,7 @@ class ProfilesController < UsersController
   end
   
   def current_user_owner?
-    current_user.id == @profile.user_id unless current_user.nil?
+    current_user == @user unless current_user.nil?
   end
   
   def set_degrees
@@ -91,6 +93,17 @@ class ProfilesController < UsersController
   
   def set_academic_titles
     @academic_titles = AcademicTitle.all
+  end
+  
+  def can?
+    current_user_administrator? || current_user_owner?
+  end
+  
+  def can
+    unless can?
+      flash[:error] = "You mast have permissions"
+      redirect_to user_profile_path(@user)
+    end
   end
  
   def avatar(image)

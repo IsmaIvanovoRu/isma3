@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-  before_action :current_user_administrator?
+  before_action :require_administrator
   before_action :set_user, only: [:show, :destroy]
   
   def index

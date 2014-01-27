@@ -1,18 +1,22 @@
-<h2>Sign up</h2>
+<div class="row">
+  <div class="large-4 large-centered small-12 columns panel">
+    <h2>Регистрация</h2>
 
-<%= form_for(resource, :as => resource_name, :url => registration_path(resource_name)) do |f| %>
-  <%= devise_error_messages! %>
+    <%= form_for(resource, :as => resource_name, :url => registration_path(resource_name)) do |f| %>
+      <%= devise_error_messages! %>
 
-  <div><%= f.label :login %><br />
-  <%= f.text_field :login, :autofocus => true %></div>
+      <div><%= f.label :login, 'Имя пользователя' %>
+      <%= f.text_field :login, :autofocus => true %></div>
 
-  <div><%= f.label :password %><br />
-  <%= f.password_field :password %></div>
+      <div><%= f.label :password, 'Пароль' %>
+      <%= f.password_field :password %></div>
 
-  <div><%= f.label :password_confirmation %><br />
-  <%= f.password_field :password_confirmation %></div>
+      <div><%= f.label :password_confirmation, 'Подтверждение пароля' %>
+      <%= f.password_field :password_confirmation %></div>
 
-  <div><%= f.submit "Sign up" %></div>
-<% end %>
+      <div><%= f.submit "Регистрация", class: 'button small' %></div>
+    <% end %>
 
-<%= render "devise/shared/links" %>
+    <%= render "devise/shared/links" %>
+  </div>
+</div>

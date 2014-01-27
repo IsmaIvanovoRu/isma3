@@ -13,15 +13,15 @@
 
   <div class="row">
     <div class="large-4 small-12 columns">
-      <%= f.label :last_name, 'Фамилия' %><br />
+      <%= f.label :last_name, 'Фамилия' %>
       <%= f.text_field :last_name %>
     </div>
     <div class="large-4 small-12 columns">
-      <%= f.label :first_name, 'Имя' %><br />
+      <%= f.label :first_name, 'Имя' %>
       <%= f.text_field :first_name %>
     </div>
     <div class="large-4 small-12 columns">
-      <%= f.label :middle_name, 'Отчество' %><br />
+      <%= f.label :middle_name, 'Отчество' %>
       <%= f.text_field :middle_name %>
     </div>
     <div class="large-6 small-12 columns">
@@ -44,19 +44,20 @@
       <%= f.label :about, 'О себе' %>
       <%= f.text_area :about %>
     </div>
+    <p>&nbsp;</p>
     <div class='large-12 small-12 columns'>
-      <%= label_tag :entrant, 'Являюсь абитуриентом' %>
       <%= check_box_tag :entrant %>
+      <%= label_tag :entrant, 'Являюсь абитуриентом' %>
     </div>
     <div class="large-12 small-12 columns">
-    <p>Аватар</p>
     <%= fields_for Attachment.new do |a| %>
       <div class="filefild">
+	<%= a.label :file, 'Аватар' %>
 	<%= a.file_field :file %>
       </div>
       <% end %>
       <div class="actions">
-	<%= f.submit class: 'small button' %>
+	<%= f.submit 'Сохранить', class: 'small button' %>
       </div>
     <% end %>
     </div>

@@ -37,13 +37,15 @@
     <%= f.date_select :exp_date, {:include_blank => ''} %>
   </div>
   <div class="field">
-    <%= f.label :fixed %><br>
     <%= f.check_box :fixed %>
+    <%= f.label :fixed %>
   </div>
-  <div class="field">
-    <%= f.label :published %><br>
-    <%= f.check_box :published %>
-  </div>
+  <% if @moderator_permission %>
+    <div class="field">
+      <%= f.check_box :published %>
+      <%= f.label :published %>
+    </div>
+  <% end %>
   <div class="actions">
     <%= f.submit %>
   </div>

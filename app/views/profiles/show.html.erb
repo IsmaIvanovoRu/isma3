@@ -1,20 +1,24 @@
 <div class="row panel">
   <div class="small-12 large-10 columns">
-    <h1><%= @profile.full_name %></h1>
-    <%= render partial: 'articles/first_image_attachment', locals: {image_attachment: @last_image_attachment, dimension: '150x150' } if @last_image_attachment %>
-    <p><%= [(@profile.degree.name if @profile.degree), (@profile.academic_title.name if @profile.academic_title)].compact.join(', ') %>
-    <p><%= @profile.about %>
-    <dl>
-      <% if @posts.count > 0 %>
-      <dt>Занимаемые должности</dt>
-      <dd>
-      <ul>
-	<% @posts.each do |post| %>
-	  <li>
-	    <%= link_to "#{post.division.name} - #{post.name}", division_post_path(post.division, post) %>
-	<% end %>
-      </ul>
-    </dd>
+    <% unless @profile.full_name.empty? %>
+      <h1><%= @profile.full_name %></h1>
+      <%= render partial: 'articles/first_image_attachment', locals: {image_attachment: @last_image_attachment, dimension: '150x150' } if @last_image_attachment %>
+      <p><%= [(@profile.degree.name if @profile.degree), (@profile.academic_title.name if @profile.academic_title)].compact.join(', ') %>
+      <p><%= @profile.about %>
+      <dl>
+	<% if @posts.count > 0 %>
+	<dt>Занимаемые должности</dt>
+	<dd>
+	<ul>
+	  <% @posts.each do |post| %>
+	    <li>
+	      <%= link_to "#{post.division.name} - #{post.name}", division_post_path(post.division, post) %>
+	  <% end %>
+	</ul>
+      </dd>
+      <% end %>
+    <% else %>
+      <h1>Профиль пользователя не заполнен</h1>
     <% end %>
   </div>
   <div class="large-2 columns">
