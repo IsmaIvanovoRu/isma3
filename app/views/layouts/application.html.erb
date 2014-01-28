@@ -129,7 +129,7 @@
 	<% end %>
 	<div class="row">
 	  <div class="large-10 columns show-for-medium-up">
-	    <h1 class="title">Ивановская государственная медицинская академия</h1>
+	    <h1 class="title" title="<%= @details_hash['Полное наименование академии'] %>">Ивановская государственная медицинская академия</h1>
 	  </div>
 	  <div class="large-2 small-12 columns">
 	    <%= form_tag("/search", method: "get") do %>
@@ -176,9 +176,9 @@
 	<%= javascript_include_tag "http://api-maps.yandex.ru/2.0-stable/?load=package.standard&lang=ru-RU" %>
     <%= javascript_include_tag "ymap" %>
     <% end %>
-    <% if (controller_name == 'articles' || controller_name == 'profiles') && (action_name == 'edit' || action_name == 'new') %>
+    <% if action_name == 'edit' || action_name == 'new' %>
       <%= javascript_include_tag "ckeditor/ckeditor" %>
-      <%= javascript_include_tag "article_edit" %>
+      <%= javascript_include_tag "ckeditor_init" %>
     <% end %>
   </body>
 </html>

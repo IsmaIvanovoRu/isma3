@@ -111,3 +111,11 @@ footer {
 footer.panel {
   margin-bottom: 0;
 }
+.wrap {
+  position: relative;
+}
+.wrap i {
+  position: absolute;
+  top: 0px;
+  right: 5px;
+}
