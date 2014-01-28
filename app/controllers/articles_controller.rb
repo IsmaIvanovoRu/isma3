@@ -2,6 +2,7 @@ class ArticlesController < ApplicationController
   skip_before_filter :authenticate_user!, only: [:index, :show]
   before_action :require_writer, only: [:edit, :update, :create, :destroy]
   before_action :set_article, only: [:show, :edit, :update, :destroy]
+  before_action :can, only: [:edit, :update, :create, :destroy]
   before_action :set_article_types, only: [:new, :edit]
   before_action :set_divisions, only: [:new, :edit]
   before_action :set_groups, only: [:new, :edit]
@@ -31,7 +32,7 @@ class ArticlesController < ApplicationController
   def show
     @attachment = Attachment.new
     @first_image_attachment = @article.attachments.select {|a| a.mime_type =~ /image/}.first
-    @image_attachments = @article.attachments.select {|a| a.mime_type =~ /image/} - [@first_image_attachment]
+    @image_attachments = (@article.attachments.select {|a| a.mime_type =~ /image/}.count > 1 ? @article.attachments.select {|a| a.mime_type =~ /image/} : [])
     @not_image_attachments = @article.attachments.select {|a| a.mime_type !~ /image/}
   end
 
@@ -92,6 +93,21 @@ class ArticlesController < ApplicationController
     
     def set_article_types
       @article_types = ArticleType.order(:name).all
+    end
+    
+    def current_user_owner?
+      current_user == @article.user unless current_user.nil?
+    end
+    
+    def can?
+      current_user_moderator? || current_user_owner?
+    end
+    
+    def can
+      unless can?
+	flash[:error] = "You mast have permissions"
+	redirect_to @article
+      end
     end
     
     def set_divisions

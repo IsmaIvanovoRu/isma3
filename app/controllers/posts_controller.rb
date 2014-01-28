@@ -67,7 +67,7 @@ class PostsController < DivisionsController
   end
   
   def set_users
-    @users = User.joins(:groups).where(groups: {name: 'isma'}).sort_by{|user| user.profile.full_name}
+    @users = User.joins(:groups).where(groups: {name: 'employees'}).sort_by{|user| user.profile.full_name}
   end
 
   def post_params

@@ -1,6 +1,6 @@
 class DivisionsController < ApplicationController
   skip_before_filter :authenticate_user!, only: [:index, :show]
-  before_action :recuire_administrator?, only: [:new, :create, :edit, :destroy]
+  before_action :require_administrator, only: [:new, :create, :edit, :destroy]
   before_action :set_division, only: [:show, :edit, :update, :destroy]
   before_action :set_division_types, only: [:new, :edit]
   

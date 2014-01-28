@@ -1,5 +1,9 @@
 <section class="panel">
-<%= render partial: 'article', locals: { article: @article, dimension: '150x150' } %>
+  <% if @moderator_permission || current_user == @article.user || @article.published %>
+    <%= render partial: 'article', locals: { article: @article, dimension: '150x150' } %>
+  <% else %>
+    <h1>Статья еще не опубликована или снята с публикации</h1>
+  <% end %>
 </section>
 <%  if @writer_permission %>
 <%= form_for(@attachment) do |f| %>
