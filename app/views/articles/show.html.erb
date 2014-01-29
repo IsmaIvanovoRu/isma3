@@ -1,6 +1,6 @@
 <section class="panel">
   <% if @moderator_permission || current_user == @article.user || @article.published %>
-    <%= render partial: 'article', locals: { article: @article, dimension: '150x150' } %>
+    <%= render partial: 'article', locals: { article: @article, dimension: '150x150', composition: {header: true, content: true, footer: true, truncate: true} } %>
   <% else %>
     <h1>Статья еще не опубликована или снята с публикации</h1>
   <% end %>

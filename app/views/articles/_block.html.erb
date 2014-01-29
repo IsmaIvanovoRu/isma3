@@ -1,6 +1,6 @@
 <h1 class="block"><%= title %></h1>
 <section class="panel">
-  <%= render partial: 'articles/article', collection: articles, locals: { dimension: '75x75' } %>
+  <%= render partial: 'articles/article', collection: articles, locals: { dimension: '75x75', composition: composition } %>
 <% case title %>
 <% when 'Новости' %>
 <%= link_to 'Архив новостей', archives_news_path %>

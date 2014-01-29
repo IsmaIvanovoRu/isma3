@@ -42,11 +42,12 @@
     </dl>
   <% end %>
   <p><%= sanitize_full(@division.about) if @division.about %>
-    <%= render partial: 'articles/article', collection: @articles_fixed, locals: { dimension: '75x75' } %>
+    <%= render partial: 'articles/article', collection: @articles_fixed, locals: { dimension: '75x75', composition: {header: true, content: false, footer: true, truncate: true} } %>
   </div>
   
   <div class="large-4 columns">
-    <%= render partial: 'articles/article', collection: @articles_not_fixed, locals: { dimension: '75x75' } %>
+    <h2>Актуально</h2>
+    <%= render partial: 'articles/article', collection: @articles_not_fixed, locals: { dimension: '75x75', composition: {header: true, content: false, footer: true, truncate: true} } %>
     <% unless @division.email.empty? && @head.first && @head.first.phone.empty? %>
     <%= render partial: 'articles/first_image_attachment', locals: {image_attachment: @last_image_attachment, dimension: '75x75' } if @last_image_attachment %>
     <h2>Контакты</h2>
