@@ -9,11 +9,6 @@ class UsersController < ApplicationController
   def show
   end
   
-  def destroy
-    @user.destroy
-    redirect_to :root
-  end
-  
   private
   def set_user
     @user = User.find(params[:id])

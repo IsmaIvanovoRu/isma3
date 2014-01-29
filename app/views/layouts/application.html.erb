@@ -48,7 +48,7 @@
 		<% end %>
 		  <li><%= link_to 'Мой профиль', user_profile_path(current_user) %></li>
 		  <li><%= link_to "Редактировать учетную запись", edit_user_registration_path %></li>
-		  <li><%= link_to "Удалить учетную запись", cancel_user_registration_path, method: :delete, data: {confirm: "Уверены? Ваша учетная запись будет удалена без возможности восстановления"} %></li>
+		  <li><%= link_to "Удалить учетную запись", registration_path(current_user), method: :delete, data: {confirm: "Уверены? Ваша учетная запись будет удалена без возможности восстановления"} %></li>
 	      </ul>
 	    </li>
 	  <% end %>
