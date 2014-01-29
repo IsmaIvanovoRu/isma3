@@ -1,9 +1,4 @@
 <div class="right">
-  <% if user_signed_in? %>
-    <%= link_to user_profile_path(current_user), title: 'Мой профиль' do %>
-      <i class="fi-torso"></i>
-    <% end %>
-  <% end %>
   <% case controller_name %>
   <% when 'articles' %>
     <% if @writer_permission %>
@@ -16,7 +11,7 @@
     <% end %>
     <% if action_name == 'show' %>
       <% if @moderator_permission || current_user == @article.user %>
-	<%= link_to edit_article_path(@article), title: 'Изменить настройки статьи' do %>
+	<%= link_to edit_article_path(@article), title: 'Редактировать статью' do %>
 	  <i class="fi-page-edit"></i>
 	<% end %>
 	<%= link_to @article, title: 'Удалить статью', method: :delete, data: { confirm: 'Are you sure?' } do %>

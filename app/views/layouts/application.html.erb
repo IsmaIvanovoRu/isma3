@@ -31,13 +31,26 @@
       <section class="top-bar-section">
 	<!-- Right Nav Section -->
 	<ul class="right">
-	<% if @administrator_permission %>
-	  <li class="has-dropdown">
-	    <a href="#">Меню</a>
-	    <ul class="dropdown">
-	      <li><%= link_to 'Добавить пункт меню', "#", "data-reveal-id" => 'add_menu' %></li>
-	    </ul>
-	  </li>
+	  <% if user_signed_in? %>
+	    <li class="has-dropdown">
+	      <a href="#">Личный кабинет</a>
+	      <ul class="dropdown">
+		<% if @administrator_permission %>
+		  <li><%= link_to 'Добавить пункт меню', "#", "data-reveal-id" => 'add_menu' %></li>
+		  <li><%= link_to 'Пользователи', users_path %></li>
+		  <li><%= link_to 'Группы', groups_path %></li>
+		<% end %>
+		<% if @moderator_permission %>
+		  <li><%= link_to 'Неопубликованные статьи статьи', '#' %></li>
+		<% end %>
+		<% if @writer_permission %>
+		  <li><%= link_to 'Написать статью', new_article_path %></li>
+		<% end %>
+		  <li><%= link_to 'Мой профиль', user_profile_path(current_user) %></li>
+		  <li><%= link_to "Редактировать учетную запись", edit_user_registration_path %></li>
+		  <li><%= link_to "Удалить учетную запись", cancel_user_registration_path, method: :delete, data: {confirm: "Уверены? Ваша учетная запись будет удалена без возможности восстановления"} %></li>
+	      </ul>
+	    </li>
 	  <% end %>
 	  <% if user_signed_in? %>
 	  <li><%= link_to 'Выйти', destroy_user_session_path, method: "delete" %></li>
