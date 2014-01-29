@@ -64,3 +64,5 @@ gem 'sanitize'
 gem 'roo'
 
 gem 'actionview-encoded_mail_to'
+
+gem 'brakeman', group: :development
