@@ -20,6 +20,10 @@
     <%= f.select :division_type_id, options_for_select= @division_types.collect {|p| [t(p.name, :scope => [:division_types]), p.id] }, {:include_blank => ''} %>
   </div>
   <div class="field">
+    <%= f.label :about, 'О подразделении' %>
+    <%= f.text_area :about %>
+  </div>
+  <div class="field">
     <%= f.label 'Адрес' %><br />
     <%= f.text_field :address %>
   </div>

@@ -4,7 +4,7 @@
       <h1><%= @profile.full_name %></h1>
       <%= render partial: 'articles/first_image_attachment', locals: {image_attachment: @last_image_attachment, dimension: '150x150' } if @last_image_attachment %>
       <p><%= [(@profile.degree.name if @profile.degree), (@profile.academic_title.name if @profile.academic_title)].compact.join(', ') %>
-      <p><%= @profile.about %>
+      <p><%= sanitize_full(@profile.about) %>
       <dl>
 	<% if @posts.count > 0 %>
 	<dt>Занимаемые должности</dt>
@@ -52,9 +52,11 @@
     </dl>
   <% end %>
   </div>
+  <% if @articles %>
   <div class="small-12 large-12 columns">
   <h2>Публикации на сайте</h2>
       <%= render partial: 'articles/article', collection: @articles, locals: { dimension: '75x75' } %>
       <%= will_paginate @articles %>
   </div>
+  <% end %>
 </div>

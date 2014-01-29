@@ -41,7 +41,7 @@ ul, ol {
 .side-nav {
   line-height: 1;
 }
-.timestamp, .author {
+.superscript, .subscript {
   font-size : 75%;
   line-height: normal;
   font-style : italic;
@@ -88,7 +88,7 @@ ul, ol {
   height: 40em;
 }
 .pink {
-  box-shadow: 0 0 10px rgba(204,0,0,0.5);
+  background-color: rgba(204,0,0,0.5);
 }
 .content {
   width: 100%;

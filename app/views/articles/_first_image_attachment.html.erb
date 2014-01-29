@@ -1,6 +1,6 @@
 <div class="wrap th left">
-  <% if @moderator_permission || current_user == article.user %>
-    <%= link_to article.first_image_attachment, method: :delete, data: { confirm: 'Are you sure?' } do %>
+  <% if @moderator_permission %>
+    <%= link_to image_attachment, method: :delete, data: { confirm: 'Are you sure?' } do %>
     <i class="fi-x"></i>
     <% end %>
   <% end %>

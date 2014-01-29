@@ -1,6 +1,6 @@
 <header>
 <% if controller.controller_name == 'articles' && controller.action_name == 'show' %>
-<p class="timestamp">
+<p class="superscript">
   <% case article.updated_at.to_date %>
   <% when Time.now.to_date %>
     сегодня в 
@@ -13,7 +13,7 @@
 <%= article.title %>
 </h1>  
 <% else %>
-  <p class="timestamp">
+  <p class="superscript">
     <% case article.updated_at.to_date %>
     <% when Time.now.to_date %>
     сегодня в 

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140124102309) do
+ActiveRecord::Schema.define(version: 20140128100532) do
 
   create_table "academic_titles", force: true do |t|
     t.string   "name",       default: "", null: false
@@ -102,6 +102,7 @@ ActiveRecord::Schema.define(version: 20140124102309) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "email",            default: ""
+    t.text     "about"
   end
 
   add_index "divisions", ["division_type_id"], name: "index_divisions_on_division_type_id", using: :btree
