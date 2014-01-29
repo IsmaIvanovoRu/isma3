@@ -1,4 +1,12 @@
 <h1>Список пользователей</h1>
+<% if @administrator_permission %>
+  <h2>Импорт пользователей</h2>
+  <%= form_tag import_users_path, multipart: true do %>
+    <%= file_field_tag :file %>
+    <%= submit_tag "Загрузить" %>
+  <% end %>
+<%= link_to 'Скачать список пользователей', users_path(format: :xls) %>
+<% end %>
 <dl class="panel">
   <% @users.each do |user| %>
     <dt>

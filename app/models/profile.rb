@@ -14,4 +14,20 @@ class Profile < ActiveRecord::Base
   "#{[last_name, first_name, middle_name].compact.join(' ')} - #{[(degree.short_name if degree), (academic_title.name if academic_title)].compact.join(', ')}".strip
   end
   
+  def import(row)
+    self.attributes = row.to_hash.slice('last_name', 'first_name', 'middle_name', 'email', 'phone')
+    self.academic_title = AcademicTitle.find_by_name(row["academic_title"]) if row["academic_title"]
+    self.degree = Degree.find_by_name(row["degree"]) if row["degree"]
+    self.save!
+  end
+
+  def open_spreadsheet(file)
+    case File.extname(file.original_filename)
+    when ".ods" then Roo::Openoffice.new(file.path, nil, :ignore)
+    when ".csv" then Roo::Csv.new(file.path, nil, :ignore)
+    when ".xls" then Roo::Excel.new(file.path, nil, :ignore)
+    when ".xlsx" then Roo::Excelx.new(file.path, nil, :ignore)
+    else raise "Unknown file type: #{file.original_filename}"
+    end
+  end
 end

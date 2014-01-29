@@ -8,6 +8,9 @@ Isma::Application.routes.draw do
   
   resources :users do
     resource :profile
+    collection do
+      post :import
+    end
   end
   
   resources :articles do
