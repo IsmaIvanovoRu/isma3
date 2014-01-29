@@ -3,7 +3,7 @@
 <h1><%= "#{@post.division.name} - #{@post.name}" %></h1>
 <%= render partial: 'articles/first_image_attachment', locals: {image_attachment: @last_image_attachment, dimension: '150x150' } if @last_image_attachment %>
 <p><%= link_to @profile.full_name_reg, user_profile_path(@profile.user) if @profile %>
-<p><%= sanitize_full(@profile.about) if @profile.about %>
+<p><%= sanitize_full(@profile.about) if @profile && @profile.about %>
 <% unless @division.email.empty? || @post.phone.empty? %>
 <dl>
   <dt>Контакты</dt>
