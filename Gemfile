@@ -65,4 +65,4 @@ gem 'roo'
 
 gem 'actionview-encoded_mail_to'
 
-gem 'brakeman', group: :development
+#gem 'brakeman', group: :development
