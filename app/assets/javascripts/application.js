@@ -12,6 +12,12 @@
 //
 //= require jquery
 //= require jquery_ujs
-//= require foundation
+//= require foundation/foundation
+//= require foundation/foundation.accordion
+//= require foundation/foundation.clearing
+//= require foundation/foundation.dropdown
+//= require foundation/foundation.orbit
+//= require foundation/foundation.reveal
+//= require foundation/foundation.topbar
 
 $(function(){ $(document).foundation(); });

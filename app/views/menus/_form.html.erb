@@ -18,7 +18,7 @@
   </div>
   <div>
   <%= f.label :parent_id %><br>
-  <%= f.select :parent_id, options_for_select= @parent_menus.collect {|p| [t(p.title, :scope => [:menus]), p.id]}, {:include_blank => true, placeholder: 'Родитель'} %>
+  <%= f.select :parent_id, options_for_select= @parent_menus.collect {|p| [p.title, p.id]}, {:include_blank => true, placeholder: 'Родитель'} %>
   </div>
   <div class="field">
     <%= f.label :title %><br>
