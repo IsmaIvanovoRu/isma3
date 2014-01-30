@@ -43,7 +43,9 @@ namespace :deploy do
     on roles(:app), in: :sequence, wait: 5 do
       # Your restart mechanism here, for example:
       # execute :touch, release_path.join('tmp/restart.txt')
-      execute 'cd /home/markovnin/www/isma/current && bundle exec thin restart'
+      set :use_sudo, true
+      set :password, 'user'
+      execute "#{try_sudo} service thin restart"
     end
   end
 
