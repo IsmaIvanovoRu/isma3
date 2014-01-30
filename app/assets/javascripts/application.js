@@ -21,3 +21,4 @@
 //= require foundation/foundation.topbar
 
 $(function(){ $(document).foundation(); });
+var CKEDITOR_BASEPATH = '/assets/ckeditor/'
