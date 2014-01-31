@@ -58,7 +58,7 @@
     <h2>Как добраться</h2>
     <div id="map" style="width: 100%; height: 200px" data-name="<%= @division.name %>" data-address="<%= @division.address %>" data-latitude="<%= @division.latitude %>" data-longitude="<%= @division.longitude %>"></div>
   </div>
-  <%  if @administrator_permission || (current_user == @head.first.user if @head.first) %>
+  <% if @administrator_permission || (current_user == @head.first.user if @head.first && current_user) %>
     <%= form_for(@attachment) do |f| %>
       <div style="display: none;">
 	<%= text_field_tag :division_id, @division.id %>
