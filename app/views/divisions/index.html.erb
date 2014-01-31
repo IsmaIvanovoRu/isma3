@@ -12,7 +12,7 @@
   <h2><%= type %></h2>
   <ul>
     <% divisions.each do |division| %>
-      <li><%= link_to division.name, division, class: (division.posts.count > 0 ? "label" : "label secondary") %></td>
+      <li><%= link_to division.name.mb_chars.capitalize, division, class: (division.posts.count > 0 ? "label" : "label secondary") %></td>
     <% end %>
   </ul>
 <% end %>
