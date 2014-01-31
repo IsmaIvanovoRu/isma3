@@ -157,26 +157,25 @@
     </div>
     <footer class="panel">
       <div class="row">
-      <% if @menus['down'] %>
-	<% @menus['down'].group_by(&:parent_id).first.last.each do |p| %>
-	  <div class="small-<%= @down_block_count %> large-<%= @down_block_count %> columns">
-	      <ul class="side-nav">
-		<% if @menus['down'].group_by(&:parent_id)[p.id] %>
-		  <% @menus['down'].group_by(&:parent_id)[p.id].each do |c| %>
-		    <li><%= link_to c.title, c.path =~ /^http:\/\// ? c.path : "http://#{c.path}", target: 'blank' %></li>
+	<% if @menus['down'] %>
+	  <% @menus['down'].group_by(&:parent_id).first.last.each do |p| %>
+	    <div class="large-<%= @down_block_count %> columns">
+		<ul class="side-nav">
+		  <% if @menus['down'].group_by(&:parent_id)[p.id] %>
+		    <% @menus['down'].group_by(&:parent_id)[p.id].each do |c| %>
+		      <li><%= link_to c.title, c.path =~ /^http:\/\// ? c.path : "http://#{c.path}", target: 'blank' %></li>
+		    <% end %>
+		  <% else %>
+		    <li><%= link_to p.title, p.path =~ /^http:\/\// ? p.path : "http://#{p.path}", target: 'blank' %></li>
 		  <% end %>
-		<% else %>
-		  <li><%= link_to p.title, p.path =~ /^http:\/\// ? p.path : "http://#{p.path}", target: 'blank' %></li>
-		<% end %>
-	      </ul>
-	  </div>
+		</ul>
+	    </div>
+	  <% end %>
 	<% end %>
-      <% end %>
       </div>
       <div class="row">
-	<div class="large-12 small-12 columns">
-
-	<address><%= @details_hash['Полное наименование академии'] %><br /><%= @details_hash['Адрес'] %></address>
+	<div class="large-12 columns">
+	  <address><%= @details_hash['Полное наименование академии'] %><br /><%= @details_hash['Адрес'] %></address>
 	</div>
       </div>
     </footer>
