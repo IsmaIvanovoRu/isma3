@@ -45,7 +45,7 @@ namespace :deploy do
       # execute :touch, release_path.join('tmp/restart.txt')
       set :use_sudo, true
       set :password, 'user'
-      execute "#{try_sudo} service thin restart"
+      execute "service thin restart"
     end
   end
 
