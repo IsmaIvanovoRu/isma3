@@ -118,3 +118,7 @@ footer.panel {
   top: 0px;
   right: 5px;
 }
+.welcome-img {
+  max-width: 100%;
+  height: auto;
+}
