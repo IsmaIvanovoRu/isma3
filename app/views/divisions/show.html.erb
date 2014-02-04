@@ -1,7 +1,7 @@
 <div class="row panel">
   <div class="large-8 columns">
     <header>
-      <h1><%= @division.name.mb_chars.capitalize %></h1>
+      <h1><%= first_letter_upcase(@division.name) %></h1>
     </header>
     <%= link_to 'Добавить должность', new_division_post_path(@division), class: "button small" if @administrator_permission %>
     <dl>
