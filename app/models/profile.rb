@@ -11,7 +11,13 @@ class Profile < ActiveRecord::Base
   end
   
   def full_name_reg
-  full_name + (" - #{[(degree.short_name if degree), (academic_title.name if academic_title)].compact.join(', ').strip}" if degree || academic_title)
+  full_name + (reg.empty? ? "" : " - #{reg}" )
+  end
+  
+  def reg
+    deg = degree.short_name if degree
+    ac = academic_title.name if academic_title
+    [deg, ac].compact.join(', ').strip
   end
   
   def import(row)
