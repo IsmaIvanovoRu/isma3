@@ -18,8 +18,8 @@ $h4-font-size: rem-calc(12);
 $row-width: rem-calc(1250);
 $primary-color: rgba(13,40,175, 1);
 $topbar-bg: rgba(231,236,241, 1);
-$topbar-dropdown-bg: rgba(255,255,255, 0.01);
-$topbar-dropdown-link-color: rgba(13,40,175, 1);
+$topbar-dropdown-bg: rgba(255,255,255, 0.85);
+$topbar-dropdown-link-color: rgba(13,40,175,1);
 $topbar-dropdown-link-bg: rgba(255,255,255, 0.85);
 $topbar-dropdown-toggle-color: rgba(13,40,175, 1);
 
@@ -36,6 +36,8 @@ $topbar-menu-link-color: rgba(13,40,175, 1);
 $topbar-menu-icon-color: rgba(13,40,175, 1);
 $topbar-menu-link-color-toggled: rgba(255,255,255, 0.85);
 $topbar-menu-icon-color-toggled: rgba(255,255,255, 0.85);
+
+$panel-bg: scale-color(rgba(255,255,255, 0.85), $lightness: -5%);
 
 // $experimental: true;
 

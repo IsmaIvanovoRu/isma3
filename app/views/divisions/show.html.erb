@@ -54,8 +54,9 @@
 	<h2>Актуально</h2>
 	<%= render partial: 'articles/article', collection: @articles_not_fixed, locals: { dimension: '75x75', composition: {header: true, content: false, footer: true, truncate: true} } %>
       <% end %>
-      <% unless @division.email.empty? && @head.first && @head.first.phone.empty? %>
-      <%= render partial: 'articles/first_image_attachment', locals: {image_attachment: @last_image_attachment, dimension: '75x75' } if @last_image_attachment %>
+      <%= render partial: 'articles/first_image_attachment', locals: {image_attachment: @last_image_attachment, dimension: '150x150' } if @last_image_attachment %>
+      <% unless @division.email.empty? && @division.address.empty? && (@head.first.phone.empty? if @head.first) %>
+      <div class="clearfix"></div>
       <h2>Контакты</h2>
       <address> <%= "Адрес: #{@division.address}" if @division.address %>
       <%= "Телефон: #{number_to_phone(@head.first.phone, country_code: 7)}" if @head.first && !@head.first.phone.empty? %>

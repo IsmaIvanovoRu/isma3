@@ -15,7 +15,7 @@
 <% @posts.each do |post| %>
   <tr>
     <td><%= post.name %></td>
-    <td><%= post.post_type.name %></td>
+    <td><%= post.post_type.name if post.post_type %></td>
     <td><%= post.division.name %></td>
     <td><%= post.parent.name if post.parent %></td>
     <td><%= post.user.profile.full_name %></td>
