@@ -92,65 +92,71 @@
 	</ul>
       </section>
     </nav>
+  </div>
+  <div class="row hide-for-large-up panel">
+    <div class="small-6 columns">
+      <ul class="side-nav">
+      <li> <%= link_to "Обучение", '#' %>
+	<li><%= link_to "Наука", '#' %>
+	<li><%= link_to "ИПО", '/divisions/108' %>
+      </ul>
     </div>
-    <div class="row" id="container">
-      <div class="row hide-for-large-up panel">
-	<div class="small-6 columns">
-	  <ul class="side-nav">
-	  <li> <%= link_to "Обучение", '#' %>
-	    <li><%= link_to "Наука", '#' %>
-	    <li><%= link_to "ИПО", '/divisions/108' %>
-	  </ul>
-	</div>
-	<div class="small-6 columns">
-	  <ul class="side-nav">
-	  <li> <%= link_to "Воспитательная работа", '#' %>
-	    <li><%= link_to "Клиника ИвГМА", '/divisions/126' %>
-	    <li><%= link_to "Новости", articles_path %>
-	  </ul>
-	</div>
-      </div>
-      <div class="large-2 columns panel show-for-large-up">
-	<ul class="side-nav">
-	<% if @menus['left'] %>
-	  <% @menus['left'].group_by(&:parent_id).first.last.each do |p| %>
-	    <% if @menus['left'].group_by(&:parent_id)[p.id] %>
-	      <hr />
-	      <% @menus['left'].group_by(&:parent_id)[p.id].each do |c| %>
-		<li><%= link_to c.title, c.path %></li>
-	      <% end %>
-	    <% else %>
-	      <li><%= link_to p.title, p.path %></li>
+    <div class="small-6 columns">
+      <ul class="side-nav">
+      <li> <%= link_to "Воспитательная работа", '#' %>
+	<li><%= link_to "Клиника ИвГМА", '/divisions/126' %>
+	<li><%= link_to "Новости", articles_path %>
+      </ul>
+    </div>
+  </div>
+  <div class="row">
+    <div class="large-10 columns show-for-medium-up">
+      <h1 class="title" title="<%= @details_hash['Полное наименование академии'] %>">Ивановская государственная медицинская академия</h1>
+    </div>
+    <div class="large-2 small-12 columns">
+      <%= form_tag("/search", method: "get") do %>
+	<%= search_field_tag :search, nil, :placeholder => "Найти..." %>
+	<%= submit_tag 'Найти', class: "hide" %>
+      <% end %>
+<!--      <%= render partial: 'layouts/icons_panel' %>-->
+    </div>
+  </div>
+  <div class="row">
+    <div class="small-12 large-10 columns">
+      <% if notice %>
+	<p class="success label"><%= notice %></p>
+      <% end %>
+      <% if alert %>
+	<p class="alert label"><%= alert %></p>
+      <% end %>
+      <% if flash[:error] %>
+	<p class="alert label"><%= flash[:error] %></p>
+      <% end %>
+    </div>
+  </div>
+  <div class="row">
+    <div class="large-2 columns show-for-large-up">
+    <section class="panel">
+      <ul class="side-nav">
+      <% if @menus['left'] %>
+	<% @menus['left'].group_by(&:parent_id).first.last.each do |p| %>
+	  <% if @menus['left'].group_by(&:parent_id)[p.id] %>
+	    <hr />
+	    <% @menus['left'].group_by(&:parent_id)[p.id].each do |c| %>
+	      <li><%= link_to c.title, c.path %></li>
 	    <% end %>
+	  <% else %>
+	    <li><%= link_to p.title, p.path %></li>
 	  <% end %>
 	<% end %>
-	</ul>
-      </div>
-      <div class="small-12 large-10 columns">
-	<% if notice %>
-	  <p class="success label"><%= notice %></p>
-	<% end %>
-	<% if alert %>
-	  <p class="alert label"><%= alert %></p>
-	<% end %>
-	<% if flash[:error] %>
-	  <p class="alert label"><%= flash[:error] %></p>
-	<% end %>
-	<div class="row">
-	  <div class="large-10 columns show-for-medium-up">
-	    <h1 class="title" title="<%= @details_hash['Полное наименование академии'] %>">Ивановская государственная медицинская академия</h1>
-	  </div>
-	  <div class="large-2 small-12 columns">
-	    <%= form_tag("/search", method: "get") do %>
-	      <%= search_field_tag :search, nil, :placeholder => "Найти..." %>
-	      <%= submit_tag 'Найти', class: "hide" %>
-	    <% end %>
-	    <%= render partial: 'layouts/icons_panel' %>
-	  </div>
-	</div>
-	<%= yield %>
-      </div>
+      <% end %>
+      </ul>
+      </section>
     </div>
+    <div class="large-10 columns">
+	<%= yield %>
+    </div>
+  </div>
     <footer class="panel">
       <div class="row">
 	<% if @menus['down'] %>

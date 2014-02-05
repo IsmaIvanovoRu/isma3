@@ -1,4 +1,4 @@
-<section  class="panel clearfix">
+<section class="panel clearfix">
 <%= link_to 'К подразделению', @post.division, class: "superscript right" %>
 <h1><%= "#{@post.division.name} - #{@post.name}" %></h1>
 <%= render partial: 'articles/first_image_attachment', locals: {image_attachment: @last_image_attachment, dimension: '150x150' } if @last_image_attachment %>

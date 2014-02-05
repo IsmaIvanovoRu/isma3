@@ -1,5 +1,6 @@
-<div class="row panel">
+<div class="row">
   <div class="small-12 large-10 columns">
+    <section class="panel clearfix">
     <% unless @profile.full_name.empty? %>
       <h1><%= @profile.full_name %></h1>
       <%= render partial: 'articles/first_image_attachment', locals: {image_attachment: @last_image_attachment, dimension: '150x150' } if @last_image_attachment %>
@@ -20,13 +21,15 @@
     <% else %>
       <h1>Профиль пользователя не заполнен</h1>
     <% end %>
+     </section>
   </div>
   <div class="large-2 columns">
+    <section class="panel clearfix">
   <% if @profile.user.groups.count > 0 %>
     <dl>
       <dt>Членство в группах</dt>
       <dd>
-	<ul>
+	<ul class="no-bullet">
 	<% @user_groups.each do |group| %>
 	  <li>
 	    <%= group.name %>
@@ -38,7 +41,7 @@
 	<% end %>
 	</ul>
 	<% if @administrator_permission %>
-	<ul>
+	<ul class="no-bullet">
 	  <% @not_user_groups.each do |group| %>
 	    <li>
 	      <%= group.name %>
@@ -51,12 +54,15 @@
       </dd>
     </dl>
   <% end %>
+   </section>
   </div>
   <% unless @articles.empty? %>
   <div class="small-12 large-12 columns">
+  <section class="panel clearfix">
   <h2>Публикации на сайте</h2>
       <%= render partial: 'articles/article', collection: @articles, locals: { dimension: '75x75', composition: {header: true, content: true, footer: true, truncate: true} } %>
       <%= will_paginate @articles %>
+      </section>
   </div>
   <% end %>
 </div>
