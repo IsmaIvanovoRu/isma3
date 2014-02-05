@@ -1,10 +1,10 @@
 <%= render partial: 'articles/first_image_attachment', locals: {article: article, image_attachment: article.first_image_attachment, dimension: dimension } if article.first_image_attachment %>
 <% if composition[:truncate] %>
-  <div class="article_content clearfix">
+  <div class="text-justify clearfix">
   <%= sanitize_truncate markdown(article.content) %>
   </div>
 <% else %>
-  <div class="article_content clearfix">
+  <div class="text-justify clearfix">
   <%= sanitize_full markdown(article.content) %>
   </div>
 <% end %>
