@@ -31,6 +31,7 @@ class DivisionsController < ApplicationController
     @childs = Post.where(parent_id: @head.first.id).where.not(division_id: @head.first.division_id) unless @head.empty?
     @attachment = Attachment.new
     @last_image_attachment = @division.attachments.last
+    @menu_title = @division.name if current_user_administrator?
   end
   
   def new

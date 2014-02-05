@@ -99,13 +99,13 @@
 	  <ul class="side-nav">
 	  <li> <%= link_to "Обучение", '#' %>
 	    <li><%= link_to "Наука", '#' %>
-	    <li><%= link_to "ИПО", '#' %>
+	    <li><%= link_to "ИПО", '/divisions/108' %>
 	  </ul>
 	</div>
 	<div class="small-6 columns">
 	  <ul class="side-nav">
 	  <li> <%= link_to "Воспитательная работа", '#' %>
-	    <li><%= link_to "Клиника", '#' %>
+	    <li><%= link_to "Клиника ИвГМА", '/divisions/126' %>
 	    <li><%= link_to "Новости", articles_path %>
 	  </ul>
 	</div>
@@ -115,14 +115,10 @@
 	<% if @menus['left'] %>
 	  <% @menus['left'].group_by(&:parent_id).first.last.each do |p| %>
 	    <% if @menus['left'].group_by(&:parent_id)[p.id] %>
-	    <li class="has-dropdown">
-	      <%= link_to p.title, '#' %>
-	      <ul class="dropdown">
+	      <hr />
 	      <% @menus['left'].group_by(&:parent_id)[p.id].each do |c| %>
 		<li><%= link_to c.title, c.path %></li>
 	      <% end %>
-	      </ul>
-	    </li>
 	    <% else %>
 	      <li><%= link_to p.title, p.path %></li>
 	    <% end %>

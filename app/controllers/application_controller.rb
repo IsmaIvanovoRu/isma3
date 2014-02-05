@@ -58,13 +58,13 @@ class ApplicationController < ActionController::Base
     if current_user_administrator? 
       @menus = Menu.order(:weigth).load.group_by(&:location)
       @parent_menus = Menu.all
+      @url = request.fullpath
+      @menu_title = ""
     else
       @menus = Menu.order(:weigth).where(private: false).group_by(&:location)
-      @parent_menus = Menu.where(private: false)
     end
       @down_block_count = 12/@menus['down'].group_by(&:parent_id).first.last.count if @menus['down']
       @menu = Menu.new
-      @url = request.fullpath
   end
   
   def profile_empty?

@@ -15,6 +15,7 @@ class PostsController < DivisionsController
   def show
     @profile = @post.user.profile if @post.user
     @last_image_attachment = @profile.attachments.last if @profile
+    @menu_title = @post.name if current_user_administrator?
   end
   
   def new

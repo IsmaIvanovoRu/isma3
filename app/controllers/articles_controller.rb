@@ -34,6 +34,7 @@ class ArticlesController < ApplicationController
     @first_image_attachment = @article.attachments.select {|a| a.mime_type =~ /image/}.first
     @image_attachments = (@article.attachments.select {|a| a.mime_type =~ /image/}.count > 1 ? @article.attachments.select {|a| a.mime_type =~ /image/} : [])
     @not_image_attachments = @article.attachments.select {|a| a.mime_type !~ /image/}
+    @menu_title = @article.title if current_user_administrator?
   end
 
   # GET /articles/new
