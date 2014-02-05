@@ -57,6 +57,7 @@ ul, ol {
 .title {
   color : rgb(122,8,3);
   font-family : Garamond, serif;
+  text-shadow: 1px 1px 2px black, 0 0 1em white;
   font-size : 150%;
   text-align : center;
   font-weight: bold;
@@ -64,7 +65,7 @@ ul, ol {
 }
 .title-super {
   font-family : Garamond, serif;
-  color: white;
+  color: rgb(122,8,3);
   text-transform: uppercase;
   font-size: 0.8125rem;
   font-weight: bold;
