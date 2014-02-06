@@ -43,7 +43,7 @@
 		  <li><%= link_to 'Детали', details_path %></li>
 		<% end %>
 		<% if @moderator_permission %>
-		  <li><%= link_to 'Неопубликованные статьи', '#' %></li>
+		  <li><%= link_to 'Неопубликованные статьи', archives_path + "?published=0" %></li>
 		<% end %>
 		<% if @writer_permission %>
 		  <li><%= link_to 'Написать статью', new_article_path %></li>
