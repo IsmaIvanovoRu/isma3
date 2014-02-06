@@ -1,4 +1,24 @@
 <header>
+<div class="left">
+  <% if @moderator_permission %>
+    <%= link_to published_toggle_article_path(article), title: (article.published ? 'Снять с публикации' : 'Опубликовать'), method: :put do %>
+      <i class="fi-eye"></i>
+    <% end %>
+  <% end %>
+  <% if @writer_permission %>
+    <% if @moderator_permission || current_user == @article.user %>
+      <%= link_to up_article_path(article), title: 'Понять наверх', method: :put do %>
+	<i class="fi-arrow-up"></i>
+      <% end %>
+      <%= link_to edit_article_path(article), title: 'Редактировать статью' do %>
+	<i class="fi-page-edit"></i>
+      <% end %>
+      <%= link_to @article, title: 'Удалить статью', method: :delete, data: { confirm: 'Are you sure?' } do %>
+	<i class="fi-x"></i>
+      <% end %>
+    <% end %>
+  <% end %>
+</div>
 <p class="superscript">
   <% case article.updated_at.to_date %>
   <% when Time.now.to_date %>

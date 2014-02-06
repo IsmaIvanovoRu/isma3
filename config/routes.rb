@@ -14,7 +14,10 @@ Isma::Application.routes.draw do
   end
   
   resources :articles do
-    member {put :mercury_update}
+    member do
+      put :published_toggle
+      put :up
+    end
   end
   resources :attachments
   resources :details  
