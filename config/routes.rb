@@ -22,9 +22,7 @@ Isma::Application.routes.draw do
   resources :attachments
   resources :details  
   controller :archives do
-    get '/archives/articles' => :articles
-    get '/archives/news' => :news
-    get '/archives/announcements' => :announcements
+    get 'archives' => :index
   end
 
   controller :contacts do

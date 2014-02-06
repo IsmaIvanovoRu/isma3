@@ -6,8 +6,8 @@
     <% end %>
   <% end %>
   <% if @writer_permission %>
-    <% if @moderator_permission || current_user == @article.user %>
-      <%= link_to up_article_path(article), title: 'Понять наверх', method: :put do %>
+    <% if @moderator_permission || current_user == article.user %>
+      <%= link_to up_article_path(article), title: 'Поднять наверх', method: :put do %>
 	<i class="fi-arrow-up"></i>
       <% end %>
       <%= link_to edit_article_path(article), title: 'Редактировать статью' do %>
