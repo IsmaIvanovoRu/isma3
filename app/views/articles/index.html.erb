@@ -4,6 +4,6 @@
     <%= render partial: 'block', locals: {title: 'Материалы', articles: @articles['articles'], composition: {header: true, content: true, footer: true, truncate: true} } unless @articles['articles'].empty? %>
   </div>
   <div class="<%= (@articles['news'].count > 0 || @articles['articles'].count > 0) ? 'large-4 columns' : 'small-12 large-12 columns' %>">
-    <%= render partial: 'block', locals: {title: 'Анонсы', articles: @articles['announcements'], composition: {header: true, content: true, footer: false, truncate: true} } unless @articles['announcements'].empty? %>
+    <%= render partial: 'block', locals: {title: 'Анонсы', articles: @articles['announcements'], composition: {header: true, content: true, footer: true, truncate: true} } unless @articles['announcements'].empty? %>
   </div>
 </div>

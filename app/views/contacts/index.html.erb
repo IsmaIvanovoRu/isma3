@@ -1,0 +1,44 @@
+<section class="panel clearfix">
+<h1>Реквизиты и контакты</h1>
+<dl>
+  <% if @details_hash['Полное наименование академии'] || @details_hash['Сокращенное наименование академии'] || @details_hash['Международное наименование академии'] %>
+    <dt>Наименование академии</dt>
+    <dd><strong>полное: </strong><%= @details_hash['Полное наименование академии'] %></dd>
+    <dd><strong>сокращенное: </strong><%= @details_hash['Сокращенное наименование академии'] %></dd>
+    <dd><strong>международное: </strong><%= @details_hash['Международное наименование академии'] %></dd>
+  <% end %>
+  <% if @details_hash['Адрес'] %>
+    <dt>Адрес</dt>
+    <dd><%= @details_hash['Адрес'] %></dd>
+  <% end %>
+  <% if @details_hash['Электронная почта'] %>
+    <dt>Электронная почта</dt>
+    <dd><%= mail_to @details_hash['Электронная почта'], 'Написать письмо', encode: "javascript" %></dd>
+  <% end %>
+  <% if @details_hash['Телефон'] %>
+    <dt>Телефон</dt>
+    <dd><%= number_to_phone(@details_hash['Телефон'], country_code: 7) %></dd>
+  <% end %>
+  <% if @details_hash['ИНН'] || @details_hash['КПП'] || @details_hash['ОКПО'] || @details_hash['ОКОГУ'] || @details_hash['Получатель платежа'] || @details_hash['Расчетный счет'] %>
+  <dt>Реквизиты</dt>
+    <% if @details_hash['ИНН'] %>
+      <dd><strong>ИНН: </strong><%= @details_hash['ИНН'] %></dd>
+    <% end %>
+    <% if @details_hash['КПП'] %>
+      <dd><strong>КПП: </strong><%= @details_hash['КПП'] %></dd>
+    <% end %>
+    <% if @details_hash['ОКПО'] %>
+      <dd><strong>ОКПО: </strong><%= @details_hash['ОКПО'] %></dd>
+    <% end %>
+    <% if @details_hash['ОКОГУ'] %>
+      <dd><strong>ОКОГУ: </strong><%= @details_hash['ОКОГУ'] %></dd>
+    <% end %>
+    <% if @details_hash['Получатель платежа'] %>
+      <dd><strong>Получатель платежа: </strong><%= @details_hash['Получатель платежа'] %></dd>
+    <% end %>
+    <% if @details_hash['Расчетный счет'] %>
+      <dd><strong>Расчетный счет: </strong><%= @details_hash['Расчетный счет'] %></dd>
+    <% end %>
+    <% end %>
+</dl>
+</section>

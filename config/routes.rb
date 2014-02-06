@@ -24,15 +24,15 @@ Isma::Application.routes.draw do
     get '/archives/announcements' => :announcements
   end
 
+  controller :contacts do
+    get 'contacts' => :index
+  end
+  
   resources :groups do
     member do
       get :add_to
       delete :remove_from
     end
-  end
-  
-  controller :groups do 
-
   end
   
   resources :divisions do 
