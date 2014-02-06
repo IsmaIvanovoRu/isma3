@@ -114,3 +114,6 @@ footer.panel {
   max-width: 100%;
   height: auto;
 }
+section.panel {
+  border-top: 3px solid rgb(0,0,205);
+}

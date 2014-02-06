@@ -1,4 +1,5 @@
 class PostsController < DivisionsController
+  before_action :require_administrator, only: [:index, :new, :create, :edit, :destroy]
   before_action :set_division, only: [:index, :show, :edit, :new, :create, :update, :destroy]
   before_action :set_post, only: [:show, :edit, :update, :destroy]
   before_action :set_post_types, only: [:new, :edit]
@@ -6,7 +7,6 @@ class PostsController < DivisionsController
   before_action :set_posts, only: [:index, :new, :edit]
   before_action :set_users, only: [:new, :edit]
   
-  before_action :current_user_administrator?, only: [:new, :create, :edit, :destroy]
   
   def index
     @posts = @division.posts.order(:name).all
