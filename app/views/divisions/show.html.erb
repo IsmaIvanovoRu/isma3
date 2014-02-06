@@ -1,6 +1,23 @@
 <div class="row">
   <div class="large-8 columns">
   <section class="panel">
+    <div class='right'>
+      <% if @administrator_permission %>
+	<%= link_to new_division_path, title: 'Новое подразделение' do %>
+	  <i class="fi-plus"></i>
+	<% end %>
+      <% end %>
+      <% if @administrator_permission || (@head.first && current_user == @head.first.user) %>
+	<%= link_to edit_division_path(@division), title: 'Редактировать подразделение' do %>
+	  <i class="fi-page-edit"></i>
+	<% end %>
+      <% end %>
+      <% if @administrator_permission %>
+	<%= link_to division_path(@division), title: 'Удалить подразделение', method: :delete, data: { confirm: 'Are you sure?' } do %>
+	  <i class="fi-x"></i>
+	<% end %>
+      <% end %>
+    </div>
     <header>
       <h1><%= first_letter_upcase(@division.name) %></h1>
     </header>
@@ -42,6 +59,7 @@
       </dd>
     </dl>
   <% end %>
+  <hr />
   <div class="text-justify">
   <%= sanitize_full(@division.about) if @division.about %>
   </div>

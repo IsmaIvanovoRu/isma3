@@ -1,6 +1,11 @@
 <div class="row">
   <div class="small-12 large-10 columns">
     <section class="panel clearfix">
+      <% if @administrator_permission || current_user == @user %>
+	<%= link_to edit_user_profile_path(@user), title: 'Редактировать профиль', class: 'right' do %>
+	  <i class="fi-page-edit"></i>
+	<% end %>
+      <% end %>
     <% unless @profile.full_name.empty? %>
       <h1><%= @profile.full_name %></h1>
       <%= render partial: 'articles/first_image_attachment', locals: {image_attachment: @last_image_attachment, dimension: '150x150' } if @last_image_attachment %>
@@ -58,11 +63,12 @@
   </div>
   <% unless @articles.empty? %>
   <div class="small-12 large-12 columns">
-  <section class="panel clearfix">
-  <h2>Публикации на сайте</h2>
-      <%= render partial: 'articles/article', collection: @articles, locals: { dimension: '75x75', composition: {header: true, content: true, footer: true, truncate: true} } %>
+    <section class="panel clearfix">
+      <h2>Публикации на сайте</h2>
+      <%= render partial: 'articles/article', collection: @articles, locals: { dimension: '75x75', composition: {header: true, content: true, footer: false, truncate: true} } %>
+      <hr />
       <%= will_paginate @articles %>
-      </section>
+    </section>
   </div>
   <% end %>
 </div>
