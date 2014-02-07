@@ -4,12 +4,14 @@ class PostsController < DivisionsController
   before_action :set_post, only: [:show, :edit, :update, :destroy]
   before_action :set_post_types, only: [:new, :edit]
   before_action :set_divisions, only: [:new, :edit]
-  before_action :set_posts, only: [:index, :new, :edit]
+  before_action :set_posts, only: [:new, :edit]
+  before_action :set_division_posts, only: [:index, :show, :edit]
   before_action :set_users, only: [:new, :edit]
+  before_action :set_head, only: [:show, :edit]
+  before_action :can, only: [:edit]
   
   
   def index
-    @posts = @division.posts.order(:name).all
   end
   
   def show
@@ -42,7 +44,6 @@ class PostsController < DivisionsController
   
   def destroy
     @post.destroy
-    
     redirect_to posts_url
   end
   
@@ -59,12 +60,31 @@ class PostsController < DivisionsController
     @divisions = Division.all
   end
   
+  def set_division_posts
+    @division_posts = @division.posts.order(:name).all
+  end
+  
   def set_post_types
     @post_types = PostType.all
   end
   
   def set_posts
-    @posts = Post.order(:name).all
+    @posts = @division.order(:name).all
+  end
+  
+  def set_head
+    @head = @division_posts.select{|e| e if e.is_head?}
+  end
+  
+  def can?
+    current_user_administrator? || (current_user == @head.first.user if @head.first)
+  end
+  
+  def can
+    unless can?
+      flash[:error] = "You mast have permissions"
+      redirect_to division_post_path(@division, @post)
+    end
   end
   
   def set_users

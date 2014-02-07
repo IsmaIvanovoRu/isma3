@@ -1,8 +1,12 @@
 class DivisionsController < ApplicationController
   skip_before_filter :authenticate_user!, only: [:index, :show]
-  before_action :require_administrator, only: [:new, :create, :edit, :destroy]
+  before_action :require_administrator, only: [:new, :create, :destroy]
   before_action :set_division, only: [:show, :edit, :update, :destroy]
   before_action :set_division_types, only: [:new, :edit]
+  before_action :set_posts, only: [:show, :edit]
+  before_action :set_division_posts, only: [:show, :edit]
+  before_action :set_head, only: [:show, :edit]
+  before_action :can, only: [:edit]
   
   def index
     @divisions = Division.order(:name).includes(:division_type).all.group_by{|d| d.division_type.name}.sort
@@ -25,8 +29,6 @@ class DivisionsController < ApplicationController
       @articles_fixed = (@division.articles.includes(:attachments).includes(:article_type).order('updated_at DESC').where(published: true, group_id: current_user_groups, fixed: true, division_id: nil).where("exp_date >= ? or exp_date IS ?", Time.now.to_date, nil) + Article.includes(:attachments).includes(:article_type).order('updated_at DESC').where(published: true, group_id: current_user_groups, division_id: @division, fixed: true).where("exp_date >= ? or exp_date IS ?", Time.now.to_date, nil)).uniq
       @articles_not_fixed = (@division.articles.includes(:attachments).includes(:article_type).order('updated_at DESC').where(published: true, group_id: current_user_groups, fixed: false, division_id: nil).where("exp_date >= ? or exp_date IS ?", Time.now.to_date, nil) + Article.includes(:attachments).includes(:article_type).order('updated_at DESC').where(published: true, group_id: current_user_groups, division_id: @division, fixed: false).where("exp_date >= ? or exp_date IS ?", Time.now.to_date, nil)).uniq.first(5)
     end
-    @posts = @division.posts.order(:name)
-    @head = @posts.select{|e| e if e.is_head?}
     @employees = @posts - @head
     @childs = Post.where(parent_id: @head.first.id).where.not(division_id: @head.first.division_id) unless @head.empty?
     @attachment = Attachment.new
@@ -56,8 +58,7 @@ class DivisionsController < ApplicationController
   end
   
   def destroy
-    @division.destroy
-    
+    @division.destroy    
     redirect_to divisions_url
   end
   
@@ -70,6 +71,10 @@ class DivisionsController < ApplicationController
   def set_division
     @division = Division.find(params[:id])
   end
+  
+  def set_division_posts
+    @division_posts = @division.posts.order(:name).all
+  end
 
   def division_params
     params.require(:division).permit(:id, :name, :division_type_id, :address, :latitude, :longitude, :email, :about)
@@ -77,5 +82,26 @@ class DivisionsController < ApplicationController
   
   def set_division_types
     @division_types = DivisionType.all
+  end
+  
+  def set_posts
+    @posts = @division.posts.order(:name)
+  end
+  
+  def set_head
+    @head = @division_posts.select{|e| e if e.is_head?}
+  end
+  
+  def can?
+    current_user_administrator? || (current_user == @head.first.user if @head.first)
+  end
+  
+  def can
+    unless can?
+      flash[:error] = "You mast have permissions"
+      redirect_to @division
+    else
+      @can = true
+    end
   end
 end
