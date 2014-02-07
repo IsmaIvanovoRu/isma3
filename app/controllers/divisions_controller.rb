@@ -85,7 +85,7 @@ class DivisionsController < ApplicationController
   end
   
   def set_posts
-    @posts = @division.posts.order(:name)
+    @posts = Posts.order(:name).all
   end
   
   def set_head

@@ -69,7 +69,7 @@ class PostsController < DivisionsController
   end
   
   def set_posts
-    @posts = @division.order(:name).all
+    @posts = Posts.order(:name).all
   end
   
   def set_head
