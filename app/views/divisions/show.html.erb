@@ -28,7 +28,7 @@
     <dd><%= link_to @head.first.user.profile.full_name_reg, user_profile_path(@head.first.user) if @head.first && @head.first.user %>
     </dd>
     </dl>
-    <% if @posts.count > 1 %>
+    <% if @division_posts.count > 1 %>
     <dl class="accordion" data-accordion>
   <dd>
     <a href="#employees">Сотрудники</a>
