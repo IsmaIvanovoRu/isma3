@@ -30,4 +30,8 @@ class Division < ActiveRecord::Base
     else raise "Unknown file type: #{file.original_filename}"
     end
   end
+  
+  def head
+    posts.includes(:parent).select{|p| p.parent.nil? || p.parent.division_id != id}
+  end
 end

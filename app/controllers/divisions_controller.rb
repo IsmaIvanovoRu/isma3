@@ -89,7 +89,7 @@ class DivisionsController < ApplicationController
   end
   
   def set_head
-    @head = @division_posts.select{|e| e if e.is_head?}
+    @head = @division.head
   end
   
   def can?
