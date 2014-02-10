@@ -1,3 +1,4 @@
+#encoding: UTF-8
 class DivisionsController < ApplicationController
   skip_before_filter :authenticate_user!, only: [:index, :show]
   before_action :require_administrator, only: [:new, :create, :destroy]
@@ -29,8 +30,15 @@ class DivisionsController < ApplicationController
       @articles_fixed = (@division.articles.includes(:attachments).includes(:article_type).order('updated_at DESC').where(published: true, group_id: current_user_groups, fixed: true, division_id: nil).where("exp_date >= ? or exp_date IS ?", Time.now.to_date, nil) + Article.includes(:attachments).includes(:article_type).order('updated_at DESC').where(published: true, group_id: current_user_groups, division_id: @division, fixed: true).where("exp_date >= ? or exp_date IS ?", Time.now.to_date, nil)).uniq
       @articles_not_fixed = (@division.articles.includes(:attachments).includes(:article_type).order('updated_at DESC').where(published: true, group_id: current_user_groups, fixed: false, division_id: nil).where("exp_date >= ? or exp_date IS ?", Time.now.to_date, nil) + Article.includes(:attachments).includes(:article_type).order('updated_at DESC').where(published: true, group_id: current_user_groups, division_id: @division, fixed: false).where("exp_date >= ? or exp_date IS ?", Time.now.to_date, nil)).uniq.first(5)
     end
+    @division_type = @division.division_type.name
+    case @division_type
+    when 'representative'
+      @clerks = @division.posts.select{|p| p.name =~ /секретарь/}
+      @employees = @division_posts - @head - @clerks
+    else
     @employees = @division_posts - @head
-    @childs = Post.where(parent_id: @head.first.id).where.not(division_id: @head.first.division_id) unless @head.empty?
+    @childs = Post.where(parent_id: @head.first.id).where.not(division_id: @head.first.division_id) unless @head.empty?    
+    end
     @attachment = Attachment.new
     @last_image_attachment = @division.attachments.last
     @menu_title = @division.name if current_user_administrator?
@@ -69,7 +77,7 @@ class DivisionsController < ApplicationController
   
   private
   def set_division
-    @division = Division.includes(:posts).includes(:users).includes(:profiles).find(params[:id])
+    @division = Division.includes(:division_type).includes(:posts).includes(:users).includes(:profiles).find(params[:id])
   end
   
   def set_division_posts
