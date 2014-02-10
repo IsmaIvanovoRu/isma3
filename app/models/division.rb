@@ -2,6 +2,7 @@ class Division < ActiveRecord::Base
   belongs_to :division_type
   has_many :posts
   has_many :users, :through => :posts
+  has_many :profiles, :through => :users
   has_many :articles, :through => :users
   has_and_belongs_to_many :attachments
   

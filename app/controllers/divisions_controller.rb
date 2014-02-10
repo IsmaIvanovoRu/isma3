@@ -69,7 +69,7 @@ class DivisionsController < ApplicationController
   
   private
   def set_division
-    @division = Division.find(params[:id])
+    @division = Division.includes(:posts).includes(:users).includes(:profiles).find(params[:id])
   end
   
   def set_division_posts
