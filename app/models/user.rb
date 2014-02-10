@@ -21,8 +21,7 @@ class User < ActiveRecord::Base
   
   private
   def add_default_groups
-    groups << Group.where(name: 'reader')
-    groups << Group.where(name: 'guests')
+    groups << Group.where(name: 'readers')
   end
   
   def build_default_profile
