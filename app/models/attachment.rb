@@ -14,7 +14,6 @@ class Attachment < ActiveRecord::Base
       end
       self.data = incoming_file[:file].read
       self.content = pdf2text(incoming_file[:file].tempfile.path) if incoming_file[:file].content_type =~ /pdf/
-      self.content = File.read(incoming_file[:file].tempfile.path) if incoming_file[:file].content_type =~ /xml/
     end
 
     def filename=(new_filename)
