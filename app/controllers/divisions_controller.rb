@@ -3,10 +3,10 @@ class DivisionsController < ApplicationController
   skip_before_filter :authenticate_user!, only: [:index, :show]
   before_action :require_administrator, only: [:new, :create, :destroy]
   before_action :set_division, only: [:show, :edit, :update, :destroy]
-  before_action :set_division_types, only: [:new, :edit]
-  before_action :set_posts, only: [:show, :edit]
-  before_action :set_division_posts, only: [:show, :edit]
-  before_action :set_head, only: [:show, :edit]
+  before_action :set_division_types, only: [:new, :edit, :create]
+  before_action :set_posts, only: [:show, :edit, :create]
+  before_action :set_division_posts, only: [:show, :edit, :create]
+  before_action :set_head, only: [:show, :edit, :create]
   before_action :can, only: [:edit]
   
   def index
@@ -93,7 +93,7 @@ class DivisionsController < ApplicationController
   end
   
   def set_division_posts
-    @division_posts = @division.posts.sort_by{|p| p.user.profile.last_name if p.user}
+    @division_posts = @division.posts
   end
 
   def division_params
