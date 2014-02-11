@@ -18,7 +18,7 @@
     <td><%= post.post_type.name if post.post_type %></td>
     <td><%= post.division.name %></td>
     <td><%= post.parent.name if post.parent %></td>
-    <td><%= post.user.profile.full_name %></td>
+    <td><%= post.user.profile.full_name if post.user %></td>
     <td><%= link_to 'Show', division_post_path(@division, post) %></td>
     <td><%= link_to 'Edit', edit_division_post_path(@division, post) %></td>
     <td><%= link_to 'Destroy', division_post_path(@division, post), method: :delete, data: { confirm: 'Are you sure?' } %></td>

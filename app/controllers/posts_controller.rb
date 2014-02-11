@@ -44,7 +44,7 @@ class PostsController < DivisionsController
   
   def destroy
     @post.destroy
-    redirect_to posts_url
+    redirect_to division_path(@division)
   end
   
   private
