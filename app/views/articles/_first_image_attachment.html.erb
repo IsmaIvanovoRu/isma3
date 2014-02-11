@@ -1,5 +1,5 @@
 <div class="wrap th left">
-  <% if @moderator_permission %>
+  <% if @moderator_permission || current_user == @article.user %>
     <%= link_to image_attachment, method: :delete, data: { confirm: 'Are you sure?' } do %>
     <i class="fi-x"></i>
     <% end %>
