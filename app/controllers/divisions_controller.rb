@@ -49,7 +49,7 @@ class DivisionsController < ApplicationController
 	@articles_not_fixed = (@division.articles.includes(:attachments).includes(:article_type).order('updated_at DESC').where(published: true, group_id: current_user_groups, fixed: false, division_id: nil).where("exp_date >= ? or exp_date IS ?", Time.now.to_date, nil) + Article.includes(:attachments).includes(:article_type).order('updated_at DESC').where(published: true, group_id: current_user_groups, division_id: @division, fixed: false).where("exp_date >= ? or exp_date IS ?", Time.now.to_date, nil)).uniq.first(5)
       end
     @employees = @division_posts - @head
-    @childs = Post.where(parent_id: @head.first.id).where.not(division_id: @head.first.division_id) unless @head.empty?    
+    @childs = Post.where(parent_id: @head).where.not(division_id: @division).map{|p| p.division}.uniq.sort_by(&:name)  
     end
     @attachment = Attachment.new
     @last_image_attachment = @division.attachments.last

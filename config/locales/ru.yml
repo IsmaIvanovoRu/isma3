@@ -256,6 +256,17 @@ ru:
     support: 'вспомогательные службы'
     student: 'обучающиеся'
     clinical: 'лечебные подразделения'
+  article_types:
+    news: 'Новость'
+    articles: 'Материал'
+    announcements: 'Анонс'
+  groups:
+    administrators: 'Администраторы'
+    moderators: 'Модераторы'
+    writers: 'Писатели'
+    readers: 'Читатели'
+    employees: 'Сотрудники'
+    isma: 'ИвГМА'
 
   # remove these aliases after 'activemodel' and 'activerecord' namespaces are removed from Rails repository
   activemodel:
