@@ -11,42 +11,43 @@
     </div>
   <% end %>
   <div class="field">
-    <%= f.label 'title' %>
+    <%= f.label 'Заголовок' %>
     <%= f.text_field :title %>
   </div>
-  <div class="field">
-    <%= f.label 'content' %>
+  <div class="Содержание">
+    <%= f.label 'Содержание' %>
     <%= f.text_area :content%>
   </div>
+  <br />
   <% unless @divisions.nil? %>
   <div class="field">
-    <%= f.label 'division_id' %>
+    <%= f.label 'Можно выбрать подразделение от имени которого, будет опубликован материал (если оставить поле незаполненным, то материал будет опубликован от Вашего имени).' %>
     <%= f.select :division_id, options_for_select= @divisions.collect {|p| [t(p.name, :scope => [:divisions]), p.id] }, {:include_blank => ''} %>
   </div>
   <% end %>
   <div class="field">
-    <%= f.label 'group_id' %>
+    <%= f.label 'Можно выбрать группу пользователей, которые будут видеть опубликованный материал (если оставить поле пустым, то материал будет доступен всем).' %>
     <%= f.select :group_id, options_for_select= @groups.collect {|p| [t(p.name, :scope => [:groups]), p.id] }, {:include_blank => ''} %>
   </div>
   <div class="field">
-    <%= f.label :article_type_id %><br>
+    <%= f.label 'Тип статьи: "Новость" - информация о прошедшем событии, имеющая значение в короткий период времени; "Анонс" - информация о предстоящем событии; "Статья" - основной материал, составляющий контент сайта.' %>
     <%= f.select :article_type_id, options_for_select= @article_types.collect {|p| [t(p.name, :scope => [:article_types]), p.id] }, {:include_blank => ''} %>
   </div>
   <div class="field">
-    <%= f.label :exp_date %><br>
+    <%= f.label 'Можно указать дату, после которой, материал будет автоматически снят с публикации (настоятельно рекомендуем указывать для анонсов событий).' %>
     <%= f.date_select :exp_date, {:include_blank => ''} %>
   </div>
   <div class="field">
     <%= f.check_box :fixed %>
-    <%= f.label :fixed %>
+    <%= f.label 'Закрепить материал (если установить метку, то статья будет располагаться на странице подразделения неограниченное время).' %>
   </div>
   <% if @moderator_permission %>
     <div class="field">
       <%= f.check_box :published %>
-      <%= f.label :published %>
+      <%= f.label 'Опубликовать' %>
     </div>
   <% end %>
   <div class="actions">
-    <%= f.submit %>
+    <%= f.submit 'Сохранить' %>
   </div>
 <% end %>
