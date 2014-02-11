@@ -93,7 +93,7 @@ class DivisionsController < ApplicationController
   end
   
   def set_division_posts
-    @division_posts = @division.posts.order(:name).all
+    @division_posts = @division.posts.sort_by{|p| p.user.profile.last_name if p.user}
   end
 
   def division_params
