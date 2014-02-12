@@ -12,25 +12,31 @@
   <% end %>
 
   <div class="field">
-    <%= f.label :name %><br />
+    <%= f.label :name %>
     <%= f.text_field :name %>
   </div>
   <div class="field">
-    <%= f.label :phone, 'Телефон' %><br />
+    <%= f.label :phone, 'Телефон' %>
     <%= f.phone_field :phone %>
   </div>  
   <div class="field">
-    <%= f.label :post_type_id %><br />
+    <%= f.label :post_type_id %>
     <%= f.select :post_type_id, options_for_select= @post_types.collect {|p| [t(p.name, :scope => [:post_types]), p.id] }, {:include_blank => ''} %>
   </div>
   <div class="field">
-    <%= f.label :parent_id %><br />
+    <%= f.label :parent_id %>
     <%= f.select :parent_id, options_for_select= @posts.collect {|p| ["#{p.name} (#{p.division.name})", p.id] }, {:include_blank => ''} %>
   </div>
   <div class="field">
-    <%= f.label :user_id %><br />
+    <%= f.label :user_id %>
     <%= f.select :user_id, options_for_select= @users.collect {|p| [p.profile.full_name, p.id] }, {:include_blank => ''} %>
   </div>
+  <% if @administrator_permission %>
+  <div class="field">
+    <%= f.check_box :feedback %>
+    <%= f.label 'Готов отвечать на вопросы' %>
+  </div>
+  <% end %>
   <div class="actions">
     <%= f.submit %>
   </div>

@@ -16,6 +16,7 @@ class User < ActiveRecord::Base
   has_and_belongs_to_many :groups
   has_many :posts
   has_many :divisions, :through => :posts
+  has_many :feedbacks
    
   after_create :add_default_groups, :build_default_profile
   

@@ -67,7 +67,7 @@
       <h2>Публикации на сайте</h2>
       <%= render partial: 'articles/article', collection: @articles, locals: { dimension: '75x75', composition: {header: true, content: true, footer: false, truncate: true} } %>
       <hr />
-      <%= will_paginate @articles %>
+      <%= will_paginate @articles, next_label: "Вперед", previous_label: 'Назад' %>
     </section>
   </div>
   <% end %>

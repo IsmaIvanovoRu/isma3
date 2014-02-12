@@ -107,7 +107,7 @@
       <p><%= "Телефон: #{number_to_phone(@head.first.phone, country_code: 7)}" if @head.first && !@head.first.phone.empty? %>
       <p><%= mail_to @division.email, 'Написать письмо', encode: "javascript" if @head.first && !@division.email.empty? %></address>
       <% end %>
-      <h2>Как добраться</h2>
+      <h2>Как нас найти</h2>
       <div id="map" style="width: 100%; height: 200px" data-name="<%= @division.name %>" data-address="<%= @division.address %>" data-latitude="<%= @division.latitude %>" data-longitude="<%= @division.longitude %>"></div>
     </div>
   </section>

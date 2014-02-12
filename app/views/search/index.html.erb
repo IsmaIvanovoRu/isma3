@@ -1,13 +1,29 @@
 <div class="panel">
 <p><%= "Вы искали: \"#{params[:search]}\". Найдено совпадений - #{@search.count}" %>
-<ol start="<%= (params[:page].to_i - 1) * 30 + 1  if params[:page] %>">
-<% @search.each do |search| %>
-<li><%= link_to search.title_sen_dot, attachment_path(search), :target => '_black' if search.class == Attachment %>
-<%= link_to search.title, article_path(search) if search.class == Article %>
-<%= link_to search.profile.full_name, user_profile_path(search) if search.class == User %>
-<%= link_to search.full_name, user_profile_path(search.user) if search.class == Profile %>
-<%= link_to search.name, division_path(search) if search.class == Division %>
+<ol start="<%= (params[:page].to_i - 1) * 30 + 1  if params[:page] %>" style="list-style-position: outside;">
+<% @search.sort_by(&:updated_at).reverse.each do |search| %>
+  <li>
+  <% if search.class == Attachment %>
+    <% if search.mime_type =~ /image/ %>
+      <%= link_to(image_tag(minify_img_path(search), size: '75x75'), "#", class: 'th', :title => search.title_sen_dot, "data-reveal-id" => "attachment_#{search.id}") %>
+      <div id="<%= "attachment_#{search.id}" %>" class="reveal-modal medium" data-reveal align="center">
+	<%= image_tag(inline_path(search)) %>
+	<a class="close-reveal-modal">&#215;</a>
+      </div>
+    <% else %>
+	<i class="fi-paperclip" title="Вложение">&nbsp;</i><%= link_to search.title_sen_dot, attachment_path(search) %>
+    <% end %>
+  <% end %>
+  <% if search.class == Article %>
+    <i class="fi-page" title="Статья">&nbsp;</i><%= link_to search.title, article_path(search) %>
+  <% end %>
+  <% if search.class == Profile %>
+    <i class="fi-torso" title="Пользователь">&nbsp;</i><%= link_to search.full_name, user_profile_path(search.user) %>
+  <% end %>
+  <%  if search.class == Division %>
+    <i class="fi-torsos" title="Подразделение">&nbsp;</i><%= link_to search.name, division_path(search) %>
+  <% end %>
 <% end %>
 </ol>
-<%= will_paginate @search %>
+<%= will_paginate @search, next_label: "Вперед", previous_label: 'Назад' %>
 </div>

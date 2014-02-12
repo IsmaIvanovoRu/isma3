@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140128100532) do
+ActiveRecord::Schema.define(version: 20140212100756) do
 
   create_table "academic_titles", force: true do |t|
     t.string   "name",       default: "", null: false
@@ -107,6 +107,16 @@ ActiveRecord::Schema.define(version: 20140128100532) do
 
   add_index "divisions", ["division_type_id"], name: "index_divisions_on_division_type_id", using: :btree
 
+  create_table "feedbacks", force: true do |t|
+    t.integer  "to",                         null: false
+    t.integer  "from",                       null: false
+    t.text     "question"
+    t.text     "answer"
+    t.boolean  "public",     default: false, null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "groups", force: true do |t|
     t.integer  "parent_id"
     t.string   "name",          default: "",    null: false
@@ -152,10 +162,11 @@ ActiveRecord::Schema.define(version: 20140128100532) do
     t.integer  "division_id"
     t.integer  "parent_id"
     t.integer  "post_type_id"
-    t.string   "name",         default: "", null: false
+    t.string   "name",         default: "",    null: false
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "phone",        default: ""
+    t.boolean  "feedback",     default: false, null: false
   end
 
   add_index "posts", ["division_id"], name: "index_posts_on_division_id", using: :btree

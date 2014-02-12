@@ -1,0 +1,34 @@
+<%= form_for(@feedback) do |f| %>
+  <% if @feedback.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@feedback.errors.count, "error") %> prohibited this feedback from being saved:</h2>
+
+      <ul>
+      <% @feedback.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+  <% unless @feedback_posts.nil? %>
+  <div class="field">
+    <%= f.label 'Выберите сотрудника, к которому будет обращен Ваш вопрос' %>
+    <%= f.select :to, options_for_select= @feedback_posts.collect {|p| [p.name, p.id] }, {:include_blank => ''} %>
+  </div>
+  <% end %>
+  <div class="field">
+    <%= f.label :question %><br>
+    <%= f.text_area :question %>
+  </div>
+  <div class="field">
+    <%= f.label :answer %><br>
+    <%= f.text_area :answer %>
+  </div>
+  <div class="field">
+    <%= f.label :public %><br>
+    <%= f.check_box :public %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

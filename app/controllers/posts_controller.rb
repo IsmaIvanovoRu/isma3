@@ -9,8 +9,7 @@ class PostsController < DivisionsController
   before_action :set_users, only: [:new, :edit]
   before_action :set_head, only: [:show, :edit]
   before_action :can, only: [:edit]
-  
-  
+    
   def index
   end
   
@@ -92,6 +91,6 @@ class PostsController < DivisionsController
   end
 
   def post_params
-    params.require(:post).permit(:id, :user_id, :parent_id, :division_id, :post_type_id, :name, :phone)
+    params.require(:post).permit(:id, :user_id, :parent_id, :division_id, :post_type_id, :name, :phone, :feedback)
   end
 end

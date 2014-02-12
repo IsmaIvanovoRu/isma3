@@ -1,0 +1,5 @@
+<h1><%= t(:feedbacks, scope: [:layout, :common]) %></h1>
+
+<%= @editor_permission ? (render 'form') : (render 'q_form') %>
+
+<%= link_to t(:back, scope: :feedbacks), feedbacks_path %>
