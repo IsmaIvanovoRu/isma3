@@ -17,18 +17,20 @@
   </div>
   <% end %>
   <div class="field">
-    <%= f.label :question %><br>
+    <%= f.label :question, 'Вопрос' %>
     <%= f.text_area :question %>
   </div>
+  <br />
   <div class="field">
-    <%= f.label :answer %><br>
+    <%= f.label :answer, 'Ответ' %>
     <%= f.text_area :answer %>
   </div>
+  <br />
   <div class="field">
-    <%= f.label :public %><br>
     <%= f.check_box :public %>
+    <%= f.label :public, 'Опубликовать' %>
   </div>
   <div class="actions">
-    <%= f.submit %>
+    <%= f.submit 'Отправить', class: 'button small' %>
   </div>
 <% end %>

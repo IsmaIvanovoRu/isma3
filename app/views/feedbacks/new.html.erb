@@ -1,5 +1,7 @@
-<h1><%= t(:feedbacks, scope: [:layout, :common]) %></h1>
+<section class="panel">
+<h1>Задать вопрос</h1>
 
-<%= @editor_permission ? (render 'form') : (render 'q_form') %>
+<%= @moderator_permission ? (render 'form') : (render 'q_form') %>
 
-<%= link_to t(:back, scope: :feedbacks), feedbacks_path %>
+<%= link_to 'К списку вопросов', feedbacks_path %>
+</section>

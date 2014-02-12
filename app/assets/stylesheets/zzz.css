@@ -1,3 +1,4 @@
+@import url(http://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,400,700&subset=cyrillic,latin);
 body {
   background-color: rgb(67,65,59);
   background-image: url("/assets/isma.jpg");
@@ -16,17 +17,14 @@ hr {
 }
 .article_title {
   text-align : left;
-  font-size: 110%;
   line-height: 1.2;
 }
 #article_title {
   text-align : justify;
-  font-size: 120%;
   line-height: 1.2;
 }
 ul, ol {
   list-style-position: inside;
-  font-size: 100%;
 }
 .side-nav {
   line-height: 1;
@@ -42,7 +40,7 @@ ul, ol {
 .block {
   font-size : 120%;
   width: 7em;
-  background-color: rgba(255,255,255, 0.6);
+  background-color: rgba(255,255,255,0.6);
   color: rgba(13,40,175, 1);
   margin: 0;
   padding: 2px;
@@ -64,7 +62,7 @@ ul, ol {
   text-transform: uppercase
 }
 .title-super {
-  font-family : Garamond, serif;
+  font-family: Garamond, serif;
   color: rgb(122,8,3);
   text-transform: uppercase;
   font-size: 0.8125rem;
@@ -116,4 +114,9 @@ footer.panel {
 }
 section.panel {
   border-top: 3px solid rgb(0,0,205);
+}
+#feedback {
+  position: fixed;
+  bottom: -20px;
+  right: 20px;
 }
