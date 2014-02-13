@@ -1,4 +1,4 @@
-<div class="panel">
+<section class="panel">
 <p><%= "Вы искали: \"#{params[:search]}\". Найдено совпадений - #{@search.count}" %>
 <ol start="<%= (params[:page].to_i - 1) * 30 + 1  if params[:page] %>" style="list-style-position: outside;">
 <% @search.sort_by(&:updated_at).reverse.each do |search| %>
@@ -29,4 +29,4 @@
 <% end %>
 </ol>
 <%= will_paginate @search, next_label: "Вперед", previous_label: 'Назад' %>
-</div>
+</section>
