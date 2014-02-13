@@ -1,7 +1,7 @@
 class FeedbacksController < ApplicationController
   skip_before_filter :authenticate_user!, only: [:index]
   before_action :require_moderator, only: [:destroy, :published_toggle, :up]
-  before_action :set_feedback, only: [:show, :edit, :update, :destroy, :can?]
+  before_action :set_feedback, only: [:show, :edit, :update, :destroy, :can?, :published_toggle, :up]
   before_action :can, only: [:edit, :update]
   before_action :set_feedback_posts, only: [:new, :edit, :create]
 
@@ -9,10 +9,9 @@ class FeedbacksController < ApplicationController
   # GET /feedbacks.json
   def index
     unless current_user.nil?
-      @feedbacks = current_user_moderator? ? Feedback.order('updated_at DESC').load : (Feedback.where(public: true) + Feedback.where(public: false, to: current_user.posts)).sort_by(&:updated_at).reverse
-    else
-      @feedbacks = Feedback.order('updated_at DESC').where(public: true)
+      @unpublished_feedbacks = current_user_moderator? ? Feedback.order('updated_at DESC').where(public: false) : Feedback.order('updated_at DESC').where(public: false, to: current_user.posts)
     end
+      @published_feedbacks = Feedback.order('updated_at DESC').where(public: true).paginate(:page => params[:page])
   end
 
   # GET /feedbacks/1
@@ -71,7 +70,7 @@ class FeedbacksController < ApplicationController
   end
   
   def published_toggle
-    @feedback.toggle!(:published)
+    @feedback.toggle!(:public)
     redirect_to :back
   end
   

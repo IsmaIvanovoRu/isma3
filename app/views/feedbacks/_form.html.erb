@@ -16,9 +16,9 @@
     <%= f.select :to, options_for_select= @feedback_posts.collect {|p| [p.name, p.id] }, {:include_blank => ''} %>
   </div>
   <% end %>
-  <div class="field">
-    <%= f.label :question, 'Вопрос' %>
-    <%= f.text_area :question %>
+  <div>
+  <p>Вопрос</p>
+    <%= sanitize_full markdown(@feedback.question) if @feedback.question %>
   </div>
   <br />
   <div class="field">

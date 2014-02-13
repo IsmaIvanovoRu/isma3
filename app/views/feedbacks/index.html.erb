@@ -1,39 +1,9 @@
 <section class="panel">
 <%= link_to 'Задать вопрос', new_feedback_path, class: "small button" if user_signed_in? %>
 <dl>
-  <% @feedbacks.each do |feedback| %>
-    <div class="panel<%= " pink" unless feedback.public %>">
-    <dt><%= sanitize_full markdown(feedback.question) if feedback.question %>
-    <p class="subscript"><%= feedback.user.profile.full_name.empty? ? feedback.user.login : feedback.user.profile.full_name %>
-    &nbsp;|&nbsp;
-    <% case feedback.created_at.to_date %>
-      <% when Time.now.to_date %>
-	сегодня в 
-	  <%= time_tag feedback.created_at, :pubdate => true, :format => '%R' %>
-	<% else %>
-	  <%= time_tag feedback.created_at, :pubdate => true, :format => '%e.%m.%Y %R' %>
-    <% end %>
-    </dt>
-    <dd><%= sanitize_full markdown(feedback.answer) if feedback.answer %>
-    <p class="subscript"><%= feedback.post.user.profile.full_name if feedback.post.user && feedback.answer %>
-    &nbsp;|&nbsp;
-    <% case feedback.updated_at.to_date %>
-      <% when Time.now.to_date %>
-	сегодня в 
-	  <%= time_tag feedback.updated_at, :pubdate => true, :format => '%R' %>
-	<% else %>
-	  <%= time_tag feedback.updated_at, :pubdate => true, :format => '%e.%m.%Y %R' %>
-    <% end %>
-    </dd>
-    </div>
-    <% if @moderator_permission || (current_user == Post.find(feedback.to).user if Post.find(feedback.to)) %>
-      <div>
-        <ul class="button-group">
-          <li><%= link_to 'Ответить', edit_feedback_path(feedback), class: "small button" %>
-          <li><%= link_to 'Удалить', feedback, method: :delete, data: { confirm: 'Are you sure?' }, class: "small button alert" if @moderator_permission %>
-        </ul>
-      </div>
-    <% end %>
-  <% end %>
+<%= render partial: 'feedback', collection: @unpublished_feedbacks %>
+</dl>
+<dl>
+<%= render partial: 'feedback', collection: @published_feedbacks %>
 </dl>
 </section>
