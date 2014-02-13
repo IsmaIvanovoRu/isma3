@@ -21,7 +21,10 @@
     <i class="fi-torso" title="Пользователь">&nbsp;</i><%= link_to search.full_name, user_profile_path(search.user) %>
   <% end %>
   <%  if search.class == Division %>
-    <i class="fi-torsos" title="Подразделение">&nbsp;</i><%= link_to search.name, division_path(search) %>
+    <i class="fi-torsos-all" title="Подразделение">&nbsp;</i><%= link_to search.name, division_path(search) %>
+  <% end %>
+  <%  if search.class == Post %>
+    <i class="fi-torso-business" title="Должность">&nbsp;</i><%= link_to "#{search.name} - #{search.user.profile.full_name if search.user && search.user.profile}", division_post_path(search.division, search) %>
   <% end %>
 <% end %>
 </ol>
