@@ -2,7 +2,7 @@
   <% unless @feedback_posts.nil? %>
   <div class="field">
     <%= f.label 'Выберите сотрудника, к которому будет обращен Ваш вопрос' %>
-    <%= f.select :to, options_for_select= @feedback_posts.collect {|p| [p.name, p.id] }, {:include_blank => ''} %>
+    <%= f.select :to, options_for_select= @feedback_posts.collect {|p| ["#{p.user.profile.full_name if p.user} - #{p.division.name} (#{p.name})", p.id] }, {:include_blank => ''} %>
   </div>
   <% end %>
   <div class="field">
