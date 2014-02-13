@@ -36,7 +36,7 @@ class FeedbacksController < ApplicationController
 
     respond_to do |format|
       if @feedback.save
-        format.html { redirect_to feedbacks_url, notice: 'Feedback was successfully created.' }
+        format.html { redirect_to feedbacks_url, notice: t(:fedback_was_successfully_created, scope: [:notices]) }
         format.json { render action: 'show', status: :created, location: @feedback }
       else
         format.html { render action: 'new' }
@@ -50,7 +50,7 @@ class FeedbacksController < ApplicationController
   def update
     respond_to do |format|
       if @feedback.update(feedback_params)
-        format.html { redirect_to feedbacks_url, notice: 'Feedback was successfully updated.' }
+        format.html { redirect_to feedbacks_url, notice: t(:feedback_was_successfully_updated, scope: [:notices]) }
         format.json { head :no_content }
       else
         format.html { render action: 'edit' }

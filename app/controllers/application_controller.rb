@@ -9,6 +9,8 @@ class ApplicationController < ActionController::Base
   before_action :profile_empty?
   before_action :set_alert
   before_action :set_details
+  before_action :feedbacks_count
+  before_action :articles_count
 
   def require_reader
     unless current_user_reader?
@@ -94,6 +96,14 @@ class ApplicationController < ActionController::Base
     @details_hash = Hash.new
     Detail.all.each{|d| @details_hash[d.key] = d.value}
     @details_hash
+  end
+  
+  def feedbacks_count
+    @feedbacks_count = Feedback.joins(:user).where(public: false, users: {id: current_user}).count unless current_user.nil?
+  end
+  
+  def articles_count
+   @articles_count = Article.order('updated_at DESC').where(published: false).count || 0 if current_user_moderator?
   end
 end
 

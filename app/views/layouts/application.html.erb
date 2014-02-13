@@ -28,8 +28,22 @@
 	<!-- Right Nav Section -->
 	<ul class="right">
 	  <% if user_signed_in? %>
+	    <% if @moderator_permission %>
+	      <% if @articles_count > 0 %>
+		<li><%= link_to archives_path + "?published=0" do %>
+		  <i class="fi-page" style="color: red;" title="<%= "Имеется неопубликованных статей, требующих Вашего внимания - #{@articles_count} " %>"></i></li>
+		  <% end %>
+		</li>
+	      <% end %>
+	    <% end %>
+	    <% if @feedbacks_count > 0 %>
+	      <li><%= link_to feedbacks_path do %>
+		<i class="fi-mail" style="color: red;" title="<%= "Имеется Ваших вопросов, на которые еще не даны ответы - #{@feedbacks_count} " %>"></i></li>
+		<% end %>
+	      </li>
+	      <% end %>
 	    <li class="has-dropdown">
-	      <a href="#">Личный кабинет</a>
+	      <a href="#"><%= current_user.login %>. Личный кабинет</a>
 	      <ul class="dropdown">
 		<% if @administrator_permission %>
 		  <li><%= link_to 'Добавить пункт меню', "#", "data-reveal-id" => 'add_menu' %></li>
@@ -37,9 +51,6 @@
 		  <li><%= link_to 'Пользователи', users_path %></li>
 		  <li><%= link_to 'Группы', groups_path %></li>
 		  <li><%= link_to 'Детали', details_path %></li>
-		<% end %>
-		<% if @moderator_permission %>
-		  <li><%= link_to 'Неопубликованные статьи', archives_path + "?published=0" %></li>
 		<% end %>
 		<% if @writer_permission %>
 		  <li><%= link_to 'Написать статью', new_article_path %></li>

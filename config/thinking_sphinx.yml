@@ -4,3 +4,9 @@ production:
   html_strip: 1
   bin_path: "/usr/bin/X11/"
   host: 127.0.0.1
+development:
+  mysql41: 9306
+  morphology: stem_ru
+  html_strip: 1
+  bin_path: "/usr/bin/X11/"
+  host: 127.0.0.1
