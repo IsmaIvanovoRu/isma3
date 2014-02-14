@@ -2,7 +2,7 @@
 <% if composition[:truncate] %>
   <div class="text-justify clearfix">
   <p>
-  <%= sanitize_truncate markdown(article.content) %>
+  <%= article.content.length > 800 ? sanitize_truncate(markdown(article.content)) : sanitize_full(markdown(article.content)) %>
   </div>
 <% else %>
   <div class="text-justify clearfix">
