@@ -13,7 +13,7 @@
       <%= link_to edit_article_path(article), title: 'Редактировать статью' do %>
 	<i class="fi-page-edit"></i>
       <% end %>
-      <%= link_to @article, title: 'Удалить статью', method: :delete, data: { confirm: 'Are you sure?' } do %>
+      <%= link_to article, title: 'Удалить статью', method: :delete, data: { confirm: 'Are you sure?' } do %>
 	<i class="fi-x"></i>
       <% end %>
     <% end %>

@@ -33,8 +33,6 @@ class DivisionsController < ApplicationController
 	@articles_fixed = Article.includes(:attachments).includes(:article_type).order('updated_at DESC').where(published: true, group_id: current_user_groups, division_id: @division, fixed: true).where("exp_date >= ? or exp_date IS ?", Time.now.to_date, nil).uniq
 	@articles_not_fixed = Article.includes(:attachments).includes(:article_type).order('updated_at DESC').where(published: true, group_id: current_user_groups, division_id: @division, fixed: false).where("exp_date >= ? or exp_date IS ?", Time.now.to_date, nil).uniq.first(5)
       end
-      @clerks = @division.posts.select{|p| p.name =~ /секретарь/}
-      @employees = @division_posts - @head - @clerks
     else
       if current_user.nil?
 	@articles_fixed = (@division.articles.includes(:attachments).includes(:article_type).order('updated_at DESC').where(published: true, group_id: nil, fixed: true, division_id: nil).where("exp_date >= ? or exp_date IS ?", Time.now.to_date, nil) + Article.includes(:attachments).includes(:article_type).order('updated_at DESC').where(published: true, group_id: nil, division_id: @division, fixed: true).where("exp_date >= ? or exp_date IS ?", Time.now.to_date, nil)).uniq
@@ -48,7 +46,8 @@ class DivisionsController < ApplicationController
 	@articles_fixed = (@division.articles.includes(:attachments).includes(:article_type).order('updated_at DESC').where(published: true, group_id: current_user_groups, fixed: true, division_id: nil).where("exp_date >= ? or exp_date IS ?", Time.now.to_date, nil) + Article.includes(:attachments).includes(:article_type).order('updated_at DESC').where(published: true, group_id: current_user_groups, division_id: @division, fixed: true).where("exp_date >= ? or exp_date IS ?", Time.now.to_date, nil)).uniq
 	@articles_not_fixed = (@division.articles.includes(:attachments).includes(:article_type).order('updated_at DESC').where(published: true, group_id: current_user_groups, fixed: false, division_id: nil).where("exp_date >= ? or exp_date IS ?", Time.now.to_date, nil) + Article.includes(:attachments).includes(:article_type).order('updated_at DESC').where(published: true, group_id: current_user_groups, division_id: @division, fixed: false).where("exp_date >= ? or exp_date IS ?", Time.now.to_date, nil)).uniq.first(5)
       end
-    @employees = @division_posts - @head
+    @clerks = @division.posts.select{|p| p.name =~ /секретарь/}
+    @employees = @division_posts - @head - @clerks
     @childs = Post.where(parent_id: @head).where.not(division_id: @division).map{|p| p.division}.uniq.sort_by(&:name)  
     end
     @attachment = Attachment.new

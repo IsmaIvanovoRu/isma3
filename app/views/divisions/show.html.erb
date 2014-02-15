@@ -33,17 +33,15 @@
 	<%= link_to h.user.profile.full_name_reg, user_profile_path(h.user) if h.user %>
       </dd>
     <% end %>
-    <% if @division_type == 'representative' %>
-      <% @clerks.each do |c| %>
-	<% last_image_attachment = c.user.profile.attachments.last if c.user %>
-	<%= render partial: 'articles/first_image_attachment', locals: {image_attachment: last_image_attachment, dimension: '75x75' } if last_image_attachment %>
-	<dt><%= link_to c.name, division_post_path(@division, c) %>
-	</dt>
-	<dd class="clearfix">
-	<% last_image_attachment = c.user.profile.attachments.last if c.user %>
-	  <%= link_to c.user.profile.full_name_reg, user_profile_path(c.user) if c.user %>
-	</dd>
-      <% end %>
+    <% @clerks.each do |c| %>
+      <% last_image_attachment = c.user.profile.attachments.last if c.user %>
+      <%= render partial: 'articles/first_image_attachment', locals: {image_attachment: last_image_attachment, dimension: '75x75' } if last_image_attachment %>
+      <dt><%= link_to c.name, division_post_path(@division, c) %>
+      </dt>
+      <dd class="clearfix">
+      <% last_image_attachment = c.user.profile.attachments.last if c.user %>
+	<%= link_to c.user.profile.full_name_reg, user_profile_path(c.user) if c.user %>
+      </dd>
     <% end %>
     </dl>
     <% if @division_posts.count > 1 %>

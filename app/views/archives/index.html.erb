@@ -1,2 +1,4 @@
 <%= render partial: 'articles/block', locals: { title: 'Архив', articles: @articles, composition: {header: true, content: true, footer: true, truncate: true} } if @articles %>
+<section class="panel">
 <%= will_paginate @articles, next_label: "Вперед", previous_label: 'Назад' %>
+</section>

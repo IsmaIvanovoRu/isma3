@@ -269,7 +269,9 @@ ru:
     isma: 'ИвГМА'
   notices:
     fedback_was_successfully_created: 'Ваш вопрос успешно добавлен. Отслеживать его статус можно в личном кабинете. Когда сотрудник ответит, он будет опубликован на этой странице'
-    feedback_was_successfully_updated: ''
+    feedback_was_successfully_updated: 'Запись обновлена'
+    search_is_temporary_unavaliable: "Поиск временно недоступен"
+    
 
   # remove these aliases after 'activemodel' and 'activerecord' namespaces are removed from Rails repository
   activemodel:
