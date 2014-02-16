@@ -19,6 +19,12 @@
     <%= f.text_area :content%>
   </div>
   <br />
+  <% unless @employees.nil? %>
+  <div class="field">
+    <%= f.label 'Можно выбрать пользователя от имени которого, будет опубликован материал.' %>
+    <%= f.select :user_id, options_for_select = @employees.collect {|p| [p.profile.full_name, p.id] }, {:include_blank => ''} %>
+  </div>
+  <% end %>
   <% unless @divisions.nil? %>
   <div class="field">
     <%= f.label 'Можно выбрать подразделение от имени которого, будет опубликован материал (если оставить поле незаполненным, то материал будет опубликован от Вашего имени).' %>
