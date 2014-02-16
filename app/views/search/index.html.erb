@@ -10,7 +10,7 @@
 	<a class="close-reveal-modal">&#215;</a>
       </div>
     <% else %>
-	  <li><i class="fi-paperclip" title="Вложение">&nbsp;</i><%= link_to search.title_sen_dot, attachment_path(search) %>
+	  <li><i class="fi-paperclip" title="Вложение">&nbsp;</i><%= link_to search.title_sen_dot, attachment_path(search), target: 'blank' %>
     <% end %>
   <% end %>
   <% if search.class == Article %>
