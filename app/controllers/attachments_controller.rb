@@ -5,15 +5,15 @@ class AttachmentsController < ApplicationController
   skip_before_filter :set_menus, only: [:inline, :minify_img]
   skip_before_filter :profile_empty?, only: [:inline, :minify_img]
   skip_before_filter :set_alert, only: [:inline, :minify_img]
-  skip_before_filter :set_details, only: [:inline, :minify_img]
-  
+  skip_before_filter :set_details, only: [:inline, :minify_img]  
   before_action :set_attachment, only: [:show, :destroy, :minify_img, :inline]
   before_action :require_administrator, only: [:index]
+  before_action :attachment_params, only: [:index]
 
   # GET /attachments
   # GET /attachments.json
   def index
-    @attachments = Attachment.all
+    @attachments = Attachment.where(attachment_params).paginate(:page => params[:page])
   end
 
   # GET /attachments/1
@@ -77,5 +77,9 @@ class AttachmentsController < ApplicationController
     def thumb(image)
       img = Magick::Image.from_blob(image).first
       img.resize_to_fill!(150).to_blob
+    end
+    
+    def attachment_params
+      params.permit(:mime_type, :updated_at, :created_at)
     end
 end

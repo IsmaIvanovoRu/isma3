@@ -1,0 +1,26 @@
+<h1>Вложения</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Имя</th>
+      <th>Тип файла</th>
+      <th>Превью</th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @attachments.each do |attachment| %>
+      <tr>
+        <td><%= link_to attachment_name(attachment.title) %></td>
+        <td><%= link_to attachment.mime_type, attachments_path + "?mime_type=#{attachment.mime_type}" %></td>
+        <td><%= image_tag(minify_img_path(attachment)) if attachment.thumbnail %></td>
+        <td><%= link_to 'Show', attachment %></td>
+        <td><%= link_to 'Destroy', attachment, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<%= will_paginate @attachments %>
