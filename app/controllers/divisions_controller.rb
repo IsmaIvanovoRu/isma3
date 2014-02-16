@@ -4,9 +4,9 @@ class DivisionsController < ApplicationController
   before_action :require_administrator, only: [:new, :create, :destroy]
   before_action :set_division, only: [:show, :edit, :update, :destroy]
   before_action :set_division_types, only: [:new, :edit, :create]
-  before_action :set_posts, only: [:show, :edit, :create]
+  before_action :set_posts, only: [:show, :edit]
   before_action :set_division_posts, only: [:show, :edit]
-  before_action :set_head, only: [:show, :edit, :create]
+  before_action :set_head, only: [:show, :edit]
   before_action :can, only: [:edit]
   
   def index
