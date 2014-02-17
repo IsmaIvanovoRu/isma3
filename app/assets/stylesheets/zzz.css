@@ -86,13 +86,17 @@ ul, ol {
   margin-right: 1%;
   margin-bottom: 1%;
 }
-.pdf-thumb {
+.thumb {
 width: 49%;
 float: left;
-overflow: hidden;
-height: 32px;
 margin: 0.5%;
 padding: 0;
+  height:32px;
+}
+.thumb-title {
+  font-size: 90%;
+  height: 16px;
+  overflow: hidden;
 }
 footer {
   font-size: 60%;

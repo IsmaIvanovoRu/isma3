@@ -264,7 +264,7 @@ ru:
     administrators: 'Администраторы'
     moderators: 'Модераторы'
     writers: 'Писатели'
-    readers: 'Читатели'
+    readers: 'Зарегистрированные пользователи'
     employees: 'Сотрудники'
     isma: 'ИвГМА'
   notices:

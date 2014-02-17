@@ -38,7 +38,10 @@ class AttachmentsController < ApplicationController
       if @attachment.save
 	case 
 	  when params[:article_id]
-	    @attachment.articles << Article.find(params[:article_id])
+	    @article = Article.find(params[:article_id])
+	    @attachment.articles << @article
+	    @article.update_attributes(published: false) unless current_user_moderator?
+	    @article.update_attributes(updated_at: @attachment.created_at)
 	  when params[:division_id]
 	    @attachment.divisions << Division.find(params[:division_id])
 	end
