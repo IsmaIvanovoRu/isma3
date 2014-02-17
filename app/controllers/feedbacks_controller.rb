@@ -3,7 +3,7 @@ class FeedbacksController < ApplicationController
   before_action :require_moderator, only: [:destroy, :published_toggle, :up]
   before_action :set_feedback, only: [:show, :edit, :update, :destroy, :can?, :published_toggle, :up]
   before_action :can, only: [:edit, :update]
-  before_action :set_feedback_posts, only: [:new, :edit, :create]
+  before_action :set_feedback_posts, only: [:index, :new, :edit, :create]
 
   # GET /feedbacks
   # GET /feedbacks.json

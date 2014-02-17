@@ -1,4 +1,10 @@
 <section class="panel">
+<h1>Вы можете задать свой вопрос одному из следущих сотрудников Академии</h1>
+<ul>
+  <% @feedback_posts.each do |p| %>
+    <li><%= link_to "#{p.user.profile.full_name if p.user} - #{p.division.name} (#{p.name})", division_post_path(p.division, p) %></li>
+  <% end %>
+</ul>
 <%= link_to 'Задать вопрос', new_feedback_path, class: "small button" if user_signed_in? %>
 <dl>
 <%= render partial: 'feedback', collection: @unpublished_feedbacks %>
