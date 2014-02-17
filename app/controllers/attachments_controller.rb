@@ -29,8 +29,10 @@ class AttachmentsController < ApplicationController
   # POST /attachments
   # POST /attachments.json
   def create      
-      return if attachment_params.blank?
-
+    if attachment_params[:id].blank? && attachment_params[:file].nil?
+      flash[:error] = "There was a problem submitting your attachment."
+      redirect_to :back
+    else
       unless attachment_params[:id].blank?
 	@attachment = Attachment.find(attachment_params[:id])
 	case 
@@ -49,21 +51,22 @@ class AttachmentsController < ApplicationController
 	@attachment.uploaded_file = attachment_params
 	if @attachment.save
 	  case 
-	    when attachment_params[:article_id]
-	      @article = Article.find(attachment_params[:article_id])
+	    when params[:article_id]
+	      @article = Article.find(params[:article_id])
 	      @attachment.articles << @article
 	      @article.update_attributes(published: false) unless current_user_moderator?
 	      @article.update_attributes(updated_at: Time.now)
-	    when attachment_params[:division_id]
-	      @attachment.divisions << Division.find(attachment_params[:division_id])
+	    when params[:division_id]
+	      @attachment.divisions << Division.find(params[:division_id])
 	  end
 	    flash[:notice] = "Thank you for your submission..."
 	    redirect_to :back
 	else
 	    flash[:error] = "There was a problem submitting your attachment."
-	    render :action => "new"
+	    redirect_to :back
 	end
       end
+    end
   end
 
   # DELETE /attachments/1
