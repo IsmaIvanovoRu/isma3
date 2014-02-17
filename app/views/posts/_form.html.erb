@@ -12,7 +12,7 @@
   <% end %>
 
   <div class="field">
-    <%= f.label :name %>
+    <%= f.label 'Название' %>
     <%= f.text_field :name %>
   </div>
   <div class="field">
@@ -20,15 +20,15 @@
     <%= f.phone_field :phone %>
   </div>  
   <div class="field">
-    <%= f.label :post_type_id %>
+    <%= f.label 'Тип должности' %>
     <%= f.select :post_type_id, options_for_select= @post_types.collect {|p| [t(p.name, :scope => [:post_types]), p.id] }, {:include_blank => ''} %>
   </div>
   <div class="field">
-    <%= f.label :parent_id %>
+    <%= f.label 'Должность начальника' %>
     <%= f.select :parent_id, options_for_select= @posts.collect {|p| ["#{p.name} (#{p.division.name})", p.id] }, {:include_blank => ''} %>
   </div>
   <div class="field">
-    <%= f.label :user_id %>
+    <%= f.label 'Сотрудник' %>
     <%= f.select :user_id, options_for_select= @users.collect {|p| [p.profile.full_name, p.id] }, {:include_blank => ''} %>
   </div>
   <% if @administrator_permission %>
@@ -38,6 +38,6 @@
   </div>
   <% end %>
   <div class="actions">
-    <%= f.submit %>
+    <%= f.submit 'Сохранить', class: 'button small' %>
   </div>
 <% end %>
