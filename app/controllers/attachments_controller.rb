@@ -8,12 +8,13 @@ class AttachmentsController < ApplicationController
   skip_before_filter :set_details, only: [:inline, :minify_img]  
   before_action :set_attachment, only: [:show, :destroy, :minify_img, :inline]
   before_action :require_administrator, only: [:index]
+  before_action :require_writer, only: [:create, :update, :destroy]
 
   # GET /attachments
   # GET /attachments.json
   def index
     @mime_types = Attachment.select(:mime_type).all.map{|a| a.mime_type}.uniq
-    @attachments = Attachment.where(attachment_params).paginate(:page => params[:page])
+    @attachments = Attachment.where(attachments_params).paginate(:page => params[:page])
   end
 
   # GET /attachments/1
@@ -105,5 +106,9 @@ class AttachmentsController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def attachment_params
       params.require(:attachment).permit(:id, :file)
+    end
+    
+    def attachments_params
+      params.permit(:mime_type)
     end
 end

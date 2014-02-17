@@ -50,7 +50,10 @@ class DivisionsController < ApplicationController
     end
     @clerks = @division.posts.select{|p| p.name =~ /секретарь/}
     @employees = @division_posts - @head - @clerks
-    @attachment = Attachment.new
+    if can?
+      @attachment = Attachment.new
+      @attachments = Attachment.select(:id, :title).order(:title).load
+    end
     @last_image_attachment = @division.attachments.last
     @menu_title = @division.name if current_user_administrator?
   end
@@ -113,7 +116,7 @@ class DivisionsController < ApplicationController
   end
   
   def can?
-    current_user_administrator? || (current_user == @head.first.user if @head.first)
+    current_user_administrator? || (current_user == @head.first.user if @head.first && current_user)
   end
   
   def can
