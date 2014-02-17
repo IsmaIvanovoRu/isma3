@@ -52,7 +52,6 @@ class ArticlesController < ApplicationController
   # POST /articles.json
   def create
     @article = Article.new(article_params)
-    @article.user_id = (current_user_moderator? ? article_params[:user_id] : current_user.id)
     respond_to do |format|
       if @article.save
         format.html { redirect_to @article, notice: 'Article was successfully created.' }
@@ -133,6 +132,8 @@ class ArticlesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def article_params
+      params[:article][:user_id] = current_user.id unless current_user_moderator?
+      params[:article][:published] = false unless current_user_moderator?
       params.require(:article).permit(:title, :content, :article_type_id, :exp_date, :published, :fixed, :commentable, :division_id, :group_id, :user_id)
     end
 end
