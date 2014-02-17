@@ -95,11 +95,11 @@
   <section class="panel">
     <% if @articles_not_fixed.count > 0 %>
       <h2>Актуально</h2>
-      <%= render partial: 'articles/article', collection: @articles_not_fixed, locals: { dimension: '75x75', composition: {header: true, content: false, footer: true, truncate: true} } %>
-      <%= link_to 'Архив', archives_path + "?division_id=#{@division.id}&fixed=false", class: 'clearfix' %><br />
+	<%= render partial: 'articles/article', collection: @articles_not_fixed, locals: { dimension: '75x75', composition: {header: true, content: false, footer: true, truncate: true} } %>
+	<%= link_to 'Архив', archives_path + "?division_id=#{@division.id}&fixed=false", class: 'clearfix' %><br />
       <% end %>
-      <%= render partial: 'articles/first_image_attachment', locals: {image_attachment: @last_image_attachment, dimension: '150x150' } if @last_image_attachment %>
-      <% unless @division.email.empty? && @division.address.empty? && (@head.first.phone.empty? if @head.first) %>
+	<%= render partial: 'articles/first_image_attachment', locals: {image_attachment: @last_image_attachment, dimension: '150x150' } if @last_image_attachment %>
+	<% unless @division.email.empty? && @division.address.empty? && (@head.first.phone.empty? if @head.first) %>
       <div class="clearfix"></div>
       <h2>Контакты</h2>
       <address><p><%= "Адрес: #{@division.address}" if @division.address %>
@@ -108,22 +108,23 @@
       <% end %>
       <h2>Как нас найти</h2>
       <div id="map" style="width: 100%; height: 200px" data-name="<%= @division.name %>" data-address="<%= @division.address %>" data-latitude="<%= @division.latitude %>" data-longitude="<%= @division.longitude %>"></div>
-    </div>
-  </section>
-  <% if @administrator_permission || (current_user == @head.first.user if @head.first && current_user) %>
-    <%= form_for(@attachment) do |f| %>
-      <div style="display: none;">
-	<%= text_field_tag :division_id, @division.id %>
-      </div>
-      <div class="filefild">
-	<%= f.select :id, options_for_select = @attachments.collect {|p| [p.title, p.id] }, {:include_blank => ''} %>
-      </div>
-      <div class="filefild">
-	<%= f.file_field :file %>
-      </div>
-      <div class="actions">
-	<%= f.submit 'Прикрепить файл' %>
-      </div>
+    <% if @administrator_permission || (current_user == @head.first.user if @head.first && current_user) %>
+    <h2>Прикрепить новый файл</h2>
+      <%= form_for(@attachment) do |f| %>
+	<div style="display: none;">
+	  <%= text_field_tag :division_id, @division.id %>
+	</div>
+	<div class="filefild">
+	  <%= f.select :id, options_for_select = @attachments.collect {|p| [p.title, p.id] }, {:include_blank => ''} %>
+	</div>
+	<div class="filefild">
+	  <%= f.file_field :file %>
+	</div>
+	<div class="actions">
+	  <%= f.submit 'Прикрепить файл' %>
+	</div>
+      <% end %>
     <% end %>
-  <% end %>
+  </section>
+      </div>
 </div>
