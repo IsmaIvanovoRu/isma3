@@ -30,7 +30,10 @@ class ArticlesController < ApplicationController
   # GET /articles/1
   # GET /articles/1.json
   def show
-    @attachment = Attachment.new
+    if can?
+      @attachment = Attachment.new
+      @attachments = Attachment.select(:id, :title).order(:title).load
+    end
     @first_image_attachment = @article.attachments.select {|a| a.mime_type =~ /image/}.first
     @image_attachments = (@article.attachments.select {|a| a.mime_type =~ /image/}.count > 1 ? @article.attachments.select {|a| a.mime_type =~ /image/} : [])
     @not_image_attachments = @article.attachments.select {|a| a.mime_type !~ /image/}

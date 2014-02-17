@@ -8,7 +8,6 @@ class AttachmentsController < ApplicationController
   skip_before_filter :set_details, only: [:inline, :minify_img]  
   before_action :set_attachment, only: [:show, :destroy, :minify_img, :inline]
   before_action :require_administrator, only: [:index]
-  before_action :attachment_params, only: [:index]
 
   # GET /attachments
   # GET /attachments.json
@@ -30,26 +29,40 @@ class AttachmentsController < ApplicationController
   # POST /attachments
   # POST /attachments.json
   def create      
-      return if params[:attachment].blank?
+      return if attachment_params.blank?
 
-      @attachment = Attachment.new
-      @attachment.uploaded_file = params[:attachment]
-      @attachment.thumbnail = thumb(@attachment.data) if @attachment.mime_type =~ /image/
-      if @attachment.save
+      unless attachment_params[:id].blank?
+	@attachment = Attachment.find(attachment_params[:id])
 	case 
 	  when params[:article_id]
 	    @article = Article.find(params[:article_id])
 	    @attachment.articles << @article
 	    @article.update_attributes(published: false) unless current_user_moderator?
-	    @article.update_attributes(updated_at: @attachment.created_at)
+	    @article.update_attributes(updated_at: Time.now)
 	  when params[:division_id]
 	    @attachment.divisions << Division.find(params[:division_id])
 	end
-	  flash[:notice] = "Thank you for your submission..."
-	  redirect_to :back
+	flash[:notice] = "Thank you for your submission..."
+	redirect_to :back
       else
-	  flash[:error] = "There was a problem submitting your attachment."
-	  render :action => "new"
+	@attachment = Attachment.new
+	@attachment.uploaded_file = attachment_params
+	if @attachment.save
+	  case 
+	    when attachment_params[:article_id]
+	      @article = Article.find(attachment_params[:article_id])
+	      @attachment.articles << @article
+	      @article.update_attributes(published: false) unless current_user_moderator?
+	      @article.update_attributes(updated_at: Time.now)
+	    when attachment_params[:division_id]
+	      @attachment.divisions << Division.find(attachment_params[:division_id])
+	  end
+	    flash[:notice] = "Thank you for your submission..."
+	    redirect_to :back
+	else
+	    flash[:error] = "There was a problem submitting your attachment."
+	    render :action => "new"
+	end
       end
   end
 
@@ -75,15 +88,6 @@ class AttachmentsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def attachment_params
-      params.require(:attachment).permit(:title, :data, :mime_type, :thumbnail, :content)
-    end
-      
-    def thumb(image)
-      img = Magick::Image.from_blob(image).first
-      img.resize_to_fill!(150).to_blob
-    end
-    
-    def attachment_params
-      params.permit(:mime_type, :updated_at, :created_at)
+      params.require(:attachment).permit(:id, :file)
     end
 end
