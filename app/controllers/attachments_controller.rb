@@ -37,10 +37,10 @@ class AttachmentsController < ApplicationController
 	@attachment = Attachment.find(attachment_params[:id])
 	case 
 	  when params[:article_id]
-	    @article = Article.find(params[:article_id])
-	    @attachment.articles << @article
-	    @article.update_attributes(published: false) unless current_user_moderator?
-	    @article.update_attributes(updated_at: Time.now)
+	    article = Article.find(params[:article_id])
+	    @attachment.articles << article
+	    article.update_attributes(published: false) unless current_user_moderator?
+	    article.update_attributes(updated_at: Time.now)
 	  when params[:division_id]
 	    @attachment.divisions << Division.find(params[:division_id])
 	end
@@ -52,10 +52,10 @@ class AttachmentsController < ApplicationController
 	if @attachment.save
 	  case 
 	    when params[:article_id]
-	      @article = Article.find(params[:article_id])
-	      @attachment.articles << @article
-	      @article.update_attributes(published: false) unless current_user_moderator?
-	      @article.update_attributes(updated_at: Time.now)
+	      article = Article.find(params[:article_id])
+	      @attachment.articles << article
+	      article.update_attributes(published: false) unless current_user_moderator?
+	      article.update_attributes(updated_at: Time.now)
 	    when params[:division_id]
 	      @attachment.divisions << Division.find(params[:division_id])
 	  end
@@ -72,10 +72,23 @@ class AttachmentsController < ApplicationController
   # DELETE /attachments/1
   # DELETE /attachments/1.json
   def destroy
-    @attachment.destroy
-    respond_to do |format|
-      format.html { redirect_to :back }
-      format.json { head :no_content }
+    if (@attachment.articles.count + @attachment.divisions.count) > 1
+      case
+      when params[:article_id]
+	article = Article.find(params[:article_id])
+	@attachment.articles.delete(article) if article
+	redirect_to :back
+      when params[:division_id]
+	division = Division.find(params[:division_id])
+	@attachment.divisions.delete(division) if division
+	redirect_to :back
+      end
+    else
+      @attachment.destroy
+      respond_to do |format|
+	format.html { redirect_to :back }
+	format.json { head :no_content }
+      end
     end
   end
 
