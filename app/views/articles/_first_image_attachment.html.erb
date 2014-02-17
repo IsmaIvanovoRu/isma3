@@ -1,14 +1,7 @@
 <div class="wrap th left">
   <% if @moderator_permission %>
-    <% case %>
-      <% when @division %>
-	<%= link_to attachment_path(image_attachment) + "?division_id=#{@division.id}", method: :delete, data: { confirm: 'Are you sure?' } do %>
-	  <i class="fi-x"></i>
-	<% end %>
-      <% when @article %>
-	<%= link_to attachment_path(image_attachment) + "?article_id=#{@article.id}", method: :delete, data: { confirm: 'Are you sure?' } do %>
-	  <i class="fi-x"></i>
-	<% end %>
+    <%= link_to attachment_path(image_attachment), method: :delete, data: { confirm: 'Уверены?' } do %>
+      <i class="fi-x"></i>
     <% end %>
   <% end %>
 <%= link_to(image_tag(minify_img_path(image_attachment), size: dimension), "#", :title => image_attachment.title_sen_dot, "data-reveal-id" => "attachment_#{image_attachment.id}") %>

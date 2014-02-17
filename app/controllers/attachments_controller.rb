@@ -73,17 +73,10 @@ class AttachmentsController < ApplicationController
   # DELETE /attachments/1
   # DELETE /attachments/1.json
   def destroy
-    if (@attachment.articles.count + @attachment.divisions.count) > 1
-      case
-      when params[:article_id]
-	article = Article.find(params[:article_id])
-	@attachment.articles.delete(article) if article
-	redirect_to :back
-      when params[:division_id]
-	division = Division.find(params[:division_id])
-	@attachment.divisions.delete(division) if division
-	redirect_to :back
-      end
+    if (@attachment.articles.count + @attachment.divisions.count) > 1 && params[:article_id]
+      article = Article.find(params[:article_id])
+      @attachment.articles.delete(article) if article
+      redirect_to :back
     else
       @attachment.destroy
       respond_to do |format|
