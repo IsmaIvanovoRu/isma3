@@ -19,10 +19,6 @@ hr {
   text-align : left;
   line-height: 1.2;
 }
-#article_title {
-  text-align : justify;
-  line-height: 1.2;
-}
 ul, ol {
   list-style-position: inside;
 }
