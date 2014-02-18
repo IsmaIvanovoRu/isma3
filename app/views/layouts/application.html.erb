@@ -150,7 +150,7 @@
   <div class="row">
     <div class="large-2 columns show-for-large-up">
     <section class="panel">
-      <ul class="side-nav">
+      <ul id="left-nav" class="side-nav">
       <% if @menus['left'] %>
 	<% @menus['left'].group_by(&:parent_id).first.last.each do |p| %>
 	  <% if @menus['left'].group_by(&:parent_id)[p.id] %>
@@ -213,6 +213,9 @@
     <% if action_name == 'edit' || action_name == 'new' || action_name == 'create' %>
       <%= javascript_include_tag "ckeditor/ckeditor" %>
       <%= javascript_include_tag "ckeditor_init" %>
+    <% end %>
+    <% if controller_name == 'welcome' %>
+      <%= javascript_include_tag "menu_hide" %>
     <% end %>
   </body>
 </html>
