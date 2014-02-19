@@ -13,4 +13,8 @@ module ApplicationHelper
     return string
   end
 
+  def autosub_details(text)
+    @details_hash.each{|k, v| text.gsub!("&[#{k}]", v.to_s)} if text.include? "&["
+    text
+  end
 end
