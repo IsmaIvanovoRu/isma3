@@ -33,6 +33,6 @@ class Division < ActiveRecord::Base
   end
   
   def head
-    posts.includes(:parent).select{|p| p.parent.nil? || p.parent.division_id != id}
+    posts.includes(:user).includes(:parent).select{|p| p.parent.nil? || p.parent.division_id != id}
   end
 end

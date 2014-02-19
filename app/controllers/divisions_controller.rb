@@ -10,7 +10,7 @@ class DivisionsController < ApplicationController
   before_action :can, only: [:edit]
   
   def index
-    @divisions = Division.order(:name).includes(:division_type).all.group_by{|d| d.division_type.name}.sort
+    @divisions = Division.order(:name).includes(:division_type).all.group_by{|d| t(d.division_type.name, scope: [:divisions])}.sort
     respond_to do |format|
       format.html
       format.xls

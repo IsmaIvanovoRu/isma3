@@ -9,8 +9,8 @@
 <%= link_to 'Скачать список подразделений', divisions_path(format: :xls) %>
 <% end %>
 <% @divisions.each do |type, divisions| %>
-  <a name="<%= type %>"></a><h2><%= first_letter_upcase(t(type, scope: [:divisions])) %></h2>
-  <ul>
+  <a name="<%= type %>"></a><h2><%= first_letter_upcase(type.dup) %></h2>
+  <ul class="no-bullet">
     <% divisions.each do |division| %>
       <li><%= link_to first_letter_upcase(division.name), division, class: (division.posts.count > 0 ? "label" : "label secondary") %></td>
     <% end %>
