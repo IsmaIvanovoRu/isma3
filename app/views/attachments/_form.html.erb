@@ -1,0 +1,28 @@
+<%= form_for(@attachment) do |f| %>
+  <% if @attachment.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@attachment.errors.count, "error") %> prohibited this feedback from being saved:</h2>
+
+      <ul>
+      <% @attachment.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+  <% unless @attachment.nil? %>
+
+  <% end %>
+  <div style="display: none;">
+    <%= text_field_tag :article_id, @article.id %>
+  </div>
+  <div class="filefild">
+    <%= f.select :id, options_for_select = @attachments.collect {|p| [p.title, p.id] }, {:include_blank => ''} %>
+  </div>
+  <div class="filefild">
+    <%= f.file_field :file %>
+  </div>
+  <div class="actions">
+    <%= f.submit 'Прикрепить файл' %>
+  </div>
+<% end %>
