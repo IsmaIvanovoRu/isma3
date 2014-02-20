@@ -115,9 +115,6 @@
 	  <%= text_field_tag :division_id, @division.id %>
 	</div>
 	<div class="filefild">
-	  <%= f.select :id, options_for_select = @attachments.collect {|p| [p.title, p.id] }, {:include_blank => ''} %>
-	</div>
-	<div class="filefild">
 	  <%= f.file_field :file %>
 	</div>
 	<div class="actions">
