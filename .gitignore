@@ -17,3 +17,4 @@ Ignore all logfiles and tempfiles.
 /tmp
 /config/database.yml
 /config/initializers/secret_token.rb
+/config/environments/*.rb
