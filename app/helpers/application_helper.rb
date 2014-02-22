@@ -7,6 +7,10 @@ module ApplicationHelper
   def sanitize_full(text)
     Sanitize.clean(text, Sanitize::Config::RELAXED).html_safe
   end
+    
+  def sanitize_truncate(text)
+    truncate(Sanitize.clean(text), :length => 300, :omission => '... ', :separator => ' ')
+  end
   
   def first_letter_upcase(string)
     string[0] = string[0].mb_chars.upcase

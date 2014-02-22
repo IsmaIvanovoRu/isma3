@@ -36,6 +36,7 @@ class FeedbacksController < ApplicationController
 
     respond_to do |format|
       if @feedback.save
+	Events.new_feedback(@feedback).deliver
         format.html { redirect_to feedbacks_url, notice: t(:fedback_was_successfully_created, scope: [:notices]) }
         format.json { render action: 'show', status: :created, location: @feedback }
       else

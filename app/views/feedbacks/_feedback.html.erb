@@ -29,13 +29,15 @@
   </dt>
   <dd><%= sanitize_full markdown(feedback.answer) if feedback.answer %>
   <p class="subscript"><%= feedback.post.user.profile.full_name if feedback.post.user && feedback.answer %>
-  &nbsp;|&nbsp;
-  <% case feedback.updated_at.to_date %>
-    <% when Time.now.to_date %>
-      сегодня в 
-	<%= time_tag feedback.updated_at, :pubdate => true, :format => '%R' %>
-      <% else %>
-	<%= time_tag feedback.updated_at, :pubdate => true, :format => '%e.%m.%Y %R' %>
+  <% if feedback.answer %>
+    &nbsp;|&nbsp;
+    <% case feedback.updated_at.to_date %>
+      <% when Time.now.to_date %>
+	сегодня в 
+	  <%= time_tag feedback.updated_at, :pubdate => true, :format => '%R' %>
+	<% else %>
+	  <%= time_tag feedback.updated_at, :pubdate => true, :format => '%e.%m.%Y %R' %>
+    <% end %>
   <% end %>
   </dd>
 </div>
