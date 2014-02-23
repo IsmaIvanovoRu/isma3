@@ -13,7 +13,7 @@ class PdfGeneratorsController < ApplicationController
 	:bold => "#{Rails.root}/vendor/fonts/Ubuntu-B.ttf"
 					  })
       pdf.font "Ubuntu"
-      pdf.text 'Divisions', :style => :bold, :size => 18
+      pdf.text t(:divisions, scope: :pdf_generators), :style => :bold, :size => 18
       pdf.move_down 10
       n = 0
       @divisions.each do |type, divisions|
@@ -35,7 +35,7 @@ class PdfGeneratorsController < ApplicationController
 	  pdf.move_down 15
 	end
       end
-      string = 'Page' + " <page> " + 'of' + " <total>"
+      string = t(:page, scope: :pdf_generators) + " <page> " + t(:of, scope: :pdf_generators) + " <total>"
       options = {:at => [pdf.bounds.right - 150, 0], :width => 150, :align => :center, :start_count_at => 1}
       pdf.number_pages string, options
       send_data pdf.render, :filename => "IsmaDivisions #{Time.now.to_date}", :type => 'application/pdf', :disposition => "inline"
