@@ -21,4 +21,56 @@ module ApplicationHelper
     @details_hash.each{|k, v| text.gsub!("&amp;[#{k}]", v.to_s)} if text.include? "&amp;["
     text
   end
+  
+  def number_to_phone(number, options = {})
+    return unless number
+    @options = options.symbolize_keys
+
+    parse_float(number, true) if options.delete(:raise)
+    number_to_phone_convert(number)
+  end
+  
+  
+  def number_to_phone_convert(number)
+    str  = country_code(@options[:country_code])
+    str << convert_to_phone_number(number.to_s.strip)
+    str << phone_ext(@options[:extension])
+  end
+
+  private
+
+    def convert_to_phone_number(number)
+      if @options[:area_code]
+	convert_with_area_code(number)
+      else
+	convert_without_area_code(number)
+      end
+    end
+
+  def convert_with_area_code(number)
+    number.gsub!(/(\d{1,4})(\d{2})(\d{2})(\d{2}$)/,"(\\1) \\2#{delimiter}\\3#{delimiter}\\4")
+    number
+  end
+
+    def convert_without_area_code(number)
+      number.gsub!(/(\d{0,4})(\d{2})(\d{2})(\d{2})$/,"\\1#{delimiter}\\2#{delimiter}\\3#{delimiter}\\4")
+      number.slice!(0, 1) if start_with_delimiter?(number)
+      number
+    end
+
+    def start_with_delimiter?(number)
+      delimiter.present? && number.start_with?(delimiter)
+    end
+
+    def delimiter
+      @options[:delimiter] || "-"
+    end
+
+    def country_code(code)
+      code.blank? ? "" : "+#{code} "
+    end
+
+    def phone_ext(ext)
+      ext.blank? ? "" : " x #{ext}"
+    end
 end

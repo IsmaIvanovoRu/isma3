@@ -103,7 +103,7 @@
       <div class="clearfix"></div>
       <h2>Контакты</h2>
       <address><p><%= "Адрес: #{@division.address}" if @division.address %>
-      <p><%= "Телефон: #{number_to_phone(@head.first.phone, country_code: 7)}" if @head.first && !@head.first.phone.empty? %>
+      <p><%= "Телефон: #{number_to_phone(@head.first.phone, country_code: 7, area_code: true)}" if @head.first && !@head.first.phone.empty? %>
       <p><%= mail_to @division.email, 'Написать письмо', encode: "javascript" if @head.first && !@division.email.empty? %></address>
       <% end %>
       <h2>Как нас найти</h2>
