@@ -1,6 +1,9 @@
 <div class="row">
   <div class="large-4 large-centered small-12 columns panel">
     <h2>Регистрация</h2>
+      <div align="justify">
+      Если Вы являетесь сотрудником академии или обучающимся, то для получения учетной записи Вам необходимо обратиться в центр информатизации или свой деканат. Это связано с необходимостью получения дополнительных прав для работы на сайте.
+      </div><br />
 
     <%= form_for(resource, :as => resource_name, :url => registration_path(resource_name)) do |f| %>
       <%= devise_error_messages! %>
