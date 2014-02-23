@@ -27,7 +27,7 @@
       <% last_image_attachment = h.user.profile.attachments.last if h && h.user %>
       <%= render partial: 'articles/first_image_attachment', locals: {image_attachment: last_image_attachment, dimension: '75x75' } if last_image_attachment %>
       <dt>
-      <%= link_to h.name, division_post_path(@division, h) if h && h.user %>
+      <%= link_to h.name, division_post_path(@division, h) if h %>
       </dt>
       <dd class="clearfix">
 	<%= link_to h.user.profile.full_name_reg, user_profile_path(h.user) if h.user %>
