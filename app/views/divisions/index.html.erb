@@ -12,7 +12,7 @@
   <a name="<%= type %>"></a><h2><%= first_letter_upcase(type.dup) %></h2>
   <ul class="no-bullet">
     <% divisions.each do |division| %>
-      <li><%= link_to first_letter_upcase(division.name), division, class: (division.posts.count > 0 ? "label" : "label secondary") %></td>
+      <li><%= link_to first_letter_upcase(division.name), division %></td>
     <% end %>
   </ul>
 <% end %>
