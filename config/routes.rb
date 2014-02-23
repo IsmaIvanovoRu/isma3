@@ -1,6 +1,7 @@
 Isma::Application.routes.draw do
 
   get "pdf_generators/divisions"
+  get "pdf_generators/managment"
   devise_for :users
   
   controller :search do

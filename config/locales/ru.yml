@@ -275,6 +275,7 @@ ru:
     page: 'Страница'
     of: 'из'
     divisions: 'Структурные подразделения'
+    managment: 'Управление'
     
 
   # remove these aliases after 'activemodel' and 'activerecord' namespaces are removed from Rails repository

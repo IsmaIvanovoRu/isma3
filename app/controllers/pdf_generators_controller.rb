@@ -1,3 +1,4 @@
+#encoding: UTF-8
 class PdfGeneratorsController < ApplicationController
   def divisions
     @divisions = Division.order(:name).includes(:division_type).includes(:posts).includes(:users).all.group_by{|d| t(d.division_type.name, scope: [:divisions])}.sort
@@ -39,5 +40,38 @@ class PdfGeneratorsController < ApplicationController
       options = {:at => [pdf.bounds.right - 150, 0], :width => 150, :align => :center, :start_count_at => 1}
       pdf.number_pages string, options
       send_data pdf.render, :filename => "IsmaDivisions #{Time.now.to_date}", :type => 'application/pdf', :disposition => "inline"
+  end
+  
+  def managment
+    @posts = Post.all.select{|p| p.name =~ /^(про|)ректор/}
+    pdf = Prawn::Document.new(page_size: "A4", :info => {
+	:Title => 'IsmaManagment ' + Time.now.to_date.to_s,
+	:Creator => "ISMA",
+	:Producer => "Prawn",
+	:CreationDate => Time.now }
+	)
+    pdf.font_families.update("Ubuntu" => {
+      :normal => "#{Rails.root}/vendor/fonts/Ubuntu-R.ttf",
+      :italic => "#{Rails.root}/vendor/fonts/Ubuntu-RI.ttf",
+      :bold => "#{Rails.root}/vendor/fonts/Ubuntu-B.ttf"
+					})
+    pdf.font "Ubuntu"
+    pdf.text t(:managment, scope: :pdf_generators), :style => :bold, :size => 18
+    pdf.move_down 10
+    n = 0
+    @posts.each do |post|
+      pdf.text post.name, :style => :bold, :size => 14
+      pdf.move_down 10
+      pdf.text post.user.profile.full_name_reg, :size => 12 if post.user
+      pdf.move_down 8 if post.user
+      pdf.text post.phone, :size => 12 if post && !post.phone.empty?
+      pdf.move_down 8 if post && !post.phone.empty?
+      pdf.text post.division.email, :size => 12 if post.division.email
+      pdf.move_down 15
+    end
+    string = t(:page, scope: :pdf_generators) + " <page> " + t(:of, scope: :pdf_generators) + " <total>"
+    options = {:at => [pdf.bounds.right - 150, 0], :width => 150, :align => :center, :start_count_at => 1}
+    pdf.number_pages string, options
+    send_data pdf.render, :filename => "IsmaManagment #{Time.now.to_date}", :type => 'application/pdf', :disposition => "inline"
   end
 end
