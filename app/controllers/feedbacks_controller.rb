@@ -97,7 +97,7 @@ class FeedbacksController < ApplicationController
     
     def can
       unless can?
-	flash[:error] = "You mast have permissions"
+	flash[:error] = "You must have permissions"
 	redirect_to feedback_path
       end
     end

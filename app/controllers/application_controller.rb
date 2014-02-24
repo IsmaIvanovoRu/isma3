@@ -14,28 +14,28 @@ class ApplicationController < ActionController::Base
 
   def require_reader
     unless current_user_reader?
-      flash[:error] = "You mast have readers`s permissions"
+      flash[:error] = "You must have readers`s permissions"
       redirect_to root_path
     end
   end
   
   def require_writer
     unless current_user_writer?
-      flash[:error] = "You mast have writer`s permissions"
+      flash[:error] = "You must have writer`s permissions"
       redirect_to root_path
     end
   end
   
   def require_moderator
     unless current_user_moderator?
-      flash[:error] = "You mast have moderator`s permissions"
+      flash[:error] = "You must have moderator`s permissions"
       redirect_to root_path
     end
   end 
   
   def require_administrator
     unless current_user_administrator?
-      flash[:error] = "You mast have administrator`s permissions"
+      flash[:error] = "You must have administrator`s permissions"
       redirect_to root_path
     end
   end 

@@ -80,7 +80,7 @@ class PostsController < DivisionsController
   
   def can
     unless can?
-      flash[:error] = "You mast have permissions"
+      flash[:error] = "You must have permissions"
       redirect_to division_post_path(@division, @post)
     end
   end

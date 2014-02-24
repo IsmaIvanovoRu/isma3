@@ -105,7 +105,7 @@ class ProfilesController < UsersController
   
   def can
     unless can?
-      flash[:error] = "You mast have permissions"
+      flash[:error] = "You must have permissions"
       redirect_to user_profile_path(@user)
     end
   end
