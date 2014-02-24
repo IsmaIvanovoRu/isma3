@@ -6,6 +6,9 @@
   <% end %>
 </ul>
 <%= link_to 'Задать вопрос', new_feedback_path, class: "small button" if user_signed_in? %>
+<% unless user_signed_in? %>
+  <p class="alert label">Для того, чтобы иметь возможность задать вопрос, необходимо пройти процедуру регистрации на сайте</p>
+<% end %>
 <dl>
 <%= render partial: 'feedback', collection: @unpublished_feedbacks %>
 </dl>
