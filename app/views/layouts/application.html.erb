@@ -59,6 +59,7 @@
 		<% if @writer_permission %>
 		  <li><%= link_to 'Написать статью', new_article_path %></li>
 		<% end %>
+		  <li><%= link_to 'Инструкция по работе с сайтом', '/articles/303' %></li>
 		  <li><%= link_to 'Мой профиль', user_profile_path(current_user) %></li>
 	      </ul>
 	    </li>
