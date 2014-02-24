@@ -68,3 +68,5 @@ gem 'actionview-encoded_mail_to'
 #gem 'brakeman', group: :development
 
 gem 'prawn'
+
+gem 'newrelic_rpm', group: :production
