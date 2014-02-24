@@ -69,4 +69,4 @@ gem 'actionview-encoded_mail_to'
 
 gem 'prawn'
 
-gem 'newrelic_rpm', group: :production
+gem 'newrelic_rpm'
