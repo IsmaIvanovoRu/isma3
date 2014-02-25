@@ -82,7 +82,7 @@ class ApplicationController < ActionController::Base
     flash[:alert] ||= nil
     case
       when profile_empty?
-	flash[:alert] = "Your profile is empty"
+	flash[:alert] = t(:your_profile_is_empty, scope: :notices)
     end
   end
   
