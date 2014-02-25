@@ -113,6 +113,9 @@ footer.panel {
   max-width: 100%;
   height: auto;
 }
+.welcome-img + .panel {
+  height: 70px;
+}
 section.panel {
   border-top: 3px solid rgb(0,0,205);
   box-shadow: 0 0 10px rgba(0,0,0,0.5);
@@ -121,7 +124,4 @@ section.panel {
   position: fixed;
   bottom: -20px;
   right: 20px;
-}
-.welcome-font {
-  font-size: 100%;
 }
