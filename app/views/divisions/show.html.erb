@@ -86,7 +86,7 @@
   <% end %>
   <hr />
   <div class="text-justify">
-  <%= sanitize_full(@division.about) if @division.about %>
+  <%= sanitize_full(markdown(autosub_details @division.about)) if @division.about %>
   </div>
     <%= render partial: 'articles/article', collection: @articles_fixed, locals: { dimension: '75x75', composition: {header: true, content: false, footer: true, truncate: true} } %>
   </div>

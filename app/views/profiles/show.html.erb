@@ -10,7 +10,7 @@
       <h1><%= @profile.full_name %></h1>
       <%= render partial: 'articles/first_image_attachment', locals: {image_attachment: @last_image_attachment, dimension: '150x150' } if @last_image_attachment %>
       <p><%= [(@profile.degree.name if @profile.degree), (@profile.academic_title.name if @profile.academic_title)].compact.join(', ') %>
-      <p class="text-justify"><%= sanitize_full(@profile.about) if @profile.about %>
+      <p class="text-justify"><%= sanitize_full(markdown(autosub_details @profile.about)) if @profile.about %>
       <dl>
 	<% if @posts.count > 0 %>
 	<dt>Занимаемые должности</dt>
