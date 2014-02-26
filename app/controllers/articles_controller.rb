@@ -137,7 +137,7 @@ class ArticlesController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def article_params
       params[:article][:user_id] = current_user.id unless current_user_moderator?
-      params[:article][:user_id] = current_user.id if params[:article][:user_id].empty?
+      params[:article][:user_id] = current_user.id unless params[:article][:user_id]
       params[:article][:published] = false unless current_user_moderator?
       params.require(:article).permit(:title, :content, :article_type_id, :exp_date, :published, :fixed, :commentable, :division_id, :group_id, :user_id)
     end
