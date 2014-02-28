@@ -25,6 +25,7 @@ Isma::Application.routes.draw do
   resources :details  
   controller :archives do
     get 'archives' => :index
+    get :feed
   end
 
   controller :contacts do

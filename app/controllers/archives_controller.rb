@@ -14,6 +14,15 @@ class ArchivesController < ApplicationController
       end
     end
   end
+      
+  def feed
+    article_types = ArticleType.where.not(name: 'articles').select(:id)
+    @articles = Article.order('updated_at DESC').where(article_type_id: article_types).where(published: true, group_id: nil).where("updated_at > ?", Time.now.to_date - 30)
+    
+    respond_to do |format|
+      format.atom
+    end
+  end
   
   private
   
