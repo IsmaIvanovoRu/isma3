@@ -1,4 +1,4 @@
-<%= render partial: 'articles/first_image_attachment', locals: {article: article, image_attachment: article.first_image_attachment, dimension: dimension } if article.first_image_attachment %>
+<%= article.first_image_attachment ? (render partial: 'articles/first_image_attachment', locals: {article: article, image_attachment: article.first_image_attachment, dimension: dimension }) : (image_tag('default.jpg', class: 'th left', size: '75x75') if controller_name == 'articles' && action_name == 'index' && article.article_type.name == 'news')  %>
 <% if composition[:truncate] %>
   <div class="text-justify clearfix">
   <p>
