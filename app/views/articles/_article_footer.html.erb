@@ -2,6 +2,22 @@
     <i class="fi-paperclip left" title="Содержит документов: <%= article.not_image_attachments_count %>"></i>
 <% end %>
 <div class="subscript">
+<% if controller_name == 'articles' && action_name == 'show' %>
+<ul class="inline-list left">
+  <li><%= link_to 'http://isma.ivanovo.ru/feed.atom', target: 'blank' do %>
+    <%= image_tag('application-rss+xml.png', title: 'Подписаться на RSS', size: '16x16') %>
+  <% end %></li>
+  <li><%= link_to 'https://twitter.com/share?url=' + article_url(article), target: 'blank' do %>
+    <%= image_tag('twitter_logo_blue.png', title: "Поделиться в Twitter", size: '16x16') %>
+  <% end %></li>
+  <li><%= link_to 'http://vk.com/share.php?' + article_url(article), target: 'blank' do %>
+    <%= image_tag('vk16.png', title: 'Поделиться Вконтакте', size: '16x16') %>
+  <% end %></li>
+  <li><%= link_to 'https://plus.google.com/share?url=' + article_url(article), target: 'blank' do %>
+    <%= image_tag('gplus-16.png', title: 'Поделиться в Google+', size: '16x16') %>
+  <% end %></li>
+</ul>
+<% end %>
 <%= article.division_id.nil? ? (article.user && article.user.profile ? (link_to article.user.profile.full_name, user_profile_path(article.user)) : '') : (@division == article.division ? '' : (link_to article.division.name, article.division if article.division)) %>
 </div>
 <hr />

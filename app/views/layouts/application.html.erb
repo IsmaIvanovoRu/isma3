@@ -6,8 +6,9 @@
     <% if Rails.env.production? %>
       <meta name='yandex-verification' content='5d4cdafa940771a6' />
     <% end %>
-    <%= yield(:twitter_card) if content_for?(:twitter_card) %>
     <title><%= content_for?(:title) ? yield(:title) : "ИвГМА" %></title>
+    <%= yield(:twitter_card) if content_for?(:twitter_card) %>
+    <%= yield(:vk_card) if content_for?(:vk_card) %>
     <%= favicon_link_tag 'favicon.ico' %>
     <%= auto_discovery_link_tag(:atom, {controller: "archives", action: "feed", format: 'atom'}, {title: "ИвГМА"}) %>
     <%= stylesheet_link_tag    "application" %>
@@ -212,6 +213,9 @@
     <% if controller_name == 'divisions' && action_name == 'show' %>
 	<%= javascript_include_tag "http://api-maps.yandex.ru/2.0-stable/?load=package.standard&lang=ru-RU" %>
     <%= javascript_include_tag "ymap" %>
+    <% end %>
+    <% if controller_name == 'articles' && action_name == 'show' %>
+      <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
     <% end %>
     <% if action_name == 'edit' || action_name == 'new' || action_name == 'create' %>
       <%= javascript_include_tag "ckeditor/ckeditor" %>

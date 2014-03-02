@@ -125,3 +125,19 @@ section.panel {
   bottom: -20px;
   right: 20px;
 }
+.fi-social-twitter, .fi-rss {
+  font-size: 20px;
+  vertical-align: middle;
+}
+.fi-rss {
+  color: orange;
+}
+.fi-social-twitter {
+  color: blue;
+}
+.inline-list {
+  margin-left: -0.5rem;
+}
+.inline-list > li {
+  margin-left: 0.5rem;
+}
