@@ -4,6 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name='yandex-verification' content='5d4cdafa940771a6' />
+    <%= yield(:twitter_card) if content_for?(:twitter_card) %>
     <title><%= content_for?(:title) ? yield(:title) : "ИвГМА" %></title>
     <%= favicon_link_tag 'favicon.ico' %>
     <%= auto_discovery_link_tag(:atom, {controller: "archives", action: "feed", format: 'atom'}, {title: "ИвГМА"}) %>
