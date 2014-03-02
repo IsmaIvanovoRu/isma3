@@ -10,7 +10,7 @@
   <li><%= link_to 'https://twitter.com/share?url=' + article_url(article), target: 'blank' do %>
     <%= image_tag('twitter_logo_blue.png', title: "Поделиться в Twitter", size: '16x16') %>
   <% end %></li>
-  <li><%= link_to 'http://vk.com/share.php?' + article_url(article), target: 'blank' do %>
+  <li><%= link_to 'http://vk.com/share.php?url' + article_url(article), target: 'blank' do %>
     <%= image_tag('vk16.png', title: 'Поделиться Вконтакте', size: '16x16') %>
   <% end %></li>
   <li><%= link_to 'https://plus.google.com/share?url=' + article_url(article), target: 'blank' do %>
