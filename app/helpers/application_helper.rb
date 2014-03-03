@@ -1,6 +1,8 @@
 module ApplicationHelper
   def sanitize_full(text)
-    Sanitize.clean(text, Sanitize::Config::RELAXED).html_safe
+    options = Sanitize::Config::RELAXED
+    options[:attributes]['a'].push('target')
+    Sanitize.clean(text, options).html_safe
   end
     
   def sanitize_truncate(text)
