@@ -5,7 +5,7 @@ atom_feed(language: 'ru-RU') do |feed|
   @articles.each do |article|
     feed.entry(article) do |entry|
       entry.title article.title
-      entry.content sanitize_full(markdown(autosub_details article.content)), type: 'html'
+      entry.content sanitize_full(autosub_details article.content), type: 'html'
       entry.author do |author|
 	author.name article.division_id.nil? ? (article.user && article.user.profile ? article.user.profile.full_name : '') : (@division == article.division ? '' : article.division.name)
       end

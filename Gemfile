@@ -53,8 +53,6 @@ gem 'foundation-rails'
 
 gem 'will_paginate'
 
-gem 'redcarpet'
-
 gem 'thinking-sphinx'
 
 gem 'devise'

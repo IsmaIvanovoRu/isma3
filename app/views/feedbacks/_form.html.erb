@@ -18,7 +18,7 @@
   <% end %>
   <div>
   <p>Вопрос</p>
-    <%= sanitize_full markdown(@feedback.question) if @feedback.question %>
+    <%= sanitize_full @feedback.question if @feedback.question %>
   </div>
   <br />
   <div class="field">
