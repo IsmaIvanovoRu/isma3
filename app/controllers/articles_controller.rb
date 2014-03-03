@@ -6,6 +6,7 @@ class ArticlesController < ApplicationController
   before_action :set_article_types, only: [:new, :edit, :create]
   before_action :set_divisions, only: [:new, :edit, :create]
   before_action :set_groups, only: [:new, :edit, :create]
+  before_action :set_employees, only: [:new, :edit, :create]
 
   # GET /articles
   # GET /articles.json
@@ -43,12 +44,10 @@ class ArticlesController < ApplicationController
   # GET /articles/new
   def new
     @article = Article.new
-    @employees = User.joins(:groups).where(groups: {name: 'employees'}).sort_by{|user| user.profile.full_name} if current_user_moderator?
   end
 
   # GET /articles/1/edit
-  def edit
-    @employees = User.joins(:groups).where(groups: {name: 'employees'}).sort_by{|user| user.profile.full_name} if current_user_moderator?
+  def edit 
   end
 
   # POST /articles
@@ -140,5 +139,9 @@ class ArticlesController < ApplicationController
       params[:article][:user_id] = current_user.id unless params[:article][:user_id]
       params[:article][:published] = false unless current_user_moderator?
       params.require(:article).permit(:title, :content, :article_type_id, :exp_date, :published, :fixed, :commentable, :division_id, :group_id, :user_id)
+    end
+    
+    def set_employees
+      @employees = User.includes(:profile).joins(:groups).where(groups: {name: 'employees'}).sort_by{|user| user.profile.full_name} if current_user_moderator?
     end
 end
