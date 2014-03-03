@@ -1,5 +1,5 @@
 class Events < ActionMailer::Base
-  include ApplicationHelper
+  helper ApplicationHelper
   default from: "it@isma.ivanovo.ru"
   
   def new_article(article)
