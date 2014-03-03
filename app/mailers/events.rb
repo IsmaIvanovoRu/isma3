@@ -4,11 +4,11 @@ class Events < ActionMailer::Base
   
   def new_article(article)
     @article = article
-    mail(to: 'webmaster@isma.ivanovo.ru', subject: 'You have a new article')
+    mail(to: 'webmaster@isma.ivanovo.ru', subject: t(:you_have_a_new_article, scope: :notices))
   end
   
   def new_feedback(feedback)
     @feedback = feedback
-    mail(to: 'webmaster@isma.ivanovo.ru', subject: 'There is a new feedback')
+    mail(to: 'webmaster@isma.ivanovo.ru', cc: (@feedback.post.division.email if @feedback.post.division.email), subject: t(:there_is_a_new_feedback, scope: :notices))
   end
 end

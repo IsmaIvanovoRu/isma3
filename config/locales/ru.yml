@@ -271,6 +271,8 @@ ru:
     entrants: 'Абитуриенты'
   notices:
     fedback_was_successfully_created: 'Ваш вопрос успешно добавлен. Отслеживать его статус можно в личном кабинете. Когда сотрудник ответит, он будет опубликован на этой странице'
+    you_have_a_new_article: 'На сайте опубликован новый материал'
+    there_is_a_new_feedback: 'На сайте опубликован новый вопрос'
     feedback_was_successfully_updated: 'Запись обновлена'
     search_is_temporary_unavaliable: "Поиск временно недоступен"
     your_profile_is_empty: "Ваш профиль не заполнен"
