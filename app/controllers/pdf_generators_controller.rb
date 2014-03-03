@@ -27,7 +27,7 @@ class PdfGeneratorsController < ApplicationController
 	    pdf.move_down 8 if h && h.user
 	    pdf.text h.user.profile.full_name_reg, :size => 12 if h.user
 	    pdf.move_down 8 if h.user
-	    pdf.text h.phone, :size => 12 if h && !h.phone.empty?
+	    pdf.text view_context.number_to_phone(h.phone, country_code: 7, area_code: true), :size => 12 if h && !h.phone.empty?
 	    pdf.move_down 8 if h && !h.phone.empty?
 	  end
 	  pdf.text division.address, :size => 12 if division.address
@@ -64,7 +64,7 @@ class PdfGeneratorsController < ApplicationController
       pdf.move_down 10
       pdf.text post.user.profile.full_name_reg, :size => 12 if post.user
       pdf.move_down 8 if post.user
-      pdf.text post.phone, :size => 12 if post && !post.phone.empty?
+      pdf.text view_context.number_to_phone(post.phone, country_code: 7, area_code: true), :size => 12 if post && !post.phone.empty?
       pdf.move_down 8 if post && !post.phone.empty?
       pdf.text post.division.email, :size => 12 if post.division.email
       pdf.move_down 15
