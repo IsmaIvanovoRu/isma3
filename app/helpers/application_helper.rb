@@ -2,7 +2,22 @@ module ApplicationHelper
   def sanitize_full(text)
     options = Sanitize::Config::RELAXED
     options[:attributes]['a'].push('target')
+    if text =~ /(youtu.be|youtube.com)/
+      options[:elements].push('iframe')
+      options[:attributes]['iframe'] = ['width', 'height', 'src', 'frameborder', 'allowfullscreen']
+      insert_iframe(text)
+    end
     Sanitize.clean(text, options).html_safe
+  end
+  
+  def insert_iframe(text)
+    matches = text.scan(/(\S*)(youtu.be|youtube.com)(\S*)/)
+    matches.each do |m|
+      id = /^.*(youtu.be\/|v\/|e\/|u\/\w+\/|embed\/|v=)([^<#\&\?]*).*/.match(m.join(''))[2]
+      iframe = "<iframe width='420' height='315' src='//www.youtube.com/embed/#{id}?rel=0' frameborder='0' allowfullscreen></iframe>"
+      text.gsub!(m.join(''), iframe)
+    end
+    text
   end
     
   def sanitize_truncate(text)
