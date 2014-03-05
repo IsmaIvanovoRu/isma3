@@ -3,14 +3,18 @@ module ApplicationHelper
     options = Sanitize::Config::RELAXED
     options[:attributes]['a'].push('target')
     if text =~ /(youtu.be|youtube.com)/ 
-      action_name == 'show' ? insert_youtube(text, options) : remove_youtube(text, options)
+      if action_name == 'show'
+	options[:elements].push('iframe')
+	options[:attributes]['iframe'] = ['width', 'height', 'src', 'frameborder', 'allowfullscreen', 'style']
+	insert_youtube(text)
+	else
+	  remove_youtube(text)
+      end
     end
     Sanitize.clean(text, options).html_safe
   end
   
-  def insert_youtube(text, options)
-    options[:elements].push('iframe')
-    options[:attributes]['iframe'] = ['width', 'height', 'src', 'frameborder', 'allowfullscreen', 'style']
+  def insert_youtube(text)
     matches = text.scan(/(\S*)(youtu.be|youtube.com)(\S*)/)
     matches.each do |m|
       id = /^.*(youtu.be\/|v\/|e\/|u\/\w+\/|embed\/|v=)([^<#\&\?]*).*/.match(m.join(''))[2]
