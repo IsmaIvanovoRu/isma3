@@ -198,7 +198,7 @@
       </div>
       <div class="row">
 	<div class="large-12 columns">
-	  <address><%= @details_hash['Полное наименование академии'] %><br /><%= @details_hash['Адрес'] %></address>
+	  <address><div itemscope itemtype="http://schema.org/Organization"><span itemprop="name"><%= @details_hash['Полное наименование академии'] %></span></div><div itemprop="address" itemscope itemtype="http://schema.org/PostalAddress"><span itemprop="streetAddress"><%= @details_hash['Адрес'] %></span></div></address>
 	</div>
       </div>
     </footer>

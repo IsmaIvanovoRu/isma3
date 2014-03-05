@@ -1,14 +1,14 @@
 <%= render partial: 'title' %>
 <div class="row">
   <div class="small-12 <%= 'large-10' if @administrator_permission %> columns">
-    <section class="panel clearfix">
+    <section class="panel clearfix" itemscope itemtype="http://schema.org/Person">
       <% if @administrator_permission || current_user == @user %>
 	<%= link_to edit_user_profile_path(@user), title: 'Редактировать профиль', class: 'right' do %>
 	  <i class="fi-page-edit"></i>
 	<% end %>
       <% end %>
     <% unless @profile.full_name.empty? %>
-      <h1><%= @profile.full_name %></h1>
+      <h1><span itemprop="name"><%= @profile.full_name %></span></h1>
       <%= render partial: 'articles/first_image_attachment', locals: {image_attachment: @last_image_attachment, dimension: '150x150' } if @last_image_attachment %>
       <p><%= [(@profile.degree.name if @profile.degree), (@profile.academic_title.name if @profile.academic_title)].compact.join(', ') %>
       <div class="text-justify"><%= sanitize_full(autosub_details @profile.about) if @profile.about %></div>
@@ -19,7 +19,7 @@
 	<ul>
 	  <% @posts.each do |post| %>
 	    <li>
-	      <%= link_to "#{post.division.name} - #{post.name}", division_post_path(post.division, post) %>
+	      <span itemprop="jobTitle"><%= link_to "#{post.division.name} - #{post.name}", division_post_path(post.division, post) %></span>
 	  <% end %>
 	</ul>
       </dd>

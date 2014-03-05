@@ -5,22 +5,22 @@
 <h1>Реквизиты и контакты</h1>
 <dl>
   <% if @details_hash['Полное наименование академии'] || @details_hash['Сокращенное наименование академии'] || @details_hash['Международное наименование академии'] %>
-    <dt>Наименование академии</dt>
-    <dd><strong>полное: </strong><%= @details_hash['Полное наименование академии'] %></dd>
-    <dd><strong>сокращенное: </strong><%= @details_hash['Сокращенное наименование академии'] %></dd>
-    <dd><strong>международное: </strong><%= @details_hash['Международное наименование академии'] %></dd>
+    <dt itemscope itemtype="http://schema.org/Organization">Наименование академии</dt>
+    <dd><strong>полное: </strong><span itemprop="name"><%= @details_hash['Полное наименование академии'] %></span></dd>
+    <dd><strong>сокращенное: </strong><span itemprop="name"><%= @details_hash['Сокращенное наименование академии'] %></span></dd>
+    <dd><strong>международное: </strong><span itemprop="name"><%= @details_hash['Международное наименование академии'] %></span></dd>
   <% end %>
   <% if @details_hash['Адрес'] %>
-    <dt>Адрес</dt>
-    <dd><%= @details_hash['Адрес'] %></dd>
+    <dt itemprop="address" itemscope itemtype="http://schema.org/PostalAddress">Адрес</dt>
+    <dd><span itemprop="streetAddress"><%= @details_hash['Адрес'] %></span></dd>
   <% end %>
   <% if @details_hash['Электронная почта'] %>
     <dt>Электронная почта</dt>
-    <dd><%= mail_to @details_hash['Электронная почта'], 'Написать письмо', encode: "javascript" %></dd>
+    <dd><span itemprop="email"><%= mail_to @details_hash['Электронная почта'], 'Написать письмо', encode: "javascript" %></span></dd>
   <% end %>
   <% if @details_hash['Телефон'] %>
     <dt>Телефон</dt>
-    <dd><%= number_to_phone(@details_hash['Телефон'], country_code: 7) %></dd>
+    <dd><span itemprop="telephone"><%= number_to_phone(@details_hash['Телефон'], country_code: 7) %></span></dd>
   <% end %>
   <% if @details_hash['ИНН'] || @details_hash['КПП'] || @details_hash['ОКПО'] || @details_hash['ОКОГУ'] || @details_hash['Получатель платежа'] || @details_hash['Расчетный счет'] %>
   <dt>Реквизиты</dt>
