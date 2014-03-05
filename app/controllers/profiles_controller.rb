@@ -6,6 +6,7 @@ class ProfilesController < UsersController
   before_action :can, only: [:edit, :update, :destroy]
   before_action :set_degrees, only: [:new, :edit]
   before_action :set_academic_titles, only: [:new, :edit]
+  before_action :entrant?, only: [:edit]
   def index
     @profiles = Profile.all
   end
@@ -50,7 +51,11 @@ class ProfilesController < UsersController
   
   def update
     if @profile.update(profile_params)
-      @profile.user.groups << Group.where(name: "entrants") if params[:entrant]
+      if params[:entrant]
+	@profile.user.groups << Group.where(name: "entrants") if @profile.user.groups.where(groups: {name: 'entrants'}).empty?
+      else
+	@profile.user.groups.delete(Group.where(name: "entrants"))
+      end
       if params[:attachment]
 	@attachment = Attachment.new
 	@attachment.uploaded_file = params[:attachment]
@@ -113,5 +118,9 @@ class ProfilesController < UsersController
   def avatar(image)
     img = Magick::Image.from_blob(image).first
     img.resize_to_fill!(150, 150, ::Magick::NorthGravity).to_blob
+  end
+  
+  def entrant?
+    @entrant = !@profile.user.groups.where(groups: {name: 'entrants'}).empty?
   end
 end

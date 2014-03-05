@@ -46,7 +46,7 @@
     </div>
     <p>&nbsp;</p>
     <div class='large-12 small-12 columns'>
-      <%= check_box_tag :entrant %>
+      <%= check_box_tag :entrant, '', (@entrant ? true : false) %>
       <%= label_tag :entrant, 'Являюсь абитуриентом' %>
     </div>
     <div class="large-12 small-12 columns">

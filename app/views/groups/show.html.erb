@@ -1,27 +1,16 @@
-<%- model_class = Group -%>
-<div class="page-header">
-  <h1><%=t '.title', :default => model_class.model_name.human.titleize %></h1>
-</div>
+<section class="panel">
+<h1><%= t(@group.name, scope: :groups) %></h1>
 
-<dl class="dl-horizontal">
-  <dt><strong><%= model_class.human_attribute_name(:name) %>:</strong></dt>
-  <dd><%= @group.name %></dd>
-  <dt><strong><%= model_class.human_attribute_name(:administrator) %>:</strong></dt>
-  <dd><%= @group.administrator? ? "+" : "-"  %></dd>
-  <dt><strong><%= model_class.human_attribute_name(:editor) %>:</strong></dt>
-  <dd><%= @group.editor? ? "+" : "-"  %></dd>
-  <dt><strong><%= model_class.human_attribute_name(:viewer) %>:</strong></dt>
-  <dd><%= @group.viewer? ? "+" : "-"  %></dd>
-</dl>
-
-<div class="form-actions">
-  <%= link_to t('.back', :default => t("helpers.links.back")),
-              groups_path, :class => 'btn'  %>
-  <%= link_to t('.edit', :default => t("helpers.links.edit")),
-              edit_group_path(@group), :class => 'btn' %>
-  <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
-              group_path(@group),
-              :method => 'delete',
-              :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) },
-              :class => 'btn btn-danger' %>
-</div>
+<ul class="no-bullet">
+  <li>администратор: <%= @group.administrator? ? "+" : "-"  %></li>
+  <li>модератор: <%= @group.moderator? ? "+" : "-"  %></li>
+  <li>писатель: <%= @group.writer? ? "+" : "-"  %></li>
+  <li>читатель: <%= @group.reader? ? "+" : "-"  %></li>
+  <li>комментатор: <%= @group.commentator? ? "+" : "-"  %></li>
+</ul>
+<ul>
+<% @group.users.sort_by(&:created_at).each do |user| %>
+  <li><%= user.profile.full_name.empty? ? (link_to user.login, edit_user_profile_path(user)) : (link_to user.profile.full_name, user_profile_path(user)) %>
+<% end %>
+</ul>
+</section>
