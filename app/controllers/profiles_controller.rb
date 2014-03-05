@@ -89,7 +89,7 @@ class ProfilesController < UsersController
   end
   
   def profile_params
-    params.require(:profile).permit(:id, :user_id, :first_name, :middle_name, :last_name, :degree_id, :academic_title_id, :phone, :about, :entrant)
+    params.require(:profile).permit(:id, :user_id, :first_name, :middle_name, :last_name, :degree_id, :academic_title_id, :phone, :about, :entrant, :email)
   end
   
   def current_user_owner?
