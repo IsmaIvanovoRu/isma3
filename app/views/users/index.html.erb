@@ -1,3 +1,4 @@
+<section class="panel">
 <h1>Список пользователей</h1>
 <% if @administrator_permission %>
   <h2>Импорт пользователей</h2>
@@ -7,7 +8,7 @@
   <% end %>
 <%= link_to 'Скачать список пользователей', users_path(format: :xls) %>
 <% end %>
-<dl class="panel">
+<dl>
   <% @users.each do |user| %>
     <dt>
     <%= user.login %>
@@ -18,3 +19,4 @@
   <% end %>
 <dl>
 <%= will_paginate @users, next_label: "Вперед", previous_label: 'Назад' %>
+</seciton>
