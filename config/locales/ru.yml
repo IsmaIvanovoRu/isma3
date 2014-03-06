@@ -281,6 +281,7 @@ ru:
     of: 'из'
     divisions: 'Структурные подразделения'
     managment: 'Управление'
+    phone_book: 'Телефонный справочник'
     
 
   # remove these aliases after 'activemodel' and 'activerecord' namespaces are removed from Rails repository
