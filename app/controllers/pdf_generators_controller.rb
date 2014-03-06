@@ -1,5 +1,6 @@
 #encoding: UTF-8
 class PdfGeneratorsController < ApplicationController
+  skip_before_filter :authenticate_user!
   def divisions
     @divisions = Division.order(:name).includes(:division_type).includes(:posts).includes(:users).all.group_by{|d| t(d.division_type.name, scope: [:divisions])}.sort
       pdf = Prawn::Document.new(page_size: "A4", :info => {
