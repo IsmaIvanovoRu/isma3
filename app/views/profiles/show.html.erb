@@ -19,7 +19,7 @@
 	<ul>
 	  <% @posts.each do |post| %>
 	    <li>
-	      <span itemprop="jobTitle"><%= link_to "#{post.division.name} - #{post.name}", division_post_path(post.division, post) %></span>
+	      <span itemprop="jobTitle"><%= link_to (post.division.name == post.name ? "#{post.name}" : "#{post.division.name} - #{post.name}"), division_post_path(post.division, post) %></span>
 	  <% end %>
 	</ul>
       </dd>

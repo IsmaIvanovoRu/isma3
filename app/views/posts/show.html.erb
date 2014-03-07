@@ -19,7 +19,7 @@
   </div>
   <br />
   <%= link_to 'К подразделению', @post.division, class: "superscript right" %>
-  <h1><%= "#{@post.division.name} - #{@post.name}" %></h1>
+  <h1><%= @post.division.name == @post.name ? "#{@post.name}" : "#{@post.division.name} - #{@post.name}" %></h1>
   <%= render partial: 'articles/first_image_attachment', locals: {image_attachment: @last_image_attachment, dimension: '150x150' } if @last_image_attachment %>
   <p><%= link_to @profile.full_name_reg, user_profile_path(@profile.user) if @profile %>
   <div class="text-justify"><%= sanitize_full(autosub_details @profile.about) if @profile && @profile.about %></div>

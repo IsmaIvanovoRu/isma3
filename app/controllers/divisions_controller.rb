@@ -48,7 +48,7 @@ class DivisionsController < ApplicationController
       end
     @childs = Post.where(parent_id: @head).where.not(division_id: @division).map{|p| p.division}.uniq.sort_by(&:name)  
     end
-    @clerks = @division.posts.select{|p| p.name =~ /(секретарь|документовед|помощник)/}
+    @clerks = @division.posts.select{|p| p.name =~ /(секретарь|документовед|помощник)/} - @head
     @employees = @division_posts - @head - @clerks
     if can?
       @attachment = Attachment.new
