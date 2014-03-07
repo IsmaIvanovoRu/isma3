@@ -16,7 +16,7 @@ class ProfilesController < UsersController
       redirect_to edit_user_profile_path(@user)
     else
       @last_image_attachment = @profile.attachments.last
-      @posts = @user.posts
+      @posts = @user.posts.sort_by{|p| p.division.name}
       g = Group.where.not(parent_id: nil).map(&:parent_id)
       @user_groups = @user.groups
       @not_user_groups = Group.order(:name).where.not(id: g) - @user_groups
@@ -81,7 +81,7 @@ class ProfilesController < UsersController
   
   private
   def set_user
-    @user = User.find(params[:user_id])
+    @user = User.includes(:divisions).includes(:posts).includes(:profile).find(params[:user_id])
   end
   
   def set_profile
