@@ -33,6 +33,7 @@ module ApplicationHelper
   end
     
   def sanitize_truncate(text)
+    remove_youtube(text)
     truncate(Sanitize.clean(text), :length => 300, :omission => '... ', :separator => ' ')
   end
   
