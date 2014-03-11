@@ -5,13 +5,9 @@
       <%= link_to new_division_post_path(@division), title: 'Новая должность' do %>
 	<i class="fi-plus"></i>
       <% end %>
-    <% end %>
-    <% if @administrator_permission || (current_user == @head.first.user if @head.first) %>
       <%= link_to edit_division_post_path(@division, @post), title: 'Редактировать должность' do %>
 	<i class="fi-page-edit"></i>
       <% end %>
-    <% end %>
-    <% if @administrator_permission %>
       <%= link_to division_post_path(@division, @post), title: 'Удалить должность', method: :delete, data: { confirm: 'Are you sure?' } do %>
 	<i class="fi-x"></i>
       <% end %>
