@@ -1,5 +1,7 @@
 Isma::Application.routes.draw do
 
+  resources :comments
+
   get "pdf_generators/divisions"
   get "pdf_generators/managment"
   get "pdf_generators/phone_book"
@@ -17,6 +19,7 @@ Isma::Application.routes.draw do
   end
   
   resources :articles do
+    resources :comments
     member do
       put :published_toggle
       put :up

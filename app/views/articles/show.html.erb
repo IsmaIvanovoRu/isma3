@@ -7,6 +7,23 @@
   <% else %>
     <h1>Статья еще не опубликована или снята с публикации</h1>
   <% end %>
+  <div id="comments">
+  <% if @comments.count > 0 %>
+  <h2>Комментарии</h2>
+    <a name="comments"></a>
+    <%= render partial: '/comments/comment', collection: @comments %>
+  <% end %>
+  </div>
+  <% if @article.commentable? && @commentator_permission %>
+    <%= form_for(@comment, :url => article_comments_path(@article), data: {remote: true}) do |f| %>
+      <div class="field">
+	<%= f.text_area :content, :rows => 3 %>
+      </div>
+      <div class="actions">
+	<%= f.submit "Добавить комментарий" %>
+      </div>
+    <% end %>
+  <% end %>
   <%  if @moderator_permission || (@writer_permission && current_user == @article.user) %>
   <h2>Прикрепить новый файл</h2>
     <%= form_for(@attachment) do |f| %>

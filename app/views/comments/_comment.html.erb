@@ -1,0 +1,11 @@
+<p class="text-justify">
+<%= comment.content %>
+</p>
+<% if @moderator_permission || current_user == comment.user %>
+  <%= link_to(article_comment_path(@article, comment), confirm: 'Уверены?', method: :delete, data: {remote: true}, class: "left") do %>
+    <i class="fi-x" title="Удалить"></i>
+  <% end %>
+<% end %>
+<div class=subscript>
+  <%= comment.user && comment.user.profile.full_name.empty? ? comment.user.login : (link_to comment.user.profile.full_name, user_profile_path(comment.user))  %>
+<%= time_tag comment.created_at, :format => :short, :pubdate => true %></div>

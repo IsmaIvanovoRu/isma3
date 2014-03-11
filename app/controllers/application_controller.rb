@@ -90,6 +90,7 @@ class ApplicationController < ActionController::Base
     @administrator_permission = current_user_administrator?
     @moderator_permission = current_user_moderator?
     @writer_permission = current_user_writer?
+    @commentator_permission = current_user_commentator?
   end
   
   def set_details

@@ -1,0 +1,4 @@
+$('#comments').html("<%=j render partial: 'comments/comment', collection: @comments %>");
+var cc = "Комментарии (" + $('#comments p').length/2 + ")";
+$('i.fi-comments').attr("title", cc);
+$('#comment_content').val('');

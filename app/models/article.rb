@@ -1,5 +1,6 @@
 class Article < ActiveRecord::Base
   belongs_to :article_type
+  has_many :comments
   belongs_to :user
   belongs_to :division
   has_many :groups, :through => :user

@@ -47,6 +47,10 @@
     <%= f.check_box :fixed %>
     <%= f.label 'Закрепить материал (если установить метку, то статья будет располагаться на странице подразделения неограниченное время).' %>
   </div>
+  <div class="field">
+    <%= f.check_box :commentable %>
+    <%= f.label 'Разрешить комментирование статьи' %>
+  </div>
   <% if @moderator_permission %>
     <div class="field">
       <%= f.check_box :published %>

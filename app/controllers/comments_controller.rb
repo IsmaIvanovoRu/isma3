@@ -1,21 +1,23 @@
 class CommentsController < ArticlesController
   skip_before_filter :authenticate_user!, only: [:index]
   before_action :require_writer, only: [:index, :new, :edit, :create, :update, :destroy]
-  before_action :set_aritcle, only: [:index, :show, :edit, :create, :update, :destroy]
+  before_action :set_article, only: [:index, :show, :edit, :create, :update, :destroy]
   before_action :set_comment, only: [:show, :edit, :update, :destroy]
   def index
-    @comments = Comment.all
+    @comments = @article.comments.all
   end
   
   def show
   end
   
   def new
-    @comment = Comment.new
+    @comment = @article.comments.new
   end
   
   def create
     @comment = @article.comments.new(comment_params)
+    @comment.user_id = current_user.id
+    @comments = @article.comments
     respond_to do |format|
       if @comment.save
         format.html { redirect_to :back, notice: 'Comment was successfully created.' }
@@ -36,7 +38,7 @@ class CommentsController < ArticlesController
   
   def destroy
     @comment.destroy
-    
+    @comments = @article.comments
     respond_to do |format|
       format.html { redirect_to :back }
       format.js
@@ -44,11 +46,14 @@ class CommentsController < ArticlesController
   end
   
   private
+  def set_article
+    @article = Article.find(params[:article_id])
+  end  
   def set_comment
-    @comment = Comment.find(params[:id])
+    @comment = @article.comments.find(params[:id])
   end
   
   def comment_params
-    params.require(:article).permit(:id, :article_id, :user_id, :content)
+    params.require(:comment).permit(:article_id, :user_id, :content)
   end
 end
