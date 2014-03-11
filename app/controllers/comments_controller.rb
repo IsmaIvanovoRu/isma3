@@ -1,8 +1,8 @@
 class CommentsController < ArticlesController
-  skip_before_filter :authenticate_user!, only: [:index]
-  before_action :require_writer, only: [:index, :new, :edit, :create, :update, :destroy]
-  before_action :set_article, only: [:index, :show, :edit, :create, :update, :destroy]
-  before_action :set_comment, only: [:show, :edit, :update, :destroy]
+  before_action :require_commentator, only: [:new, :create, :destroy]
+  before_action :require_moderator, only: [:published_toggle]
+  before_action :set_article, only: [:index, :show, :edit, :create, :update, :destroy, :published_toggle]
+  before_action :set_comment, only: [:show, :edit, :update, :destroy, :published_toggle]
   def index
     @comments = @article.comments.all
   end
@@ -43,6 +43,11 @@ class CommentsController < ArticlesController
       format.html { redirect_to :back }
       format.js
     end
+  end
+  
+  def published_toggle
+    @comment.toggle!(:published)
+    redirect_to :back
   end
   
   private

@@ -19,7 +19,11 @@ Isma::Application.routes.draw do
   end
   
   resources :articles do
-    resources :comments
+    resources :comments do
+      member do
+	put :published_toggle
+      end
+    end
     member do
       put :published_toggle
       put :up

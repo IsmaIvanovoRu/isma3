@@ -40,7 +40,7 @@ class ArticlesController < ApplicationController
     @not_image_attachments = @article.attachments.select {|a| a.mime_type !~ /image/}
     @menu_title = @article.title if current_user_administrator?
     @comment = @article.comments.new
-    @comments = @article.comments.where.not(id: nil)
+    @comments = current_user_moderator? ? @article.comments.where.not(id: nil) : @article.comments.where.not(id: nil).where(published: true)
   end
 
   # GET /articles/new

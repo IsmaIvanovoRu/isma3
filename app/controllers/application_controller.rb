@@ -39,6 +39,13 @@ class ApplicationController < ActionController::Base
       redirect_to root_path
     end
   end 
+
+  def require_commentator
+    unless current_user_commentator?
+      flash[:error] = "You must have commentator`s permissions"
+      redirect_to root_path
+    end
+  end 
   
   def current_user_groups
     current_user.groups
