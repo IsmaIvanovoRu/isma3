@@ -7,9 +7,11 @@
   <% else %>
     <h1>Статья еще не опубликована или снята с публикации</h1>
   <% end %>
+  <% if @article.commentable? && @commentator_permission %>
+    <div id="add-comment-notice" class="hide">Спасибо за Ваш комментарий, он появится после одобрения модератором... или не появится</div>
+  <% end %>
   <% if @comments.count > 0 %>
   <h2>Комментарии</h2>
-  <div id="add-comment-notice" class="hide">Спасибо за Ваш комментарий, он появится после одобрения модератором... или не появится</div>
   <div id="comments">
     <%= render partial: '/comments/comment', collection: @comments, locals: { article: @article } %>
   </div>
@@ -37,7 +39,7 @@
 	<%= f.file_field :file %>
       </div>
       <div class="actions">
-	<%= f.submit 'Прикрепить файл' %>
+	<%= f.submit 'Прикрепить файл', class: "button tiny" %>
       </div>
     <% end %>
   <% end %>
