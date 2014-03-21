@@ -6,7 +6,7 @@
     <% end %>
   <% end %>
   <% if @moderator_permission %>
-    <%= link_to(article_comment_path(article, comment), confirm: 'Уверены?', method: :delete, data: {remote: true}) do %>
+    <%= link_to(article_comment_path(article, comment), method: :delete, data: {remote: true, confirm: 'Уверены?'}) do %>
       <i class="fi-x" title="Удалить"></i>
     <% end %>
   <% end %>

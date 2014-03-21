@@ -14,7 +14,7 @@ class ArticlesController < ApplicationController
       @articles = {}
     if current_user.nil?
       ArticleType.all.each do |article_type|
-	@articles[article_type.name] = Article.includes(:attachments).order('updated_at DESC').where(published: true, group_id: nil, article_type_id: article_type).where("exp_date >= ? or exp_date IS ?", Time.now.to_date, nil).limit(6)
+	@articles[article_type.name] = Article.includes(:division).includes(:user).order('articles.updated_at DESC').where(published: true, group_id: nil, article_type_id: article_type).where("exp_date >= ? or exp_date IS ?", Time.now.to_date, nil).limit(6)
       end
     else
       if current_user_moderator?
@@ -23,7 +23,7 @@ class ArticlesController < ApplicationController
 	current_user_groups = current_user.groups + current_user.groups.joins(:parent).map{|g| g.parent} + [nil]
       end
       ArticleType.all.each do |article_type|
-	@articles[article_type.name] = Article.includes(:attachments).order('updated_at DESC').where(published: true, group_id: current_user_groups, article_type_id: article_type).where("exp_date >= ? or exp_date IS ?", Time.now.to_date, nil).limit(6)
+	@articles[article_type.name] = Article.includes(:division).includes(:user).order('articles.updated_at DESC').where(published: true, group_id: current_user_groups, article_type_id: article_type).where("exp_date >= ? or exp_date IS ?", Time.now.to_date, nil).limit(6)
       end
     end
   end
@@ -40,7 +40,7 @@ class ArticlesController < ApplicationController
     @not_image_attachments = @article.attachments.select {|a| a.mime_type !~ /image/}
     @menu_title = @article.title if current_user_administrator?
     @comment = @article.comments.new
-    @comments = current_user_moderator? ? @article.comments.where.not(id: nil) : @article.comments.where.not(id: nil).where(published: true)
+    @comments = current_user_moderator? ? @article.comments.includes(:user).where.not(id: nil) : @article.comments.includes(:user).where.not(id: nil).where(published: true)
   end
 
   # GET /articles/new
@@ -105,7 +105,7 @@ class ArticlesController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_article
-      @article = Article.includes(:attachments).find(params[:id])
+      @article = Article.includes(:attachments).includes(:comments).includes(:division).includes(:user).find(params[:id])
     end
     
     def set_article_types
