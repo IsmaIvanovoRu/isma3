@@ -5,3 +5,12 @@
 <section class="panel">
 <%= will_paginate @articles, next_label: "Вперед", previous_label: 'Назад' %>
 </section>
+<section class="panel">
+<% unless @unpablished_comments.nil? %>
+<% @unpablished_comments.each do |comment| %>
+  <%= render partial: '/articles/article', locals: { article: comment.article, dimension: '75x75', composition: {header: true, content: true, footer: true, truncate: true} } %>
+    <%= render partial: '/comments/comment', locals: { article: comment.article, comment: comment } %>
+<% end %>
+<%= will_paginate @unpablished_comments, next_label: "Вперед", previous_label: 'Назад' %>
+<% end %>
+</section>

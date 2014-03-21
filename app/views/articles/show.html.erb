@@ -7,20 +7,20 @@
   <% else %>
     <h1>Статья еще не опубликована или снята с публикации</h1>
   <% end %>
-  <div id="comments">
   <% if @comments.count > 0 %>
   <h2>Комментарии</h2>
-    <a name="comments"></a>
-    <%= render partial: '/comments/comment', collection: @comments %>
-  <% end %>
+  <div id="add-comment-notice" class="hide">Спасибо за Ваш комментарий, он появится после одобрения модератором... или не появится</div>
+  <div id="comments">
+    <%= render partial: '/comments/comment', collection: @comments, locals: { article: @article } %>
   </div>
+  <% end %>
   <% if @article.commentable? && @commentator_permission %>
     <%= form_for(@comment, :url => article_comments_path(@article), data: {remote: true}) do |f| %>
       <div class="field">
 	<%= f.text_area :content, :rows => 3 %>
       </div>
       <div class="actions">
-	<%= f.submit "Добавить комментарий" %>
+	<%= f.submit "Добавить комментарий", class: 'tiny button'  %>
       </div>
     <% end %>
   <% end %>

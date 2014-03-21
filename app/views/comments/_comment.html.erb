@@ -1,12 +1,12 @@
 <article class="<%= " pink" unless comment.published %>">
 <div class="right">
   <% if @moderator_permission %>
-    <%= link_to published_toggle_article_comment_path(@article, comment), title: (comment.published ? 'Снять с публикации' : 'Опубликовать'), method: :put do %>
+    <%= link_to published_toggle_article_comment_path(article, comment), title: (comment.published ? 'Снять с публикации' : 'Опубликовать'), method: :put, data: {remote: true} do %>
       <i class="fi-eye"></i>
     <% end %>
   <% end %>
-  <% if @moderator_permission || current_user == comment.user %>
-    <%= link_to(article_comment_path(@article, comment), confirm: 'Уверены?', method: :delete, data: {remote: true}, class: "left") do %>
+  <% if @moderator_permission %>
+    <%= link_to(article_comment_path(article, comment), confirm: 'Уверены?', method: :delete, data: {remote: true}) do %>
       <i class="fi-x" title="Удалить"></i>
     <% end %>
   <% end %>
