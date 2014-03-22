@@ -65,8 +65,8 @@
 	      <% end %>
 	    <% end %>
 	    <% if @feedbacks_count > 0 %>
-	      <li><%= link_to feedbacks_path do %>
-		<i class="fi-mail" style="color: red;" title="<%= "Имеется Ваших вопросов, на которые еще не даны ответы - #{@feedbacks_count} " %>"></i></li>
+	      <li><%= link_to feedbacks_path, title: "Вопросов, ожидающих ответа - #{@feedbacks_count}" do %>
+		<i class="fi-mail" style="color: red;"></i></li>
 		<% end %>
 	      </li>
 	      <% end %>
