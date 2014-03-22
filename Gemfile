@@ -68,3 +68,5 @@ gem 'actionview-encoded_mail_to'
 gem 'prawn'
 
 gem 'newrelic_rpm'
+
+gem 'jquery-ui-rails'

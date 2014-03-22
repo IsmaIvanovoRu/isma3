@@ -45,7 +45,7 @@
   </div>
   <div class="field">
     <%= f.label 'Можно указать дату, после которой, материал будет автоматически снят с публикации (настоятельно рекомендуем указывать для анонсов событий).' %>
-    <%= f.date_select :exp_date, {:include_blank => ''} %>
+    <%= f.text_field :exp_date, id: 'datepicker' %>
   </div>
   <div class="field">
     <%= f.check_box :fixed %>
