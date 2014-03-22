@@ -37,10 +37,31 @@
 	  <% if user_signed_in? %>
 	    <% if @moderator_permission %>
 	      <% if @articles_count > 0 %>
-		<li><%= link_to archives_path + "?published=0" do %>
-		  <i class="fi-page" style="color: red;" title="<%= "Имеется неопубликованных статей, требующих Вашего внимания - #{@articles_count} " %>"></i></li>
+		<li><%= link_to archives_path + "?published=0", title: "Имеется неопубликованных статей, требующих Вашего внимания - #{@articles_count}" do %>
+		  <i class="fi-page" style="color: red;"></i></li>
 		  <% end %>
 		</li>
+	      <% end %>
+	      <% if @new_comments.count > 0 %>
+	      <li>
+		<%= link_to '#', title: "Имеется статей с неопубликованными комментариями, требующих Вашего внимания - #{@new_comments.count}", data: {dropdown: 'new_comments'} do %>
+		  <i class="fi-comments" style='color: red;'></i>
+		<% end %>
+		<div id="new_comments" data-dropdown-content class="f-dropdown content">
+		  <ul class="no-bullet">
+		    <% @new_comments.each do |article| %>
+			<li>
+			  <dl>
+			    <dt><small><%= link_to article.title, article %></small></dt>
+			    <% article.comments.each do |comment| %>
+			      <dd><%= comment.content %></dd>
+			    <% end %>
+			  </dl>
+			</li>
+		    <% end %>
+		  </ul>
+		</div>
+	      </li>
 	      <% end %>
 	    <% end %>
 	    <% if @feedbacks_count > 0 %>
