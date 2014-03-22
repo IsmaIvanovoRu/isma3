@@ -3,10 +3,10 @@ class ArticlesController < ApplicationController
   before_action :require_writer, only: [:new, :edit, :update, :create, :destroy, :published_toggle, :up]
   before_action :set_article, only: [:show, :edit, :update, :destroy, :published_toggle, :up]
   before_action :can, only: [:edit, :update, :destroy]
-  before_action :set_article_types, only: [:new, :edit, :create]
-  before_action :set_divisions, only: [:new, :edit, :create]
-  before_action :set_groups, only: [:new, :edit, :create]
-  before_action :set_employees, only: [:new, :edit, :create]
+  before_action :set_article_types, only: [:new, :edit, :create, :update]
+  before_action :set_divisions, only: [:new, :edit, :create, :update]
+  before_action :set_groups, only: [:new, :edit, :create, :update]
+  before_action :set_employees, only: [:new, :edit, :create, :update]
 
   # GET /articles
   # GET /articles.json
@@ -140,7 +140,7 @@ class ArticlesController < ApplicationController
       params[:article][:user_id] = current_user.id unless current_user_moderator?
       params[:article][:user_id] = current_user.id unless params[:article][:user_id]
       params[:article][:published] = false unless current_user_moderator?
-      params.require(:article).permit(:title, :content, :article_type_id, :exp_date, :published, :fixed, :commentable, :division_id, :group_id, :user_id)
+      params.require(:article).permit(:title, :content, :article_type_id, :exp_date, :published, :fixed, :commentable, :division_id, :group_id, :user_id, :message)
     end
     
     def set_employees

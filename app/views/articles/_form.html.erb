@@ -14,11 +14,15 @@
     <%= f.label 'Заголовок' %>
     <%= f.text_field :title %>
   </div>
-  <div class="Содержание">
+  <div class="field">
     <%= f.label 'Содержание' %>
     <%= f.text_area :content%>
   </div>
   <br />
+  <div class="field">
+    <%= f.label "Поле для переписки с модератором" %>
+    <%= f.text_field :message %>
+  </div>
   <% unless @employees.nil? %>
   <div class="field">
     <%= f.label 'Можно выбрать пользователя от имени которого, будет опубликован материал.' %>

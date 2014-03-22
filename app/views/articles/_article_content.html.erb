@@ -1,8 +1,18 @@
 <%= article.first_image_attachment ? (render partial: 'articles/first_image_attachment', locals: {article: article, image_attachment: article.first_image_attachment, dimension: dimension }) : (image_tag('default.jpg', class: 'th left', size: '75x75') if controller_name == 'articles' && action_name == 'index' && article.article_type.name == 'news')  %>
+<% if (@moderator_permission || current_user == article.user) && !article.message.empty? %>
+  <div class="text-justify clearfix alert-box radius">
+    <%= article.message %>
+  </div>
+<% end %>
 <% if composition[:truncate] %>
   <div class="text-justify clearfix">
-  <p>
-  <%= article.content.length > 800 ? sanitize_truncate(autosub_details article.content) : sanitize_full(autosub_details article.content) %>
+    <% if article.content.length > 800 %>
+      <p>
+	<%= sanitize_truncate(autosub_details article.content) %>
+      </p>
+    <% else %>
+      <%= sanitize_full(autosub_details article.content) %>
+    <% end %>
   </div>
 <% else %>
   <div class="text-justify clearfix">
