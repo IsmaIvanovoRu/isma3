@@ -1,5 +1,6 @@
 Isma::Application.routes.draw do
 
+  get "sitemaps/sitemap"
   resources :comments
 
   get "pdf_generators/divisions"
