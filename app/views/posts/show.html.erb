@@ -23,7 +23,7 @@
   <dl>
     <dt>Контакты</dt>
     <dd><p><%= mail_to @division.email, 'Написать письмо', encode: "javascript", subject: "Для #{@profile.full_name if @profile}" unless @division.email.empty? %></dd>
-    <dd><p><%= "Телефон: #{number_to_phone(@post.phone, country_code: 7, area_code: true)}" unless @post.phone.empty? %></dd>
+    <dd><p><%= "Телефон: #{multi_number_to_phone(@post.phone, country_code: 7, area_code: true)}" unless @post.phone.empty? %></dd>
   </dl>
   <% end %>
 </section>

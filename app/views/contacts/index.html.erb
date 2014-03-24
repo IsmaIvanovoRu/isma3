@@ -20,7 +20,7 @@
   <% end %>
   <% if @details_hash['Телефон'] %>
     <dt>Телефон</dt>
-    <dd><span itemprop="telephone"><%= number_to_phone(@details_hash['Телефон'], country_code: 7) %></span></dd>
+    <dd><span itemprop="telephone"><%= multi_number_to_phone(@details_hash['Телефон'], country_code: 7, area_code: true) %></span></dd>
   <% end %>
   <% if @details_hash['ИНН'] || @details_hash['КПП'] || @details_hash['ОКПО'] || @details_hash['ОКОГУ'] || @details_hash['Получатель платежа'] || @details_hash['Расчетный счет'] %>
   <dt>Реквизиты</dt>

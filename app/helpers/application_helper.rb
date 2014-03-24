@@ -46,7 +46,14 @@ module ApplicationHelper
     @details_hash.each{|k, v| text.gsub!("&amp;[#{k}]", v.to_s)} if text.include? "&amp;["
     text
   end
-  
+ 
+  def multi_number_to_phone(numbers, options = {})
+    return unless numbers
+    s = []
+    numbers.split(';').each{|number| s += [number_to_phone(number, options)]}
+    s.join(', ')
+  end
+ 
   def number_to_phone(number, options = {})
     return unless number
     @options = options.symbolize_keys
