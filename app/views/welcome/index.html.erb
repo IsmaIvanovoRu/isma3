@@ -1,8 +1,8 @@
 <div class="row">
-  <%= link_to '/articles/226' do %>
+  <%= link_to articles_path do %>
     <div class="small-6 large-4 columns">
-	<div class="welcome-img"><%= image_tag('/assets/common.jpg', width: '100%') %></div>
-	<div class="panel"><h1>Основные сведения</h1></div>
+	<div class="welcome-img"><%= image_tag('/assets/news.jpg', width: '100%') %></div>
+	<div class="panel"><h1>Новости</h1></div>
     </div>
   <% end %>
   <%= link_to '/divisions/141' do %>
@@ -29,10 +29,10 @@
 	<div class="panel"><h1>Клиника</h1></div>
     </div>
   <% end %>
-  <%= link_to articles_path do %>
+  <%= link_to '/articles/226' do %>
     <div class="small-6 large-4 columns">
-	<div class="welcome-img"><%= image_tag('/assets/news.jpg', width: '100%') %></div>
-	<div class="panel"><h1>Новости</h1></div>
+	<div class="welcome-img"><%= image_tag('/assets/common.jpg', width: '100%') %></div>
+	<div class="panel"><h1>Основные сведения</h1></div>
     </div>
   <% end %>
 </div>
