@@ -12,12 +12,14 @@
 <%= link_to 'Скачать список подразделений', divisions_path(format: :xls) %>
 <% end %>
 <% @divisions.each do |type, divisions| %>
-<%= content_tag(:a, '', name: type, style: 'padding-top: 45px;') %>
-<h2><%= first_letter_upcase(type.dup) %></h2>
-  <ul class="no-bullet">
-    <% divisions.each do |division| %>
-      <li><%= link_to first_letter_upcase(division.name), division %></td>
-    <% end %>
-  </ul>
+  <% unless type == 'обучающиеся' %>
+  <%= content_tag(:a, '', name: type, style: 'padding-top: 45px;') %>
+  <h2><%= first_letter_upcase(type.dup) %></h2>
+    <ul class="no-bullet">
+      <% divisions.each do |division| %>
+	<li><%= link_to first_letter_upcase(division.name), division %></td>
+      <% end %>
+    </ul>
+  <% end %>
 <% end %>
 </section>
