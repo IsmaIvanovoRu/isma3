@@ -41,8 +41,12 @@ class User < ActiveRecord::Base
 	user.profile.import(row)
       else
 	user.attributes = row.to_hash.slice('login', 'password', 'password_confirmation')
+	user_groups = row.to_hash.slice('groups')['groups'].split(',') if row.to_hash.slice('groups')['groups']
 	if user.save!
 	  user.profile.import(row)
+	  if user_groups
+	    user_groups.each{|group| user.groups << Group.where(name: group)}
+	  end
 	end
       end
     end
