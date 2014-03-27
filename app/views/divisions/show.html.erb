@@ -48,9 +48,19 @@
     <% if @employees.count > 0 %>
     <dl class="accordion" data-accordion>
   <dd>
-    <a href="#employees"><%= @division_type == 'representative' ? 'Состав' : 'Сотрудники' %></a>
+    <a href="#employees">
+    <% case @division_type %>
+    <% when 'representative' %>
+    <%= 'Состав' %>
+    <% when 'student' %>
+    <%= 'Обучающиеся' %>
+    <% else %>
+    <%= 'Сотрудники' %>
+    <% end %>
+    </a>
     <div id="employees" class="content">
-	<% if @division_type == 'representative' %>
+	<% case @division_type %>
+	<% when 'representative' %>
 	  <ul class="no-bullet">
 	    <% @employees.each do |employee| %>
 	      <% last_image_attachment = employee.user.profile.attachments.last if employee.user %>

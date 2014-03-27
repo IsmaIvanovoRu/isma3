@@ -11,4 +11,12 @@ class Post < ActiveRecord::Base
   def is_head?
     parent.nil? || (parent.nil? ? false : parent.division != division)
   end
+  
+  def self.import_from_row(row, user)
+    post = Division.find_by_name(row["division"]).posts.new
+    post.name = row["post"]
+    post.user_id = user.id
+    post.parent_id = post.division.head.first.id unless post.division.head.empty?
+    post.save!
+  end
 end
