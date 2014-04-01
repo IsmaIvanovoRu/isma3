@@ -67,7 +67,7 @@ class PostsController < DivisionsController
   end
   
   def set_posts
-    @division.division_type.name = 'stusent' ? @posts = Post.order(:name).joins(:division).where(divisions: {division_type_id: 6}) : @posts = Post.order(:name).joins(:division).where.not(divisions: {division_type_id: 6})
+    @division.division_type.name = 'stusent' ? @posts = Post.order(:name).joins(:division).where(divisions: {division_type_id: [2, 6]}) : @posts = Post.order(:name).joins(:division).where.not(divisions: {division_type_id: 6})
   end
   
   def set_head
