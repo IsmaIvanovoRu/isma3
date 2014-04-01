@@ -1,5 +1,5 @@
-<div class="row">
-  <% if @menus['center'] %>
+<% if @menus['center'] %>
+  <div class="row">
     <% @menus['center'].group_by(&:parent_id).first.last.each do |p| %>
       <div class="large-12 small-12 columns">
 	  <ul class="side-nav" style="padding-top: 0;">
@@ -17,8 +17,8 @@
 	  </ul>
       </div>
     <% end %>
-  <% end %>
-</div>
+  </div>
+<% end %>
 <div class="row">
   <%= link_to articles_path do %>
     <div class="small-6 large-4 columns">
