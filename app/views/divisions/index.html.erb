@@ -12,7 +12,7 @@
 <%= link_to 'Скачать список подразделений', divisions_path(format: :xls) %>
 <% end %>
 <% @divisions.each do |type, divisions| %>
-  <% unless type == 'обучающиеся' %>
+  <% unless type == 'обучающиеся' && !@administrator_permission %>
   <%= content_tag(:a, '', name: type, style: 'padding-top: 45px;') %>
   <h2><%= first_letter_upcase(type.dup) %></h2>
     <ul class="no-bullet">
