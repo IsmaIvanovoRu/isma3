@@ -1,6 +1,8 @@
 class PostsController < DivisionsController
   before_action :require_administrator, only: [:index, :new, :create, :edit, :destroy]
+  skip_before_filter :is_student, only: [:show]
   before_action :set_division, only: [:index, :show, :edit, :new, :create, :update, :destroy]
+  before_filter :is_student, only: [:show]
   before_action :set_post, only: [:show, :edit, :update, :destroy]
   before_action :set_post_types, only: [:new, :edit, :create]
   before_action :set_posts, only: [:new, :edit, :create]

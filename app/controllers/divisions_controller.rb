@@ -3,6 +3,7 @@ class DivisionsController < ApplicationController
   skip_before_filter :authenticate_user!, only: [:index, :show]
   before_action :require_administrator, only: [:new, :create, :destroy]
   before_action :set_division, only: [:show, :edit, :update, :destroy]
+  before_filter :is_student, only: [:show]
   before_action :set_division_types, only: [:new, :edit, :create]
   before_action :set_posts, only: [:show, :edit]
   before_action :set_division_posts, only: [:show, :edit]
@@ -125,6 +126,21 @@ class DivisionsController < ApplicationController
       redirect_to @division
     else
       @can = true
+    end
+  end
+  def is_student?
+    unless current_user.nil?
+      groups_names = current_user_groups.map(&:name)
+      (groups_names.include?('students') || groups_names.include?('employees') || current_user_administrator?)
+    end
+  end
+  
+  def is_student
+    if @division.division_type_id == 6
+      unless is_student?
+	flash[:error] = "You must have permissions"
+	redirect_to root_path
+      end
     end
   end
 end

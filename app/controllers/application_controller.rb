@@ -50,7 +50,7 @@ class ApplicationController < ActionController::Base
   end 
   
   def current_user_groups
-    current_user.groups
+    current_user.groups unless current_user.nil?
   end
   
   def current_user_writer?
