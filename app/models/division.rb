@@ -20,12 +20,12 @@ class Division < ActiveRecord::Base
     end
   end
   
-  def self.import_from_row(row, user)
-    division = find_by_name(row["division"]) || new
-    division.attributes = row.to_hash.slice('division_type_id', 'address', 'latitude', 'longitude', 'email')
-    division.name = row["division"]
+  def self.import_from_row(row, user =  nil)
+    division = find_by_name(row["name"]) || new
+    division.attributes = row.to_hash.slice('name', 'division_type_id', 'address', 'latitude', 'longitude', 'email')
+    division.name = row["name"]
     if division.save!
-      Post.import_from_row(row, user)
+      Post.import_from_row(row, user) unless user.nil?
     end
   end
 

@@ -86,7 +86,7 @@ class DivisionsController < ApplicationController
   end
   
   def import
-    Division.import(params[:file])
+    Division.import_from_file(params[:file])
     redirect_to divisions_url, notice: "Divisions imported."
   end
   
