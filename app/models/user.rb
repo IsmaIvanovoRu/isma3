@@ -34,18 +34,26 @@ class User < ActiveRecord::Base
   def self.import(file)
     spreadsheet = open_spreadsheet(file)
     header = spreadsheet.row(1)
-    (2..spreadsheet.last_row).each do |i|
-      row = Hash[[header, spreadsheet.row(i)].transpose]
-      user = find_by_id(row["id"]) || new
-      if user.id
-	user.profile.import(row)
-      else
-	user.attributes = row.to_hash.slice('login', 'password', 'password_confirmation')
-	user_groups = row.to_hash.slice('groups')['groups'].split(',') if row.to_hash.slice('groups')['groups']
-	if user.save!
-	  user.profile.import(row)
-	  if user_groups
-	    user_groups.each{|group| user.groups << Group.where(name: group)}
+    (2..spreadsheet.last_row).to_a.in_groups_of(100, false) do |group|
+      ActiveRecord::Base.transaction do
+	group.each do |i|
+	  row = Hash[[header, spreadsheet.row(i)].transpose]
+	  user = find_by_id(row["id"]) || new
+	  if user.id
+	    user.profile.import(row)
+	  else
+	    user.attributes = row.to_hash.slice('login', 'password', 'password_confirmation')
+	    user_groups = row.to_hash.slice('groups')['groups'].split(',') if row.to_hash.slice('groups')['groups']
+	    user_post = row.to_hash.slice('post')['post']
+	    if user.save!
+	      user.profile.import(row)
+	      if user_groups
+		user_groups.each{|group| user.groups << Group.where(name: group)}
+	      end
+	      if row["division"]
+		  Division.import_from_row(row, user)
+	      end
+	    end
 	  end
 	end
       end

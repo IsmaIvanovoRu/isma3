@@ -58,11 +58,16 @@ class AttachmentsController < ApplicationController
 	@attachment = Attachment.new
 	@attachment.uploaded_file = attachment_params
 	if @attachment.save
-	  params[:article_id]
-	  article = Article.find(params[:article_id])
-	  @attachment.articles << article
-	  article.update_attributes(published: false) unless current_user_moderator?
-	  article.update_attributes(updated_at: Time.now)
+	  case
+	  when params[:article_id]
+	    article = Article.find(params[:article_id])
+	    @attachment.articles << article
+	    article.update_attributes(published: false) unless current_user_moderator?
+	    article.update_attributes(updated_at: Time.now)
+	  when params[:division_id]
+	    division = Division.find(params[:division_id])
+	    @attachment.divisions << division
+	  end
 	  flash[:notice] = "Thank you for your submission..."
 	  redirect_to :back
 	else

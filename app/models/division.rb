@@ -11,14 +11,21 @@ class Division < ActiveRecord::Base
   validates :latitude, :numericality => { :greater_than_or_equal_to => -90, :less_than_or_equal_to => 90 }
   validates :longitude, :numericality => { :greater_than_or_equal_to => 0, :less_than_or_equal_to => 180 }
   
-  def self.import(file)
+  def self.import_from_file(file)
     spreadsheet = open_spreadsheet(file)
     header = spreadsheet.row(1)
     (2..spreadsheet.last_row).each do |i|
       row = Hash[[header, spreadsheet.row(i)].transpose]
-      division = find_by_id(row["id"]) || new
-      division.attributes = row.to_hash.slice('id', 'name', 'division_type_id', 'address', 'latitude', 'longitude', 'email')
-      division.save!
+      import_from_row(row)
+    end
+  end
+  
+  def self.import_from_row(row, user =  nil)
+    division = find_by_name(row["name"]) || new
+    division.attributes = row.to_hash.slice('name', 'division_type_id', 'address', 'latitude', 'longitude', 'email')
+    division.name = row["name"]
+    if division.save!
+      Post.import_from_row(row, user) unless user.nil?
     end
   end
 
