@@ -38,7 +38,7 @@ class User < ActiveRecord::Base
       ActiveRecord::Base.transaction do
 	group.each do |i|
 	  row = Hash[[header, spreadsheet.row(i)].transpose]
-	  user = find_by_id(row["id"]) || new
+	  user = find_by_id(row["login"]) || new
 	  if user.id
 	    user.profile.import(row)
 	  else
@@ -50,7 +50,7 @@ class User < ActiveRecord::Base
 	      if user_groups
 		user_groups.each{|group| user.groups << Group.where(name: group)}
 	      end
-	      if row["division"]
+	      if row['name']
 		  Division.import_from_row(row, user)
 	      end
 	    end
