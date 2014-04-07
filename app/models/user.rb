@@ -38,9 +38,12 @@ class User < ActiveRecord::Base
       ActiveRecord::Base.transaction do
 	group.each do |i|
 	  row = Hash[[header, spreadsheet.row(i)].transpose]
-	  user = find_by_id(row["login"]) || new
+	  user = find_by_login(row["login"]) || new
 	  if user.id
 	    user.profile.import(row)
+	      if row['name']
+		Division.import_from_row(row, user)
+	      end
 	  else
 	    user.attributes = row.to_hash.slice('login', 'password', 'password_confirmation')
 	    user_groups = row.to_hash.slice('groups')['groups'].split(',') if row.to_hash.slice('groups')['groups']
