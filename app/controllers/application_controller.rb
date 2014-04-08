@@ -109,7 +109,7 @@ class ApplicationController < ActionController::Base
   end
   
   def feedbacks_count
-    @feedbacks_count = @moderator_permission ? Feedback.where(public: false).count : (Feedback.joins(:user).where(public: false, users: {id: current_user}).count unless current_user.nil?)
+    @feedbacks_count = @moderator_permission ? Feedback.where(public: false).count : (Feedback.joins(:post).where(public: false, posts: {id: current_user.posts.map(&:id)}).count unless current_user.nil?)
   end
   
   def articles_count
