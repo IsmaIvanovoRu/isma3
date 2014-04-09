@@ -69,7 +69,7 @@ class PostsController < DivisionsController
   end
   
   def set_posts
-    @division.division_type.name = 'student' ? @posts = Post.order(:name).joins(:division).where(divisions: {division_type_id: [2, 6]}) : @posts = Post.order(:name).joins(:division).where.not(divisions: {division_type_id: 6})
+    @division.division_type.name == 'student' ? @posts = Post.order(:name).joins(:division).where(divisions: {division_type_id: [2, 6]}) : @posts = Post.order(:name).joins(:division).where.not(divisions: {division_type_id: 6})
   end
   
   def set_head
@@ -88,7 +88,7 @@ class PostsController < DivisionsController
   end
   
   def set_users
-    @division.division_type.name = 'student' ? @users = User.joins(:groups).includes(:profile).where(groups: {name: 'students'}).sort_by{|user| user.profile.full_name} : @users = User.joins(:groups).includes(:profile).where(groups: {name: 'employees'}).sort_by{|user| user.profile.full_name}
+    @division.division_type.name == 'student' ? @users = User.joins(:groups).includes(:profile).where(groups: {name: 'students'}).sort_by{|user| user.profile.full_name} : @users = User.joins(:groups).includes(:profile).where(groups: {name: 'employees'}).sort_by{|user| user.profile.full_name}
   end
 
   def post_params
