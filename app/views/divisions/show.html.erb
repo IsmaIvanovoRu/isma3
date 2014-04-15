@@ -79,12 +79,12 @@
 		  <% end %>
 		</ul>
 	      <% else %>
-		<dl>
+		<ul class="no-bullet">
 		<% @employees.each do |employee| %>
-		    <dt><%= link_to employee.name, division_post_path(@division, employee) %></dt>
-		    <dd><%= link_to employee.user.profile.full_name_reg, user_profile_path(employee.user) if employee.user && employee.user.profile %></dd>
+		    <li style="padding: 5px 0px;"><%= link_to employee.name, division_post_path(@division, employee) %><br />
+		    <strong><span style="padding: 0px 10px;">&nbsp;</span><%= link_to employee.user.profile.full_name_reg, user_profile_path(employee.user) if employee.user && employee.user.profile %></strong></li>
 		<% end %>
-		</dl>
+		</ul>
 	      <% end %>
 	  </div>
 	</dd>
