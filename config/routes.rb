@@ -28,6 +28,7 @@ Isma::Application.routes.draw do
     member do
       put :published_toggle
       put :up
+      put :cleanup_message
     end
   end
   resources :attachments

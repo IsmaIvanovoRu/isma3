@@ -1,7 +1,7 @@
 class ArticlesController < ApplicationController
   skip_before_filter :authenticate_user!, only: [:index, :show]
-  before_action :require_writer, only: [:new, :edit, :update, :create, :destroy, :published_toggle, :up]
-  before_action :set_article, only: [:show, :edit, :update, :destroy, :published_toggle, :up]
+  before_action :require_writer, only: [:new, :edit, :update, :create, :destroy, :published_toggle, :up, :cleanup_message]
+  before_action :set_article, only: [:show, :edit, :update, :destroy, :published_toggle, :up, :cleanup_message]
   before_action :can, only: [:edit, :update, :destroy]
   before_action :set_article_types, only: [:new, :edit, :create, :update]
   before_action :set_divisions, only: [:new, :edit, :create, :update]
@@ -99,6 +99,14 @@ class ArticlesController < ApplicationController
   
   def up
     @article.update_attributes(updated_at: Time.now)
+    redirect_to :back
+  end
+  
+  def cleanup_message
+    tmp_datetime = @article.updated_at
+    @article.message = ""
+    @article.updated_at = tmp_datetime
+    @article.save!
     redirect_to :back
   end
 
