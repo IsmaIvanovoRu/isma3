@@ -104,9 +104,9 @@ class ArticlesController < ApplicationController
   
   def cleanup_message
     tmp_datetime = @article.updated_at
-    @article.message = ""
-    @article.updated_at = tmp_datetime
-    @article.save!
+    Article.record_timestamps = false
+    @article.update_attributes(message: "", updated_at: tmp_datetime)
+    Article.record_timestamps = true
     redirect_to :back
   end
 
