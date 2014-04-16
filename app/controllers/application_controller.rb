@@ -10,8 +10,8 @@ class ApplicationController < ActionController::Base
   before_action :set_alert
   before_action :set_details
   before_action :feedbacks_count
-  before_filter :current_user_moderator?
   before_action :articles_count
+  before_filter :current_user_moderator?
   before_action :new_comments
 
   def require_reader
@@ -113,7 +113,7 @@ class ApplicationController < ActionController::Base
   end
   
   def articles_count
-   @articles_count = Article.order('updated_at DESC').where(published: false).count || 0 if @moderator_permission
+   @articles_count = @moderator_permission ? Article.order('updated_at DESC').where(published: false).count || 0 : (current_user.articles.order('updated_at DESC').where(published: false).count || 0 unless current_user.nil?)
   end
   
   def new_comments
