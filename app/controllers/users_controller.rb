@@ -3,7 +3,7 @@ class UsersController < ApplicationController
   before_action :set_user, only: [:show, :destroy]
   
   def index
-    @users = User.includes(:groups).includes(:profile).order('users.created_at DESC').paginate(page: params[:page])
+    @users = User.includes(:groups).includes(:profile).order('profiles.updated_at DESC').paginate(page: params[:page])
     @all_users = User.order(:login).includes('profile')
     respond_to do |format|
       format.html
