@@ -55,6 +55,10 @@
     <%= f.check_box :commentable %>
     <%= f.label 'Разрешить комментирование статьи' %>
   </div>
+  <div class="field">
+    <%= f.check_box :skip_frontend %>
+    <%= f.label 'Не отображать на главной странице' %>
+  </div>
   <% if @moderator_permission %>
     <div class="field">
       <%= f.check_box :published %>
