@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140322045152) do
+ActiveRecord::Schema.define(version: 20140422122648) do
 
   create_table "academic_titles", force: true do |t|
     t.string   "name",       default: "", null: false
@@ -39,6 +39,7 @@ ActiveRecord::Schema.define(version: 20140322045152) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "message",         default: ""
+    t.boolean  "skip_frontend",   default: false
   end
 
   add_index "articles", ["article_type_id"], name: "index_articles_on_article_type_id", using: :btree
