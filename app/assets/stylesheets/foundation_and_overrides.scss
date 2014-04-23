@@ -43,6 +43,15 @@ $topbar-menu-icon-color-toggled: rgba(255,255,255, 0.85);
 
 $panel-bg: scale-color(rgba(255,255,255, 0.85), $lightness: -5%);
 
+// We use these to set the background colors for parts of Clearing.
+$clearing-bg: rgb(203,218,252);
+$clearing-caption-bg: $clearing-bg;
+$clearing-carousel-bg: rgb(158,185,247);
+$clearing-img-bg: $clearing-bg;
+
+// We use these to style the close button
+$clearing-close-color: rgba(13,40,175,1);
+
 // The default font-size is set to 100% of the browser style sheet (usually 16px)
 // for compatibility with browser-based text zoom or user-set defaults.
 
