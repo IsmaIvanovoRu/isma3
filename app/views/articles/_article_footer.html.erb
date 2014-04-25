@@ -4,7 +4,7 @@
   <li><%= link_to 'http://isma.ivanovo.ru/feed.atom', target: 'blank' do %>
     <%= image_tag('application-rss+xml.png', title: 'Подписаться на RSS', size: '16x16') %>
   <% end %></li>
-  <li><%= link_to 'https://twitter.com/share?text=' + (content_for?(:title) ? yield(:title) : "ИвГМА") + '&?url=' + article_url(article) + '&?via=@IsmaIvanovoRu', target: 'blank' do %>
+  <li><%= link_to 'https://twitter.com/share?text=' + (content_for?(:title) ? yield(:title).split(' | ').first.strip : "ИвГМА") + '&?url=' + article_url(article) + '&?via=@IsmaIvanovoRu', target: 'blank' do %>
     <%= image_tag('twitter_logo_blue.png', title: "Поделиться в Twitter", size: '16x16') %>
   <% end %></li>
   <li><%= link_to 'http://vk.com/share.php?url=' + article_url(article), target: 'blank' do %>
