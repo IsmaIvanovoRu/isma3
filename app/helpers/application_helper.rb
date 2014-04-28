@@ -46,6 +46,11 @@ module ApplicationHelper
     @details_hash.each{|k, v| text.gsub!("&amp;[#{k}]", v.to_s)} if text.include? "&amp;["
     text
   end
+  
+    def autosub_details_in_title(text)
+    @details_hash.each{|k, v| text.gsub!("&[#{k}]", v.to_s)} if text.include? "&["
+    text
+  end
  
   def multi_number_to_phone(numbers, options = {})
     return unless numbers

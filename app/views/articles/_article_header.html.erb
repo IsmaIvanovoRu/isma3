@@ -30,11 +30,11 @@
 </div>
 <% if controller.controller_name == 'articles' && controller.action_name == 'show' %>
   <h1>
-    <%= article.title %>
+    <%= autosub_details_in_title(article.title) %>
   </h1>  
 <% else %>
   <h1 class="index">
-    <%= link_to article.title, article %>
+    <%= link_to autosub_details_in_title(article.title), article %>
   </h1>
 <% end %>
 </header>
