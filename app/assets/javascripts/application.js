@@ -21,6 +21,7 @@
 //= require foundation/foundation.orbit
 //= require foundation/foundation.reveal
 //= require foundation/foundation.topbar
+Foundation.global.namespace = '';
 $(function(){ $(document).foundation(); });
 var CKEDITOR_BASEPATH = '/assets/ckeditor/'
 Foundation.libs.topbar['settings']['back_text'] = 'Назад'
