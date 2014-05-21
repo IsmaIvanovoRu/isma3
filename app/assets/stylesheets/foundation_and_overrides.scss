@@ -11,6 +11,7 @@
 
 // Allows the use of rem-calc() or lower-bound() in your settings
 @import "foundation/functions";
+$namespace : false;
 $body-font-family: 'Open Sans', Arial, sans-serif;
 $paragraph-font-size: 0.875rem;
 $paragraph-line-height: 1.3;
