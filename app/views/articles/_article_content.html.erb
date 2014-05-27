@@ -2,7 +2,7 @@
 <% if (@moderator_permission || current_user == article.user) && !article.message.empty? %>
   <div class="text-justify clearfix alert-box radius">
   <div class="wrap">
-    <% if @moderator_permission || current_user == @article.user %>
+    <% if @moderator_permission || current_user == article.user %>
       <%= link_to cleanup_message_article_path(article), title: "Очистить", method: :put do %>
 	<i class="fi-x" style="color: white; margin-top: -14px; margin-right: -24px;"></i>
       <% end %>
