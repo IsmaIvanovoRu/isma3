@@ -9,7 +9,7 @@
     <% end %>
   <% end %>
 </div>
-<%= link_to attachment_path(not_image_attachment), target: '_blank' do %>
+<%= link_to attachment_path(not_image_attachment), target: '_blank', title: not_image_attachment.title_sen_dot do %>
   <% case %>
   <% when not_image_attachment.mime_type =~ /pdf/ %>
   <%= image_tag("application-pdf.png", size: '32x32', class: "left") %>
