@@ -10,6 +10,7 @@
     <tr>
       <th>Имя</th>
       <th>Тип файла</th>
+      <th>Количество скачиваний/просмотров</th>
       <th>Превью</th>
       <th></th>
     </tr>
@@ -20,6 +21,7 @@
       <tr>
         <td><%= link_to attachment_name(attachment.title), attachment_path(attachment), target: 'blank' %></td>
         <td><%= link_to attachment.mime_type, attachments_path + "?mime_type=#{attachment.mime_type}" %></td>
+        <td><%= attachment.score %></td>
         <td><%= image_tag(minify_img_path(attachment)) if attachment.thumbnail %></td>
         <td><%= link_to 'Удалить', attachment, method: :delete, data: { confirm: 'Are you sure?' } %></td>
       </tr>
