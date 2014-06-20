@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140422122648) do
+ActiveRecord::Schema.define(version: 20140521121227) do
 
   create_table "academic_titles", force: true do |t|
     t.string   "name",       default: "", null: false
@@ -61,6 +61,7 @@ ActiveRecord::Schema.define(version: 20140422122648) do
     t.text     "content",    limit: 16777215
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "score",                       default: 0
   end
 
   add_index "attachments", ["article_id"], name: "index_attachments_on_article_id", using: :btree
@@ -164,6 +165,24 @@ ActiveRecord::Schema.define(version: 20140422122648) do
   add_index "menus", ["parent_id"], name: "index_menus_on_parent_id", using: :btree
   add_index "menus", ["path"], name: "index_menus_on_path", using: :btree
   add_index "menus", ["title"], name: "index_menus_on_title", using: :btree
+
+  create_table "points", force: true do |t|
+    t.integer  "post_id"
+    t.integer  "user_id"
+    t.integer  "year",          default: 0,   null: false
+    t.float    "qualification", default: 0.0, null: false
+    t.float    "learning",      default: 0.0, null: false
+    t.float    "science",       default: 0.0, null: false
+    t.float    "clinic",        default: 0.0, null: false
+    t.float    "social",        default: 0.0, null: false
+    t.float    "sum",           default: 0.0, null: false
+    t.float    "sum_a",         default: 0.0, null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "points", ["post_id"], name: "index_points_on_post_id", using: :btree
+  add_index "points", ["user_id"], name: "index_points_on_user_id", using: :btree
 
   create_table "post_types", force: true do |t|
     t.string   "name",       default: "", null: false
