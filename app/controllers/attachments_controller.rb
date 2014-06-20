@@ -22,6 +22,8 @@ class AttachmentsController < ApplicationController
   # GET /attachments/1
   # GET /attachments/1.json
   def show
+    @attachment.score += 1
+    @attachment.save
     send_data @attachment.data, :filename => @attachment.title, :type => @attachment.mime_type, :disposition => "inline"
   end
   
