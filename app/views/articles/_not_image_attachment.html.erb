@@ -23,7 +23,7 @@
   <div class="thumb-title">
   <%= not_image_attachment.title_sen_dot %>
   </div>
-  <div class="subscript">
+  <!--<div class="subscript">
     <% case not_image_attachment.updated_at.to_date %>
     <% when Time.now.to_date %>
       сегодня в 
@@ -31,6 +31,6 @@
       <% else %>
 	<%= time_tag not_image_attachment.updated_at, :pubdate => true, :format => '%e.%m.%Y %R' %>
     <% end %>
-  </div>
+  </div>-->
 <% end %>
 </li>
