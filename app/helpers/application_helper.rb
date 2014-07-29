@@ -1,10 +1,10 @@
 module ApplicationHelper
   def sanitize_full(text)
     options = Sanitize::Config::RELAXED
-    options[:attributes]['a'].push('target')
+    options[:attributes]['a'] + ['target']
     if text =~ /(youtu.be|youtube.com)/ 
       if action_name == 'show'
-	options[:elements].push('iframe')
+	options[:elements] + ['iframe']
 	options[:attributes]['iframe'] = ['width', 'height', 'src', 'frameborder', 'allowfullscreen', 'style']
 	insert_youtube(text)
 	else
