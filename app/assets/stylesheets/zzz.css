@@ -145,3 +145,6 @@ section.panel {
 .inline-list > li {
   margin-left: 0.5rem;
 }
+.side-nav li a:not(.button) {
+  padding: 0 0;
+}
