@@ -2,7 +2,7 @@
 class PdfGeneratorsController < ApplicationController
   skip_before_filter :authenticate_user!
   def divisions
-    @divisions = Division.order(:name).includes(:division_type).includes(:posts).includes(:users).all.group_by{|d| t(d.division_type.name, scope: [:divisions])}.sort
+    @divisions = Division.order(:name).includes([:division_type, :posts, :users]).joins(:division_type).where.not(division_types: {name: "student"}).group_by{|d| t(d.division_type.name, scope: [:divisions])}.sort
       pdf = Prawn::Document.new(page_size: "A4", :info => {
 	:Title => 'IsmaDivisions ' + Time.now.to_date.to_s,
 	:Creator => "ISMA",
