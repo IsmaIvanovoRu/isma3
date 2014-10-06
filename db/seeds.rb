@@ -10,7 +10,8 @@ extrants = User.joins(:divisions).where("divisions.name like ?", "%6 курса%
 extrants.each do |user|
   Group.find(7).users.delete(user)
 end
-Division.where("name like ?", "%6 курса%").each{|d| d.destroy}
+Division.where("name like ?", "%6 курса педиатрического%").each{|d| d.destroy}
+Division.where("name like ?", "%5 курса стоматологического%").each{|d| d.destroy}
 divisions = Division.where(division_type_id: 6)
 divisions.each do |division|
   name = division.name.split(' ')
