@@ -6,7 +6,11 @@
 #
 #   cities = City.create([{name: ''Chicago' }', '{name: ''Copenhagen' }]')
 #   Mayor.create(name: ''Emanuel'', 'city: 'cities.first')
-extrants = User.joins(:divisions).where("divisions.name like ?", "%6 курса%")
+extrants = User.joins(:divisions).where("divisions.name like ?", "%6 курса педиатрического%")
+extrants.each do |user|
+  Group.find(7).users.delete(user)
+end
+extrants = User.joins(:divisions).where("divisions.name like ?", "%5 курса стоматологического%")
 extrants.each do |user|
   Group.find(7).users.delete(user)
 end
