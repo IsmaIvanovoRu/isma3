@@ -92,6 +92,11 @@
 	      </ul>
 	    </li>
 	  <% end %>
+          <% if session[:blind] %>
+            <li><%= link_to 'Обычная версия', common_path %></li>
+          <% else %>
+            <li><%= link_to 'Версия для слабовидящих', special_path %></li>
+          <% end %>
 	  <% if user_signed_in? %>
 	  <li><%= link_to 'Выйти', destroy_user_session_path, method: "delete" %></li>
 	  <% else %>

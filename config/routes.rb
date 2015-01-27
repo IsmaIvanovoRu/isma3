@@ -12,6 +12,11 @@ Isma::Application.routes.draw do
     get 'search' => :index
   end
   
+  controller :blind do
+    get :common
+    get :special
+  end
+  
   resources :users do
     resource :profile
     collection do

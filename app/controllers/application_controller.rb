@@ -13,6 +13,7 @@ class ApplicationController < ActionController::Base
   before_action :articles_count
   before_filter :current_user_moderator?
   before_action :new_comments
+  before_action :set_blind
 
   def require_reader
     unless current_user_reader?
@@ -119,5 +120,8 @@ class ApplicationController < ActionController::Base
   def new_comments
     @new_comments = Article.includes(:comments).joins(:comments).where(comments: {published: false}).uniq if @moderator_permission
   end
+  
+  def set_blind
+    session[:blind] = session[:blind] || false
+  end
 end
-
