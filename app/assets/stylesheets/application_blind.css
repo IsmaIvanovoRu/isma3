@@ -9,10 +9,10 @@
  * compiled file, but it's generally better to create a new file per style scope.
  *
  *= require_self
- *= require foundation_and_overrides
+ *= require foundation_and_overrides_blind
  * 
 
- *= require zzz
+ *= require zzz_blind
  *= require foundation-icons
  *= require jquery-ui/datepicker
  */
