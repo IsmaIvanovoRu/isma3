@@ -71,7 +71,7 @@
 	      </li>
 	      <% end %>
 	    <li class="has-dropdown">
-	      <a href="#"><%= current_user.login %>. Личный кабинет</a>
+              <%= link_to current_user.login, "#" %>
 	      <ul class="dropdown">
 		<% if @administrator_permission %>
 		  <li><%= link_to 'Добавить пункт меню', "#", "data-reveal-id" => 'add_menu' %></li>
