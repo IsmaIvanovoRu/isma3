@@ -14,6 +14,7 @@ class ApplicationController < ActionController::Base
   before_filter :current_user_moderator?
   before_action :new_comments
   before_action :set_blind
+  layout :set_layout
 
   def require_reader
     unless current_user_reader?
@@ -123,5 +124,9 @@ class ApplicationController < ActionController::Base
   
   def set_blind
     session[:blind] = session[:blind] || false
+  end
+  
+  def set_layout
+    session[:blind] ? 'blind' : 'application'
   end
 end

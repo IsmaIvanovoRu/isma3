@@ -1,0 +1,133 @@
+p.clearing-caption {
+  color: rgb(0,0,0)
+}
+.visible-img > img {
+  box-shadow: 0 0 10px rgba(0,0,0,0.5);
+}
+.index {
+  text-align : left;
+  line-height: 1.2;
+  font-size: 100%
+}
+ul, ol {
+  list-style-position: inside;
+}
+.side-nav {
+  line-height: 1;
+}
+.superscript, .subscript {
+  font-size : 75%;
+  line-height: normal;
+  font-style : italic;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  text-align: right;
+}
+.block {
+  font-size : 120%;
+  width: 7em;
+  background-color: rgb(255,255,255);
+  color: rgb(0,0,0);
+  margin: 0;
+  padding: 2px;
+  text-align : center;
+  -webkit-border-top-left-radius: 15px;
+  -webkit-border-top-right-radius: 15px;
+  -moz-border-radius-topleft: 15px;
+  -moz-border-radius-topright: 15px;
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
+}
+.title {
+  color : rgb(0,0,0);
+  font-family : Garamond, serif;
+  font-size : 150%;
+  text-align : center;
+  font-weight: bold;
+  text-transform: uppercase
+}
+.title-super {
+  font-family: Garamond, serif;
+  color: rgb(0,0,0);
+  text-transform: uppercase;
+  font-size: 0.8125rem;
+  font-weight: bold;
+  position: relative;
+  display: block;
+  padding: 0 15px;
+  height: 45px;
+  line-height: 45px;
+}
+.rows-40 {
+  height: 40em;
+}
+.pink {
+  background-color: rgba(204,0,0,0.5);
+}
+.content {
+  width: 100%;
+}
+.th {
+  display: none;
+}
+.thumb {
+  width: 100%;
+  float: left;
+  margin: 0.5%;
+  padding: 0;
+    height:32px;
+}
+.thumb-title {
+  font-size: 90%;
+  height: 16px;
+  overflow: hidden;
+}
+footer {
+  font-size: 60%;
+}
+footer.panel {
+  margin-bottom: 0;
+}
+.wrap {
+  position: relative;
+}
+.wrap i {
+  position: absolute;
+  top: 0px;
+  right: 5px;
+}
+img {
+  display: none;
+}
+#feedback {
+  position: fixed;
+  bottom: -20px;
+  right: 20px;
+}
+.fi-social-twitter, .fi-rss {
+  font-size: 20px;
+  vertical-align: middle;
+}
+.fi-rss {
+  color: orange;
+}
+.fi-social-twitter {
+  color: blue;
+}
+.inline-list {
+  margin-left: -0.5rem;
+}
+.inline-list > li {
+  margin-left: 0.5rem;
+}
+.side-nav li a:not(.button) {
+  padding: 0 0;
+}
+a:link {
+  color: rgb(0,0,0);
+  background: rgb(255,255,255);
+}
+a:hover {
+  color: rgb(255,255,255);
+  background: rgb(0,0,0);
+}

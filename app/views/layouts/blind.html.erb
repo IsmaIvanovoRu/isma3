@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <% if Rails.env.production? %>
+      <meta name='yandex-verification' content='5d4cdafa940771a6' />
+      <meta name="google-site-verification" content="0Q_dWen2iLrRIDHR_F5M9T68VvJi91AMy-AWKX5yHUo" />
+    <% end %>
+    <title><%= content_for?(:title) ? yield(:title) : "ИвГМА" %></title>
+    <%= yield(:twitter_card) if content_for?(:twitter_card) %>
+    <%= yield(:vk_card) if content_for?(:vk_card) %>
+    <%= favicon_link_tag 'favicon.ico' %>
+    <%= auto_discovery_link_tag(:atom, root_url + 'feed.atom', {title: "ИвГМА"}) %>
+    <%= stylesheet_link_tag    "application_blind" %>
+    <%= stylesheet_link_tag    "http://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,400,700&subset=latin,cyrillic" %>
+    <%= javascript_include_tag "vendor/modernizr" %>
+    <%= csrf_meta_tags %>
+  </head>
+
+  <body>
+  <div class="fixed">
+    <nav class="top-bar" data-topbar>
+      <ul class="title-area">
+        <li class="name">
+          <h1><%= link_to 'Главная', root_path, class: "show-for-medium-up", style: 'color: rgb(0,0,0)' %></h1>
+          <%= link_to root_path, class: "show-for-small-only" do %>
+            <span class="title-super">ИвГМА</span>
+          <% end %>
+        </li>
+        <li class="toggle-topbar menu-icon"><a href="#"><span>Меню</span></a></li>
+      </ul>
+
+      <section class="top-bar-section">
+        <!-- Right Nav Section -->
+        <ul class="right">
+          <% if user_signed_in? %>
+            <% if @articles_count > 0 %>
+              <li><%= link_to (@moderator_permission ? (archives_path + "?published=0") : user_profile_path(current_user)), title: "Имеется неопубликованных статей - #{@articles_count}" do %>
+                <i class="fi-page" style="color: red;"></i></li>
+                <% end %>
+              </li>
+            <% end %>
+            <% if @moderator_permission %>
+              <% if @new_comments.count > 0 %>
+              <li>
+                <%= link_to '#', title: "Имеется статей с неопубликованными комментариями, требующих Вашего внимания - #{@new_comments.count}", data: {dropdown: 'new_comments'} do %>
+                  <i class="fi-comments" style='color: red;'></i>
+                <% end %>
+                <div id="new_comments" data-dropdown-content class="f-dropdown content">
+                  <ul class="no-bullet">
+                    <% @new_comments.each do |article| %>
+                        <li>
+                          <dl>
+                            <dt><small><%= link_to article.title, article %></small></dt>
+                            <% article.comments.each do |comment| %>
+                              <dd><%= comment.content %></dd>
+                            <% end %>
+                          </dl>
+                        </li>
+                    <% end %>
+                  </ul>
+                </div>
+              </li>
+              <% end %>
+            <% end %>
+            <% if @feedbacks_count > 0 %>
+              <li><%= link_to feedbacks_path, title: "Вопросов, ожидающих ответа - #{@feedbacks_count}" do %>
+                <i class="fi-mail" style="color: red;"></i></li>
+                <% end %>
+              </li>
+              <% end %>
+            <li class="has-dropdown">
+              <a href="#"><%= current_user.login %>. Личный кабинет</a>
+              <ul class="dropdown">
+                <% if @administrator_permission %>
+                  <li><%= link_to 'Добавить пункт меню', "#", "data-reveal-id" => 'add_menu' %></li>
+                  <li><%= link_to 'Меню', menus_path %></li>
+                  <li><%= link_to 'Пользователи', users_path %></li>
+                  <li><%= link_to 'Группы', groups_path %></li>
+                  <li><%= link_to 'Детали', details_path %></li>
+                  <li><%= link_to 'Вложения', attachments_path %></li>
+                <% end %>
+                <% if @moderator_permission %>
+                  <li><%= link_to 'Неопубликованные статьи', archives_path + "?published=0" %></li>
+                <% end %>
+                <% if @writer_permission %>
+                  <li><%= link_to 'Написать статью', new_article_path %></li>
+                <% end %>
+                  <li><%= link_to 'Инструкция по работе с сайтом', '/articles/303' %></li>
+                  <li><%= link_to 'Мой профиль', user_profile_path(current_user) %></li>
+              </ul>
+            </li>
+          <% end %>
+          <% if user_signed_in? %>
+          <li><%= link_to 'Выйти', destroy_user_session_path, method: "delete" %></li>
+          <% else %>
+          <li><%= link_to 'Вход', new_user_session_path %></li>
+          <% end %>
+          <% if session[:blind] %>
+            <li><%= link_to 'Обычная версия', common_path %></li>
+          <% else %>
+            <li><%= link_to 'Версия для слабовидящих', special_path %></li>
+          <% end %>
+        </ul>
+
+        <!-- Left Nav Section -->
+        <ul class="left">
+        <% if @menus['up'] %>
+          <% @menus['up'].group_by(&:parent_id).first.last.each do |p| %>
+            <% if @menus['up'].group_by(&:parent_id)[p.id] %>
+              <li class="has-dropdown">
+                <%= link_to p.title, '#' %>
+                <ul class="dropdown">
+                <% @menus['up'].group_by(&:parent_id)[p.id].each do |c| %>
+                  <% if @menus['up'].group_by(&:parent_id)[c.id] %>
+                    <li class="has-dropdown">
+                      <%= link_to c.title, '#' %>
+                      <ul class="dropdown">
+                      <% @menus['up'].group_by(&:parent_id)[c.id].each do |cc| %>
+                        <li><%= link_to cc.title, cc.path %></li>
+                      <% end %>
+                      </ul>
+                    </li>
+                    <% else %>
+                      <li><%= link_to c.title, c.path %></li>
+                    <% end %>
+                <% end %>
+                </ul>
+              </li>
+            <% else %>
+              <li><%= link_to p.title, p.path %></li>
+            <% end %>
+          <% end %>
+        <% end %>
+        </ul>
+      </section>
+    </nav>
+  </div>
+  <div class="row hide-for-large-up panel">
+    <div class="small-6 columns">
+      <ul class="side-nav">
+      <li> <%= link_to "Основные сведения", '/articles/226' %>
+        <li><%= link_to "Образование", '/divisions/141' %>
+        <li><%= link_to "Наука", '/divisions/140' %>
+      </ul>
+    </div>
+    <div class="small-6 columns">
+      <ul class="side-nav">
+      <li> <%= link_to "Воспитательная работа", '/divisions/107' %>
+        <li><%= link_to "Клиника ИвГМА", '/divisions/126' %>
+        <li><%= link_to "Новости", articles_path %>
+      </ul>
+    </div>
+  </div>
+  <div class="row">
+    <div class="large-10 columns show-for-medium-up">
+    <%= image_tag('/assets/gerb.png', size: '48x48', class: "left", style: "padding-top: 7px;") %>
+          <h1 class="title" style="padding-top: 20px;" title="<%= @details_hash['Полное наименование академии'] %>">Ивановская государственная медицинская академия</h1>
+    </div>
+    <div class="large-2 small-12 columns" style="padding-top: 20px;">
+      <%= form_tag("/search", method: "get") do %>
+        <%= search_field_tag :search, nil, :placeholder => "Найти..." %>
+        <%= submit_tag 'Найти', class: "hide" %>
+      <% end %>
+    </div>
+  </div>
+  <div class="row">
+    <div class="small-12 large-10 columns">
+      <% if notice %>
+        <p class="success label"><%= notice %></p>
+      <% end %>
+      <% if alert %>
+        <p class="alert label"><%= alert %></p>
+      <% end %>
+      <% if flash[:error] %>
+        <p class="alert label"><%= flash[:error] %></p>
+      <% end %>
+    </div>
+  </div>
+  <div class="row">
+    <div class="large-2 columns show-for-large-up">
+    <section class="panel">
+      <ul id="left-nav" class="side-nav">
+      <% if @menus['left'] %>
+        <% @menus['left'].group_by(&:parent_id).first.last.each do |p| %>
+          <% if @menus['left'].group_by(&:parent_id)[p.id] %>
+            <hr />
+            <% @menus['left'].group_by(&:parent_id)[p.id].each do |c| %>
+              <li><%= link_to c.title, c.path %></li>
+            <% end %>
+          <% else %>
+            <li><%= link_to p.title, p.path %></li>
+          <% end %>
+        <% end %>
+      <% end %>
+      </ul>
+      </section>
+    </div>
+    <div class="large-10 columns">
+        <%= yield %>
+    </div>
+  </div>
+      <div class="row">
+        <div class="large-12 small-12 columns">
+    <footer class="panel">
+      <div class="row">
+        <% if @menus['down'] %>
+          <% @menus['down'].group_by(&:parent_id).first.last.each do |p| %>
+            <div class="large-<%= @down_block_count %> columns">
+                <ul class="side-nav">
+                  <% if @menus['down'].group_by(&:parent_id)[p.id] %>
+                    <% @menus['down'].group_by(&:parent_id)[p.id].each do |c| %>
+                      <li><%= link_to c.title, c.path =~ /^http:\/\// ? c.path : "http://#{c.path}", target: 'blank' %></li>
+                    <% end %>
+                  <% else %>
+                    <li><%= link_to p.title, p.path =~ /^http:\/\// ? p.path : "http://#{p.path}", target: 'blank' %></li>
+                  <% end %>
+                </ul>
+            </div>
+          <% end %>
+        <% end %>
+      </div>
+      <div class="row">
+        <div class="large-12 columns">
+          <address><div itemscope itemtype="http://schema.org/Organization"><span itemprop="name"><%= @details_hash['Полное наименование академии'] %></span></div><div itemprop="address" itemscope itemtype="http://schema.org/PostalAddress"><span itemprop="streetAddress"><%= @details_hash['Адрес'] %></span></div></address>
+        </div>
+      </div>
+    </footer>
+    <%= link_to 'Задать вопрос', feedbacks_path, id: 'feedback', class: 'button tiny', style: 'background-color: rgb(70,130,180);' %>
+</div>
+</div>
+    <% if @administrator_permission %>
+      <div id="add_menu" class="reveal-modal medium" data-reveal>
+        <%= render partial: 'menus/form' %>
+        <a class="close-reveal-modal">&#215;</a>
+      </div>
+    <% end %>
+    <%= javascript_include_tag "application" %>
+    <% if controller_name == 'divisions' && action_name == 'show' %>
+        <%= javascript_include_tag "http://api-maps.yandex.ru/2.0-stable/?load=package.standard&lang=ru-RU" %>
+    <%= javascript_include_tag "ymap" %>
+    <% end %>
+    <% if controller_name == 'articles' && action_name == 'show' %>
+      <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+    <% end %>
+    <% if action_name == 'edit' || action_name == 'new' || action_name == 'create' || action_name == 'update' %>
+      <%= javascript_include_tag "ckeditor/ckeditor" %>
+      <%= javascript_include_tag "ckeditor_init" %>
+      <%= javascript_include_tag "datepicker" %>
+    <% end %>
+    <% if controller_name == 'welcome' %>
+      <%= javascript_include_tag "menu_hide" %>
+    <% end %>
+    <% if Rails.env.production? %>
+      <!-- Yandex.Metrika counter -->
+      <script type="text/javascript">
+      (function (d, w, c) {
+          (w[c] = w[c] || []).push(function() {
+              try {
+                  w.yaCounter24099004 = new Ya.Metrika({id:24099004});
+              } catch(e) { }
+          });
+
+          var n = d.getElementsByTagName("script")[0],
+              s = d.createElement("script"),
+              f = function () { n.parentNode.insertBefore(s, n); };
+          s.type = "text/javascript";
+          s.async = true;
+          s.src = (d.location.protocol == "https:" ? "https:" : "http:") + "//mc.yandex.ru/metrika/watch.js";
+
+          if (w.opera == "[object Opera]") {
+              d.addEventListener("DOMContentLoaded", f, false);
+          } else { f(); }
+      })(document, window, "yandex_metrika_callbacks");
+      </script>
+      <noscript><div><img src="//mc.yandex.ru/watch/24099004" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+      <!-- /Yandex.Metrika counter -->
+      <!-- /Google.Analytics counter -->
+      <script>
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+        ga('create', 'UA-10854449-2', 'isma.ivanovo.ru');
+        ga('send', 'pageview');
+
+      </script>
+      <!-- /Google.Analytics counter -->
+    <% end %>
+  </body>
+</html>
