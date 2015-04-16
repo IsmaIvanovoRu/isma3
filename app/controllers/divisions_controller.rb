@@ -101,7 +101,7 @@ class DivisionsController < ApplicationController
   end
 
   def division_params
-    params.require(:division).permit(:id, :name, :division_type_id, :address, :latitude, :longitude, :email, :about)
+    params.require(:division).permit(:id, :name, :division_type_id, :address, :latitude, :longitude, :email, :about, :url, :reference)
   end
   
   def set_division_types
