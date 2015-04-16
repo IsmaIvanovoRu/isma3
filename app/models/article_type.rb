@@ -1,4 +1,4 @@
 class ArticleType < ActiveRecord::Base
   has_many :articles
-  validate :name, :presence => true
+  validates :name, :presence => true
 end

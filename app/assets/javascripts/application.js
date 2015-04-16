@@ -13,15 +13,8 @@
 //= require jquery
 //= require jquery_ujs
 //= require jquery-ui/datepicker
-//= require foundation
 //= require foundation/foundation
-//= require foundation/foundation.accordion
-//= require foundation/foundation.clearing
-//= require foundation/foundation.dropdown
-//= require foundation/foundation.orbit
-//= require foundation/foundation.reveal
-//= require foundation/foundation.topbar
-Foundation.global.namespace = '';
-$(function(){ $(document).foundation(); });
+//= require foundation
+$(document).foundation();
 var CKEDITOR_BASEPATH = '/assets/ckeditor/'
 Foundation.libs.topbar['settings']['back_text'] = 'Назад'
