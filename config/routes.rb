@@ -3,6 +3,9 @@ Isma::Application.routes.draw do
   get "sitemaps/sitemap"
   resources :comments
 
+  
+  get 'sveden/struct'
+  
   get "pdf_generators/divisions"
   get "pdf_generators/managment"
   get "pdf_generators/phone_book"
@@ -46,6 +49,7 @@ Isma::Application.routes.draw do
   controller :contacts do
     get 'contacts' => :index
   end
+  
   
   resources :groups do
     member do

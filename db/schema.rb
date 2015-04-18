@@ -27,19 +27,19 @@ ActiveRecord::Schema.define(version: 20150416141432) do
 
   create_table "articles", force: :cascade do |t|
     t.integer  "user_id",         limit: 4
-    t.string   "title",           limit: 255,   default: "",    null: false
-    t.text     "content",         limit: 65535
+    t.string   "title",           limit: 255,      default: "",    null: false
+    t.text     "content",         limit: 16777215
     t.date     "exp_date"
-    t.boolean  "published",       limit: 1,     default: false
-    t.boolean  "fixed",           limit: 1,     default: false
-    t.boolean  "commentable",     limit: 1,     default: false
+    t.boolean  "published",       limit: 1,        default: false
+    t.boolean  "fixed",           limit: 1,        default: false
+    t.boolean  "commentable",     limit: 1,        default: false
     t.integer  "division_id",     limit: 4
     t.integer  "group_id",        limit: 4
     t.integer  "article_type_id", limit: 4
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "message",         limit: 255,   default: ""
-    t.boolean  "skip_frontend",   limit: 1,     default: false
+    t.string   "message",         limit: 255,      default: ""
+    t.boolean  "skip_frontend",   limit: 1,        default: false
   end
 
   add_index "articles", ["article_type_id"], name: "index_articles_on_article_type_id", using: :btree
@@ -109,17 +109,17 @@ ActiveRecord::Schema.define(version: 20150416141432) do
   end
 
   create_table "divisions", force: :cascade do |t|
-    t.string   "name",             limit: 255,                  default: "",  null: false
+    t.string   "name",             limit: 255,   default: "",  null: false
     t.integer  "division_type_id", limit: 4
-    t.string   "address",          limit: 255,                  default: ""
-    t.float    "latitude",         limit: 24,                   default: 0.0
-    t.float    "longitude",        limit: 24,                   default: 0.0
+    t.string   "address",          limit: 255,   default: ""
+    t.float    "latitude",         limit: 24,    default: 0.0
+    t.float    "longitude",        limit: 24,    default: 0.0
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "email",            limit: 255,                  default: ""
+    t.string   "email",            limit: 255,   default: ""
     t.text     "about",            limit: 65535
-    t.string   "url",              limit: 255
-    t.decimal  "reference",                      precision: 10
+    t.string   "url",              limit: 255,   default: ""
+    t.integer  "reference",        limit: 4
   end
 
   add_index "divisions", ["division_type_id"], name: "index_divisions_on_division_type_id", using: :btree

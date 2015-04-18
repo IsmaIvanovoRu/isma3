@@ -5,6 +5,7 @@ class DivisionsController < ApplicationController
   before_action :set_division, only: [:show, :edit, :update, :destroy]
   before_filter :is_student, only: [:show]
   before_action :set_division_types, only: [:new, :edit, :create]
+  before_action :set_references, only: [:new, :edit]
   before_action :set_posts, only: [:show, :edit]
   before_action :set_division_posts, only: [:show, :edit]
   before_action :set_head, only: [:show, :edit]
@@ -110,6 +111,10 @@ class DivisionsController < ApplicationController
   
   def set_posts
     @posts = Post.order(:name).all
+  end
+  
+  def set_references
+    @references = Attachment.order(:title).select([:id, :title]).select{|a| a.title =~ /^Положение|^положение/}
   end
   
   def set_head
