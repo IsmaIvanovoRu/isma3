@@ -1,5 +1,5 @@
 # config valid only for Capistrano 3.1
-lock '3.3.5'
+lock '3.4.0'
 
 set :application, 'isma'
 set :repo_url, 'git@github.com:Infinitiv/isma3.git'
@@ -10,7 +10,7 @@ set :branch, 'testing'
 
 # Default deploy_to directory is /var/www/my_app
 # set :deploy_to, '/var/www/my_app'
-set :deploy_to, '/home/markovnin/www/isma'
+set :deploy_to, '/home/ubuntu/www/isma'
 
 # Default value for :scm is :git
 # set :scm, :git
@@ -43,7 +43,7 @@ namespace :deploy do
     on roles(:app), in: :sequence, wait: 5 do
       # Your restart mechanism here, for example:
       # execute :touch, release_path.join('tmp/restart.txt')
-      set :password, 'user'
+      set :password, 'ubuntu'
       execute "sudo service thin restart"
     end
   end
