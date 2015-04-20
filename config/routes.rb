@@ -5,6 +5,7 @@ Isma::Application.routes.draw do
 
   
   get 'sveden/struct'
+  get 'sveden/employees'
   
   get "pdf_generators/divisions"
   get "pdf_generators/managment"

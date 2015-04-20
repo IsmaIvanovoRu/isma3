@@ -1,5 +1,7 @@
 class Profile < ActiveRecord::Base
   belongs_to :user
+  has_many :posts, :through => :user
+  has_many :divisions, :through => :posts
   belongs_to :degree
   belongs_to :academic_title
   has_and_belongs_to_many :attachments

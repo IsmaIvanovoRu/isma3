@@ -31,7 +31,7 @@
                   <% end %>
                   <% unless division.email.empty? %>
                     <dt>Адрес электронной почты:</dt>
-                    <dd><%= mail_to division.email, 'Написать письмо', encode: "javascript", itemprop: 'E-mail' if h && !division.email.empty? %></dd>
+                    <dd><%= mail_to division.email, division.email, itemprop: 'E-mail' if h && !division.email.empty? %></dd>
                   <% end %>
                 <% end %>
               </dl>

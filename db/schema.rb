@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150416141432) do
+ActiveRecord::Schema.define(version: 20150418170858) do
 
   create_table "academic_titles", force: :cascade do |t|
     t.string   "name",       limit: 255, default: "", null: false
@@ -192,17 +192,22 @@ ActiveRecord::Schema.define(version: 20150416141432) do
   add_index "posts", ["user_id"], name: "index_posts_on_user_id", using: :btree
 
   create_table "profiles", force: :cascade do |t|
-    t.integer  "user_id",           limit: 4
-    t.string   "first_name",        limit: 255,   default: "", null: false
-    t.string   "middle_name",       limit: 255,   default: ""
-    t.string   "last_name",         limit: 255,   default: "", null: false
-    t.integer  "degree_id",         limit: 4
-    t.integer  "academic_title_id", limit: 4
-    t.string   "phone",             limit: 255,   default: ""
-    t.text     "about",             limit: 65535
+    t.integer  "user_id",            limit: 4
+    t.string   "first_name",         limit: 255,   default: "", null: false
+    t.string   "middle_name",        limit: 255,   default: ""
+    t.string   "last_name",          limit: 255,   default: "", null: false
+    t.integer  "degree_id",          limit: 4
+    t.integer  "academic_title_id",  limit: 4
+    t.string   "phone",              limit: 255,   default: ""
+    t.text     "about",              limit: 65535
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "email",             limit: 255,   default: ""
+    t.string   "email",              limit: 255,   default: ""
+    t.string   "discipline",         limit: 255,   default: ""
+    t.string   "qualification",      limit: 255,   default: ""
+    t.text     "development",        limit: 65535
+    t.integer  "general_experience", limit: 4,     default: 0
+    t.integer  "special_experience", limit: 4,     default: 0
   end
 
   add_index "profiles", ["academic_title_id"], name: "index_profiles_on_academic_title_id", using: :btree
