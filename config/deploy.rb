@@ -43,8 +43,7 @@ namespace :deploy do
     on roles(:app), in: :sequence, wait: 5 do
       # Your restart mechanism here, for example:
       # execute :touch, release_path.join('tmp/restart.txt')
-      set :password, 'ubuntu'
-      execute "sudo service thin restart"
+      execute "thin restart -C /etc/thin/isma.yml"
     end
   end
 
