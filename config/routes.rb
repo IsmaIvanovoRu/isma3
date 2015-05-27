@@ -3,9 +3,17 @@ Isma::Application.routes.draw do
   get "sitemaps/sitemap"
   resources :comments
 
-  
+  get 'sveden/common'
   get 'sveden/struct'
+  get 'sveden/document'
+  get 'sveden/education'
+  get 'sveden/eduStandarts'
   get 'sveden/employees'
+  get 'sveden/objects'
+  get 'sveden/grants'
+  get 'sveden/paid_edu'
+  get 'sveden/budget'
+  get 'sveden/vacant'
   
   get "pdf_generators/divisions"
   get "pdf_generators/managment"
