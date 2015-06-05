@@ -14,6 +14,9 @@ Isma::Application.routes.draw do
   get 'sveden/paid_edu'
   get 'sveden/budget'
   get 'sveden/vacant'
+  controller :abitur do
+    get 'abitur' => :index
+  end
   
   get "pdf_generators/divisions"
   get "pdf_generators/managment"
