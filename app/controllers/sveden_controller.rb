@@ -25,6 +25,10 @@ class SvedenController < ApplicationController
   def employees
     @posts = Post.includes(:profile).select{|p| p.name =~ /^(про|)ректор/}
     @employees = Profile.includes([:user, :degree, :academic_title]).joins(:divisions).where(divisions: {division_type_id: 3}).sort_by(&:full_name)
+    respond_to do |format|
+      format.html
+      format.xls
+    end
   end
 
   def objects

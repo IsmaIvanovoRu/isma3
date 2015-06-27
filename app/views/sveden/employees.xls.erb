@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
+  xmlns:o="urn:schemas-microsoft-com:office:office"
+  xmlns:x="urn:schemas-microsoft-com:office:excel"
+  xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
+  xmlns:html="http://www.w3.org/TR/REC-html40">
+  <Worksheet ss:Name="Sheet1">
+    <Table>
+      <Row>
+        <Cell><Data ss:Type="String">Ф.И.О.</Data></Cell>
+        <Cell><Data ss:Type="String">Кафедра</Data></Cell>
+        <Cell><Data ss:Type="String">Занимаемая должность</Data></Cell>
+        <Cell><Data ss:Type="String">Преподаваемые дисциплины</Data></Cell>
+        <Cell><Data ss:Type="String">Ученая степень</Data></Cell>
+	<Cell><Data ss:Type="String">Ученое звание</Data></Cell>
+	<Cell><Data ss:Type="String">Наименование направления подготовки и (или) специальность</Data></Cell>
+	<Cell><Data ss:Type="String">Повышение квалификации и (или) профессиональная переподготовка</Data></Cell>
+        <Cell><Data ss:Type="String">Общий стаж работы</Data></Cell>
+        <Cell><Data ss:Type="String">Стаж работы по специальности</Data></Cell>
+      </Row>
+    <% @employees.each do |employee| %>
+      <Row>
+        <Cell><Data ss:Type="String"><%= employee.full_name %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= employee.posts.includes(:division).joins(:division).where(divisions: {division_type_id: 3}).map{|p| [p.division.name]}.join(", ") %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= employee.posts.includes(:division).joins(:division).where(divisions: {division_type_id: 3}).map{|p| [p.name]}.join(", ") %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= employee.discipline ? employee.discipline : '' %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= employee.degree ? employee.degree.name : '' %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= employee.academic_title.name if employee.academic_title %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= employee.qualification %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= employee.development %></Data></Cell>
+        <Cell><Data ss:Type="Number"><%= employee.general_experience %></Data></Cell>
+        <Cell><Data ss:Type="Number"><%= employee.special_experience %></Data></Cell>
+      </Row>
+    <% end %>
+    </Table>
+  </Worksheet>
+</Workbook>
