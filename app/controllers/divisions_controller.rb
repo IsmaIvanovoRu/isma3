@@ -15,7 +15,7 @@ class DivisionsController < ApplicationController
     @divisions = Division.order(:name).includes(:division_type).group_by{|d| t(d.division_type.name, scope: [:divisions])}.sort
     respond_to do |format|
       format.html
-      format.xls
+      format.xls if current_user_administrator?
     end
   end
   

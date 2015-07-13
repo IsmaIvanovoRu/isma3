@@ -27,7 +27,7 @@ class SvedenController < ApplicationController
     @employees = Profile.includes([:user, :degree, :academic_title]).joins(:divisions).where(divisions: {division_type_id: 3}).sort_by(&:full_name)
     respond_to do |format|
       format.html
-      format.xls
+      format.xls if current_user_administrator?
     end
   end
 
