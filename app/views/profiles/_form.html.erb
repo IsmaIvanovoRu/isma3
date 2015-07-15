@@ -24,14 +24,16 @@
       <%= f.label :middle_name, 'Отчество' %>
       <%= f.text_field :middle_name %>
     </div>
-    <div class="large-6 small-12 columns">
-      <%= f.label 'degree_id', 'Ученая степень' %>
-      <%= f.select :degree_id, options_for_select= @degrees.collect {|p| [t(p.name, :scope => [:degrees]), p.id] }, {:include_blank => ''} %>
-    </div>
-    <div class="large-6 small-12 columns">
-      <%= f.label :academic_title_id, 'Ученое звание' %>
-      <%= f.select :academic_title_id, options_for_select= @academic_titles.collect {|p| [t(p.name, :scope => [:academic_titles]), p.id] }, {:include_blank => ''} %>
-    </div>
+    <% if @moderator_permission %>
+      <div class="large-6 small-12 columns">
+        <%= f.label 'degree_id', 'Ученая степень' %>
+        <%= f.select :degree_id, options_for_select= @degrees.collect {|p| [t(p.name, :scope => [:degrees]), p.id] }, {:include_blank => ''} %>
+      </div>
+      <div class="large-6 small-12 columns">
+        <%= f.label :academic_title_id, 'Ученое звание' %>
+        <%= f.select :academic_title_id, options_for_select= @academic_titles.collect {|p| [t(p.name, :scope => [:academic_titles]), p.id] }, {:include_blank => ''} %>
+      </div>
+    <% end %>
     <div class="large-6 small-12 columns">
       <%= f.label :phone, 'Телефон' %>
       <%= f.phone_field :phone %>
