@@ -10,7 +10,6 @@ class Division < ActiveRecord::Base
             :length => { :maximum => 255 }
   validates :latitude, :numericality => { :greater_than_or_equal_to => -90, :less_than_or_equal_to => 90 }
   validates :longitude, :numericality => { :greater_than_or_equal_to => 0, :less_than_or_equal_to => 180 }
-  validates :reference, :numericality => true
   validates :url, :length => { maximum: 255 }
   
   def self.import_from_file(file)
