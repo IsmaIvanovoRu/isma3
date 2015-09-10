@@ -69,3 +69,5 @@ gem 'newrelic_rpm'
 gem 'jquery-ui-rails'
 
 gem 'yaml_db'
+
+gem 'sidekiq'
