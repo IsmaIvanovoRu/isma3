@@ -58,7 +58,7 @@ class ArticlesController < ApplicationController
     @article = Article.new(article_params)
     respond_to do |format|
       if @article.save
-	Events.new_article(@article).deliver
+	Events.delay.new_article(@article.id)
         format.html { redirect_to @article, notice: 'Article was successfully created.' }
         format.json { render action: 'show', status: :created, location: @article }
       else
