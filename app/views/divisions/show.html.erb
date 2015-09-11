@@ -124,21 +124,21 @@
 	<% if @articles_not_fixed.count > 0 %>
 	  <h1>Актуально</h1>
 	  <%= render partial: 'articles/article', collection: @articles_not_fixed, locals: { dimension: '75x75', composition: {header: true, content: false, footer: true, truncate: true} } %>
-	  <%= link_to 'Архив', archives_path + "?division_id=#{@division.id}&fixed=false", class: 'clearfix' %><br />
 	<% end %>
-	    <%= render partial: 'articles/first_image_attachment', locals: {image_attachment: @last_image_attachment, dimension: '150x150' } if @last_image_attachment %>
-	  <% unless @division_type == 'student' %>
-	    <% unless @division.email.empty? && @division.address.empty? && (@head.first.phone.empty? if @head.first) %>
-	      <div class="clearfix"></div>
-	      <h2>Контакты</h2>
-	      <address><p><%= "Адрес: #{@division.address}" if @division.address %>
-	      <p><%= "Телефон: #{multi_number_to_phone(@head.first.phone, country_code: 7, area_code: true)}" if @head.first && !@head.first.phone.empty? %>
-	      <p><%= mail_to @division.email, 'Написать письмо', encode: "javascript" if @head.first && !@division.email.empty? %></address>
-	    <% end %>
-	    <% if @division.latitude && @division.longitude %>
-	      <h2>Как нас найти</h2>
-	      <div id="map" style="width: 100%; height: 200px" data-name="<%= @division.name %>" data-address="<%= @division.address %>" data-latitude="<%= @division.latitude %>" data-longitude="<%= @division.longitude %>"></div>
-	    <% end %>
+        <%= link_to 'Архив', archives_path + "?division_id=#{@division.id}&fixed=false", class: 'clearfix' %><br />
+        <%= render partial: 'articles/first_image_attachment', locals: {image_attachment: @last_image_attachment, dimension: '150x150' } if @last_image_attachment %>
+        <% unless @division_type == 'student' %>
+          <% unless @division.email.empty? && @division.address.empty? && (@head.first.phone.empty? if @head.first) %>
+            <div class="clearfix"></div>
+            <h2>Контакты</h2>
+            <address><p><%= "Адрес: #{@division.address}" if @division.address %>
+            <p><%= "Телефон: #{multi_number_to_phone(@head.first.phone, country_code: 7, area_code: true)}" if @head.first && !@head.first.phone.empty? %>
+            <p><%= mail_to @division.email, 'Написать письмо', encode: "javascript" if @head.first && !@division.email.empty? %></address>
+          <% end %>
+          <% if @division.latitude && @division.longitude %>
+            <h2>Как нас найти</h2>
+            <div id="map" style="width: 100%; height: 200px" data-name="<%= @division.name %>" data-address="<%= @division.address %>" data-latitude="<%= @division.latitude %>" data-longitude="<%= @division.longitude %>"></div>
+          <% end %>
 	<% end %>
 	  <% if @administrator_permission || (current_user == @head.first.user if @head.first && current_user) %>
 	    <h2>Прикрепить новый файл</h2>
