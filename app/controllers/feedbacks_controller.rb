@@ -9,7 +9,7 @@ class FeedbacksController < ApplicationController
   # GET /feedbacks.json
   def index
     unless current_user.nil?
-      @unpublished_feedbacks = current_user_moderator? ? Feedback.order('updated_at DESC').where(public: false) : Feedback.order('updated_at DESC').where(public: false, to: current_user.posts)
+      @unpublished_feedbacks = current_user_moderator? ? Feedback.includes(:post).order('updated_at DESC').where(public: false) : Feedback.order('updated_at DESC').where(public: false, to: current_user.posts)
     end
       @published_feedbacks = Feedback.order('updated_at DESC').where(public: true).paginate(:page => params[:page])
   end

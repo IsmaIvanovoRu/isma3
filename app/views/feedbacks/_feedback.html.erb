@@ -1,4 +1,9 @@
 <div class="panel<%= " pink" unless feedback.public %>">
+<% if @moderator_permission %>
+  <div class="left subscript">
+    <%= feedback.post.name %>
+  </div>
+<% end %>
 <div class="right">
   <% if @moderator_permission || can_edit? %>
     <%= link_to published_toggle_feedback_path(feedback), title: (feedback.public ? 'Снять с публикации' : 'Опубликовать'), method: :put do %>
