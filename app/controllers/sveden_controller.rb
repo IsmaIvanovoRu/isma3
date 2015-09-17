@@ -7,7 +7,7 @@ class SvedenController < ApplicationController
   end
   
   def struct
-    @divisions = Division.order(:name).includes([:division_type]).group_by{|d| t(d.division_type.name, scope: [:divisions])}.sort
+    @divisions = Division.order(:name).includes([:division_type]).where(in_structure: true).group_by{|d| t(d.division_type.name, scope: [:divisions])}.sort
   end
   
   def document

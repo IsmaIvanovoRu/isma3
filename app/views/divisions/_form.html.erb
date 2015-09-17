@@ -47,6 +47,10 @@
     <%= f.label 'Номер вложения положения о подразделении' %>
     <%= f.select :reference, options_for_select = @references.collect {|r| [r.title_sen_dot, r.id] }, {:include_blank => ''} %>
   </div>
+  <div class="field">
+    <%= f.check_box :in_structure %>
+    <%= f.label 'Отображать в структуре академии' %>
+  </div>
   <div class="actions">
     <%= f.submit 'Сохранить', class: 'button small' %>
   </div>

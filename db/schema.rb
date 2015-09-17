@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150418170858) do
+ActiveRecord::Schema.define(version: 20150917173903) do
 
   create_table "academic_titles", force: :cascade do |t|
     t.string   "name",       limit: 255, default: "", null: false
@@ -30,16 +30,16 @@ ActiveRecord::Schema.define(version: 20150418170858) do
     t.string   "title",           limit: 255,      default: "",    null: false
     t.text     "content",         limit: 16777215
     t.date     "exp_date"
-    t.boolean  "published",       limit: 1,        default: false
-    t.boolean  "fixed",           limit: 1,        default: false
-    t.boolean  "commentable",     limit: 1,        default: false
+    t.boolean  "published",                        default: false
+    t.boolean  "fixed",                            default: false
+    t.boolean  "commentable",                      default: false
     t.integer  "division_id",     limit: 4
     t.integer  "group_id",        limit: 4
     t.integer  "article_type_id", limit: 4
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "message",         limit: 255,      default: ""
-    t.boolean  "skip_frontend",   limit: 1,        default: false
+    t.boolean  "skip_frontend",                    default: false
   end
 
   add_index "articles", ["article_type_id"], name: "index_articles_on_article_type_id", using: :btree
@@ -82,7 +82,7 @@ ActiveRecord::Schema.define(version: 20150418170858) do
     t.text     "content",    limit: 65535
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.boolean  "published",  limit: 1,     default: false, null: false
+    t.boolean  "published",                default: false, null: false
   end
 
   add_index "comments", ["article_id"], name: "index_comments_on_article_id", using: :btree
@@ -109,7 +109,7 @@ ActiveRecord::Schema.define(version: 20150418170858) do
   end
 
   create_table "divisions", force: :cascade do |t|
-    t.string   "name",             limit: 255,   default: "",  null: false
+    t.string   "name",             limit: 255,   default: "",   null: false
     t.integer  "division_type_id", limit: 4
     t.string   "address",          limit: 255,   default: ""
     t.float    "latitude",         limit: 24,    default: 0.0
@@ -120,6 +120,7 @@ ActiveRecord::Schema.define(version: 20150418170858) do
     t.text     "about",            limit: 65535
     t.string   "url",              limit: 255,   default: ""
     t.integer  "reference",        limit: 4
+    t.boolean  "in_structure",                   default: true
   end
 
   add_index "divisions", ["division_type_id"], name: "index_divisions_on_division_type_id", using: :btree
@@ -129,7 +130,7 @@ ActiveRecord::Schema.define(version: 20150418170858) do
     t.integer  "from",       limit: 4,                     null: false
     t.text     "question",   limit: 65535
     t.text     "answer",     limit: 65535
-    t.boolean  "public",     limit: 1,     default: false, null: false
+    t.boolean  "public",                   default: false, null: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -137,11 +138,11 @@ ActiveRecord::Schema.define(version: 20150418170858) do
   create_table "groups", force: :cascade do |t|
     t.integer  "parent_id",     limit: 4
     t.string   "name",          limit: 255, default: "",    null: false
-    t.boolean  "administrator", limit: 1,   default: false, null: false
-    t.boolean  "moderator",     limit: 1,   default: false, null: false
-    t.boolean  "writer",        limit: 1,   default: false, null: false
-    t.boolean  "reader",        limit: 1,   default: false, null: false
-    t.boolean  "commentator",   limit: 1,   default: false, null: false
+    t.boolean  "administrator",             default: false, null: false
+    t.boolean  "moderator",                 default: false, null: false
+    t.boolean  "writer",                    default: false, null: false
+    t.boolean  "reader",                    default: false, null: false
+    t.boolean  "commentator",               default: false, null: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -158,7 +159,7 @@ ActiveRecord::Schema.define(version: 20150418170858) do
     t.string   "title",      limit: 255, default: "",    null: false
     t.string   "path",       limit: 255, default: "",    null: false
     t.integer  "weigth",     limit: 4,   default: 0,     null: false
-    t.boolean  "private",    limit: 1,   default: false, null: false
+    t.boolean  "private",                default: false, null: false
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "parent_id",  limit: 4
@@ -183,7 +184,7 @@ ActiveRecord::Schema.define(version: 20150418170858) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "phone",        limit: 255, default: ""
-    t.boolean  "feedback",     limit: 1,   default: false, null: false
+    t.boolean  "feedback",                 default: false, null: false
   end
 
   add_index "posts", ["division_id"], name: "index_posts_on_division_id", using: :btree
