@@ -1,7 +1,7 @@
 module ApplicationHelper
   def sanitize_full(text)
     options = Sanitize::Config.merge(Sanitize::Config::RELAXED, 
-                                     attributes: {'a' => Sanitize::Config::RELAXED[:attributes]['a'] + ["target"]})
+                                     attributes: {'a' => Sanitize::Config::RELAXED[:attributes]['a'] + ["target"], all: Sanitize::Config::RELAXED[:attributes][:all] + ['itemprop', 'itemscope', 'itemtype']})
     if text =~ /(youtu.be|youtube.com)/ 
       if action_name == 'show'
 	options = Sanitize::Config.merge(Sanitize::Config::RELAXED,
@@ -44,12 +44,29 @@ module ApplicationHelper
   end
 
   def autosub_details(text)
-    @details_hash.each{|k, v| text.gsub!("&amp;[#{k}]", v.to_s)} if text.include? "&amp;["
+    if text.include? "&amp;["
+      begin
+        start_text = text.clone
+        @details_hash.each do |k, v|
+          if v[:tag_type] && v[:tag_name]
+            case v[:tag_type].to_s
+            when 'itemprop'
+              s = "itemprop=#{v[:tag_name]}"
+            when 'itemtype'
+              s = "itemscope itemtype=http://obrnadzor.gov.ru/ru/microformats/#{v[:tag_name]}"
+            end
+            v[:block] ? text.gsub!("&amp;[#{k}]", "<div #{s}>#{v[:value].to_s}</div>") : text.gsub!("&amp;[#{k}]", "<span #{s}>#{v[:value].to_s}</span>")
+          else
+            text.gsub!("&amp;[#{k}]", v[:value].to_s)
+          end
+        end
+      end while text.include?("&amp;[") && start_text != text
+    end
     text
   end
   
     def autosub_details_in_title(text)
-    @details_hash.each{|k, v| text.gsub!("&[#{k}]", v.to_s)} if text.include? "&["
+    @details_hash.each{|k, v| text.gsub!("&[#{k}]", v[:value].to_s)} if text.include? "&["
     text
   end
  

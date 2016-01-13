@@ -19,6 +19,18 @@
     <%= f.label :value %><br />
     <%= f.text_field :value %>
   </div>
+  <div class="field">
+    <%= f.label :tag_type %><br />
+    <%= f.select :tag_type, options_for_select = ["itemprop", "itemtype"], {:include_blank => ''} %>
+  </div>
+  <div class="field">
+    <%= f.label :tag_name %><br />
+    <%= f.text_field :tag_name %>
+  </div>
+  <div class="field">
+    <%= f.check_box :block %>
+    <%= f.label 'Блочный элемент' %>
+  </div>
   <div class="actions">
     <%= f.submit %>
   </div>

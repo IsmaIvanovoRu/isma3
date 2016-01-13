@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150917173903) do
+ActiveRecord::Schema.define(version: 20160111101918) do
 
   create_table "academic_titles", force: :cascade do |t|
     t.string   "name",       limit: 255, default: "", null: false
@@ -96,10 +96,13 @@ ActiveRecord::Schema.define(version: 20150917173903) do
   end
 
   create_table "details", force: :cascade do |t|
-    t.string   "key",        limit: 255, default: "", null: false
-    t.string   "value",      limit: 255, default: "", null: false
+    t.string   "key",        limit: 255,   default: "", null: false
+    t.text     "value",      limit: 65535,              null: false
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "tag_type",   limit: 255
+    t.boolean  "block"
+    t.string   "tag_name",   limit: 255
   end
 
   create_table "division_types", force: :cascade do |t|

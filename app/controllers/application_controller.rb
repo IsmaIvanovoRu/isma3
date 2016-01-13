@@ -106,7 +106,7 @@ class ApplicationController < ActionController::Base
   
   def set_details
     @details_hash = Hash.new
-    Detail.all.each{|d| @details_hash[d.key] = d.value}
+    Detail.all.each{|d| @details_hash[d.key] = {value: d.value, tag_type: d.tag_type, tag_name: d.tag_name, block: d.block}}
     @details_hash
   end
   
