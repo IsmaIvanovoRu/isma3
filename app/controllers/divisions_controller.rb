@@ -82,7 +82,8 @@ class DivisionsController < ApplicationController
   end
   
   def destroy
-    @division.destroy    
+    @division.articles.each{|a| a.update_attributes(division_id: nil)}
+    @division.destroy
     redirect_to divisions_url
   end
   
