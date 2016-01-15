@@ -16,6 +16,7 @@ Isma::Application.routes.draw do
   get 'sveden/vacant'
   controller :abitur do
     get 'abitur' => :index
+    get 'Abitur' => :index
   end
   
   get "pdf_generators/divisions"
