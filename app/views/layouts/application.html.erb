@@ -100,7 +100,7 @@
           <% if session[:blind] %>
             <li><%= link_to 'Обычная версия', common_path %></li>
           <% else %>
-            <li><%= link_to 'Версия для слабовидящих', special_path %></li>
+            <li itemprop=Copy><%= link_to 'Версия для слабовидящих', special_path %></li>
           <% end %>
 	</ul>
 
