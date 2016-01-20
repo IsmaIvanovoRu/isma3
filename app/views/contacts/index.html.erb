@@ -4,46 +4,46 @@
 <section class="panel clearfix">
 <h1>Реквизиты и контакты</h1>
 <dl>
-  <% if @details_hash['Полное наименование академии'] || @details_hash['Сокращенное наименование академии'] || @details_hash['Международное наименование академии'] %>
+  <% if @details_hash['Полное наименование академии'][:value] || @details_hash['Сокращенное наименование академии'][:value] || @details_hash['Международное наименование академии'][:value] %>
     <dt itemscope itemtype="http://schema.org/Organization">Наименование академии</dt>
-    <dd><strong>полное: </strong><span itemprop="name"><%= @details_hash['Полное наименование академии'] %></span></dd>
-    <dd><strong>сокращенное: </strong><span itemprop="name"><%= @details_hash['Сокращенное наименование академии'] %></span></dd>
-    <dd><strong>международное: </strong><span itemprop="name"><%= @details_hash['Международное наименование академии'] %></span></dd>
+    <dd><strong>полное: </strong><span itemprop="name"><%= @details_hash['Полное наименование академии'][:value] %></span></dd>
+    <dd><strong>сокращенное: </strong><span itemprop="name"><%= @details_hash['Сокращенное наименование академии'][:value] %></span></dd>
+    <dd><strong>международное: </strong><span itemprop="name"><%= @details_hash['Международное наименование академии'][:value] %></span></dd>
   <% end %>
-  <% if @details_hash['Адрес'] %>
+  <% if @details_hash['Адрес'][:value] %>
     <dt itemprop="address" itemscope itemtype="http://schema.org/PostalAddress">Адрес</dt>
-    <dd><span itemprop="streetAddress"><%= @details_hash['Адрес'] %></span></dd>
+    <dd><span itemprop="streetAddress"><%= @details_hash['Адрес'][:value] %></span></dd>
   <% end %>
-  <% if @details_hash['Электронная почта'] %>
+  <% if @details_hash['Электронная почта'][:value] %>
     <dt>Электронная почта</dt>
-    <dd><span itemprop="email"><%= mail_to @details_hash['Электронная почта'], 'Написать письмо', encode: "javascript" %></span></dd>
+    <dd><span itemprop="email"><%= mail_to @details_hash['Электронная почта'][:value], 'Написать письмо', encode: "javascript" %></span></dd>
   <% end %>
-  <% if @details_hash['Телефон'] %>
+  <% if @details_hash['Телефон'][:value] %>
     <dt>Телефон</dt>
-    <dd><span itemprop="telephone"><%= multi_number_to_phone(@details_hash['Телефон'], country_code: 7, area_code: true) %></span></dd>
+    <dd><span itemprop="telephone"><%= multi_number_to_phone(@details_hash['Телефон'][:value], country_code: 7, area_code: true) %></span></dd>
   <% end %>
-  <% if @details_hash['ИНН'] || @details_hash['КПП'] || @details_hash['ОКПО'] || @details_hash['ОКОГУ'] || @details_hash['Получатель платежа'] || @details_hash['Расчетный счет'] %>
+  <% if @details_hash['ИНН'][:value] || @details_hash['КПП'][:value] || @details_hash['ОКПО'][:value] || @details_hash['ОКОГУ'][:value] || @details_hash['Получатель платежа'][:value] || @details_hash['Расчетный счет'][:value] %>
   <dt>Реквизиты</dt>
-    <% if @details_hash['ИНН'] %>
-      <dd><strong>ИНН: </strong><%= @details_hash['ИНН'] %></dd>
+    <% if @details_hash['ИНН'][:value] %>
+      <dd><strong>ИНН: </strong><%= @details_hash['ИНН'][:value] %></dd>
     <% end %>
-    <% if @details_hash['КПП'] %>
-      <dd><strong>КПП: </strong><%= @details_hash['КПП'] %></dd>
+    <% if @details_hash['КПП'][:value] %>
+      <dd><strong>КПП: </strong><%= @details_hash['КПП'][:value] %></dd>
     <% end %>
-    <% if @details_hash['ОКПО'] %>
-      <dd><strong>ОКПО: </strong><%= @details_hash['ОКПО'] %></dd>
+    <% if @details_hash['ОКПО'][:value] %>
+      <dd><strong>ОКПО: </strong><%= @details_hash['ОКПО'][:value] %></dd>
     <% end %>
-    <% if @details_hash['ОКОГУ'] %>
-      <dd><strong>ОКОГУ: </strong><%= @details_hash['ОКОГУ'] %></dd>
+    <% if @details_hash['ОКОГУ'][:value] %>
+      <dd><strong>ОКОГУ: </strong><%= @details_hash['ОКОГУ'][:value] %></dd>
     <% end %>
-    <% if @details_hash['ОКТМО'] %>
-      <dd><strong>ОКТМО: </strong><%= @details_hash['ОКТМО'] %></dd>
+    <% if @details_hash['ОКТМО'][:value] %>
+      <dd><strong>ОКТМО: </strong><%= @details_hash['ОКТМО'][:value] %></dd>
     <% end %>
-    <% if @details_hash['Получатель платежа'] %>
-      <dd><strong>Получатель платежа: </strong><%= @details_hash['Получатель платежа'] %></dd>
+    <% if @details_hash['Получатель платежа'][:value] %>
+      <dd><strong>Получатель платежа: </strong><%= @details_hash['Получатель платежа'][:value] %></dd>
     <% end %>
-    <% if @details_hash['Расчетный счет'] %>
-      <dd><strong>Расчетный счет: </strong><%= @details_hash['Расчетный счет'] %></dd>
+    <% if @details_hash['Расчетный счет'][:value] %>
+      <dd><strong>Расчетный счет: </strong><%= @details_hash['Расчетный счет'][:value] %></dd>
     <% end %>
     <% end %>
 </dl>
