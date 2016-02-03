@@ -3,6 +3,9 @@ Isma::Application.routes.draw do
   get "sitemaps/sitemap"
   resources :comments
 
+  controller :sveden do
+    get 'sveden' => :index
+  end
   get 'sveden/common'
   get 'sveden/struct'
   get 'sveden/document'

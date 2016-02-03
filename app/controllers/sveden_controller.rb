@@ -2,6 +2,10 @@
 class SvedenController < ApplicationController
   skip_before_filter :authenticate_user!
   
+  def index
+    redirect_to article_path(226)
+  end
+  
   def common
     redirect_to article_path(1137)
   end
