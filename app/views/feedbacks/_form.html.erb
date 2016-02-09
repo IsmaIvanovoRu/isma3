@@ -26,10 +26,12 @@
     <%= f.text_area :answer %>
   </div>
   <br />
-  <div class="field">
-    <%= f.check_box :public %>
-    <%= f.label :public, 'Опубликовать' %>
-  </div>
+  <% if @moderator_permission %>
+    <div class="field">
+      <%= f.check_box :public %>
+      <%= f.label :public, 'Опубликовать' %>
+    </div>
+  <% end %>
   <div class="actions">
     <%= f.submit 'Отправить', class: 'button small' %>
   </div>
