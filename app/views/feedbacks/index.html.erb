@@ -1,12 +1,9 @@
 <%= render partial: 'title' %>
 <section class="panel">
-<h1>Вы можете задать свой вопрос одному из следущих сотрудников Академии</h1>
-<ul>
-  <% @feedback_posts.each do |p| %>
-    <li><%= link_to "#{p.user.profile.full_name if p.user} - #{p.division.name} (#{p.name})", division_post_path(p.division, p) %></li>
-  <% end %>
-</ul>
-<%= link_to 'Задать вопрос', new_feedback_path, class: "small button" if user_signed_in? %>
+<h1>Задать вопрос администрации академии</h1>
+<% if user_signed_in? %>
+  <%= render 'q_form' %>
+<% end %>
 <% unless user_signed_in? %>
   <p class="alert label">Для того, чтобы иметь возможность задать вопрос, необходимо пройти процедуру регистрации на сайте</p>
 <% end %>
@@ -17,5 +14,5 @@
 <dl>
 <%= render partial: 'feedback', collection: @published_feedbacks %>
 </dl>
-<%= will_paginate @published_feedbacks, next_label: "Вперед", previous_label: 'Назад' %>
+<%= will_paginate @published_feedbacks %>
 </section>

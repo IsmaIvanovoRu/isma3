@@ -8,6 +8,7 @@ class FeedbacksController < ApplicationController
   # GET /feedbacks
   # GET /feedbacks.json
   def index
+    @feedback = Feedback.new
     unless current_user.nil?
       @unpublished_feedbacks = current_user_moderator? ? Feedback.includes(:post).order('updated_at DESC').where(public: false) : Feedback.order('updated_at DESC').where(public: false, to: current_user.posts)
     end
@@ -33,14 +34,15 @@ class FeedbacksController < ApplicationController
   def create
     @feedback = Feedback.new(feedback_params)
     @feedback.from = current_user.id unless current_user.nil?
+    @feedback.to = 1
 
     respond_to do |format|
       if @feedback.save
-	Events.delay.new_feedback(@feedback.id)
+	#Events.delay.new_feedback(@feedback.id)
         format.html { redirect_to feedbacks_url, notice: t(:fedback_was_successfully_created, scope: [:notices]) }
         format.json { render action: 'show', status: :created, location: @feedback }
       else
-        format.html { render action: 'new' }
+        format.html { redirect_to feedbacks_url }
         format.json { render json: @feedback.errors, status: :unprocessable_entity }
       end
     end
@@ -51,6 +53,7 @@ class FeedbacksController < ApplicationController
   def update
     respond_to do |format|
       if @feedback.update(feedback_params)
+        #Events.delay.assign_feedback(@feedback.id) unless @feedback.answer == false
         format.html { redirect_to feedbacks_url, notice: t(:feedback_was_successfully_updated, scope: [:notices]) }
         format.json { head :no_content }
       else
@@ -103,6 +106,6 @@ class FeedbacksController < ApplicationController
     end
     
     def set_feedback_posts
-      @feedback_posts = Post.includes(:division).includes(:user).where(feedback: true)
+      @feedback_posts = Post.includes(:division).includes(:user).where(divisions: {division_type_id: [2, 5]})
     end
 end

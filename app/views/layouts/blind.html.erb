@@ -156,7 +156,7 @@
   <div class="row">
     <div class="large-10 columns show-for-medium-up">
     <%= image_tag('gerb.png', size: '48x48', class: "left", style: "padding-top: 7px;") %>
-          <h1 class="title" style="padding-top: 20px;" title="<%= @details_hash['Полное наименование академии'] %>">Ивановская государственная медицинская академия</h1>
+          <h1 class="title" style="padding-top: 20px;" title="<%= @details_hash['Полное наименование академии'][:value] %>">Ивановская государственная медицинская академия</h1>
     </div>
     <div class="large-2 small-12 columns" style="padding-top: 20px;">
       <%= form_tag("/search", method: "get") do %>
@@ -244,13 +244,16 @@
     <% if controller_name == 'articles' && action_name == 'show' %>
       <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
     <% end %>
-    <% if action_name == 'edit' || action_name == 'new' || action_name == 'create' || action_name == 'update' %>
+    <% if action_name == 'edit' || action_name == 'new' || action_name == 'create' || action_name == 'update' || controller_name == 'feedbacks' %>
       <%= javascript_include_tag "ckeditor/ckeditor" %>
       <%= javascript_include_tag "ckeditor_init" %>
       <%= javascript_include_tag "datepicker" %>
     <% end %>
     <% if controller_name == 'welcome' %>
       <%= javascript_include_tag "menu_hide" %>
+    <% end %>
+    <% if controller_name == "feedbacks" && action_name == 'edit' %>
+      <%= javascript_include_tag "feedback" %>
     <% end %>
     <% if Rails.env.production? %>
       <!-- Yandex.Metrika counter -->

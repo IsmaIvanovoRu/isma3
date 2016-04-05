@@ -49,7 +49,7 @@ gem 'thin'
 
 gem 'rmagick'
 
-gem 'foundation-rails'
+gem 'foundation-rails', '~> 5.5.0'
 
 gem 'will_paginate'
 

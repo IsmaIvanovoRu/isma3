@@ -1,11 +1,11 @@
 <div class="panel<%= " pink" unless feedback.public %>">
 <% if @moderator_permission %>
   <div class="left subscript">
-    <%= feedback.post.name %>
+    <%= "#{feedback.post.division.name} - #{feedback.post.name}" if feedback.post %>
   </div>
 <% end %>
 <div class="right">
-  <% if @moderator_permission || can_edit? %>
+  <% if @moderator_permission || can_edit?(feedback) %>
     <%= link_to published_toggle_feedback_path(feedback), title: (feedback.public ? 'Снять с публикации' : 'Опубликовать'), method: :put do %>
       <i class="fi-eye"></i>
     <% end %>
@@ -33,7 +33,7 @@
   <% end %>
   </dt>
   <dd><%= sanitize_full feedback.answer if feedback.answer %>
-  <p class="subscript"><%= feedback.post.user.profile.full_name if feedback.post.user && feedback.answer %>
+  <p class="subscript"><%= feedback.post.user.profile.full_name if feedback.post && feedback.post.user && feedback.answer %>
   <% if feedback.answer %>
     &nbsp;|&nbsp;
     <% case feedback.updated_at.to_date %>
