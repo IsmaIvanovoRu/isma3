@@ -9,7 +9,7 @@ class Events < ActionMailer::Base
   
   def new_feedback(feedback_id)
     @feedback = Feedback.find(feedback_id)
-    mail(to: 'webmaster@isma.ivanovo.ru'), subject: t(:there_is_a_new_feedback, scope: :notices))
+    mail(to: 'webmaster@isma.ivanovo.ru', subject: t(:there_is_a_new_feedback, scope: :notices))
   end
   
   def assign_feedback(feedback_id)
