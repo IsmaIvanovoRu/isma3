@@ -41,6 +41,6 @@ class Division < ActiveRecord::Base
   end
   
   def head
-    posts.includes([:parent, :profile]).select{|p| p.parent_id.nil? || p.parent.division_id != id}
+    posts.includes(:parent).select{|p| p.parent_id.nil? || p.parent.division_id != id}
   end
 end

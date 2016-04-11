@@ -38,7 +38,7 @@ class FeedbacksController < ApplicationController
 
     respond_to do |format|
       if @feedback.save
-	#Events.delay.new_feedback(@feedback.id)
+	Events.delay.new_feedback(@feedback.id)
         format.html { redirect_to feedbacks_url, notice: t(:fedback_was_successfully_created, scope: [:notices]) }
         format.json { render action: 'show', status: :created, location: @feedback }
       else
@@ -53,7 +53,7 @@ class FeedbacksController < ApplicationController
   def update
     respond_to do |format|
       if @feedback.update(feedback_params)
-        #Events.delay.assign_feedback(@feedback.id) unless @feedback.answer == false
+        Events.delay.assign_feedback(@feedback.id) unless @feedback.answer == false
         format.html { redirect_to feedbacks_url, notice: t(:feedback_was_successfully_updated, scope: [:notices]) }
         format.json { head :no_content }
       else
