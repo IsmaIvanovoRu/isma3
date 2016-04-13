@@ -7,6 +7,7 @@
   <Worksheet ss:Name="Sheet1">
     <Table>
       <Row>
+        <Cell><Data ss:Type="String">Логин</Data></Cell>
         <Cell><Data ss:Type="String">Ф.И.О.</Data></Cell>
         <Cell><Data ss:Type="String">Кафедра</Data></Cell>
         <Cell><Data ss:Type="String">Занимаемая должность</Data></Cell>
@@ -20,6 +21,7 @@
       </Row>
     <% @employees.each do |employee| %>
       <Row>
+        <Cell><Data ss:Type="String"><%= employee.user.login %></Data></Cell>
         <Cell><Data ss:Type="String"><%= employee.full_name %></Data></Cell>
         <Cell><Data ss:Type="String"><%= employee.posts.includes(:division).joins(:division).where(divisions: {division_type_id: 3}).map{|p| [p.division.name]}.join(", ") %></Data></Cell>
         <Cell><Data ss:Type="String"><%= employee.posts.includes(:division).joins(:division).where(divisions: {division_type_id: 3}).map{|p| [p.name]}.join(", ") %></Data></Cell>
