@@ -53,7 +53,7 @@ class FeedbacksController < ApplicationController
   def update
     respond_to do |format|
       if @feedback.update(feedback_params)
-        Events.delay.assign_feedback(@feedback.id) unless @feedback.answer == false
+        Events.delay.assign_feedback(@feedback.id) if @feedback.to != nil && @feedback.answer == nil
         format.html { redirect_to feedbacks_url, notice: t(:feedback_was_successfully_updated, scope: [:notices]) }
         format.json { head :no_content }
       else
