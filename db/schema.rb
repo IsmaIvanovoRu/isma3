@@ -11,13 +11,46 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160111101918) do
+ActiveRecord::Schema.define(version: 20160415064616) do
+
+  create_table "academic_plans", force: :cascade do |t|
+    t.string   "name",                   limit: 255
+    t.integer  "attachment_id",          limit: 4
+    t.integer  "educational_program_id", limit: 4
+    t.datetime "created_at",                         null: false
+    t.datetime "updated_at",                         null: false
+  end
+
+  add_index "academic_plans", ["attachment_id"], name: "index_academic_plans_on_attachment_id", using: :btree
+  add_index "academic_plans", ["educational_program_id"], name: "index_academic_plans_on_educational_program_id", using: :btree
+
+  create_table "academic_schedules", force: :cascade do |t|
+    t.string   "name",                   limit: 255
+    t.integer  "attachment_id",          limit: 4
+    t.integer  "educational_program_id", limit: 4
+    t.datetime "created_at",                         null: false
+    t.datetime "updated_at",                         null: false
+  end
+
+  add_index "academic_schedules", ["attachment_id"], name: "index_academic_schedules_on_attachment_id", using: :btree
+  add_index "academic_schedules", ["educational_program_id"], name: "index_academic_schedules_on_educational_program_id", using: :btree
 
   create_table "academic_titles", force: :cascade do |t|
     t.string   "name",       limit: 255, default: "", null: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  create_table "accreditations", force: :cascade do |t|
+    t.string   "number",          limit: 255
+    t.date     "date_of_issue"
+    t.date     "expiration_date"
+    t.integer  "attachment_id",   limit: 4
+    t.datetime "created_at",                  null: false
+    t.datetime "updated_at",                  null: false
+  end
+
+  add_index "accreditations", ["attachment_id"], name: "index_accreditations_on_attachment_id", using: :btree
 
   create_table "article_types", force: :cascade do |t|
     t.string   "name",       limit: 255, default: "", null: false
@@ -128,6 +161,29 @@ ActiveRecord::Schema.define(version: 20160111101918) do
 
   add_index "divisions", ["division_type_id"], name: "index_divisions_on_division_type_id", using: :btree
 
+  create_table "educational_programs", force: :cascade do |t|
+    t.string   "name",                    limit: 255
+    t.string   "code",                    limit: 255
+    t.integer  "educational_standart_id", limit: 4
+    t.string   "level",                   limit: 255
+    t.integer  "accreditation_id",        limit: 4
+    t.integer  "attachment_id",           limit: 4
+    t.datetime "created_at",                          null: false
+    t.datetime "updated_at",                          null: false
+  end
+
+  add_index "educational_programs", ["accreditation_id"], name: "index_educational_programs_on_accreditation_id", using: :btree
+  add_index "educational_programs", ["attachment_id"], name: "index_educational_programs_on_attachment_id", using: :btree
+  add_index "educational_programs", ["educational_standart_id"], name: "index_educational_programs_on_educational_standart_id", using: :btree
+
+  create_table "educational_standarts", force: :cascade do |t|
+    t.string   "name",       limit: 255
+    t.string   "level",      limit: 255
+    t.string   "url",        limit: 255
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
+  end
+
   create_table "feedbacks", force: :cascade do |t|
     t.integer  "to",         limit: 4,                     null: false
     t.integer  "from",       limit: 4,                     null: false
@@ -172,6 +228,16 @@ ActiveRecord::Schema.define(version: 20160111101918) do
   add_index "menus", ["path"], name: "index_menus_on_path", using: :btree
   add_index "menus", ["title"], name: "index_menus_on_title", using: :btree
 
+  create_table "methodological_supports", force: :cascade do |t|
+    t.integer  "attachment_id",          limit: 4
+    t.integer  "educational_program_id", limit: 4
+    t.datetime "created_at",                       null: false
+    t.datetime "updated_at",                       null: false
+  end
+
+  add_index "methodological_supports", ["attachment_id"], name: "index_methodological_supports_on_attachment_id", using: :btree
+  add_index "methodological_supports", ["educational_program_id"], name: "index_methodological_supports_on_educational_program_id", using: :btree
+
   create_table "post_types", force: :cascade do |t|
     t.string   "name",       limit: 255, default: "", null: false
     t.datetime "created_at"
@@ -194,6 +260,17 @@ ActiveRecord::Schema.define(version: 20160111101918) do
   add_index "posts", ["parent_id"], name: "index_posts_on_parent_id", using: :btree
   add_index "posts", ["post_type_id"], name: "index_posts_on_post_type_id", using: :btree
   add_index "posts", ["user_id"], name: "index_posts_on_user_id", using: :btree
+
+  create_table "practices", force: :cascade do |t|
+    t.string   "name",                   limit: 255
+    t.integer  "attachment_id",          limit: 4
+    t.integer  "educational_program_id", limit: 4
+    t.datetime "created_at",                         null: false
+    t.datetime "updated_at",                         null: false
+  end
+
+  add_index "practices", ["attachment_id"], name: "index_practices_on_attachment_id", using: :btree
+  add_index "practices", ["educational_program_id"], name: "index_practices_on_educational_program_id", using: :btree
 
   create_table "profiles", force: :cascade do |t|
     t.integer  "user_id",            limit: 4
@@ -218,6 +295,17 @@ ActiveRecord::Schema.define(version: 20160111101918) do
   add_index "profiles", ["degree_id"], name: "index_profiles_on_degree_id", using: :btree
   add_index "profiles", ["user_id"], name: "index_profiles_on_user_id", using: :btree
 
+  create_table "subjects", force: :cascade do |t|
+    t.string   "name",                   limit: 255
+    t.integer  "attachment_id",          limit: 4
+    t.integer  "educational_program_id", limit: 4
+    t.datetime "created_at",                         null: false
+    t.datetime "updated_at",                         null: false
+  end
+
+  add_index "subjects", ["attachment_id"], name: "index_subjects_on_attachment_id", using: :btree
+  add_index "subjects", ["educational_program_id"], name: "index_subjects_on_educational_program_id", using: :btree
+
   create_table "users", force: :cascade do |t|
     t.string   "encrypted_password",     limit: 255, default: "", null: false
     t.string   "reset_password_token",   limit: 255
@@ -235,4 +323,18 @@ ActiveRecord::Schema.define(version: 20160111101918) do
 
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
 
+  add_foreign_key "academic_plans", "attachments"
+  add_foreign_key "academic_plans", "educational_programs"
+  add_foreign_key "academic_schedules", "attachments"
+  add_foreign_key "academic_schedules", "educational_programs"
+  add_foreign_key "accreditations", "attachments"
+  add_foreign_key "educational_programs", "accreditations"
+  add_foreign_key "educational_programs", "attachments"
+  add_foreign_key "educational_programs", "educational_standarts"
+  add_foreign_key "methodological_supports", "attachments"
+  add_foreign_key "methodological_supports", "educational_programs"
+  add_foreign_key "practices", "attachments"
+  add_foreign_key "practices", "educational_programs"
+  add_foreign_key "subjects", "attachments"
+  add_foreign_key "subjects", "educational_programs"
 end
