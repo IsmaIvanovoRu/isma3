@@ -1,0 +1,21 @@
+<section class=panel>
+  <h1>Практики</h1>
+  <div>
+    <%= link_to "Добавить", new_practice_path, class: 'button' %>
+  </div>
+  <ul>
+    <% @practices.each do |practice| %>
+      <div class="right">
+        <% if @moderator_permission %>
+          <%= link_to edit_practice_path(practice), title: 'Редактировать' do %>
+            <i class="fi-page-edit"></i>
+          <% end %>
+          <%= link_to practice, title: 'Удалить', method: :delete, data: { confirm: 'Are you sure?' } do %>
+            <i class="fi-x"></i>
+          <% end %>
+        <% end %>
+      </div>
+        <li><%= link_to "#{practice.name} - #{practice.educational_program.name} (#{practice.educational_program.educational_standart.level})", practice %></li>
+    <% end %>
+  </ul>
+</section>

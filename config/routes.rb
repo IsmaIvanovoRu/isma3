@@ -94,11 +94,11 @@ Isma::Application.routes.draw do
   
   resources :educational_programs
   
-  resources :academical_plans
+  resources :academic_plans
   
-  resources :academical_schedules
+  resources :academic_schedules
   
-  resources :practics
+  resources :practices
   
   resources :metodological_supports
   
