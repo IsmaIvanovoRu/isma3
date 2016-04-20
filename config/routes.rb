@@ -89,6 +89,22 @@ Isma::Application.routes.draw do
       put :up
     end
   end
+  
+  resources :educational_standarts
+  
+  resources :educational_programs
+  
+  resources :academical_plans
+  
+  resources :academical_schedules
+  
+  resources :practics
+  
+  resources :metodological_supports
+  
+  resources :accreditations
+  
+  resources :subjects
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

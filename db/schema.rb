@@ -164,6 +164,8 @@ ActiveRecord::Schema.define(version: 20160415064616) do
   create_table "educational_programs", force: :cascade do |t|
     t.string   "name",                    limit: 255
     t.string   "code",                    limit: 255
+    t.string   "form",                    limit: 255
+    t.string   "duration",                limit: 255
     t.integer  "educational_standart_id", limit: 4
     t.string   "level",                   limit: 255
     t.integer  "accreditation_id",        limit: 4

@@ -80,6 +80,15 @@
 		  <li><%= link_to 'Группы', groups_path %></li>
 		  <li><%= link_to 'Детали', details_path %></li>
 		  <li><%= link_to 'Вложения', attachments_path %></li>
+		  <li class="has-dropdown">
+                    <%= link_to 'Образование', "#" %>
+                    <ul class="dropdown">
+                      <li><%= link_to 'Свидетельства об аккредитации', accreditations_path %></li>
+                      <li><%= link_to 'Образовательные стандарты', educational_standarts_path %></li>
+                      <li><%= link_to 'Образовательные программы', educational_programs_path %></li>
+                      <li><%= link_to 'Дисциплины', subjects_path %></li>
+                    </ul>
+		  </li>
 		<% end %>
 		<% if @moderator_permission %>
 		  <li><%= link_to 'Неопубликованные статьи', archives_path + "?published=0" %></li>

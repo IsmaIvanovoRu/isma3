@@ -1,0 +1,17 @@
+<section class=panel>
+  <div>
+    <%= link_to 'К списку стандартов', educational_standarts_path %>
+  </div>
+  <div class="right">
+    <% if @moderator_permission %>
+      <%= link_to edit_educational_standart_path(@educational_standart), title: 'Редактировать' do %>
+        <i class="fi-page-edit"></i>
+      <% end %>
+      <%= link_to @educational_standart, title: 'Удалить', method: :delete, data: { confirm: 'Are you sure?' } do %>
+        <i class="fi-x"></i>
+      <% end %>
+    <% end %>
+  </div>
+  <h1><%= link_to @educational_standart.name, @educational_standart.url, target: 'blank'%></h1>
+  <p><%= @educational_standart.level %></p>
+</section>

@@ -1,0 +1,24 @@
+<%= form_for @subject do |f| %>
+  <% if @subject.errors.any? %>
+    <ul>
+      <% @subject.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+    </ul>
+  <% end %>
+  <div class=field>
+    <%= f.label 'Название' %>
+    <%= f.text_field :name %>
+  </div>
+  <div class=field>
+    <%= f.label 'Образовательная программа' %>
+    <%= f.select :educational_program_id, option_for_select = @educational_programs.collect {|p| ["#{p.name} (#{p.educational_standart.level})", p.id]}, {include_blank: ''} %>
+  </div>
+  <div class=field>
+    <%= f.label 'Ссылка на аннотацию' %>
+    <%= f.select :attachment_id, option_for_select = @attachments.collect {|p| ["#{p.title} (#{p.id})", p.id]}, {include_blank: ''} %>
+  </div>
+  <div class=actions>
+    <%= f.submit 'Добавить', class: 'button tiny' %>
+  </div>
+<% end %>
