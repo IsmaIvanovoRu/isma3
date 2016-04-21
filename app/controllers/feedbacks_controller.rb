@@ -106,6 +106,6 @@ class FeedbacksController < ApplicationController
     end
     
     def set_feedback_posts
-      @feedback_posts = Post.includes(:division).includes(:user).where(divisions: {division_type_id: [2, 5]})
+      @feedback_posts = Post.includes(:division).includes(:user).where(divisions: {division_type_id: [2, 5, 7]})
     end
 end
