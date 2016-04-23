@@ -36,7 +36,7 @@
   </div>
   <div>
     <%= f.label 'Ссылка на образовательную программу' %>
-    <%= f.select :attachment_id, option_for_select = @attachments.collect {|p| [p.title, p.id]}, {include_blank: ''} %>
+    <%= f.select :attachment_id, option_for_select = @attachments.collect {|p| ["#{p.title} (#{p.id})", p.id]}, {include_blank: ''} %>
   </div>
   <div class=actions>
     <%= f.submit 'Добавить', class: 'button tiny' %>
