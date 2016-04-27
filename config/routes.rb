@@ -10,7 +10,6 @@ Isma::Application.routes.draw do
   get 'sveden/struct'
   get 'sveden/document'
   get 'sveden/education'
-  get 'sveden/education_'
   get 'sveden/eduStandarts'
   get 'sveden/employees'
   get 'sveden/objects'

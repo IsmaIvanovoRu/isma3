@@ -38,22 +38,22 @@ section.panel
         -n += 1
         tr
           td(style="vertical-align: top;")= n
-          td(itemprop='OOP_main', style="vertical-align: top;")= educational_program.name if educational_program.name
+          td(itemprop='OOP_main', style="vertical-align: top;")= link_to educational_program.name, educational_program.attachment, target: 'blank' if educational_program.name
           td(itemprop='code', style="vertical-align: top;")= educational_program.code if educational_program.code
-          td(itemprop='education_plan', style="vertical-align: top;")= link_to educational_program.academic_plan.name, educational_program.academic_plan.attachment if educational_program.academic_plan
-          td(itemprop='education_annotation', style="vertical-align: top;")= link_to educational_program.academic_schedule.name, educational_program.academic_schedule.attachment if educational_program.academic_schedule
+          td(itemprop='education_plan', style="vertical-align: top;")= link_to educational_program.academic_plan.name, educational_program.academic_plan.attachment, target: 'blank' if educational_program.academic_plan
+          td(itemprop='education_annotation', style="vertical-align: top;")= link_to educational_program.academic_schedule.name, educational_program.academic_schedule.attachment, target: 'blank' if educational_program.academic_schedule
           td(style="vertical-align: top;")
             ul
               - educational_program.subjects.each do |subject|
-                li(itemprop='education_annotation')= link_to subject.name, subject.attachment
+                li(itemprop='education_annotation')= link_to subject.name, subject.attachment, target: 'blank'
           td(style="vertical-align: top;")
             ul
               - educational_program.practices.each do |practic|
-                li(itemprop='EduPr')= link_to practic.name, practic.attachment
+                li(itemprop='EduPr')= link_to practic.name, practic.attachment, target: 'blank'
           td(style="vertical-align: top;")
             ul
               - educational_program.methodological_supports.each do |methodological_support|
-                li(itemprop='methodology')= link_to methodological_support.name, methodological_support.attachment
+                li(itemprop='methodology')= link_to methodological_support.name, methodological_support.attachment, target: 'blank'
   p= autosub_details("&amp;[Информация о численности обучающихся по реализуемым образовательным программам за счет бюджетных ассигнований федерального бюджета]").html_safe
   p= autosub_details("&amp;[Информация о численности обучающихся по реализуемым образовательным программам по договорам об образовании за счет средств физических и (или) юридических лиц]").html_safe
   p= autosub_details("&amp;[Информация о результатах перевода, восстановления и отчисления]").html_safe
