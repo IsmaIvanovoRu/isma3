@@ -35,7 +35,7 @@ section.panel
     tbody
       - n = 0
       - @educational_programs.each do |educational_program|
-        -n =+ 1
+        -n += 1
         tr
           td= n
           td= educational_program.name if educational_program.name

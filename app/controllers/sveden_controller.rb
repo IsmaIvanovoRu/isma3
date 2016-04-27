@@ -18,8 +18,12 @@ class SvedenController < ApplicationController
     redirect_to article_path(1144)
   end
   
-  def education
+  def education_
     @educational_programs = EducationalProgram.includes(:educational_standart, :academic_plan, :academic_schedule, :practices, :subjects, :accreditation, :methodological_supports)
+  end
+  
+  def education
+    redirect_to article_path(1145)
   end
   
   def eduStandarts
