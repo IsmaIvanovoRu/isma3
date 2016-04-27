@@ -1,8 +1,8 @@
 section.panel
   h1 Образование
-  p= autosub_details("&amp;[Навигация сведений об образовательной организации]")
+  p= autosub_details("&amp;[Навигация сведений об образовательной организации]").html_safe
   p Ивановская государственная медицинская академия имеет право на осуществление образовательной деятельности в сфере высшего профессионального образования (лицензия Федеральной службы по надзору в сфере образования и науки № 0702 от 24 апреля 2013 года).
-  p= autosub_details("&amp;[Информация о языках, на которых осуществляется образование]")
+  p= autosub_details("&amp;[Информация о языках, на которых осуществляется образование]").html_safe
   table
     caption Реализуемые программы
     thead
@@ -37,7 +37,7 @@ section.panel
       - @educational_programs.each do |educational_program|
         -n += 1
         tr
-          td= n
+          td(style="vertical-align: top;")= n
           td(itemprop='OOP_main', style="vertical-align: top;")= educational_program.name if educational_program.name
           td(itemprop='code', style="vertical-align: top;")= educational_program.code if educational_program.code
           td(itemprop='education_plan', style="vertical-align: top;")= link_to educational_program.academic_plan.name, educational_program.academic_plan.attachment if educational_program.academic_plan
@@ -54,6 +54,7 @@ section.panel
             ul
               - educational_program.methodological_supports.each do |methodological_support|
                 li(itemprop='methodology')= link_to methodological_support.name, methodological_support.attachment
-  p= autosub_details("&amp;[Информация о результатах перевода, восстановления и отчисления]")
-  p= autosub_details("&amp;[Информация о направлениях и результатах научной (научно- исследовательской) деятельности и научно- исследовательской базе для её осуществления]")
-        
+  p= autosub_details("&amp;Информация о численности обучающихся по реализуемым образовательным программам за счет бюджетных ассигнований федерального бюджета").html_safe
+  p= autosub_details("&amp;Информация о численности обучающихся по реализуемым образовательным программам по договорам об образовании за счет средств физических и (или) юридических лиц").html_safe
+  p= autosub_details("&amp;[Информация о результатах перевода, восстановления и отчисления]").html_safe
+  p= autosub_details("&amp;[Информация о направлениях и результатах научной (научно- исследовательской) деятельности и научно- исследовательской базе для её осуществления]").html_safe        
