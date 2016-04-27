@@ -1,0 +1,57 @@
+section.panel
+  h1 Образование
+  p здесь будет меню
+  p Ивановская государственная медицинская академия имеет право на осуществление образовательной деятельности в сфере высшего профессионального образования (лицензия Федеральной службы по надзору в сфере образования и науки № 0702 от 24 апреля 2013 года).
+  p Образование осуществляется на русском языке.
+  table
+    caption Реализуемые программы
+    thead
+      tr
+        th Образовательная программа
+        th Уровень образования
+        th Форма обучения
+        th Срок обучения
+        th Срок действия государственной аккредитации образовательной программы
+    tbody
+      - @educational_programs.each do |educational_program|
+        tr
+          td= educational_program.name if educational_program.name
+          td= educational_program.level if educational_program.level
+          td= educational_program.form if educational_program.form
+          td= educational_program.duration if educational_program.duration
+          td= educational_program.accreditation.date_of_issue.strftime("%d.%m.%Y") if educational_program.accreditation
+  table
+    caption Реализуемые образовательные программы с указанием учебных дисциплин (модулей), практик, предусмотренных соответствующей образовательной программой
+    thead
+      tr
+        th № п/п
+        th Образовательная программа
+        th Код
+        th Учебный план
+        th Календарный учебный график
+        th Аннотации к рабочим программам дисциплин
+        th Практики
+        th Методические и иные документы
+    tbody
+      - n = 0
+      - @educational_programs.each do |educational_program|
+        -n =+ 1
+        tr
+          td= n
+          td= educational_program.name if educational_program.name
+          td= educational_program.code if educational_program.code
+          td= link_to educational_program.academic_plan.name, educational_program.academic_plan.attachment if educational_program.academic_plan
+          td= link_to educational_program.academic_schedule.name, educational_program.academic_schedule.attachment if educational_program.academic_schedule
+          td
+            ul.no-bullet
+              - educational_program.subjects.each do |subject|
+                li= link_to subject.name, subject.attachment
+          td
+            ul.no-bullet
+              - educational_program.practices.each do |practic|
+                li= link_to practic.name, practic.attachment
+          td
+            ul.no-bullet
+              - educational_program.methodological_supports.each do |methodological_support|
+                li= link_to methodological_support.name, methodological_support.attachment
+        

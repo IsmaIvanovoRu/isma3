@@ -8,6 +8,6 @@ class EducationalProgram < ActiveRecord::Base
   has_many :methodological_supports
   has_many :subjects
   
-  validates :name, :educational_standart, :level, :form, :duration, :attachment_id, presence: true
+  validates :name, :level, :form, :duration, :attachment_id, presence: true
   validates :attachment_id, :accreditation_id, :educational_standart_id, numericality: { integer_only: true }
 end
