@@ -1,8 +1,8 @@
 section.panel
   h1 Образование
-  p здесь будет меню
+  p= autosub_details("&amp;[Навигация сведений об образовательной организации]")
   p Ивановская государственная медицинская академия имеет право на осуществление образовательной деятельности в сфере высшего профессионального образования (лицензия Федеральной службы по надзору в сфере образования и науки № 0702 от 24 апреля 2013 года).
-  p Образование осуществляется на русском языке.
+  p= autosub_details("&amp;[Информация о языках, на которых осуществляется образование]")
   table
     caption Реализуемые программы
     thead
@@ -15,11 +15,11 @@ section.panel
     tbody
       - @educational_programs.each do |educational_program|
         tr
-          td= educational_program.name if educational_program.name
-          td= educational_program.level if educational_program.level
-          td= educational_program.form if educational_program.form
-          td= educational_program.duration if educational_program.duration
-          td= educational_program.accreditation.date_of_issue.strftime("%d.%m.%Y") if educational_program.accreditation
+          td(itemprop='OOP_main')= educational_program.name if educational_program.name
+          td(itemprop='EduLevel')= educational_program.level if educational_program.level
+          td(itemprop='EduForm')= educational_program.form if educational_program.form
+          td(itemprop='LearningTerm')= educational_program.duration if educational_program.duration
+          td(itemprop='DateEnd')= (educational_program.accreditation.expiration_date ? educational_program.accreditation.expiration_date.strftime("%d.%m.%Y") : 'бессрочно') if educational_program.accreditation
   table
     caption Реализуемые образовательные программы с указанием учебных дисциплин (модулей), практик, предусмотренных соответствующей образовательной программой
     thead
@@ -38,20 +38,22 @@ section.panel
         -n += 1
         tr
           td= n
-          td= educational_program.name if educational_program.name
-          td= educational_program.code if educational_program.code
-          td= link_to educational_program.academic_plan.name, educational_program.academic_plan.attachment if educational_program.academic_plan
-          td= link_to educational_program.academic_schedule.name, educational_program.academic_schedule.attachment if educational_program.academic_schedule
-          td
-            ul.no-bullet
+          td(itemprop='OOP_main', style="vertical-align: top;")= educational_program.name if educational_program.name
+          td(itemprop='code', style="vertical-align: top;")= educational_program.code if educational_program.code
+          td(itemprop='education_plan', style="vertical-align: top;")= link_to educational_program.academic_plan.name, educational_program.academic_plan.attachment if educational_program.academic_plan
+          td(itemprop='education_annotation', style="vertical-align: top;")= link_to educational_program.academic_schedule.name, educational_program.academic_schedule.attachment if educational_program.academic_schedule
+          td(style="vertical-align: top;")
+            ul
               - educational_program.subjects.each do |subject|
-                li= link_to subject.name, subject.attachment
-          td
-            ul.no-bullet
+                li(itemprop='education_annotation')= link_to subject.name, subject.attachment
+          td(style="vertical-align: top;")
+            ul
               - educational_program.practices.each do |practic|
-                li= link_to practic.name, practic.attachment
-          td
-            ul.no-bullet
+                li(itemprop='EduPr')= link_to practic.name, practic.attachment
+          td(style="vertical-align: top;")
+            ul
               - educational_program.methodological_supports.each do |methodological_support|
-                li= link_to methodological_support.name, methodological_support.attachment
+                li(itemprop='methodology')= link_to methodological_support.name, methodological_support.attachment
+  p= autosub_details("&amp;[Информация о результатах перевода, восстановления и отчисления]")
+  p= autosub_details("&amp;[Информация о направлениях и результатах научной (научно- исследовательской) деятельности и научно- исследовательской базе для её осуществления]")
         
