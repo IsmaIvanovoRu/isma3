@@ -9,5 +9,5 @@ class EducationalProgram < ActiveRecord::Base
   has_many :subjects
   
   validates :name, :level, :form, :duration, :attachment_id, presence: true
-  validates :attachment_id, :accreditation_id, numericality: { integer_only: true }
+  validates :attachment_id, numericality: { integer_only: true }
 end

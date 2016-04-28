@@ -12,7 +12,7 @@
   </div>
   <div class=field>
     <%= f.label 'Образовательная программа' %>
-    <%= f.select :educational_program_id, option_for_select = @educational_programs.collect {|p| ["#{p.name} (#{p.educational_standart.level})", p.id]}, {include_blank: ''} %>
+    <%= f.select :educational_program_id, option_for_select = @educational_programs.collect {|p| ["#{p.name} (#{p.educational_standart ? p.educational_standart.level : 'нет стандарта'})", p.id]}, {include_blank: ''} %>
   </div>
   <div class=field>
     <%= f.label 'Ссылка на аннотацию' %>
