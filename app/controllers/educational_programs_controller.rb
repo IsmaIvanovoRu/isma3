@@ -10,7 +10,9 @@ class EducationalProgramsController < ApplicationController
   end
   
   def show
-    
+    @methodological_supports = @educational_program.methodological_supports.includes(:attachment).sort_by{|ms| ms.attachment.title}
+    @methodological_support = MethodologicalSupport.new
+    @attachments = Attachment.order(:title).select(:id, :title).select{|a| a.title =~ /pdf/}
   end
   
   def new

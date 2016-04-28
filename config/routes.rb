@@ -100,7 +100,7 @@ Isma::Application.routes.draw do
   
   resources :practices
   
-  resources :metodological_supports
+  resources :methodological_supports
   
   resources :accreditations
   
