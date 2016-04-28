@@ -15,7 +15,7 @@
           <% end %>
         <% end %>
       </div>
-        <li><%= link_to "#{academic_schedule.name} - #{academic_schedule.educational_program.name} (#{academic_schedule.educational_program.educational_standart.level})", academic_schedule %></li>
+        <li><%= link_to academic_schedule.educational_program.educational_standart ? "#{academic_schedule.name} - #{academic_schedule.educational_program.name} (#{academic_schedule.educational_program.educational_standart.level})" : "#{academic_schedule.name} - #{academic_schedule.educational_program.name}", academic_schedule %></li>
     <% end %>
   </ul>
 </section>

@@ -15,7 +15,7 @@
           <% end %>
         <% end %>
       </div>
-        <li><%= link_to "#{academic_plan.name} - #{academic_plan.educational_program.name} (#{academic_plan.educational_program.educational_standart.level})", academic_plan %></li>
+        <li><%= link_to academic_plan.educational_program.educational_standart ? "#{academic_plan.name} - #{academic_plan.educational_program.name} (#{academic_plan.educational_program.educational_standart.level})" : "#{academic_plan.name} - #{academic_plan.educational_program.name}", academic_plan %></li>
     <% end %>
   </ul>
 </section>

@@ -23,6 +23,10 @@
     <dt>Продолжительность обучения</dt>
     <dd><%= @educational_program.duration %></dd>
     <dt>Сведения об аккредитации</dt>
-    <dd><%= link_to "Свидетельство об аккредитации номер #{@educational_program.accreditation.number}, выдано #{@educational_program.accreditation.date_of_issue}, действительно до #{@educational_program.accreditation.expiration_date}", @educational_program.accreditation %></dd>
+    <% if @educational_program.accreditation %>
+      <dd><%= link_to "Свидетельство об аккредитации номер #{@educational_program.accreditation.number}, выдано #{@educational_program.accreditation.date_of_issue}, действительно до #{@educational_program.accreditation.expiration_date}", @educational_program.accreditation %></dd>
+    <% else %>
+      <dd>нет аккредитации</dd>
+    <% end %>
   </dl>
 </section>

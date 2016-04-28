@@ -15,6 +15,6 @@
   <h1><%= link_to @academic_plan.name, @academic_plan.attachment, target: 'blank'%></h1>
   <dl>
     <dt>Учебный план</dt>
-    <dd><%= link_to "#{@academic_plan.educational_program.name} (#{@academic_plan.educational_program.educational_standart.level})", @academic_plan.educational_program %></dd>
+    <dd><%= link_to @academic_plan.educational_program.educational_standart ? "#{@academic_plan.educational_program.name} (#{@academic_plan.educational_program.educational_standart.level})" : "#{@academic_plan.educational_program.name}", @academic_plan.educational_program %></dd>
   </dl>
 </section>
