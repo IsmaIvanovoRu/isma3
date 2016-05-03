@@ -1,5 +1,6 @@
 #encoding: UTF-8
 class EducationalProgramsController < ApplicationController
+  skip_before_action :authenticate_user!, only: [:show]
   before_action :require_moderator, only: [:new, :edit, :update, :create, :destroy]
   before_action :set_educational_program, only: [:show, :edit, :destroy, :update]
   before_action :educational_program_params, only: [:create, :update]

@@ -15,7 +15,7 @@ section.panel
     tbody
       - @educational_programs.each do |educational_program|
         tr
-          td(itemprop='OOP_main')= educational_program.name if educational_program.name
+          td(itemprop='OOP_main')= link_to educational_program.name, educational_program if educational_program.name
           td(itemprop='EduLevel')= educational_program.level if educational_program.level
           td(itemprop='EduForm')= educational_program.form if educational_program.form
           td(itemprop='LearningTerm')= educational_program.duration if educational_program.duration
