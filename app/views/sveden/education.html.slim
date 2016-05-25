@@ -26,8 +26,6 @@ section.panel
       tr
         th № п/п
         th Образовательная программа
-        th Уровень образования
-        th Код
         th Учебный план
         th Календарный учебный график
         th Аннотации к рабочим программам дисциплин
@@ -39,9 +37,10 @@ section.panel
         -n += 1
         tr
           td(style="vertical-align: top;")= n
-          td(itemprop='OOP_main', style="vertical-align: top;")= link_to educational_program.name, educational_program.attachment, target: 'blank' if educational_program.name
-          td(itemprop='EduLavel', style="vertical-align: top;")= educational_program.level if educational_program.level
-          td(itemprop='EduCode', style="vertical-align: top;")= educational_program.code if educational_program.code
+          td(style="vertical-align: top;")
+            .(itemprop='OOP_main')= link_to educational_program.name, educational_program.attachment, target: 'blank' if educational_program.name
+            .(itemprop='EduLavel')= educational_program.level if educational_program.level
+            .(itemprop='EduCode')= educational_program.code if educational_program.code
           td(itemprop='education_plan', style="vertical-align: top;")= link_to educational_program.academic_plan.name, educational_program.academic_plan.attachment, target: 'blank' if educational_program.academic_plan
           td(itemprop='education_shedule', style="vertical-align: top;")= link_to educational_program.academic_schedule.name, educational_program.academic_schedule.attachment, target: 'blank' if educational_program.academic_schedule
           td(style="vertical-align: top;")
