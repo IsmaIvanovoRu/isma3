@@ -32,6 +32,7 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 group :development do
   gem 'capistrano-rails'
   gem 'capistrano-sidekiq'
+  gem 'rack-mini-profiler'
 end
 
 group :development, :test do
