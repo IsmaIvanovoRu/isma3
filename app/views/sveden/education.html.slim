@@ -41,8 +41,14 @@ section.panel
             .(itemprop='OOP_main')= link_to educational_program.name, educational_program.attachment, target: 'blank' if educational_program.name
             .(itemprop='EduLavel')= educational_program.level if educational_program.level
             .(itemprop='EduCode')= educational_program.code if educational_program.code
-          td(itemprop='education_plan', style="vertical-align: top;")= link_to educational_program.academic_plan.name, educational_program.academic_plan.attachment, target: 'blank' if educational_program.academic_plan
-          td(itemprop='education_shedule', style="vertical-align: top;")= link_to educational_program.academic_schedule.name, educational_program.academic_schedule.attachment, target: 'blank' if educational_program.academic_schedule
+          td(style="vertical-align: top;")
+            ul
+              - educational_program.academic_plans.each do |academic_plan|
+                li(itemprop='education_plan')= link_to academic_plan.name, academic_plan.attachment, target: 'blank'
+          td(style="vertical-align: top;")
+            ul
+              - educational_program.academic_schedules.each do |academic_schedule|
+                li(itemprop='education_shedule')= link_to academic_schedule.name, academic_schedule.attachment, target: 'blank'
           td(style="vertical-align: top;")
             ul
               - educational_program.subjects.each do |subject|

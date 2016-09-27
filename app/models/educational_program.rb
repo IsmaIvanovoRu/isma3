@@ -2,8 +2,8 @@ class EducationalProgram < ActiveRecord::Base
   belongs_to :educational_standart
   belongs_to :accreditation
   belongs_to :attachment
-  has_one :academic_plan, dependent: :destroy
-  has_one :academic_schedule, dependent: :destroy
+  has_many :academic_plans, dependent: :destroy
+  has_many :academic_schedules, dependent: :destroy
   has_many :practices, dependent: :destroy
   has_many :methodological_supports, dependent: :destroy
   has_many :subjects, dependent: :destroy

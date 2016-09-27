@@ -1,5 +1,5 @@
 # config valid only for Capistrano 3.1
-lock '3.5.0'
+lock '3.6.1'
 
 set :application, 'isma'
 set :repo_url, 'git@github.com:Infinitiv/isma3.git'
