@@ -1,5 +1,5 @@
 class Attachment < ActiveRecord::Base
-  require 'RMagick'
+  require 'rmagick'
   has_and_belongs_to_many :articles
   has_and_belongs_to_many :profiles
   has_and_belongs_to_many :divisions
@@ -11,7 +11,7 @@ class Attachment < ActiveRecord::Base
 	img = Magick::Image.read(incoming_file[:file].tempfile.path).first
 	img.scale!(img.columns > img.rows ? 1024 / img.columns.to_f : 1024 / img.rows.to_f) if img.rows > 1024 || img.columns > 1024
 	img.write(incoming_file[:file].tempfile.path)
-        %x(jpetoptim -s #{incoming_file[:file].tempfile.path}) if incoming_file[:file].content_type =~ /jpeg/
+        %x(jpegoptim -s #{incoming_file[:file].tempfile.path}) if incoming_file[:file].content_type =~ /jpeg/
       end
       self.data = incoming_file[:file].read
       self.thumbnail = thumb(self.data) if self.mime_type =~ /image/
