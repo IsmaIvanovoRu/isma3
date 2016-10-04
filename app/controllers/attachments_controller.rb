@@ -26,11 +26,13 @@ class AttachmentsController < ApplicationController
     @attachment.score += 1
     @attachment.save
     Attachment.record_timestamps = true
-    send_data @attachment.data, :filename => @attachment.title, :type => @attachment.mime_type, :disposition => "inline"
+    path = @attachment.file_name[0..2].split('').join('/')
+    send_file Rails.root.join('public', 'storage', path, @attachment.file_name), :filename => @attachment.title, :type => @attachment.mime_type, :disposition => "inline"
   end
   
   def inline
-    send_data @attachment.data, :filename => @attachment.title, :type => @attachment.mime_type, :disposition => "inline"
+    path = @attachment.file_name[0..2].split('').join('/')
+    send_file Rails.root.join('public', 'storage', path, @attachment.file_name), :filename => @attachment.title, :type => @attachment.mime_type, :disposition => "inline"
   end
   
   def edit
@@ -133,16 +135,21 @@ class AttachmentsController < ApplicationController
       @attachment.articles.delete(article) if article
       redirect_to :back
     else
-      @attachment.destroy
-      respond_to do |format|
-	format.html { redirect_to :back }
-	format.json { head :no_content }
+      file_name = @attachment.file_name
+      thumbnail_name = @attachment.thumbnail_name
+      attachments_count = Attachment.where(file_name: file_name).count
+      if @attachment.destroy && attachments_count == 1
+        path = @attachment.file_name[0..2].split('').join('/')
+        File.delete(Rails.root.join('public', 'storage', path, file_name)) if file_name
+        File.delete(Rails.root.join('public', 'storage', path, thumbnail_name)) if thumbnail_name
       end
+      redirect_to :back
     end
   end
 
   def minify_img()
-    send_data @attachment.thumbnail, :filename => @attachment.title, :type => @attachment.mime_type, :disposition => "inline"
+    path = @attachment.file_name[0..2].split('').join('/')
+    send_file Rails.root.join('public', 'storage', path, @attachment.thumbnail_name), :filename => @attachment.title, :type => @attachment.mime_type, :disposition => "inline"
   end
   
   private

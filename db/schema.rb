@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160415064616) do
+ActiveRecord::Schema.define(version: 20161003115408) do
 
   create_table "academic_plans", force: :cascade do |t|
     t.string   "name",                   limit: 255
@@ -86,15 +86,17 @@ ActiveRecord::Schema.define(version: 20160415064616) do
   end
 
   create_table "attachments", force: :cascade do |t|
-    t.integer  "article_id", limit: 4
-    t.string   "title",      limit: 255,      default: "", null: false
-    t.string   "mime_type",  limit: 255,      default: "", null: false
-    t.binary   "data",       limit: 16777215
-    t.binary   "thumbnail",  limit: 16777215
-    t.text     "content",    limit: 16777215
+    t.integer  "article_id",     limit: 4
+    t.string   "title",          limit: 255,      default: "", null: false
+    t.string   "mime_type",      limit: 255,      default: "", null: false
+    t.binary   "data",           limit: 16777215
+    t.binary   "thumbnail",      limit: 16777215
+    t.text     "content",        limit: 16777215
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "score",      limit: 4,        default: 0
+    t.integer  "score",          limit: 4,        default: 0
+    t.string   "file_name",      limit: 255
+    t.string   "thumbnail_name", limit: 255
   end
 
   add_index "attachments", ["article_id"], name: "index_attachments_on_article_id", using: :btree
