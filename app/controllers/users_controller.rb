@@ -3,8 +3,8 @@ class UsersController < ApplicationController
   before_action :set_user, only: [:show, :destroy]
   
   def index
-    @users = User.includes(:groups).includes(:profile).order('profiles.updated_at DESC').paginate(page: params[:page])
-    @all_users = User.order(:login).includes('profile')
+    @users = User.select(:id, :login).includes(:groups, :profile).order('profiles.updated_at DESC').paginate(page: params[:page])
+    @all_users = User.select(:id, :login).order(:login).includes('profile')
     respond_to do |format|
       format.html
       format.xls if current_user_administrator?

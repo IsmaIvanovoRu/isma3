@@ -19,7 +19,7 @@ class SvedenController < ApplicationController
   end
   
   def education
-    @educational_programs = EducationalProgram.includes(:educational_standart, :academic_plans, :academic_schedules, :practices, :subjects, :accreditation, :methodological_supports)
+    @educational_programs = EducationalProgram.includes(:educational_standart, {academic_plans: :attachment}, {academic_schedules: :attachment}, {practices: :attachment}, {subjects: :attachment}, :accreditation, {methodological_supports: :attachment}, :attachment)
   end
   
   def eduStandarts

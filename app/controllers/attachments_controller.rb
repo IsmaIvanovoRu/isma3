@@ -16,7 +16,7 @@ class AttachmentsController < ApplicationController
   # GET /attachments.json
   def index
     @mime_types = Attachment.select(:mime_type).all.map{|a| a.mime_type}.uniq
-    @attachments = Attachment.order("score DESC").where(attachments_params).paginate(:page => params[:page])
+    @attachments = Attachment.select(:id, :title, :mime_type, :score, :thumbnail_name).order("score DESC").where(attachments_params).paginate(:page => params[:page])
   end
 
   # GET /attachments/1
