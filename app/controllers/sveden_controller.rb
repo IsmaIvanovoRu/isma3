@@ -27,8 +27,12 @@ class SvedenController < ApplicationController
   end
   
   def employees
-    @posts = Post.includes(:profile).select{|p| p.name =~ /^(про|)ректор/}
+    @posts = Post.includes(:profile, :division).select{|p| p.name =~ /^(про|)ректор/}
     @employees = Profile.includes([:user, :degree, :academic_title]).joins(:divisions).where(divisions: {division_type_id: 3}).sort_by(&:full_name)
+    @posts_hash = {}
+    Post.includes(:profile, :division).joins(:profile, :division).where(profiles: {id: @employees}).where(divisions: {division_type_id: 3}).group_by(&:user_id).each do |k, v|
+      @posts_hash[k] = v.map{|p| [p.name, p.division.name].join(' ')}.each{|item| (item =~ /заведую/ ? item.gsub!('кафедра', '') : item.gsub!('кафедра', 'кафедры'))}.join(', ')
+    end
     respond_to do |format|
       format.html
       format.xls if current_user_administrator?

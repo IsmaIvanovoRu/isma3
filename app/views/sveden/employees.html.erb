@@ -17,7 +17,7 @@
   <tbody>
     <% @posts.each do |post| %>
       <tr>
-        <td><%= link_to post.user.profile.full_name, user_profile_path(post.user), itemprop: 'fio' if post.user %></td>
+        <td><%= link_to post.profile.full_name, user_profile_path(post.user), itemprop: 'fio' if post.user %></td>
         <td itemprop="Post"><%= post.name %></td>
         <td itemprop='Telephone'><%= number_to_phone(post.phone, country_code: 7, area_code: true) if post && !post.phone.empty? %></td>
         <td><%= mail_to post.division.email, post.division.email, itemprop: 'e-mail' if post.division.email %></td>
@@ -46,7 +46,7 @@
     <% @employees.each do |employee| %>
         <tr>
           <td><%= link_to employee.full_name, user_profile_path(employee.user), itemprop: 'fio' %></td>
-          <td itemprop="Post"><%= employee_posts(employee) %></td>
+          <td itemprop="Post"><%= @posts_hash[employee.user.id] %></td>
           <td itemprop="TeachingDiscipline"><%= employee.discipline %></td>
           <td itemprop="Degree"><%= employee.degree.name if employee.degree %></td>
           <td itemprop="AcademStat"><%= employee.academic_title.name if employee.academic_title %></td>
