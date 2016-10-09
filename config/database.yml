@@ -34,6 +34,6 @@ production:
   encoding: utf8
   database: isma_production
   pool: 5
-  username: ror
+  username: isma
   password: ZVrs9FkC
   host: 10.0.5.53
