@@ -3,7 +3,7 @@ lock '3.6.1'
 
 set :application, 'isma'
 set :repo_url, 'git@github.com:Infinitiv/isma3.git'
-set :branch, 'testing'
+set :branch, 'd15a6d1cf2d409f41ced2b7302fd77e75877b77e'
 
 # Default branch is :master
 # ask :branch, proc { `git rev-parse --abbrev-ref HEAD`.chomp }
