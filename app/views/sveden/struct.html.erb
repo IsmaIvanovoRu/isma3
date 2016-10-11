@@ -41,8 +41,10 @@
           <dt>Местонахождение структурного подразделения:</dt>
           <dd><address itemprop="AddressStr"><%= full_address(division.address) if division.address %></address></dd>
           <% unless division.url.empty? %>
-            <dt>Адрес официального сайта в сети интернет</dt>
-            <dd><%= link_to division.url, division.url, target: 'blank', itemprop: 'Site' %></dd>
+              <dt>Адрес официального сайта в сети интернет</dt>
+              <dd><%= link_to division.url, division.url, target: 'blank', itemprop: 'Site' %></dd>
+            <% else %>
+              <dt><%= link_to "Адрес официального сайта в сети интернет", division, itemprop: 'Site' %></dt>
           <% end %>
           <% unless division.reference.nil? %>
             <dt>Положение о структурном подразделении</dt>
