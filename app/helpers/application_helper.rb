@@ -51,9 +51,9 @@ module ApplicationHelper
           if v[:tag_type] && v[:tag_name]
             case v[:tag_type].to_s
             when 'itemprop'
-              s = "itemprop=#{v[:tag_name]}"
+              s = "itemprop='#{v[:tag_name]}'"
             when 'itemtype'
-              s = "itemscope itemtype=http://obrnadzor.gov.ru/microformats/#{v[:tag_name]}"
+              s = "itemscope itemtype='http://obrnadzor.gov.ru/microformats/#{v[:tag_name]}'"
             end
             v[:block] ? text.gsub!("&amp;[#{k}]", "<div #{s}>#{v[:value].to_s}</div>") : text.gsub!("&amp;[#{k}]", "<span #{s}>#{v[:value].to_s}</span>")
           else
