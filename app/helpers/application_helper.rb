@@ -5,14 +5,14 @@ module ApplicationHelper
     if text =~ /(youtu.be|youtube.com)/ 
       if action_name == 'show'
 	options = Sanitize::Config.merge(Sanitize::Config::RELAXED,
-                                     attributes: {'a' => Sanitize::Config::RELAXED[:attributes]['a'] + ["target"], 'iframe' => ['width', 'height', 'src', 'frameborder', 'allowfullscreen', 'style']},
+                                     attributes: {'a' => Sanitize::Config::RELAXED[:attributes]['a'] + ["target"], 'iframe' => ['width', 'height', 'src', 'frameborder', 'allowfullscreen', 'style'], all: Sanitize::Config::RELAXED[:attributes][:all] + ['itemprop', 'itemscope', 'itemtype']},
 	                             elements: Sanitize::Config::RELAXED[:elements] + ['iframe'])
 	insert_youtube(text)
 	else
 	  remove_youtube(text)
       end
     end
-    Sanitize.clean(text, options).html_safe
+    Sanitize.clean(text, options).gsub('itemscope=""', 'itemscope').html_safe
   end
   
   def insert_youtube(text)
