@@ -51,7 +51,7 @@ module ApplicationHelper
           if v[:tag_type] && v[:tag_name]
             case v[:tag_type].to_s
             when 'itemprop'
-              s = "itemprop='#{v[:tag_name]}'"
+              s = "itemprop=\"#{v[:tag_name]}\""
             when 'itemtype'
               s = "itemscope itemtype=\"http://obrnadzor.gov.ru/microformats/#{v[:tag_name]}\""
             end
