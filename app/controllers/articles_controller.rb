@@ -35,9 +35,10 @@ class ArticlesController < ApplicationController
       @attachment = Attachment.new
       @attachments = Attachment.select(:id, :title).order(:title).load
     end
-    @first_image_attachment = @article.attachments.select {|a| a.mime_type =~ /image/}.first
-    @image_attachments = (@article.attachments.select {|a| a.mime_type =~ /image/}.count > 1 ? @article.attachments.select {|a| a.mime_type =~ /image/} : [])
-    @not_image_attachments = @article.attachments.select {|a| a.mime_type !~ /image/}
+    attachments = @article.attachments
+    @first_image_attachment = attachments.select {|a| a.mime_type =~ /image/}.first
+    @image_attachments = (attachments.select {|a| a.mime_type =~ /image/}.count > 1 ? attachments.select {|a| a.mime_type =~ /image/} : [])
+    @not_image_attachments = attachments.select {|a| a.mime_type !~ /image/}
     @menu_title = @article.title if current_user_administrator?
     @comment = @article.comments.new
     @comments = current_user_moderator? ? @article.comments.includes(:user).where.not(id: nil) : @article.comments.includes(:user).where.not(id: nil).where(published: true)
@@ -113,7 +114,7 @@ class ArticlesController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_article
-      @article = Article.includes(:attachments).includes(:comments).includes(:division).includes(:user).find(params[:id])
+      @article = Article.includes(:attachments, :comments, :division, :user).find(params[:id])
     end
     
     def set_article_types
