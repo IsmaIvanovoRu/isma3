@@ -5,19 +5,20 @@ class Attachment < ActiveRecord::Base
   has_and_belongs_to_many :divisions
   
   def uploaded_file=(incoming_file)
-    self.title = incoming_file[:file].original_filename
-    self.mime_type = incoming_file[:file].content_type
-    md5 = ::Digest::MD5.file(incoming_file[:file].tempfile.path).hexdigest
+    self.title = incoming_file.original_filename
+    self.mime_type = incoming_file.content_type
+    md5 = ::Digest::MD5.file(incoming_file.tempfile.path).hexdigest
     self.file_name = md5
     path = file_name[0..2].split('').join('/')
+    %x(mkdir -p #{Rails.root.join('public', 'storage', path)})
     file_path = Rails.root.join('public', 'storage', path, self.file_name)
-    copy_file(file_path, incoming_file[:file])
+    copy_file(file_path, incoming_file)
     self.content = pdf2text(file_path) if self.mime_type =~ /pdf/
-    if incoming_file[:file].content_type =~ /image/
+    if incoming_file.content_type =~ /image/
       img = Magick::Image.read(file_path).first
       img.scale!(img.columns > img.rows ? 1024 / img.columns.to_f : 1024 / img.rows.to_f) if img.rows > 1024 || img.columns > 1024
       img.write(file_path)
-      %x(jpegoptim -s #{file_path}) if incoming_file[:file].content_type =~ /jpeg/
+      %x(jpegoptim -s #{file_path}) if incoming_file.content_type =~ /jpeg/
       img.resize_to_fill!(150)
       self.thumbnail_name = 'thumb-' + md5
       thumbnail_path = Rails.root.join('public', 'storage', path, self.thumbnail_name)

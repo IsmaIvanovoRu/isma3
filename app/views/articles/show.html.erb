@@ -36,7 +36,7 @@
 	<%= f.select :id, options_for_select = @attachments.collect {|p| [p.title, p.id] }, {:include_blank => ''} %>
       </div>
       <div class="filefild">
-	<%= f.file_field :file %>
+	<%= f.file_field :file, name: 'attachment[files][]', id: :files, multiple: true %>
       </div>
       <div class="actions">
 	<%= f.submit 'Прикрепить файл', class: "button tiny" %>

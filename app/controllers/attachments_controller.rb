@@ -42,8 +42,8 @@ class AttachmentsController < ApplicationController
 
   # POST /attachments
   # POST /attachments.json
-  def create      
-    if attachment_params[:id].blank? && attachment_params[:file].nil?
+  def create
+    if attachment_params[:id].blank? && attachment_params[:files].nil?
       flash[:error] = "There was a problem submitting your attachment."
       redirect_to :back
     else
@@ -61,25 +61,27 @@ class AttachmentsController < ApplicationController
 	flash[:notice] = "Thank you for your submission..."
 	redirect_to :back
       else
-	@attachment = Attachment.new
-	@attachment.uploaded_file = attachment_params
-	if @attachment.save
-	  case
-	  when params[:article_id]
-	    article = Article.find(params[:article_id])
-	    @attachment.articles << article
-	    article.update_attributes(published: false) unless current_user_moderator?
-	    article.update_attributes(updated_at: Time.now)
-	  when params[:division_id]
-	    division = Division.find(params[:division_id])
-	    @attachment.divisions << division
-	  end
-	  flash[:notice] = "Thank you for your submission..."
-	  redirect_to :back
-	else
-	    flash[:error] = "There was a problem submitting your attachment."
-	    redirect_to :back
-	end
+        attachment_params[:files].each do |file|	
+          @attachment = Attachment.new
+          @attachment.uploaded_file = file
+          if @attachment.save
+            case
+            when params[:article_id]
+              article = Article.find(params[:article_id])
+              @attachment.articles << article
+              article.update_attributes(published: false) unless current_user_moderator?
+              article.update_attributes(updated_at: Time.now)
+            when params[:division_id]
+              division = Division.find(params[:division_id])
+              @attachment.divisions << division
+            end
+          else
+              flash[:error] = "There was a problem submitting your attachment."
+              redirect_to :back
+          end
+        end
+        flash[:notice] = "Thank you for your submission..."
+        redirect_to :back
       end
     end
   end
@@ -160,7 +162,7 @@ class AttachmentsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def attachment_params
-      params.require(:attachment).permit(:id, :file)
+      params.require(:attachment).permit(:id, files: [])
     end
     
     def attachments_params
