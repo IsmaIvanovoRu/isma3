@@ -2,6 +2,6 @@ class RegistrationsController < Devise::RegistrationsController
   protected
 
   def after_sign_up_path_for(resource)
-    edit_user_profile_path(current_user) if user_signed_in?
+    root_path
   end
 end
