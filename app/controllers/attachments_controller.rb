@@ -113,7 +113,7 @@ class AttachmentsController < ApplicationController
 	end
       else
 	@attachment = Attachment.find(params[:id])
-	@attachment.uploaded_file = attachment_params
+	@attachment.uploaded_file = attachment_params[:file]
 	if @attachment.save
 	  params[:article_id]
 	  article = Article.find(params[:article_id])
@@ -162,7 +162,7 @@ class AttachmentsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def attachment_params
-      params.require(:attachment).permit(:id, files: [])
+      params.require(:attachment).permit(:id, :file, files: [])
     end
     
     def attachments_params
