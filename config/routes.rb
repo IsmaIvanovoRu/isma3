@@ -1,8 +1,9 @@
 Isma::Application.routes.draw do
 
   get "sitemaps/sitemap"
+  
   resources :comments
-
+  
   controller :sveden do
     get 'sveden' => :index
   end
