@@ -1,4 +1,5 @@
 <%= render partial: 'title' %>
+<%= render partial: 'description' %>
 <section class="panel">
   <% if @moderator_permission || current_user == @article.user || @article.published %>
     <%= render partial: 'twitter_card' %>

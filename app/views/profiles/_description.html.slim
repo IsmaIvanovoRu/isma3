@@ -1,0 +1,2 @@
+- content_for :description
+  = "Персональная страница #{Petrovich(lastname: @profile.last_name, firstname: @profile.first_name, middlename: @profile.middle_name).genitive.to_s}"

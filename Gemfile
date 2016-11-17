@@ -77,3 +77,7 @@ gem 'yaml_db'
 gem 'sidekiq'
 
 gem 'slim'
+
+gem 'russian_inflect'
+
+gem 'petrovich'
