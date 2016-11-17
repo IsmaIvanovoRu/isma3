@@ -8,6 +8,6 @@ class BlindController < ApplicationController
   
   def special
     session[:blind] = true
-    redirect_to :back
+    request.env["HTTP_REFERER"] ? redirect_to(:back) : redirect_to(root_path)
   end
 end
