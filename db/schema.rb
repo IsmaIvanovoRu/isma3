@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161004094939) do
+ActiveRecord::Schema.define(version: 20161118094638) do
 
   create_table "academic_plans", force: :cascade do |t|
     t.string   "name",                   limit: 255
@@ -262,6 +262,11 @@ ActiveRecord::Schema.define(version: 20161004094939) do
   add_index "posts", ["parent_id"], name: "index_posts_on_parent_id", using: :btree
   add_index "posts", ["post_type_id"], name: "index_posts_on_post_type_id", using: :btree
   add_index "posts", ["user_id"], name: "index_posts_on_user_id", using: :btree
+
+  create_table "posts_subjects", id: false, force: :cascade do |t|
+    t.integer "post_id",    limit: 4, null: false
+    t.integer "subject_id", limit: 4, null: false
+  end
 
   create_table "practices", force: :cascade do |t|
     t.string   "name",                   limit: 255
