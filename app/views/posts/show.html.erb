@@ -20,37 +20,38 @@
   <%= render partial: 'articles/first_image_attachment', locals: {image_attachment: @last_image_attachment, dimension: '150x150' } if @last_image_attachment %>
   <p><%= link_to @profile.full_name_reg, user_profile_path(@profile.user) if @profile %>
   <div class="text-justify"><%= sanitize_full(autosub_details @profile.about) if @profile && @profile.about %></div>
-<% if @administrator_permission %>
-  <% unless @post.subjects.empty? %>
-    <h2>Преподаваемые дисциплины</h2>
-    <ul>
-      <% @post.subjects.each do |subject| %>
-        <li><%= link_to "#{subject.name} (#{subject.educational_program.name})", remove_subject_division_post_path(@division, @post) + "?subject_id=#{subject.id}", method: :delete %></li>
-      <% end %>
-    </ul> 
-  <% end %>
-  <% unless @subjects.empty? %>
-  <h2>Другие дисциплины</h2>
-  <ul>
-    <% @division_subjects.each do |subject| %>
-      <li><%= link_to "#{subject.name} (#{subject.educational_program.name})", add_subject_division_post_path(@division, @post) + "?subject_id=#{subject.id}" %></li>
+<% if @division.division_type_id == 3 %>
+  <% if @administrator_permission %>
+    <% unless @post.subjects.empty? %>
+      <h2>Преподаваемые дисциплины</h2>
+      <ul>
+        <% @post.subjects.each do |subject| %>
+          <li><%= link_to "#{subject.name} (#{subject.educational_program.name})", remove_subject_division_post_path(@division, @post) + "?subject_id=#{subject.id}", method: :delete %></li>
+        <% end %>
+      </ul> 
     <% end %>
-    <% @subjects.each do |subject| %>
-      <li><%= link_to "#{subject.name} (#{subject.educational_program.name})", add_subject_division_post_path(@division, @post) + "?subject_id=#{subject.id}" %></li>    
-    <% end %>
-  </ul>
-  <% end %>
-<% else %>
-  <% unless @post.subjects.empty? %>
-    <h2>Преподаваемые дисциплины</h2>
+    <% unless @subjects.empty? %>
+    <h2>Другие дисциплины</h2>
     <ul>
-      <% @post.subjects.each do |subject| %>
-        <li><%= "#{subject.name} (#{subject.educational_program.name})" %></li>
+      <% @division_subjects.each do |subject| %>
+        <li><%= link_to "#{subject.name} (#{subject.educational_program.name})", add_subject_division_post_path(@division, @post) + "?subject_id=#{subject.id}" %></li>
       <% end %>
-    </ul> 
+      <% @subjects.each do |subject| %>
+        <li><%= link_to "#{subject.name} (#{subject.educational_program.name})", add_subject_division_post_path(@division, @post) + "?subject_id=#{subject.id}" %></li>    
+      <% end %>
+    </ul>
+    <% end %>
+  <% else %>
+    <% unless @post.subjects.empty? %>
+      <h2>Преподаваемые дисциплины</h2>
+      <ul>
+        <% @post.subjects.each do |subject| %>
+          <li><%= "#{subject.name} (#{subject.educational_program.name})" %></li>
+        <% end %>
+      </ul> 
+    <% end %>
   <% end %>
 <% end %>
-
   <% unless @division.email.empty? || @post.phone.empty? %>
   <dl>
     <dt>Контакты</dt>
