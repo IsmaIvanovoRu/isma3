@@ -28,15 +28,17 @@
     <% end %>
   </ul> 
 <% end %>
-<% unless @subjects.empty? %>
+<% unless @subjects && @subjects.empty? %>
 <h2>Другие дисциплины</h2>
 <ul>
+<% if @division_subjects %>
   <% @division_subjects.each do |subject| %>
     <li><%= link_to "#{subject.name} (#{subject.educational_program.name})", add_subject_division_post_path(@division, @post) + "?subject_id=#{subject.id}" %></li>
   <% end %>
   <% @subjects.each do |subject| %>
     <li><%= link_to "#{subject.name} (#{subject.educational_program.name})", add_subject_division_post_path(@division, @post) + "?subject_id=#{subject.id}" %></li>    
   <% end %>
+<% end %>
 </ul>
 <% end %>
 
