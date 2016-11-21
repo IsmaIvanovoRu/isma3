@@ -35,7 +35,7 @@ class SvedenController < ApplicationController
       @posts_hash[k][:posts] = {}
       @posts_hash[k][:subjects] = {}
       @posts_hash[k][:posts] = v.map{|p| [p.name, p.division.name].join(' ')}.each{|item| (item =~ /заведую/ ? item.gsub!('кафедра', '') : item.gsub!('кафедра', 'кафедры'))}.join(', ')
-      @posts_hash[k][:subjects] = v.map{|p| p.subjects.map(&:name)}.join(', ')
+      @posts_hash[k][:subjects] = v.map{|p| p.subjects.map(&:name).uniq}.join(', ')
     end
     respond_to do |format|
       format.html
