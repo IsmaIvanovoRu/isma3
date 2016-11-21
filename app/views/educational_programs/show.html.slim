@@ -31,6 +31,10 @@ section.panel
             = link_to methodological_support, title: 'Удалить', method: :delete, data: { confirm: 'Are you sure?' } do
               i.fi-x
         li= link_to methodological_support.attachment.title_sen_dot, methodological_support.attachment
+    h2 Дисциплины
+    ul
+      - @subjects.each do |subject|
+        li= link_to subject.name, subject
   - if @moderator_permission
     = form_for @methodological_support do |f|
       .(style="display: none;")

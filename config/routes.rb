@@ -76,7 +76,12 @@ Isma::Application.routes.draw do
   end
   
   resources :divisions do 
-    resources :posts
+    resources :posts do
+      member do
+        get :add_subject
+        delete :remove_subject
+      end
+    end
     collection do
       post :import
     end

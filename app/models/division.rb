@@ -5,6 +5,7 @@ class Division < ActiveRecord::Base
   has_many :profiles, :through => :users
   has_many :articles, :through => :users
   has_and_belongs_to_many :attachments
+  has_many :subjects, through: :posts
   
   validates :name, :presence => true, 
             :length => { :maximum => 255 }

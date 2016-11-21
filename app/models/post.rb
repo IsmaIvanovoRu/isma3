@@ -4,6 +4,8 @@ class Post < ActiveRecord::Base
   belongs_to :parent, :foreign_key => "parent_id", :class_name => "Post"
   belongs_to :post_type
   has_many :feedbacks
+  has_and_belongs_to_many :subjects
+  has_many :educational_programs, through: :subjects
   has_one :profile, :through => :user
   
   validates :name, :division_id, :presence => true

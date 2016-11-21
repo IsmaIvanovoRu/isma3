@@ -1,9 +1,9 @@
 class PostsController < DivisionsController
   before_action :require_administrator, only: [:index, :new, :create, :edit, :destroy]
   skip_before_filter :is_student, only: [:show]
-  before_action :set_division, only: [:index, :show, :edit, :new, :create, :update, :destroy]
+  before_action :set_division, only: [:index, :show, :edit, :new, :create, :update, :destroy, :add_subject, :remove_subject]
   before_filter :is_student, only: [:show]
-  before_action :set_post, only: [:show, :edit, :update, :destroy]
+  before_action :set_post, only: [:show, :edit, :update, :destroy, :add_subject, :remove_subject]
   before_action :set_post_types, only: [:new, :edit, :create]
   before_action :set_posts, only: [:new, :edit, :create]
   before_action :set_division_posts, only: [:index, :show, :edit, :create]
@@ -17,7 +17,13 @@ class PostsController < DivisionsController
   def show
     @profile = @post.user.profile if @post.user
     @last_image_attachment = @profile.attachments.last if @profile
-    @menu_title = @post.name if current_user_administrator?
+    if current_user_administrator?
+      @menu_title = @post.name
+      if @post.division.division_type_id == 3
+        @division_subjects = @post.division.subjects.includes(:educational_program) - @post.subjects
+        @subjects = Subject.includes(:educational_program).order(:name) - @division_subjects - @post.subjects
+      end
+    end
   end
   
   def new
@@ -47,9 +53,19 @@ class PostsController < DivisionsController
     redirect_to division_path(@division)
   end
   
+  def add_subject
+    @post.subjects << Subject.find(params[:subject_id])
+    redirect_to :back
+  end
+  
+  def remove_subject
+    @post.subjects.delete(Subject.find(params[:subject_id]))
+    redirect_to :back
+  end
+  
   private
   def set_post
-    @post = @division.posts.find(params[:id])
+    @post = @division.posts.includes(:subjects).find(params[:id])
   end
   
   def set_division

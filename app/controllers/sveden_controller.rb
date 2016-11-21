@@ -30,8 +30,12 @@ class SvedenController < ApplicationController
     @posts = Post.includes(:profile, :division).select{|p| p.name =~ /^(про|)ректор/}
     @employees = Profile.includes([:user, :degree, :academic_title]).joins(:divisions).where(divisions: {division_type_id: 3}).sort_by(&:full_name)
     @posts_hash = {}
-    Post.includes(:profile, :division).joins(:profile, :division).where(profiles: {id: @employees}).where(divisions: {division_type_id: 3}).group_by(&:user_id).each do |k, v|
-      @posts_hash[k] = v.map{|p| [p.name, p.division.name].join(' ')}.each{|item| (item =~ /заведую/ ? item.gsub!('кафедра', '') : item.gsub!('кафедра', 'кафедры'))}.join(', ')
+    Post.includes(:profile, :division, :subjects).joins(:profile, :division).where(profiles: {id: @employees}).where(divisions: {division_type_id: 3}).group_by(&:user_id).each do |k, v|
+      @posts_hash[k] = {}
+      @posts_hash[k][:posts] = {}
+      @posts_hash[k][:subjects] = {}
+      @posts_hash[k][:posts] = v.map{|p| [p.name, p.division.name].join(' ')}.each{|item| (item =~ /заведую/ ? item.gsub!('кафедра', '') : item.gsub!('кафедра', 'кафедры'))}.join(', ')
+      @posts_hash[k][:subjects] = v.map{|p| p.subjects.map(&:name)}.join(', ')
     end
     respond_to do |format|
       format.html

@@ -46,8 +46,8 @@
     <% @employees.each do |employee| %>
         <tr>
           <td><%= link_to employee.full_name, user_profile_path(employee.user), itemprop: 'fio' %></td>
-          <td itemprop="Post"><%= @posts_hash[employee.user.id] %></td>
-          <td itemprop="TeachingDiscipline"><%= employee.discipline %></td>
+          <td itemprop="Post"><%= @posts_hash[employee.user.id][:posts] %></td>
+          <td itemprop="TeachingDiscipline"><%= @posts_hash[employee.user.id][:subjects].empty? ? employee.discipline : @posts_hash[employee.user.id][:subjects].mb_chars.downcase.to_s %></td>
           <td itemprop="Degree"><%= employee.degree.name if employee.degree %></td>
           <td itemprop="AcademStat"><%= employee.academic_title.name if employee.academic_title %></td>
           <td itemprop="EmployeeQualification"><%= employee.qualification %></td>

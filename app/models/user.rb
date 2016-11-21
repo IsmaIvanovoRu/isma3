@@ -15,6 +15,7 @@ class User < ActiveRecord::Base
   has_many :articles
   has_and_belongs_to_many :groups
   has_many :posts
+  has_many :subjects, through: :posts
   has_many :divisions, :through => :posts
   has_many :feedbacks
   has_many :comments
