@@ -14,7 +14,7 @@ class ArticlesController < ApplicationController
       @articles = {}
     if current_user.nil?
       ArticleType.all.each do |article_type|
-	@articles[article_type.name] = Article.includes(:division, :user, :attachments_for_articles).order('articles.updated_at DESC').where(published: true, group_id: nil, article_type_id: article_type, skip_frontend: false).where("exp_date >= ? or exp_date IS ?", Time.now.to_date, nil).limit(6)
+	@articles[article_type.name] = Article.includes(:division, :user, :attachments_for_articles).order('articles.updated_at DESC').where(published: true, group_id: nil, article_type_id: article_type, skip_frontend: false).where("exp_date >= ? or exp_date IS ?", Time.now.to_date, nil).limit(8)
       end
     else
       if current_user_moderator?
@@ -23,7 +23,7 @@ class ArticlesController < ApplicationController
 	current_user_groups = current_user.groups + current_user.groups.joins(:parent).map{|g| g.parent} + [nil]
       end
       ArticleType.all.each do |article_type|
-	@articles[article_type.name] = Article.includes(:division).includes(:user).order('articles.updated_at DESC').where(published: true, group_id: current_user_groups, article_type_id: article_type, skip_frontend: false).where("exp_date >= ? or exp_date IS ?", Time.now.to_date, nil).limit(6)
+	@articles[article_type.name] = Article.includes(:division).includes(:user).order('articles.updated_at DESC').where(published: true, group_id: current_user_groups, article_type_id: article_type, skip_frontend: false).where("exp_date >= ? or exp_date IS ?", Time.now.to_date, nil).limit(8)
       end
     end
   end
