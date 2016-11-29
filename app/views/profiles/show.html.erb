@@ -28,6 +28,20 @@
     <% else %>
       <h1>Профиль пользователя не заполнен</h1>
     <% end %>
+    <% if @administrator_permission || current_user == @user %>
+      <h2>Прикрепить аватар</h2>
+      <%= form_for(@attachment) do |f| %>
+        <div style="display: none;">
+          <%= text_field_tag :user_id, @user.id %>
+        </div>
+        <div class="filefild">
+          <%= f.file_field :file, name: 'attachment[files][]', id: :files, multiple: true %>
+        </div>
+        <div class="actions">
+          <%= f.submit 'Прикрепить файл' %>
+        </div>
+      <% end %>
+    <% end %>
      </section>
   </div>
   <% if @administrator_permission %>

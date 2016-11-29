@@ -74,6 +74,9 @@ class AttachmentsController < ApplicationController
             when params[:division_id]
               division = Division.find(params[:division_id])
               @attachment.divisions << division
+            when params[:user_id]
+              user = User.find(params[:user_id])
+              user.profile.attachments << @attachment
             end
           else
               flash[:error] = "There was a problem submitting your attachment."

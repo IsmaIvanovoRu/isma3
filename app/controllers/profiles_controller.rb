@@ -31,6 +31,7 @@ class ProfilesController < UsersController
 	@articles = (@user == current_user || current_user_moderator? ?  Article.includes(:attachments).includes(:article_type).order('updated_at DESC').where(group_id: current_user_groups, user_id: @user).where("exp_date >= ? or exp_date IS ?", Time.now.to_date, nil).paginate(:page => params[:page]) : Article.includes(:attachments).includes(:article_type).order('updated_at DESC').where(published: true, group_id: current_user_groups, user_id: @user).where("exp_date >= ? or exp_date IS ?", Time.now.to_date, nil).paginate(:page => params[:page]))
       end
     end
+    @attachment = Attachment.new
   end
   
   def new
@@ -55,14 +56,6 @@ class ProfilesController < UsersController
 	@profile.user.groups << Group.where(name: "entrants") if @profile.user.groups.where(groups: {name: 'entrants'}).empty?
       else
 	@profile.user.groups.delete(Group.where(name: "entrants"))
-      end
-      if params[:attachment]
-	@attachment = Attachment.new
-	@attachment.uploaded_file = params[:attachment]
-	@attachment.thumbnail = avatar(@attachment.data) if @attachment.mime_type =~ /image/
-	if @attachment.save
-	  @profile.attachments << @attachment
-	end
       end
       redirect_to user_profile_path(@user), notice: 'Profile was successfully updated.'
     else
@@ -113,11 +106,6 @@ class ProfilesController < UsersController
       flash[:error] = "You must have permissions"
       redirect_to user_profile_path(@user)
     end
-  end
- 
-  def avatar(image)
-    img = Magick::Image.from_blob(image).first
-    img.resize_to_fill!(150, 150, ::Magick::NorthGravity).to_blob
   end
   
   def entrant?

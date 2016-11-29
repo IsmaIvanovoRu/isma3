@@ -148,7 +148,7 @@
 		<%= text_field_tag :division_id, @division.id %>
 	      </div>
 	      <div class="filefild">
-		<%= f.file_field :file %>
+		<%= f.file_field :file, name: 'attachment[files][]', id: :files, multiple: true %>
 	      </div>
 	      <div class="actions">
 		<%= f.submit 'Прикрепить файл' %>
