@@ -117,7 +117,7 @@ class AttachmentsController < ApplicationController
 	end
       else
 	@attachment = Attachment.find(params[:id])
-	@attachment.uploaded_file = attachment_params[:file]
+	@attachment.uploaded_file(attachment_params[:file])
 	if @attachment.save
 	  params[:article_id]
 	  article = Article.find(params[:article_id])
