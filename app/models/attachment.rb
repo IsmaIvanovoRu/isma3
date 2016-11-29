@@ -4,7 +4,7 @@ class Attachment < ActiveRecord::Base
   has_and_belongs_to_many :profiles
   has_and_belongs_to_many :divisions
   
-  def uploaded_file=(incoming_file)
+  def uploaded_file(incoming_file, gravity = "default")
     self.title = incoming_file.original_filename
     self.mime_type = incoming_file.content_type
     md5 = ::Digest::MD5.file(incoming_file.tempfile.path).hexdigest
@@ -19,7 +19,8 @@ class Attachment < ActiveRecord::Base
       img.scale!(img.columns > img.rows ? 1024 / img.columns.to_f : 1024 / img.rows.to_f) if img.rows > 1024 || img.columns > 1024
       img.write(file_path)
       %x(jpegoptim -s #{file_path}) if incoming_file.content_type =~ /jpeg/
-      img.resize_to_fill!(150)
+      img.resize_to_fill!(150) if gravity == 'default'
+      img.resize_to_fill!(150, 150, ::Magick::NorthGravity) if gravity == 'north'
       self.thumbnail_name = 'thumb-' + md5
       thumbnail_path = Rails.root.join('public', 'storage', path, self.thumbnail_name)
       img.write(thumbnail_path)

@@ -63,7 +63,8 @@ class AttachmentsController < ApplicationController
       else
         attachment_params[:files].each do |file|	
           @attachment = Attachment.new
-          @attachment.uploaded_file = file
+          gravity = params[:user_id] ? 'north' : 'default'
+          @attachment.uploaded_file(file, gravity)
           if @attachment.save
             case
             when params[:article_id]
