@@ -1,0 +1,14 @@
+= render partial: 'title' 
+= render partial: 'description'
+section.panel
+  h1 Задать вопрос администрации академии
+  - if user_signed_in?
+    = render 'q_form'
+  - unless user_signed_in?
+    p.alert.label Для того, чтобы иметь возможность задать вопрос, необходимо пройти процедуру регистрации на сайте
+  = will_paginate @published_feedbacks, next_label: "Вперед", previous_label: 'Назад'
+  dl
+    = render partial: 'feedback', collection: @unpublished_feedbacks
+  dl
+    = render partial: 'feedback', collection: @published_feedbacks
+  = will_paginate @published_feedbacks

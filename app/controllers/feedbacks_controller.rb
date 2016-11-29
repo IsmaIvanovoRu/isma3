@@ -10,7 +10,7 @@ class FeedbacksController < ApplicationController
   def index
     @feedback = Feedback.new
     unless current_user.nil?
-      @unpublished_feedbacks = current_user_moderator? ? Feedback.includes(:post).order('updated_at DESC').where(public: false) : Feedback.order('updated_at DESC').where(public: false, to: current_user.posts)
+      @unpublished_feedbacks = current_user_moderator? ? Feedback.includes(:post).order('updated_at DESC').where(public: false) : Feedback.includes(:post).order('updated_at DESC').where(public: false, to: current_user.posts) + Feedback.includes(:post).order('updated_at DESC').where(public: false, from: current_user)
     end
       @published_feedbacks = Feedback.order('updated_at DESC').where(public: true).paginate(:page => params[:page])
   end
