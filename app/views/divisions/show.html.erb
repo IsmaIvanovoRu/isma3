@@ -134,6 +134,7 @@
             <h2>Контакты</h2>
             <address><p><%= "Адрес: #{@division.address}" if @division.address %>
             <p><%= "Телефон: #{multi_number_to_phone(@head.first.phone, country_code: 7, area_code: true)}" if @head.first && !@head.first.phone.empty? %>
+            <p><%= link_to 'Сайт', @division.url, target: '_blank' if @division.url && !@division.url.empty? %>
             <p><%= mail_to @division.email, 'Написать письмо', encode: "javascript" if @head.first && !@division.email.empty? %></address>
           <% end %>
           <% if @division.latitude && @division.longitude %>
