@@ -51,4 +51,8 @@
       <%= check_box_tag :entrant, '', (@entrant ? true : false) %>
       <%= label_tag :entrant, 'Являюсь абитуриентом' %>
     </div>
+    <div class="actions">
+      <%= f.submit 'Сохранить', class: 'small button' %>
+    </div>
   </div>
+<% end %>
