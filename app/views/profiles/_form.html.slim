@@ -1,0 +1,60 @@
+= form_for @profile, url: user_profile_path(@user), :html => {:multipart => true} do |f|
+  - if @user.errors.any?
+    #error_explanation
+      h2= "#{pluralize(@usererrors.count, "error")} prohibited this user from being saved:"
+      ul
+        - @usererrors.full_messages.each do |msg|
+          li= msg
+  .row
+    .large-4.small-12.columns
+      = f.label :last_name, 'Фамилия'
+      = f.text_field :last_name
+    .large-4.small-12.columns
+      = f.label :first_name, 'Имя'
+      = f.text_field :first_name
+    .large-4.small-12.columns
+      = f.label :middle_name, 'Отчество'
+      = f.text_field :middle_name
+  - if @moderator_permission
+    .row
+      .large-6.small-12.columns
+        = f.label 'degree_id', 'Ученая степень'
+        = f.select :degree_id, options_for_select= @degrees.collect {|p| [t(p.name, :scope => [:degrees]), p.id] }, {:include_blank => ''}
+      .large-6.small-12.columns
+        = f.label :academic_title_id, 'Ученое звание'
+        = f.select :academic_title_id, options_for_select= @academic_titles.collect {|p| [t(p.name, :scope => [:academic_titles]), p.id] }, {:include_blank => ''}
+    .row
+      .large-4.small-12.columns
+        = f.label :discipline, 'Дисциплины'
+        = f.text_field :discipline
+      .large-4.small-12.columns
+        = f.label :qualification, 'Квалификация'
+        = f.text_field :qualification
+      .large-4.small-12.columns
+        = f.label :development, 'Повышение квалификации'
+        = f.text_field :development
+    .row
+      .large-6.small-12.columns
+        = f.label :general_experience, 'Общий стаж'
+        = f.number_field :general_experience, min: 0
+      .large-6.small-12.columns
+        = f.label :special_experience, 'Стаж по специальности'
+        = f.number_field :special_experience, min: 0
+  .row
+    .large-6.small-12.columns
+      = f.label :phone, 'Телефон'
+      = f.phone_field :phone
+    .large-6.small-12.columns
+      = f.label :email, 'Адрес электронной почты'
+      = f.email_field :email
+  .row
+    .large-12.small-12.columns
+      = f.label :about, 'О себе'
+      = f.text_area :about
+  p &nbsp;
+  .row
+    .large-12.small-12.columns
+      = check_box_tag :entrant, '', (@entrant ? true : false)
+      = label_tag :entrant, 'Являюсь абитуриентом'
+  .actions
+    = f.submit 'Сохранить', class: 'small button'
