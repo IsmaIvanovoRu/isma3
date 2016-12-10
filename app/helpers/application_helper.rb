@@ -8,8 +8,18 @@ module ApplicationHelper
                                      attributes: {'a' => Sanitize::Config::RELAXED[:attributes]['a'] + ["target"], 'iframe' => ['width', 'height', 'src', 'frameborder', 'allowfullscreen', 'style'], all: Sanitize::Config::RELAXED[:attributes][:all] + ['itemprop', 'itemscope', 'itemtype']},
 	                             elements: Sanitize::Config::RELAXED[:elements] + ['iframe'])
 	insert_youtube(text)
-	else
-	  remove_youtube(text)
+      else
+        remove_youtube(text)
+      end
+    end
+    if text =~ /(docs.google.com\/forms)/ 
+      if action_name == 'show'
+	options = Sanitize::Config.merge(Sanitize::Config::RELAXED,
+                                     attributes: {'a' => Sanitize::Config::RELAXED[:attributes]['a'] + ["target"], 'iframe' => ['width', 'height', 'src', 'frameborder', 'allowfullscreen', 'style'], all: Sanitize::Config::RELAXED[:attributes][:all] + ['itemprop', 'itemscope', 'itemtype']},
+	                             elements: Sanitize::Config::RELAXED[:elements] + ['iframe'])
+	insert_googleform(text)
+      else
+        remove_googleform(text)
       end
     end
     Sanitize.clean(text, options).gsub('itemscope=""', 'itemscope').html_safe
@@ -32,9 +42,27 @@ module ApplicationHelper
     end
     text
   end
+  
+  def insert_googleform(text)
+    matches = text.scan(/(\S*)(docs.google.com\/forms)(\S*)/)
+    matches.each do |m|
+      id = /\/d\/e\/([^<#\&\?]*).*\/viewform*/.match(m.last)[1]
+      iframe = "<iframe src='https://docs.google.com/forms/d/e/#{id}/viewform?embedded=true' width='100%' height='800' frameborder='0' marginheight='0' marginwidth='0'>Загрузка...</iframe>"
+      text.gsub!(m.join(''), iframe)
+    end
+  end
+  
+  def remove_googleform(text)
+    matches = text.scan(/(\S*)(docs.google.com\/forms)(\S*)/)
+    matches.each do |m|
+      text.gsub!(m.join(''), '')
+    end
+    text
+  end
     
   def sanitize_truncate(text)
     remove_youtube(text)
+    remove_googleform(text)
     truncate(Sanitize.clean(text), :length => 300, :omission => '... ', :separator => ' ')
   end
   
