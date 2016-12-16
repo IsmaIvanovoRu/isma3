@@ -3,5 +3,5 @@
 # To ban all spiders from the entire site uncomment the next two lines:
 User-agent: *
 Allow: /
-Disallow: /kiosk
+Disallow: /kiosk.txt
 Sitemap: http://isma.ivanovo.ru/sitemaps/sitemap.xml
