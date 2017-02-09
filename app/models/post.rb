@@ -7,6 +7,8 @@ class Post < ActiveRecord::Base
   has_and_belongs_to_many :subjects
   has_many :educational_programs, through: :subjects
   has_one :profile, :through => :user
+  has_one :degree, through: :profile
+  has_one :academic_title, through: :profile
   
   validates :name, :division_id, :presence => true
   validates :name, :length => { :maximum => 255 }

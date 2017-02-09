@@ -46,4 +46,15 @@ namespace :isma do
       puts counter
     end
   end
+  
+  desc "Export employees"
+  task export_employees: :environment do
+    posts = Post.includes(:division, :profile, :degree, :academic_title).order(:division_id)
+    data = posts.map{|p| [p.division.name, p.name, p.profile.full_name, (p.degree.name if p.degree), (p.academic_title.name if p.academic_title), p.profile.discipline, p.profile.qualification, p.profile.development, p.profile.general_experience, p.profile.special_experience, p.division.address, p.division.latitude, p.division.longitude, p.division.email, p.division.url, p.phone]}
+    File.open('employees.csv', 'w') do |f|
+      data.each do |row|
+        f.write("#{row.join(";").gsub(/\n/, "")}\n")
+      end
+    end
+  end
 end
