@@ -16,7 +16,7 @@
   <% end %>
   <% if @details_hash['Электронная почта'][:value] %>
     <dt>Электронная почта</dt>
-    <dd><span itemprop="email"><%= mail_to @details_hash['Электронная почта'][:value], 'Написать письмо', encode: "javascript" %></span></dd>
+    <dd><span itemprop="email"><%= mail_to @details_hash['Электронная почта'][:value] %></span></dd>
   <% end %>
   <% if @details_hash['Телефон'][:value] %>
     <dt>Телефон</dt>
