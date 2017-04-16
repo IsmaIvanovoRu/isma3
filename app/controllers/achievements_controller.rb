@@ -30,7 +30,7 @@ class AchievementsController < ApplicationController
   end
   
   def update
-    @achievement.update(achievement_params)
+    @achievement.update(achievement_params.update(published: false))
     if params[:attachment]
       attachment_params[:files].each do |file|
         @attachment = Attachment.new
@@ -41,7 +41,7 @@ class AchievementsController < ApplicationController
         end
       end
     end
-    redirect_to :back
+    redirect_to user_profile_path(@achievement.user)
   end
   
   def published_toggle
