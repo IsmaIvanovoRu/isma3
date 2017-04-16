@@ -1,0 +1,11 @@
+section.panel
+  .
+    = link_to 'К списку категорий достижений', achievement_categories_path
+  .right
+    - if @moderator_permission
+      = link_to edit_achievement_category_path(@achievement_category), title: 'Редактировать' do
+        i.fi-page-edit
+      = link_to @achievement_category, title: 'Удалить', method: :delete, data: { confirm: 'Are you sure?' } do
+        i.fi-x
+  h1= @achievement_category.name
+  p= @achievement_category.description

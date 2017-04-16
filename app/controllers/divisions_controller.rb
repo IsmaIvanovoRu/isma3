@@ -119,7 +119,11 @@ class DivisionsController < ApplicationController
   end
   
   def set_head
-    @head = @division.head
+    if @division.division_type_id == 6 
+      @head = []
+    else 
+      @head = @division.head
+    end
   end
   
   def can?
@@ -134,6 +138,7 @@ class DivisionsController < ApplicationController
       @can = true
     end
   end
+  
   def is_student?
     unless current_user.nil?
       groups_names = current_user_groups.map(&:name)

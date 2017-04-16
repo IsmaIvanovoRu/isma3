@@ -20,18 +20,22 @@ class ProfilesController < UsersController
       g = Group.where.not(parent_id: nil).map(&:parent_id)
       @user_groups = @user.groups
       @not_user_groups = Group.order(:name).where.not(id: g) - @user_groups
+      @achievements = current_user_moderator? || current_user_owner? ? @user.achievements.order(:event_date).includes(:achievement_category, :achievement_result) : @user.achievements.order(:event_date).includes(:achievement_category, :achievement_result).where(published: true)
       if current_user.nil?
-	@articles = Article.includes(:attachments).includes(:article_type).order('updated_at DESC').where(published: true, group_id: nil, user_id: @user).where("exp_date >= ? or exp_date IS ?", Time.now.to_date, nil).paginate(:page => params[:page])
+       @articles = Article.includes(:attachments).includes(:article_type).order('updated_at DESC').where(published: true, group_id: nil, user_id: @user).where("exp_date >= ? or exp_date IS ?", Time.now.to_date, nil).paginate(:page => params[:page])
       else
-	if current_user_moderator?
-	  current_user_groups = Group.all + [nil]
-	else
-	  current_user_groups = current_user.groups + current_user.groups.joins(:parent).map{|g| g.parent} + [nil]
-	end
-	@articles = (@user == current_user || current_user_moderator? ?  Article.includes(:attachments).includes(:article_type).order('updated_at DESC').where(group_id: current_user_groups, user_id: @user).where("exp_date >= ? or exp_date IS ?", Time.now.to_date, nil).paginate(:page => params[:page]) : Article.includes(:attachments).includes(:article_type).order('updated_at DESC').where(published: true, group_id: current_user_groups, user_id: @user).where("exp_date >= ? or exp_date IS ?", Time.now.to_date, nil).paginate(:page => params[:page]))
+        if current_user_moderator?
+          current_user_groups = Group.all + [nil]
+        else
+          current_user_groups = current_user.groups + current_user.groups.joins(:parent).map{|g| g.parent} + [nil]
+        end
+        @articles = (@user == current_user || current_user_moderator? ?  Article.includes(:attachments).includes(:article_type).order('updated_at DESC').where(group_id: current_user_groups, user_id: @user).where("exp_date >= ? or exp_date IS ?", Time.now.to_date, nil).paginate(:page => params[:page]) : Article.includes(:attachments).includes(:article_type).order('updated_at DESC').where(published: true, group_id: current_user_groups, user_id: @user).where("exp_date >= ? or exp_date IS ?", Time.now.to_date, nil).paginate(:page => params[:page]))
+        @attachment = Attachment.new
+        @achievement = @user.achievements.new
+        @achievement_categories = AchievementCategory.order(:name).load
+        @achievement_results = AchievementResult.order(:name).load
       end
     end
-    @attachment = Attachment.new
   end
   
   def new
@@ -53,9 +57,9 @@ class ProfilesController < UsersController
   def update
     if @profile.update(profile_params)
       if params[:entrant]
-	@profile.user.groups << Group.where(name: "entrants") if @profile.user.groups.where(groups: {name: 'entrants'}).empty?
+  @profile.user.groups << Group.where(name: "entrants") if @profile.user.groups.where(groups: {name: 'entrants'}).empty?
       else
-	@profile.user.groups.delete(Group.where(name: "entrants"))
+  @profile.user.groups.delete(Group.where(name: "entrants"))
       end
       redirect_to user_profile_path(@user), notice: 'Profile was successfully updated.'
     else

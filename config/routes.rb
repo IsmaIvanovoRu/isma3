@@ -112,6 +112,16 @@ Isma::Application.routes.draw do
   
   resources :subjects
 
+  resources :achievements do
+    member do
+      put :published_toggle
+    end
+  end
+
+  resources :achievement_categories
+
+  resources :achievement_results
+
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

@@ -92,6 +92,14 @@
                       <li><%= link_to 'Методическое обеспечение', methodological_supports_path %></li>
                     </ul>
 		  </li>
+		  <li class="has-dropdown">
+		  	<%= link_to 'Достижения', '#' %>
+		  	<ul class="dropdown">
+		  		<li><%= link_to 'Неопубликованные достижения', achievements_url + "?published=false" %></li>
+		  		<li><%= link_to 'Категории достижений', achievement_categories_url %></li>
+		  		<li><%= link_to 'Результаты достижеий', achievement_results_url %></li>
+		  	</ul>
+		  </li>
 		<% end %>
 		<% if @moderator_permission %>
 		  <li><%= link_to 'Неопубликованные статьи', archives_path + "?published=0" %></li>
@@ -266,7 +274,7 @@
     <% if controller_name == 'articles' && action_name == 'show' %>
       <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
     <% end %>
-    <% if action_name == 'edit' || action_name == 'new' || action_name == 'create' || action_name == 'update' || controller_name == 'feedbacks' %>
+    <% if action_name == 'edit' || action_name == 'new' || action_name == 'create' || action_name == 'update' || controller_name == 'feedbacks' || controller_name = 'profile' %>
       <%= javascript_include_tag "ckeditor/ckeditor" %>
       <%= javascript_include_tag "ckeditor_init" %>
       <%= javascript_include_tag "datepicker" %>

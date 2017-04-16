@@ -1,0 +1,22 @@
+tr
+  td class = ('pink' unless achievement.published)
+    = achievement.event_name
+  td class = ('pink' unless achievement.published)
+    = achievement.achievement_category.name
+  td class = ('pink' unless achievement.published)
+    = time_tag achievement.event_date, :pubdate => true, :format => '%e.%m.%Y'
+  td class = ('pink' unless achievement.published)
+    = achievement.achievement_result.name
+  td class = ('pink' unless achievement.published)
+    = achievement.attachments.count > 0 ? "Да" : "Нет"
+  - if @administrator_permission || current_user == @user
+    td class = ('pink' unless achievement.published)
+      - if @administrator_permission
+        = link_to published_toggle_achievement_path(achievement), title: (achievement.published ? 'Снять с публикации' : 'Опубликовать'), method: :put do
+          i.fi-eye
+          span &nbsp;
+      = link_to edit_achievement_path(achievement), title: 'Редактировать' do
+        i.fi-page-edit
+        span &nbsp;
+      = link_to achievement, title: 'Удалить', method: :delete, data: { confirm: 'Are you sure?' } do
+        i.fi-x

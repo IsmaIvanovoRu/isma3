@@ -1,0 +1,5 @@
+section.panel
+	h1 Список результатов достижений
+	ul
+  	- @achievements.each do |achievement|
+    	li= achievement.event_name

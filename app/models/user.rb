@@ -19,6 +19,7 @@ class User < ActiveRecord::Base
   has_many :divisions, :through => :posts
   has_many :feedbacks
   has_many :comments
+  has_many :achievements
    
   after_create :add_default_groups, :build_default_profile
   

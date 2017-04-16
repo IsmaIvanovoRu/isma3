@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161118094638) do
+ActiveRecord::Schema.define(version: 20170410114820) do
 
   create_table "academic_plans", force: :cascade do |t|
     t.string   "name",                   limit: 255
@@ -51,6 +51,40 @@ ActiveRecord::Schema.define(version: 20161118094638) do
   end
 
   add_index "accreditations", ["attachment_id"], name: "index_accreditations_on_attachment_id", using: :btree
+
+  create_table "achievement_categories", force: :cascade do |t|
+    t.string   "name",        limit: 255
+    t.text     "description", limit: 65535
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
+  end
+
+  create_table "achievement_results", force: :cascade do |t|
+    t.string   "name",       limit: 255
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
+  end
+
+  create_table "achievements", force: :cascade do |t|
+    t.integer  "user_id",                 limit: 4
+    t.string   "event_name",              limit: 255
+    t.integer  "achievement_category_id", limit: 4
+    t.integer  "achievement_result_id",   limit: 4
+    t.date     "event_date"
+    t.text     "comment",                 limit: 65535
+    t.boolean  "published",                             default: false
+    t.datetime "created_at",                                            null: false
+    t.datetime "updated_at",                                            null: false
+  end
+
+  add_index "achievements", ["achievement_category_id"], name: "index_achievements_on_achievement_category_id", using: :btree
+  add_index "achievements", ["achievement_result_id"], name: "index_achievements_on_achievement_result_id", using: :btree
+  add_index "achievements", ["user_id"], name: "index_achievements_on_user_id", using: :btree
+
+  create_table "achievements_attachments", id: false, force: :cascade do |t|
+    t.integer "achievement_id", limit: 4, null: false
+    t.integer "attachment_id",  limit: 4, null: false
+  end
 
   create_table "article_types", force: :cascade do |t|
     t.string   "name",       limit: 255, default: "", null: false
@@ -335,6 +369,9 @@ ActiveRecord::Schema.define(version: 20161118094638) do
   add_foreign_key "academic_schedules", "attachments"
   add_foreign_key "academic_schedules", "educational_programs"
   add_foreign_key "accreditations", "attachments"
+  add_foreign_key "achievements", "achievement_categories"
+  add_foreign_key "achievements", "achievement_results"
+  add_foreign_key "achievements", "users"
   add_foreign_key "educational_programs", "accreditations"
   add_foreign_key "educational_programs", "attachments"
   add_foreign_key "educational_programs", "educational_standarts"

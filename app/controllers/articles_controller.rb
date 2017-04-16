@@ -7,6 +7,7 @@ class ArticlesController < ApplicationController
   before_action :set_divisions, only: [:new, :edit, :create, :update]
   before_action :set_groups, only: [:new, :edit, :create, :update]
   before_action :set_employees, only: [:new, :edit, :create, :update]
+  before_action :can_view, only: [:show]
 
   # GET /articles
   # GET /articles.json
@@ -133,6 +134,21 @@ class ArticlesController < ApplicationController
       unless can?
 	flash[:error] = "You must have permissions"
 	redirect_to @article
+      end
+    end
+    
+    def can_view
+      if @article.group_id
+        if current_user
+          current_user_groups = (current_user_moderator? ? Group.order(:name).load : current_user.groups + current_user.groups.map {|g| g.parent}.select {|g| !g.nil?}.uniq)
+          unless current_user_groups.include?(Group.find(@article.group_id))
+            flash[:error] = "You must have permissions"
+            redirect_to root_path
+          end
+        else
+          flash[:error] = "You must have permissions"
+          redirect_to root_path
+        end
       end
     end
     
