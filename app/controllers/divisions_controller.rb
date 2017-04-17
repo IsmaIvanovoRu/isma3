@@ -12,7 +12,7 @@ class DivisionsController < ApplicationController
   before_action :can, only: [:edit]
   
   def index
-    @divisions = Division.order(:name).includes(:division_type).group_by{|d| t(d.division_type.name, scope: [:divisions])}.sort
+    @divisions = Division.order(:name).includes(:division_type).joins(:division_type).where.not(division_types: {name: 'student'}).group_by{|d| t(d.division_type.name, scope: [:divisions])}.sort
     respond_to do |format|
       format.html
       format.xls if current_user_administrator?
