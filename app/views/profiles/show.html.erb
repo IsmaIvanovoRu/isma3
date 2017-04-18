@@ -81,13 +81,7 @@
     <% if !@achievements.empty? || current_user == @user %>
       <div class="small-12 large-12 columns">
         <section class="panel clearfix">
-          <% if current_user == @user %>
-            <%= link_to 'Добавить достижение', "#", "data-reveal-id" => 'add_achievement', class: "button tiny" %>
-            <div id="add_achievement" class="reveal-modal medium" data-reveal>
-                <%= render partial: 'achievements/form' %>
-                <a class="close-reveal-modal">&#215;</a>
-            </div>
-          <% end %>
+          <%= link_to 'Добавить достижение', new_achievement_path, class: "button tiny" if current_user == @user %>
           <% unless @achievements.empty? %>
                 <h2>
                   Перечень достижений

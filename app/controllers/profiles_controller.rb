@@ -31,9 +31,6 @@ class ProfilesController < UsersController
         end
         @articles = (@user == current_user || current_user_moderator? ?  Article.includes(:attachments).includes(:article_type).order('updated_at DESC').where(group_id: current_user_groups, user_id: @user).where("exp_date >= ? or exp_date IS ?", Time.now.to_date, nil).paginate(:page => params[:page]) : Article.includes(:attachments).includes(:article_type).order('updated_at DESC').where(published: true, group_id: current_user_groups, user_id: @user).where("exp_date >= ? or exp_date IS ?", Time.now.to_date, nil).paginate(:page => params[:page]))
         @attachment = Attachment.new
-        @achievement = @user.achievements.new
-        @achievement_categories = AchievementCategory.order(:name).load
-        @achievement_results = AchievementResult.order(:name).load
       end
     end
   end
