@@ -38,7 +38,11 @@ Isma::Application.routes.draw do
   end
   
   resources :users do
-    resource :profile
+    resource :profile do
+      member do
+        put :published_toggle
+      end
+    end
     collection do
       post :import
     end

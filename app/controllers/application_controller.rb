@@ -13,6 +13,7 @@ class ApplicationController < ActionController::Base
   before_action :articles_count
   before_filter :current_user_moderator?
   before_action :new_comments
+  before_action :profiles_count
   before_action :set_blind
   layout :set_layout
 
@@ -120,6 +121,10 @@ class ApplicationController < ActionController::Base
   
   def new_comments
     @new_comments = Article.includes(:comments).joins(:comments).where(comments: {published: false}).uniq if @moderator_permission
+  end
+  
+  def profiles_count
+    @profiles_count = @moderator_permission ? Profile.where(published: false).count : 0
   end
   
   def set_blind

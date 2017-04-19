@@ -33,6 +33,13 @@
       <section class="top-bar-section">
 	<!-- Right Nav Section -->
 	<ul class="right">
+          <% if @moderator_permission && @profiles_count > 0 %>
+            <li>
+              <%= link_to users_path + "?published=0", title: "Профилей с изменениями - #{@profiles_count}" do %>
+                <i class="fi-torso" style="color: red;"></i>
+              <% end %>
+            </li>
+          <% end %>
 	  <% if user_signed_in? %>
 	    <% if @articles_count > 0 %>
 	      <li><%= link_to (@moderator_permission ? (archives_path + "?published=0") : user_profile_path(current_user)), title: "Имеется неопубликованных статей - #{@articles_count}" do %>

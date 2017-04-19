@@ -4,15 +4,23 @@
   <div class="small-12 <%= 'large-10' if @administrator_permission %> columns">
     <section class="panel clearfix" itemscope itemtype="http://schema.org/Person">
       <% if @administrator_permission || current_user == @user %>
-  <%= link_to edit_user_profile_path(@user), title: 'Редактировать профиль', class: 'right' do %>
-    <i class="fi-page-edit"></i>
-  <% end %>
+        <%= link_to edit_user_profile_path(@user), title: 'Редактировать профиль', class: 'right' do %>
+          <i class="fi-page-edit"></i>
+        <% end %>
+        <% if @administrator_permission %>
+          <span>&nbsp;</span>
+          <%= link_to published_toggle_user_profile_path(@user), title: 'Опубликовать', class: 'right', method: :put do %>
+            <i class="fi-eye"></i>
+          <% end %>
+        <% end %>
       <% end %>
     <% unless @profile.full_name.empty? %>
       <h1><span itemprop="name"><%= @profile.full_name %></span></h1>
       <%= render partial: 'articles/first_image_attachment', locals: {image_attachment: @last_image_attachment, dimension: '150x150' } if @last_image_attachment %>
       <p><%= [(@profile.degree.name if @profile.degree), (@profile.academic_title.name if @profile.academic_title)].compact.join(', ') %>
-      <div class="text-justify"><%= sanitize_full(autosub_details @profile.about) if @profile.about %></div>
+      <% if @profile.published || current_user == @user || @administrator_permission %>
+        <div class="text-justify <%= 'pink' unless @profile.published %>"><%= sanitize_full(autosub_details @profile.about) if @profile.about %></div>
+      <% end %>
       <dl>
   <% if @posts.count > 0 %>
   <dt>Занимаемые должности</dt>

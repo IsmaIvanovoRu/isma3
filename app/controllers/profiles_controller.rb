@@ -1,8 +1,8 @@
 class ProfilesController < UsersController
   skip_before_filter :authenticate_user!, only: [:show]
-  skip_before_filter :require_administrator, only: [:show, :edit, :update, :destroy,]
-  before_action :set_user, only: [:show, :edit, :update, :destroy, :new, :create]
-  before_action :set_profile, only: [:show, :edit, :update, :destroy]
+  skip_before_filter :require_administrator, only: [:show, :edit, :update, :destroy]
+  before_action :set_user, only: [:show, :edit, :update, :destroy, :new, :create, :published_toggle]
+  before_action :set_profile, only: [:show, :edit, :update, :destroy, :published_toggle]
   before_action :can, only: [:edit, :update, :destroy]
   before_action :set_degrees, only: [:new, :edit]
   before_action :set_academic_titles, only: [:new, :edit]
@@ -73,6 +73,11 @@ class ProfilesController < UsersController
     end
   end
   
+  def published_toggle
+    @profile.toggle!(:published)
+    redirect_to :back
+  end
+  
   private
   def set_user
     @user = User.includes(:divisions).includes(:posts).includes(:profile).find(params[:user_id])
@@ -83,7 +88,8 @@ class ProfilesController < UsersController
   end
   
   def profile_params
-    params.require(:profile).permit(:id, :user_id, :first_name, :middle_name, :last_name, :degree_id, :academic_title_id, :phone, :about, :entrant, :email, :discipline, :qualification, :development, :general_experience, :special_experience)
+    params[:profile][:published] = false unless current_user_moderator?
+    params.require(:profile).permit(:id, :user_id, :first_name, :middle_name, :last_name, :degree_id, :academic_title_id, :phone, :about, :entrant, :email, :discipline, :qualification, :development, :general_experience, :special_experience, :published)
   end
   
   def current_user_owner?

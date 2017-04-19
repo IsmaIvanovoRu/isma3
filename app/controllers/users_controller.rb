@@ -1,9 +1,10 @@
 class UsersController < ApplicationController
   before_action :require_administrator
   before_action :set_user, only: [:show, :destroy]
+  before_action :user_params
   
   def index
-    @users = User.select(:id, :login).includes(:groups, :profile).order('profiles.updated_at DESC').paginate(page: params[:page])
+    @users = User.select(:id, :login).includes(:groups, :profile).order('profiles.updated_at DESC').where(profiles: user_params).paginate(page: params[:page])
     @all_users = User.select(:id, :login).order(:login).includes('profile')
     respond_to do |format|
       format.html
@@ -22,5 +23,9 @@ class UsersController < ApplicationController
   private
   def set_user
     @user = User.find(params[:id])
+  end
+  
+  def user_params
+    params.permit(:published)
   end
 end

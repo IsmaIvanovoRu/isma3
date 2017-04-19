@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170410114820) do
+ActiveRecord::Schema.define(version: 20170419104530) do
 
   create_table "academic_plans", force: :cascade do |t|
     t.string   "name",                   limit: 255
@@ -54,9 +54,9 @@ ActiveRecord::Schema.define(version: 20170410114820) do
 
   create_table "achievement_categories", force: :cascade do |t|
     t.string   "name",        limit: 255
-    t.text     "description", limit: 65535
-    t.datetime "created_at",                null: false
-    t.datetime "updated_at",                null: false
+    t.text     "description", limit: 16777215
+    t.datetime "created_at",                   null: false
+    t.datetime "updated_at",                   null: false
   end
 
   create_table "achievement_results", force: :cascade do |t|
@@ -71,10 +71,10 @@ ActiveRecord::Schema.define(version: 20170410114820) do
     t.integer  "achievement_category_id", limit: 4
     t.integer  "achievement_result_id",   limit: 4
     t.date     "event_date"
-    t.text     "comment",                 limit: 65535
-    t.boolean  "published",                             default: false
-    t.datetime "created_at",                                            null: false
-    t.datetime "updated_at",                                            null: false
+    t.text     "comment",                 limit: 16777215
+    t.boolean  "published",                                default: false
+    t.datetime "created_at",                                               null: false
+    t.datetime "updated_at",                                               null: false
   end
 
   add_index "achievements", ["achievement_category_id"], name: "index_achievements_on_achievement_category_id", using: :btree
@@ -315,9 +315,9 @@ ActiveRecord::Schema.define(version: 20170410114820) do
 
   create_table "profiles", force: :cascade do |t|
     t.integer  "user_id",            limit: 4
-    t.string   "first_name",         limit: 255,   default: "", null: false
+    t.string   "first_name",         limit: 255,   default: "",   null: false
     t.string   "middle_name",        limit: 255,   default: ""
-    t.string   "last_name",          limit: 255,   default: "", null: false
+    t.string   "last_name",          limit: 255,   default: "",   null: false
     t.integer  "degree_id",          limit: 4
     t.integer  "academic_title_id",  limit: 4
     t.string   "phone",              limit: 255,   default: ""
@@ -330,6 +330,7 @@ ActiveRecord::Schema.define(version: 20170410114820) do
     t.text     "development",        limit: 65535
     t.integer  "general_experience", limit: 4,     default: 0
     t.integer  "special_experience", limit: 4,     default: 0
+    t.boolean  "published",                        default: true
   end
 
   add_index "profiles", ["academic_title_id"], name: "index_profiles_on_academic_title_id", using: :btree
