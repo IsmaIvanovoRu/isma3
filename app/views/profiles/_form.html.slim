@@ -5,17 +5,17 @@
       ul
         - @usererrors.full_messages.each do |msg|
           li= msg
+  .row
+    .large-4.small-12.columns
+      = f.label :last_name, 'Фамилия'
+      = f.text_field :last_name
+    .large-4.small-12.columns
+      = f.label :first_name, 'Имя'
+      = f.text_field :first_name
+    .large-4.small-12.columns
+      = f.label :middle_name, 'Отчество'
+      = f.text_field :middle_name
   - if @moderator_permission
-    .row
-      .large-4.small-12.columns
-        = f.label :last_name, 'Фамилия'
-        = f.text_field :last_name
-      .large-4.small-12.columns
-        = f.label :first_name, 'Имя'
-        = f.text_field :first_name
-      .large-4.small-12.columns
-        = f.label :middle_name, 'Отчество'
-        = f.text_field :middle_name
     .row
       .large-6.small-12.columns
         = f.label 'degree_id', 'Ученая степень'
