@@ -13,7 +13,7 @@
     <%= yield(:vk_card) if content_for?(:vk_card) %>
     <%= favicon_link_tag 'favicon.ico' %>
     <%= auto_discovery_link_tag(:atom, root_url + 'feed.atom', {title: "ИвГМА"}) %>
-    <%= stylesheet_link_tag    "application" %>
+    <%= stylesheet_link_tag "application" %>
     <%= csrf_meta_tags %>
   </head>
 
@@ -33,6 +33,13 @@
       <section class="top-bar-section">
 	<!-- Right Nav Section -->
 	<ul class="right">
+          <% if @moderator_permission && @achievements_count > 0 %>
+            <li>
+              <%= link_to achievements_path + "?achievement[published]=0", title: "Достижений на модерацию - #{@achievements_count}" do %>
+                <i class="fi-list" style="color: red;"></i>
+              <% end %>
+            </li>
+          <% end %>
           <% if @moderator_permission && @profiles_count > 0 %>
             <li>
               <%= link_to users_path + "?published=0", title: "Профилей с изменениями - #{@profiles_count}" do %>

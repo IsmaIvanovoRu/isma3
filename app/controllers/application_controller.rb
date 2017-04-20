@@ -14,6 +14,7 @@ class ApplicationController < ActionController::Base
   before_filter :current_user_moderator?
   before_action :new_comments
   before_action :profiles_count
+  before_action :achievements_count
   before_action :set_blind
   layout :set_layout
 
@@ -125,6 +126,10 @@ class ApplicationController < ActionController::Base
   
   def profiles_count
     @profiles_count = @moderator_permission ? Profile.where(published: false).count : 0
+  end
+  
+  def achievements_count
+    @achievements_count = @moderator_permission ? Achievement.where(published: false).count : 0
   end
   
   def set_blind
