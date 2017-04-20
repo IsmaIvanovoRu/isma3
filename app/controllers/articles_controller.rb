@@ -6,7 +6,7 @@ class ArticlesController < ApplicationController
   before_action :set_article_types, only: [:new, :edit, :create, :update]
   before_action :set_divisions, only: [:new, :edit, :create, :update]
   before_action :set_groups, only: [:new, :edit, :create, :update]
-  before_action :set_employees, only: [:new, :edit, :create, :update]
+  before_action :set_writers, only: [:new, :edit, :create, :update]
   before_action :can_view, only: [:show]
 
   # GET /articles
@@ -168,7 +168,7 @@ class ArticlesController < ApplicationController
       params.require(:article).permit(:title, :content, :article_type_id, :exp_date, :published, :fixed, :commentable, :division_id, :group_id, :user_id, :message, :skip_frontend)
     end
     
-    def set_employees
-      @employees = User.includes(:profile).joins(:groups).where(groups: {name: 'employees'}).sort_by{|user| user.profile.full_name} if current_user_moderator?
+    def set_writers
+      @writers = User.includes(:profile).joins(:groups).where(groups: {name: 'writers'}).sort_by{|user| user.profile.full_name} if current_user_moderator?
     end
 end

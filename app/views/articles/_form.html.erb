@@ -23,10 +23,10 @@
     <%= f.label "Поле для переписки с модератором" %>
     <%= f.text_field :message %>
   </div>
-  <% unless @employees.nil? %>
+  <% unless @writers.nil? %>
   <div class="field">
     <%= f.label 'Можно выбрать пользователя от имени которого, будет опубликован материал.' %>
-    <%= f.select :user_id, options_for_select = @employees.collect {|p| [p.profile.full_name, p.id] }, {:include_blank => ''} %>
+    <%= f.select :user_id, options_for_select = @writers.collect {|p| [p.profile.full_name, p.id] }, {:include_blank => ''} %>
   </div>
   <% end %>
   <% unless @divisions.nil? %>
