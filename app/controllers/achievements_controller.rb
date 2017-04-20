@@ -32,7 +32,7 @@ class AchievementsController < ApplicationController
           end
         end
       end
-      redirect_to :back, notice: "Achievement added successfully"
+      redirect_to user_profile_path(@achievement.user), notice: "Achievement added successfully"
     else
       render action: 'new', alert: "Achievement can't be created"
     end
