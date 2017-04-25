@@ -85,7 +85,7 @@
     </section>
     </div>
   <% end %>
-  <% unless @user.groups.include?(9) %>
+  <% if @user.groups.map(&:id).include?(9) %>
     <% if !@achievements.empty? || current_user == @user %>
       <div class="small-12 large-12 columns">
         <section class="panel clearfix">
