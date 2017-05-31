@@ -15,6 +15,12 @@
 <dl>
   <% @users.each do |user| %>
     <dt>
+      <% if @administrator_permission %>
+        <span>&nbsp;</span>
+        <%= link_to published_toggle_user_profile_path(user), title: 'Опубликовать', class: 'right', method: :put do %>
+          <i class="fi-eye"></i>
+        <% end %>
+      <% end %>
     <%= user.login %>
 | дата регистрации: <%= user.created_at.to_date %>
     </dt>
