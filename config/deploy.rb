@@ -2,7 +2,7 @@
 lock '3.6.1'
 
 set :application, 'isma'
-set :repo_url, 'git@github.com:Infinitiv/isma3.git'
+set :repo_url, 'git@github.com:IsmaIvanovoRu/isma3.git'
 set :branch, 'testing'
 
 # Default branch is :master
