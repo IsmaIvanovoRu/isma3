@@ -223,9 +223,9 @@
       <div class="row">
         <div class="large-12 columns">
 	  <address>
-	  <div itemscope itemtype="http://schema.org/Organization">
+	  <div itemscope itemtype="https://schema.org/Organization">
             <span itemprop="name"><%= @details_hash['Полное наименование академии'][:value] %></span>
-            <div itemprop="address" itemscope itemtype="http://schema.org/PostalAddress">
+            <div itemprop="address" itemscope itemtype="https://schema.org/PostalAddress">
               <span itemprop="streetAddress"><%= @details_hash['Адрес'][:value] %>, </span>
               телефон: <span itemprop="telephone"><%= @details_hash['Телефон'][:value] %></span>
             </div>
@@ -243,11 +243,11 @@
         <a class="close-reveal-modal">&#215;</a>
       </div>
     <% end %>
-    <%= stylesheet_link_tag    "http://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,400,700&subset=latin,cyrillic" %>
+    <%= stylesheet_link_tag    "https://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,400,700&subset=latin,cyrillic" %>
     <%= javascript_include_tag "vendor/modernizr" %>
     <%= javascript_include_tag "application" %>
     <% if controller_name == 'divisions' && action_name == 'show' %>
-        <%= javascript_include_tag "http://api-maps.yandex.ru/2.0-stable/?load=package.standard&lang=ru-RU" %>
+        <%= javascript_include_tag "https://api-maps.yandex.ru/2.0-stable/?load=package.standard&lang=ru-RU" %>
     <%= javascript_include_tag "ymap" %>
     <% end %>
     <% if controller_name == 'articles' && action_name == 'show' %>
