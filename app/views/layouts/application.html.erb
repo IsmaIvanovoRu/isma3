@@ -33,6 +33,11 @@
       <section class="top-bar-section">
 	<!-- Right Nav Section -->
 	<ul class="right">
+          <li>
+            <%= link_to article_url(2722), title: "English" do %>
+              <%= image_tag 'flag_gb.png', size: '24x24' %>
+            <% end %>
+          </li>
           <% if @moderator_permission && @achievements_count > 0 %>
             <li>
               <%= link_to achievements_path + "?achievement[published]=0", title: "Достижений на модерацию - #{@achievements_count}" do %>
