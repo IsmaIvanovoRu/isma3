@@ -7,12 +7,20 @@
 #   cities = City.create([{name: ''Chicago' }', '{name: ''Copenhagen' }]')
 #   Mayor.create(name: ''Emanuel'', 'city: 'cities.first')
 
-AchievementCategory.create(name: "Учеба", description: "именные стипендии, премии, грамоты, медали и т. п., полученные за особые успехи в учебе")
-AchievementCategory.create(name: "Наука", description: "конференции, гранты, научные конкурсы, выставки, патенты и прочие достижения в научной сфере")
-AchievementCategory.create(name: "Спорт", description: "соревнования, конкурсы, значки ГТО и т.п.")
-AchievementCategory.create(name: "Общественная деятельность", description: "волонтерство, творчество, политика и прочие достижения в общественной сфере")
-AchievementCategory.create(name: "Прочее", description: "различные достижения, не относящиеся ни к одной из перечисленных категорий")
-AchievementResult.create(name: "Победитель")
-AchievementResult.create(name: "Призер")
-AchievementResult.create(name: "Участник")
-DivisionType.create(id: 6, name: "student")
+Division.where("name LIKE ?", "%ординатура%").each{|d| d.update_attributes(name: d.name.gsub("1", "2"))}
+
+users = User.joins(:divisions).where("divisions.name LIKE ?", "%группа 6%")
+users.each do |user|
+  user.groups.delete(Group.find_by_name("students"))
+  user.groups.delete(Group.find_by_name("writers"))
+  user.groups << Group.find_by_name("graduates")
+  user.divisions.where("divisions.name LIKE ?", "%группа 6%").each{|d| d.destroy}
+end
+
+Division.where("name LIKE ?", "%группа 5%").each{|d| d.update_attributes(name: d.name.gsub("5 курса", "6 курса"))}
+Division.where("name LIKE ?", "%группа 4%").each{|d| d.update_attributes(name: d.name.gsub("4 курса", "5 курса"))}
+Division.where("name LIKE ?", "%группа 3%").each{|d| d.update_attributes(name: d.name.gsub("3 курса", "4 курса"))}
+Division.where("name LIKE ?", "%группа 2%").each{|d| d.update_attributes(name: d.name.gsub("2 курса", "3 курса"))}
+Division.where("name LIKE ?", "%группа 1%").each{|d| d.update_attributes(name: d.name.gsub("1 курса", "2 курса"))}
+Division.where("name LIKE ? AND name LIKE ?", "%аспирантура%", "%1 год%").each{|d| d.update_attributes(name: d.name.gsub("1", "2"))}
+Division.where("name LIKE ? AND name LIKE ?", "%аспирантура%", "%2 год%").each{|d| d.update_attributes(name: d.name.gsub("2", "3"))}
