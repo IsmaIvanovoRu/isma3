@@ -1,0 +1,19 @@
+= form_for @accreditation do |f|
+  - if @accreditation.errors.any?
+    ul
+      - @accreditation.errors.full_messages.each do |msg|
+        li= msg
+  .field
+    = f.label 'Номер свидетельства'
+    = f.text_field :number
+  .field
+    = f.label 'Дата выдачи'
+    = f.text_field :date_of_issue, class: 'datepicker'
+  .field
+    = f.label 'Дата окончания действия'
+    = f.text_field :expiration_date, class: 'datepicker'
+  .
+    = f.label 'Ссылка на свидетельство'
+    = f.select :attachment_id, option_for_select = @attachments.collect {|p| [p.title, p.id]}, {include_blank: ''}
+  .actions>
+    = f.submit 'Добавить', class: 'button tiny'

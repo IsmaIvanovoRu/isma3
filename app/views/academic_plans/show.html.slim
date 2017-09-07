@@ -1,0 +1,13 @@
+section.panel
+  .
+    = link_to 'К списку учебных планов', academic_plans_path
+  .right
+    - if @moderator_permission
+      = link_to edit_academic_plan_path(@academic_plan), title: 'Редактировать' do
+        i.fi-page-edit
+      = link_to @academic_plan, title: 'Удалить', method: :delete, data: { confirm: 'Are you sure?' } do
+        i.fi-x
+  h1= link_to @academic_plan.name, @academic_plan.attachment, target: 'blank'
+  dl
+    dt Учебный план
+    dd= link_to @academic_plan.educational_program.educational_standart ? "#{@academic_plan.educational_program.name} (#{@academic_plan.educational_program.educational_standart.level})" : "#{@academic_plan.educational_program.name}", @academic_plan.educational_program
