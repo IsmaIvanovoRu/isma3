@@ -1,0 +1,13 @@
+section.panel
+  .
+    = link_to 'К списку учебных графиков', academic_schedules_path
+  .right
+    - if @moderator_permission
+      = link_to edit_academic_schedule_path(@academic_schedule), title: 'Редактировать' do
+        i.fi-page-edit
+      = link_to @academic_schedule, title: 'Удалить', method: :delete, data: { confirm: 'Are you sure?' } do
+        i.fi-x
+  h1= link_to @academic_schedule.name, @academic_schedule.attachment, target: 'blank'
+  dl
+    dt Учебный план
+    dd= link_to @academic_schedule.educational_program.educational_standart ? "#{@academic_schedule.educational_program.name} (#{@academic_schedule.educational_program.educational_standart.level})" : "#{@academic_schedule.educational_program.name}", @academic_schedule.educational_program
