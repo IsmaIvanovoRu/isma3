@@ -1,0 +1,16 @@
+= form_for @academic_plan do |f|
+  - if @academic_plan.errors.any?
+    ul
+      - @academic_plan.errors.full_messages.each do |msg|
+        li= msg
+  .field
+    = f.label 'Название'
+    = f.text_field :name
+  .field
+    = f.label 'Образовательная программа'
+    = f.select :educational_program_id, option_for_select = @educational_programs.collect {|p| ["#{p.name} (#{p.educational_standart ? p.educational_standart.level : 'нет стандарта'})", p.id]}, {include_blank: ''}
+  .field
+    = f.label 'Ссылка на учебный план'
+    = f.select :attachment_id, option_for_select = @attachments.collect {|p| ["#{p.title} (#{p.id})", p.id]}, {include_blank: ''}
+  .actions
+    = f.submit 'Добавить', class: 'button tiny'
