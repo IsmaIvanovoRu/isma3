@@ -1,5 +1,5 @@
-- content_for :description
+- content_for :description do
   - unless @article.division.nil?
-    = "Статья #{@article.title}, написанная #{RussianInflect.inflect(@article.division.name, :instrumental)}"
+    = "Статья #{@article.title}, написанная #{RussianInflect.inflect(@article.division.name, :instrumental)}" 
   - else
     = "Статья #{@article.title}, написанная #{Petrovich(lastname: @article.user.profile.last_name, firstname: @article.user.profile.first_name, middlename: @article.user.profile.middle_name).instrumental.to_s}" if @article.user && @article.user.profile

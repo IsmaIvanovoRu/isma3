@@ -1,0 +1,26 @@
+header
+  .left
+    - if @moderator_permission
+      = link_to published_toggle_article_path(article), title: (article.published ? 'Снять с публикации' : 'Опубликовать'), method: :put do
+        i.fi-eye
+    - if @writer_permission
+      - if @moderator_permission || current_user == article.user
+        = link_to up_article_path(article), title: 'Поднять наверх', method: :put do
+          i.fi-arrow-up
+        = link_to edit_article_path(article), title: 'Редактировать статью' do
+          i.fi-page-edit
+        = link_to article, title: 'Удалить статью', method: :delete, data: { confirm: 'Are you sure?' } do
+          i.fi-x
+  .superscript.clearfix
+    - case article.updated_at.to_date
+    - when Time.now.to_date
+      |  сегодня в 
+      = time_tag article.updated_at, :pubdate => true, :format => '%R'
+    - else
+      = time_tag article.updated_at, :pubdate => true, :format => '%e.%m.%Y %R'
+  - if controller.controller_name == 'articles' && controller.action_name == 'show'
+    h1
+      = autosub_details_in_title(article.title)
+  - else
+    h1.index
+      = link_to autosub_details_in_title(article.title), article

@@ -1,0 +1,20 @@
+= render partial: 'title'
+= render partial: 'description'
+section.panel
+  - if @moderator_permission || current_user == @article.user || @article.published
+    = render partial: 'twitter_card'
+    = render partial: 'vk_card'
+    = render partial: 'article', locals: { article: @article, dimension: '150x150', composition: {header: true, content: true, footer: true, truncate: false} }
+  - else
+    h1 Статья еще не опубликована или снята с публикации
+  - if @moderator_permission || (@writer_permission && current_user == @article.user)
+    h2 Прикрепить новый файл
+    = form_for(@attachment) do |f|
+      div style = "display: none;"
+        = text_field_tag :article_id, @article.id
+      .filefild
+        = f.select :id, options_for_select = @attachments.collect {|p| [p.title, p.id] }, {:include_blank => ''}
+      .filefild
+        = f.file_field :file, name: 'attachment[files][]', id: :files, multiple: true
+      .actions
+        = f.submit 'Прикрепить файл', class: "button tiny"
