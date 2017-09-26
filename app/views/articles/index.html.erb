@@ -1,9 +1,0 @@
-<div class="row">
-  <div class="<%= (@articles['news'].count > 0 || @articles['articles'].count > 0) ? 'large-4 large-push-8 columns' : 'small-12 large-12 columns' %>">
-    <%= render partial: 'block', locals: {title: 'Анонсы', articles: @articles['announcements'], composition: {header: true, content: true, footer: true, truncate: true} } unless @articles['announcements'].empty? %>
-  </div>
-  <div class="<%= @articles['announcements'].count > 0 ? 'large-8 large-pull-4 columns' : 'small-12 large-12 columns' %>">
-    <%= render partial: 'block', locals: {title: 'Новости', articles: @articles['news'], composition: {header: true, content: true, footer: true, truncate: true} } unless @articles['news'].empty? %>
-    <%= render partial: 'block', locals: {title: 'Материалы', articles: @articles['articles'], composition: {header: true, content: false, footer: true, truncate: true} } unless @articles['articles'].empty? %>
-  </div>
-</div>

@@ -1,0 +1,20 @@
+.subscript
+  - if controller_name == 'articles' && action_name == 'show'
+    ul.inline-list.left
+      li
+        = link_to 'http://isma.ivanovo.ru/feed.atom', target: 'blank' do
+          = image_tag('application-rss-xml.png', title: 'Подписаться на RSS', size: '16x16')
+      li
+        = link_to 'https://twitter.com/share?text=' + (content_for?(:title) ? yield(:title).split(' | ').first.strip : "ИвГМА") + '&?url=' + article_url(article) + '&?via=@IsmaIvanovoRu', target: 'blank' do
+          = image_tag('twitter_logo_blue.png', title: "Поделиться в Twitter", size: '16x16')
+      li
+        = link_to 'http://vk.com/share.php?url=' + article_url(article), target: 'blank' do
+          = image_tag('vk16.png', title: 'Поделиться Вконтакте', size: '16x16')
+      li
+        = link_to 'https://plus.google.com/share?url=' + article_url(article), target: 'blank' do
+          = image_tag('gplus-16.png', title: 'Поделиться в Google+', size: '16x16')
+  = article.division_id.nil? ? (article.user && article.user.profile ? (link_to article.user.profile.full_name, user_profile_path(article.user)) : '') : (@division == article.division ? '' : (link_to article.division.name, article.division if article.division))
+hr
+- if controller.controller_name == 'articles' && controller.action_name == 'show'
+  = render partial: 'articles/image_attachments', locals: { article: article } if @image_attachments.count > 0
+  = render partial: 'articles/not_image_attachments', locals: { article: article } if @not_image_attachments.count > 0

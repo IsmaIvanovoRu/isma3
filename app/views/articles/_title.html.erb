@@ -1,3 +1,0 @@
-<% content_for :title do %>
-  <%= "#{@article.title} | #{!@article.division_id.nil? ? @article.division.name : (@article.user.profile.full_name if @article.user && @article.user.profile)}" %>
-<% end %>

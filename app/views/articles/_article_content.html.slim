@@ -1,0 +1,17 @@
+= article.first_image_attachment ? (render partial: 'articles/first_image_attachment', locals: {article: article, image_attachment: article.first_image_attachment, dimension: dimension }) : (image_tag('default.jpg', class: 'th left', size: '75x75') if controller_name == 'articles' && action_name == 'index' && article.article_type.name == 'news')
+- if (@moderator_permission || current_user == article.user) && !article.message.empty?
+  .text-justify.clearfix.alert-box.radius
+    .wrap
+      - if @moderator_permission || current_user == article.user
+        = link_to cleanup_message_article_path(article), title: "Очистить", method: :put do
+          i.fi-x[style="color: white; margin-top: -14px; margin-right: -24px;"]
+    = article.message
+- if composition[:truncate]
+  .text-justify.clearfix
+    - if article.content.length > 800
+      p= sanitize_truncate(autosub_details article.content)
+    - else
+      = sanitize_full(autosub_details article.content)
+- else
+  .text-justify.clearfix
+    = sanitize_full(autosub_details article.content)

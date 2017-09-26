@@ -1,0 +1,8 @@
+- media_class_1 = (@articles['news'].count + @articles['articles'].count > 0) ? 'large-4 large-push-8 columns' : 'small-12 large-12 columns'
+- media_class_2 = @articles['announcements'].count > 0 ? 'large-8 large-pull-4 columns' : 'small-12 large-12 columns'
+.row
+  . class=media_class_1
+    = render partial: 'block', locals: {title: 'Анонсы', articles: @articles['announcements'], composition: {header: true, content: true, footer: true, truncate: true} } unless @articles['announcements'].empty?
+  . class=media_class_2
+    = render partial: 'block', locals: {title: 'Новости', articles: @articles['news'], composition: {header: true, content: true, footer: true, truncate: true} } unless @articles['news'].empty?
+    = render partial: 'block', locals: {title: 'Материалы', articles: @articles['articles'], composition: {header: true, content: false, footer: true, truncate: true} } unless @articles['articles'].empty?

@@ -1,5 +1,0 @@
-<article class="clearfix <%= 'pink' unless article.published %>">
-  <%= render partial: '/articles/article_header', locals: { article: article, composition: composition } if composition[:header] %>
-  <%= render partial: '/articles/article_content', locals: { article: article, dimension: dimension, composition: composition } if composition[:content] %>
-  <%= render partial: '/articles/article_footer', locals: { article: article, composition: composition } if composition[:footer] %>
-</article>
