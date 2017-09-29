@@ -1,0 +1,47 @@
+- content_for :title do
+  |  Сведения об образовательной организации 
+section.panel
+  h1 Структура и органы управления образовательной организацией
+  p= autosub_details("&amp;[Навигация сведений об образовательной организации]").html_safe
+  h2 Структура образовательной организации ГБОУ ВПО ИвГМА Минздрава России:
+  - @divisions.each do |type, divisions|
+    - unless type == 'обучающиеся'
+      = content_tag(:a, '', name: type, style: 'padding-top: 45px;')
+      h2
+        = first_letter_upcase(type.dup)
+      ul.no-bullet
+        - divisions.each do |division|
+          li[itemprop='structOrgUprav']
+            h3
+              = link_to first_letter_upcase(division.name), division, itemprop: 'name'
+              - if @administrator_permission
+                = link_to edit_division_path(division), title: 'Редактировать подразделение' do
+                  i.fi-page-edit
+            dl[style="padding-left: 1em;"]
+              dt Информация о руководителях структурных подразделений:
+              dd
+                - division.head.each do |h|
+                  dl
+                    dt Ф.И.О.
+                    dd[itemprop="fio"]
+                      = h.user.profile.full_name if h.user
+                      span[itemprop='post']= ", #{h.name}"
+                      - unless type == 'обучающиеся'
+                        - unless h.phone.empty?
+                          dt Телефон:
+                          dd= multi_number_to_phone(h.phone, country_code: 7, area_code: true) if h && !h.phone.empty?
+                        - unless division.email.empty?
+                          dt Адрес электронной почты:
+                          dd= mail_to division.email, division.email, itemprop: 'email' if h && !division.email.empty?
+                    dt Местонахождение структурного подразделения:
+                    dd
+                      address[itemprop="addressStr"]
+                        = full_address(division.address) if division.address
+                    - unless division.url.empty?
+                      dt Адрес официального сайта в сети интернет
+                      dd = link_to division.url, division.url, target: 'blank', itemprop: 'site'
+                    - else
+                      dt = link_to "Адрес официального сайта в сети интернет", division, itemprop: 'site'
+                    - unless division.reference.nil?
+                      dt Положение о структурном подразделении
+                      dd = link_to 'Положение', attachment_path(division.reference), target: 'blank', itemprop: "divisionClauseDocLink"
