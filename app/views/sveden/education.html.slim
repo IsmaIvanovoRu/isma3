@@ -2,24 +2,25 @@ section.panel
   h1 Образование
   p= autosub_details("&amp;[Навигация сведений об образовательной организации]").html_safe
   p Ивановская государственная медицинская академия имеет право на осуществление образовательной деятельности в сфере высшего профессионального образования (лицензия Федеральной службы по надзору в сфере образования и науки № 0702 от 24 апреля 2013 года).
-  p= autosub_details("&amp;[Информация о языках, на которых осуществляется образование]").html_safe
-  table
+  table(itemprop='eduAccred')
     caption Реализуемые программы
     thead
       tr
+        th Код образовательной программы
         th Образовательная программа
         th Уровень образования
-        th Форма обучения
         th Срок обучения
         th Срок действия государственной аккредитации образовательной программы
+        th Язык обучения
     tbody
       - @educational_programs.each do |educational_program|
         tr
-          td(itemprop='OOP_main')= link_to educational_program.name, educational_program if educational_program.name
-          td(itemprop='EduLevel')= educational_program.level if educational_program.level
-          td(itemprop='EduForm')= educational_program.form if educational_program.form
-          td(itemprop='LearningTerm')= educational_program.duration if educational_program.duration
-          td(itemprop='DateEnd')= (educational_program.accreditation.expiration_date ? educational_program.accreditation.expiration_date.strftime("%d.%m.%Y") : 'бессрочно') if educational_program.accreditation
+          td(itemprop='eduCode')=  educational_program.code
+          td(itemprop='eduName')= link_to educational_program.name, educational_program if educational_program.name
+          td(itemprop='eduLevel')= educational_program.level if educational_program.level
+          td(itemprop='learningTerm')= educational_program.duration if educational_program.duration
+          td(itemprop='dateEnd')= (educational_program.accreditation.expiration_date ? educational_program.accreditation.expiration_date.strftime("%d.%m.%Y") : 'бессрочно') if educational_program.accreditation
+          td(itemprop='language') русский
   table
     caption Реализуемые образовательные программы с указанием учебных дисциплин (модулей), практик, предусмотренных соответствующей образовательной программой
     thead
@@ -35,28 +36,29 @@ section.panel
       - n = 0
       - @educational_programs.each do |educational_program|
         -n += 1
-        tr
+        tr(itemprop='eduOp')
           td(style="vertical-align: top;")= n
           td(style="vertical-align: top;")
-            .(itemprop='OOP_main')= link_to educational_program.name, educational_program.attachment, target: 'blank' if educational_program.name
-            .(itemprop='EduLavel')= educational_program.level if educational_program.level
-            .(itemprop='EduCode')= educational_program.code if educational_program.code
+            .(itemprop='eduName')= link_to educational_program.name, educational_program.attachment, target: 'blank', itemprop: 'opMain' if educational_program.name
+            .(itemprop='eduLevel')= educational_program.level if educational_program.level
+            .(itemprop='eduCode')= educational_program.code if educational_program.code
+            .(itemprop='eduForm')= educational_program.form if educational_program.form
           td(style="vertical-align: top;")
             ul
               - educational_program.academic_plans.each do |academic_plan|
-                li(itemprop='education_plan')= link_to academic_plan.name, academic_plan.attachment, target: 'blank'
+                li(itemprop='educationPlan')= link_to academic_plan.name, academic_plan.attachment, target: 'blank'
           td(style="vertical-align: top;")
             ul
               - educational_program.academic_schedules.each do |academic_schedule|
-                li(itemprop='education_shedule')= link_to academic_schedule.name, academic_schedule.attachment, target: 'blank'
+                li(itemprop='educationShedule')= link_to academic_schedule.name, academic_schedule.attachment, target: 'blank'
           td(style="vertical-align: top;")
             ul
               - educational_program.subjects.each do |subject|
-                li(itemprop='education_annotation')= link_to subject.name, subject.attachment, target: 'blank'
+                li(itemprop='educationAnnotation')= link_to subject.name, subject.attachment, target: 'blank'
           td(style="vertical-align: top;")
             ul
               - educational_program.practices.each do |practic|
-                li(itemprop='EduPr')= link_to practic.name, practic.attachment, target: 'blank'
+                li(itemprop='eduPr')= link_to practic.name, practic.attachment, target: 'blank'
           td(style="vertical-align: top;")
             ul
               - educational_program.methodological_supports.each do |methodological_support|
