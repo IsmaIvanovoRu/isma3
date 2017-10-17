@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170419104530) do
+ActiveRecord::Schema.define(version: 20171004103940) do
 
   create_table "academic_plans", force: :cascade do |t|
     t.string   "name",                   limit: 255
@@ -228,6 +228,7 @@ ActiveRecord::Schema.define(version: 20170419104530) do
     t.boolean  "public",                   default: false, null: false
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.boolean  "private",                  default: false
   end
 
   create_table "groups", force: :cascade do |t|
