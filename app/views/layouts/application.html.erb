@@ -95,15 +95,13 @@
 		  <li><%= link_to 'Добавить пункт меню', "#", "data-reveal-id" => 'add_menu' %></li>
 		  <li><%= link_to 'Меню', menus_path %></li>
 		  <li><%= link_to 'Пользователи', users_path %></li>
-		  <li><%= link_to 'Группы', groups_path %></li>
-		  <li><%= link_to 'Детали', details_path %></li>
-		  <li><%= link_to 'Вложения', attachments_path %></li>
 		  <li class="has-dropdown">
                     <%= link_to 'Образование', "#" %>
                     <ul class="dropdown">
                       <li><%= link_to 'Свидетельства об аккредитации', accreditations_path %></li>
                       <li><%= link_to 'Образовательные стандарты', educational_standarts_path %></li>
                       <li><%= link_to 'Образовательные программы', educational_programs_path %></li>
+                      <li><%= link_to 'Численность обучающихся', educational_program_numbers_path %></li>
                       <li><%= link_to 'Дисциплины', subjects_path %></li>
                       <li><%= link_to 'Учебные планы', academic_plans_path %></li>
                       <li><%= link_to 'Учебные графики', academic_schedules_path %></li>
@@ -119,6 +117,9 @@
 		  		<li><%= link_to 'Результаты достижеий', achievement_results_url %></li>
 		  	</ul>
 		  </li>
+		  <li><%= link_to 'Группы', groups_path %></li>
+		  <li><%= link_to 'Детали', details_path %></li>
+		  <li><%= link_to 'Вложения', attachments_path %></li>
 		<% end %>
 		<% if @moderator_permission %>
 		  <li><%= link_to 'Неопубликованные статьи', archives_path + "?published=0" %></li>

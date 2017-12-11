@@ -1,0 +1,41 @@
+section.panel
+  h1 Численность обучающихся
+  - if @moderator_permission
+    h2 Импорт численности обучающихся
+    = form_tag import_educational_program_numbers_path, multipart: true do
+      = file_field_tag :file
+      = submit_tag "Загрузить", class: 'button'
+  hr
+  .
+    = link_to "Добавить", new_educational_program_number_path, class: 'button'
+    table
+      thead
+        tr
+          th rowspan=2 Образовательная программа
+          th colspan=4 Количество обучающихся
+          th rowspan=2 Дата
+          th rowspan=2 Действия
+        tr
+          th за счет средств федерального бюджета
+          th за счет средств регионального бюджета
+          th за счет средств местного бюджета
+          th за счет средств физических лиц
+      tbody
+        - @educational_program_numbers.each do |educational_program_number|
+          tr
+            td
+              - if educational_program_number.educational_program.educational_standart
+                = link_to "#{educational_program_number.educational_program.name} (#{educational_program_number.educational_program.educational_standart.level})", educational_program_number.educational_program
+              - else 
+                = link_to "#{educational_program_number.educational_program.name}", educational_program_number.educational_program
+            td= educational_program_number.number_federal
+            td= educational_program_number.number_regional
+            td= educational_program_number.number_local
+            td= educational_program_number.number_personal
+            td= educational_program_number.date.strftime('%e.%m.%Y')
+            td
+              - if @moderator_permission
+                = link_to edit_educational_program_number_path(educational_program_number), title: 'Редактировать' do
+                  i.fi-page-edit
+                = link_to educational_program_number, title: 'Удалить', method: :delete, data: { confirm: 'Are you sure?' } do
+                  i.fi-x

@@ -3,24 +3,51 @@ section.panel
   p= autosub_details("&amp;[Навигация сведений об образовательной организации]").html_safe
   p Ивановская государственная медицинская академия имеет право на осуществление образовательной деятельности в сфере высшего профессионального образования (лицензия Федеральной службы по надзору в сфере образования и науки № 0702 от 24 апреля 2013 года).
   table(itemprop='eduAccred')
-    caption Реализуемые программы
+    caption Информация о сроке действия государственной аккредитации образовательной программы, о языках, на которых осуществляется образование (обучение)
     thead
       tr
-        th Код образовательной программы
-        th Образовательная программа
+        th Код
+        th Наименование специальности, направления подготовки
         th Уровень образования
-        th Срок обучения
-        th Срок действия государственной аккредитации образовательной программы
-        th Язык обучения
+        th Срок действия государственной аккредитации
+        th Языки, на которых осуществляется образование (обучение)
+        th Сведения о нормативных сроках обучения
     tbody
       - @educational_programs.each do |educational_program|
         tr
           td(itemprop='eduCode')=  educational_program.code
           td(itemprop='eduName')= link_to educational_program.name, educational_program if educational_program.name
           td(itemprop='eduLevel')= educational_program.level if educational_program.level
-          td(itemprop='learningTerm')= educational_program.duration if educational_program.duration
           td(itemprop='dateEnd')= (educational_program.accreditation.expiration_date ? educational_program.accreditation.expiration_date.strftime("%d.%m.%Y") : 'бессрочно') if educational_program.accreditation
           td(itemprop='language') русский
+          td(itemprop='learningTerm')= educational_program.duration if educational_program.duration
+  table
+    caption Информация о численности обучающихся по реализуемым образовательным программам за счет бюджетных ассигнований федерального бюджета, бюджетов субъектов Российской Федерации, местных бюджетов и по договорам об образовании за счет средств физических и (или) юридических лиц
+    thead
+      tr
+        th rowspan=2 Код
+        th rowspan=2 Наименование специальности, направления подготовки
+        th rowspan=2 Уровень образования
+        th rowspan=2 Форма обучения
+        th colspan=4 Численность обучающихся за счет (количество человек):
+      tr
+        th бюджетных ассигнований федерального бюджета
+        th бюджетов субъектов Российской Федерации
+        th местных бюджетов
+        th средств физических и (или) юридических лиц
+    tbody
+      - @educational_programs.each do |educational_program|
+        - educational_program_number = educational_program.educational_program_numbers.sort_by(&:date).last
+        - if educational_program_number
+          tr
+            td(itemprop='eduCode')=  educational_program.code
+            td(itemprop='eduName')= link_to educational_program.name, educational_program if educational_program.name
+            td(itemprop='eduLevel')= educational_program.level if educational_program.level
+            td(itemprop='eduForm')= educational_program.form if educational_program.form
+            td(itemprop='numberBFpriem')= educational_program_number.number_federal
+            td(itemprop='numberBRpriem')= educational_program_number.number_regional
+            td(itemprop='numberBMpriem')= educational_program_number.number_local
+            td(itemprop='numberPpriem')= educational_program_number.number_personal
   table
     caption Реализуемые образовательные программы с указанием учебных дисциплин (модулей), практик, предусмотренных соответствующей образовательной программой
     thead

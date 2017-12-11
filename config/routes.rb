@@ -104,6 +104,12 @@ Isma::Application.routes.draw do
   
   resources :educational_programs
   
+  resources :educational_program_numbers do
+    collection do
+      post :import
+    end
+  end
+  
   resources :academic_plans
   
   resources :academic_schedules
