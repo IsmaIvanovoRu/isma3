@@ -21,7 +21,7 @@ section.panel
           td(itemprop='dateEnd')= (educational_program.accreditation.expiration_date ? educational_program.accreditation.expiration_date.strftime("%d.%m.%Y") : 'бессрочно') if educational_program.accreditation
           td(itemprop='language') русский
           td(itemprop='learningTerm')= educational_program.duration if educational_program.duration
-  table
+  table(itemprop='eduChislen')
     caption Информация о численности обучающихся по реализуемым образовательным программам за счет бюджетных ассигнований федерального бюджета, бюджетов субъектов Российской Федерации, местных бюджетов и по договорам об образовании за счет средств физических и (или) юридических лиц
     thead
       tr
