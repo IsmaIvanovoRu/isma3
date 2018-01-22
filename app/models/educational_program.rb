@@ -8,6 +8,7 @@ class EducationalProgram < ActiveRecord::Base
   has_many :methodological_supports, dependent: :destroy
   has_many :subjects, dependent: :destroy
   has_many :educational_program_numbers
+  has_many :educational_program_priems
   
   validates :name, :level, :form, :duration, :attachment_id, presence: true
   validates :attachment_id, numericality: { integer_only: true }
