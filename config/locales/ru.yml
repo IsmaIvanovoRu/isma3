@@ -276,12 +276,6 @@ ru:
     feedback_was_successfully_updated: 'Запись обновлена'
     search_is_temporary_unavaliable: "Поиск временно недоступен"
     your_profile_is_empty: "Ваш профиль не заполнен"
-  pdf_generators:
-    page: 'Страница'
-    of: 'из'
-    divisions: 'Структурные подразделения'
-    managment: 'Управление'
-    phone_book: 'Телефонный справочник'
     
 
   # remove these aliases after 'activemodel' and 'activerecord' namespaces are removed from Rails repository
