@@ -3,7 +3,7 @@
 section.panel
   h1 Структура и органы управления образовательной организацией
   p= autosub_details("&amp;[Навигация сведений об образовательной организации]").html_safe
-  h2 Структура образовательной организации ГБОУ ВПО ИвГМА Минздрава России:
+  h2 Структура образовательной организации
   - @divisions.each do |type, divisions|
     - unless type == 'обучающиеся'
       = content_tag(:a, '', name: type, style: 'padding-top: 45px;')
