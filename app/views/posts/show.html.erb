@@ -26,7 +26,7 @@
       <h2>Преподаваемые дисциплины</h2>
       <ul>
         <% @post.subjects.each do |subject| %>
-          <li><%= link_to "#{subject.name} (#{subject.educational_program.name})", remove_subject_division_post_path(@division, @post) + "?subject_id=#{subject.id}", method: :delete %></li>
+          <li><%= link_to "#{subject.name} (#{subject.educational_program.full_name})", remove_subject_division_post_path(@division, @post) + "?subject_id=#{subject.id}", method: :delete %></li>
         <% end %>
       </ul> 
     <% end %>
@@ -34,10 +34,10 @@
     <h2>Другие дисциплины</h2>
     <ul>
       <% @division_subjects.each do |subject| %>
-        <li><%= link_to "#{subject.name} (#{subject.educational_program.name})", add_subject_division_post_path(@division, @post) + "?subject_id=#{subject.id}" %></li>
+        <li><%= link_to "#{subject.name} (#{subject.educational_program.full_name})", add_subject_division_post_path(@division, @post) + "?subject_id=#{subject.id}" %></li>
       <% end %>
       <% @subjects.each do |subject| %>
-        <li><%= link_to "#{subject.name} (#{subject.educational_program.name})", add_subject_division_post_path(@division, @post) + "?subject_id=#{subject.id}" %></li>    
+        <li><%= link_to "#{subject.name} (#{subject.educational_program.full_name})", add_subject_division_post_path(@division, @post) + "?subject_id=#{subject.id}" %></li>    
       <% end %>
     </ul>
     <% end %>
@@ -46,7 +46,7 @@
       <h2>Преподаваемые дисциплины</h2>
       <ul>
         <% @post.subjects.each do |subject| %>
-          <li><%= "#{subject.name} (#{subject.educational_program.name})" %></li>
+          <li><%= "#{subject.name} (#{subject.educational_program.full_name})" %></li>
         <% end %>
       </ul> 
     <% end %>

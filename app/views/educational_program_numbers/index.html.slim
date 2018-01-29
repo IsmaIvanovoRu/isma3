@@ -25,9 +25,9 @@ section.panel
           tr
             td
               - if educational_program_number.educational_program.educational_standart
-                = link_to "#{educational_program_number.educational_program.name} (#{educational_program_number.educational_program.educational_standart.level})", educational_program_number.educational_program
+                = link_to "#{educational_program_number.educational_program.full_name} (#{educational_program_number.educational_program.educational_standart.level})", educational_program_number.educational_program
               - else 
-                = link_to "#{educational_program_number.educational_program.name}", educational_program_number.educational_program
+                = link_to "#{educational_program_number.educational_program.full_name}", educational_program_number.educational_program
             td= educational_program_number.number_federal
             td= educational_program_number.number_regional
             td= educational_program_number.number_local

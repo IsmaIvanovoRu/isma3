@@ -7,7 +7,7 @@ section.panel
         i.fi-page-edit
       = link_to @educational_program, title: 'Удалить', method: :delete, data: { confirm: 'Are you sure?' } do
         i.fi-x
-  h1= link_to @educational_program.name, @educational_program.attachment, target: 'blank'
+  h1= link_to @educational_program.full_name, @educational_program.attachment, target: 'blank'
   dl
     dt Уровень обучения
     dd= @educational_program.level

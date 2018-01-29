@@ -6,4 +6,4 @@
 #
 #   cities = City.create([{name: ''Chicago' }', '{name: ''Copenhagen' }]')
 #   Mayor.create(name: ''Emanuel'', 'city: 'cities.first')
-Detail.where.not(tag_name: nil).each{|d| d.update_attributes(tag_name: d.tag_name.camelcase(:lower))}
+EducationalProgram.all.each{|ep| ep.update_attributes(name: ep.name.gsub(/.*\d{2}\s/, '').gsub(/\s\(.*\)/, ''))}

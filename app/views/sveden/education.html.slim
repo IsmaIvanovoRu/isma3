@@ -16,7 +16,7 @@ section.panel
       - @educational_programs.each do |educational_program|
         tr
           td(itemprop='eduCode')=  educational_program.code
-          td(itemprop='eduName')= link_to educational_program.name, educational_program if educational_program.name
+          td(itemprop='eduName')= link_to educational_program.full_name, educational_program if educational_program.full_name
           td(itemprop='eduLevel')= educational_program.level if educational_program.level
           td(itemprop='dateEnd')= (educational_program.accreditation.expiration_date ? educational_program.accreditation.expiration_date.strftime("%d.%m.%Y") : 'бессрочно') if educational_program.accreditation
           td(itemprop='language') русский
@@ -41,7 +41,7 @@ section.panel
         - if educational_program_number
           tr
             td(itemprop='eduCode')=  educational_program.code
-            td(itemprop='eduName')= link_to educational_program.name, educational_program if educational_program.name
+            td(itemprop='eduName')= link_to educational_program.full_name, educational_program if educational_program.full_name
             td(itemprop='eduLevel')= educational_program.level if educational_program.level
             td(itemprop='eduForm')= educational_program.form if educational_program.form
             td(itemprop='numberBFpriem')= educational_program_number.number_federal
@@ -69,7 +69,7 @@ section.panel
         - if educational_program_priem
           tr
             td(itemprop='eduCode')=  educational_program.code
-            td(itemprop='eduName')= link_to educational_program.name, educational_program if educational_program.name
+            td(itemprop='eduName')= link_to educational_program.full_name, educational_program if educational_program.full_name
             td(itemprop='eduLevel')= educational_program.level if educational_program.level
             td(itemprop='eduForm')= educational_program.form if educational_program.form
             td(itemprop='numberBFpriem')= educational_program_priem.number_federal
@@ -95,7 +95,7 @@ section.panel
         tr(itemprop='eduOp')
           td(style="vertical-align: top;")= n
           td(style="vertical-align: top;")
-            .(itemprop='eduName')= link_to educational_program.name, educational_program.attachment, target: 'blank', itemprop: 'opMain' if educational_program.name
+            .(itemprop='eduName')= link_to educational_program.full_name, educational_program.attachment, target: 'blank', itemprop: 'opMain' if educational_program.full_name
             .(itemprop='eduLevel')= educational_program.level if educational_program.level
             .(itemprop='eduCode')= educational_program.code if educational_program.code
             .(itemprop='eduForm')= educational_program.form if educational_program.form

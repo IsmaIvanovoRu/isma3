@@ -9,4 +9,4 @@ section.panel
             i.fi-page-edit
           = link_to academic_schedule, title: 'Удалить', method: :delete, data: { confirm: 'Are you sure?' } do
             i.fi-x
-      li= link_to academic_schedule.educational_program.educational_standart ? "#{academic_schedule.name} - #{academic_schedule.educational_program.name} (#{academic_schedule.educational_program.educational_standart.level})" : "#{academic_schedule.name} - #{academic_schedule.educational_program.name}", academic_schedule
+      li= link_to academic_schedule.educational_program.educational_standart ? "#{academic_schedule.name} - #{academic_schedule.educational_program.full_name} (#{academic_schedule.educational_program.educational_standart.level})" : "#{academic_schedule.name} - #{academic_schedule.educational_program.full_name}", academic_schedule
