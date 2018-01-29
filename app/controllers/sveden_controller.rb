@@ -19,7 +19,7 @@ class SvedenController < ApplicationController
   end
   
   def education
-    @educational_programs = EducationalProgram.includes(:educational_standart, :educational_program_numbers, {academic_plans: :attachment}, {academic_schedules: :attachment}, {practices: :attachment}, {subjects: :attachment}, :accreditation, {methodological_supports: :attachment}, :attachment)
+    @educational_programs = EducationalProgram.includes(:educational_standart, :educational_program_numbers, {academic_plans: :attachment}, {academic_schedules: :attachment}, {practices: :attachment}, {subjects: :attachment}, :accreditation, {methodological_supports: :attachment}, :attachment).order('level DESC').order([:code, :name])
   end
   
   def eduStandarts
