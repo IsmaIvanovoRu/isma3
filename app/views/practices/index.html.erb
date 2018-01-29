@@ -15,7 +15,7 @@
           <% end %>
         <% end %>
       </div>
-        <li><%= link_to practice.educational_program.educational_standart ? "#{practice.name} - #{practice.educational_program.name} (#{practice.educational_program.educational_standart.level})" : "#{practice.name} - #{practice.educational_program.name}", practice %></li>
+        <li><%= link_to practice.educational_program.educational_standart ? "#{practice.name} - #{practice.educational_program.full_name} (#{practice.educational_program.educational_standart.level})" : "#{practice.name} - #{practice.educational_program.full_name}", practice %></li>
     <% end %>
   </ul>
 </section>

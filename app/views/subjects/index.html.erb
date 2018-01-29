@@ -15,7 +15,7 @@
           <% end %>
         <% end %>
       </div>
-        <li><%= link_to subject.educational_program.educational_standart ? "#{subject.name} - #{subject.educational_program.name} (#{subject.educational_program.educational_standart.level})" : "#{subject.name} - #{subject.educational_program.name}", subject %></li>
+        <li><%= link_to subject.educational_program.educational_standart ? "#{subject.name} - #{subject.educational_program.full_name} (#{subject.educational_program.educational_standart.level})" : "#{subject.name} - #{subject.educational_program.full_name}", subject %></li>
     <% end %>
   </ul>
 </section>

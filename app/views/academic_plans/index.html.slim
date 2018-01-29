@@ -11,6 +11,6 @@ section.panel
           = link_to academic_plan, title: 'Удалить', method: :delete, data: { confirm: 'Are you sure?' } do
             i.fi-x
       - if academic_plan.educational_program.educational_standart
-        li= link_to "#{academic_plan.name} - #{academic_plan.educational_program.name} (#{academic_plan.educational_program.educational_standart.level})", academic_plan
+        li= link_to "#{academic_plan.name} - #{academic_plan.educational_program.full_name} (#{academic_plan.educational_program.educational_standart.level})", academic_plan
       - else 
-        li= link_to "#{academic_plan.name} - #{academic_plan.educational_program.name}", academic_plan
+        li= link_to "#{academic_plan.name} - #{academic_plan.educational_program.full_name}", academic_plan
