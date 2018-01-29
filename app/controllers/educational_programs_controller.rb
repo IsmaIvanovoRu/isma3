@@ -7,7 +7,7 @@ class EducationalProgramsController < ApplicationController
   before_action :options_for_select, only: [:new, :edit]
   
   def index
-    @educational_programs = EducationalProgram.order(:level, :name).load
+    @educational_programs = EducationalProgram.order('level DESC').order([:code, :name])
   end
   
   def show
