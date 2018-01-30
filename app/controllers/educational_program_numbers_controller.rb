@@ -55,6 +55,6 @@ class EducationalProgramNumbersController < ApplicationController
   end
   
   def options_for_select
-    @educational_programs = EducationalProgram.order(:name).load
+    @educational_programs = EducationalProgram.order('level DESC').order([:code, :name])
   end
 end
