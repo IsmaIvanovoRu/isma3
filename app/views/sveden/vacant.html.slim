@@ -1,0 +1,40 @@
+section.panel
+  h1 Вакантные места для приема (перевода)
+  p= autosub_details("&amp;[Навигация сведений об образовательной организации]").html_safe
+  table(itemprop='vacant')
+    thead
+      tr
+        th rowspan=2 Код
+        th rowspan=2 Наименование образовательной программы
+        th rowspan=2 Наименование специальности, направления подготовки
+        th rowspan=2 Уровень образования
+        th rowspan=2 Курс
+        th rowspan=2 Форма обучения
+        th colspan=4 Количество вакантных мест для приема (перевода) на места, финансируемые:
+      tr
+        th бюджетных ассигнований федерального бюджета
+        th бюджетов субъектов Российской Федерации
+        th местных бюджетов
+        th по договорам об образовании за счет средств физических и (или) юридических лиц
+    tbody
+      - @educational_programs.each do |educational_program|
+        - educational_program.educational_program_vacants.group_by(&:stage).each do |stage, vacants|
+          - educational_program_vacant = vacants.sort_by(&:date).last
+          - if educational_program_vacant
+            tr
+              td=  educational_program.code
+              td(itemprop='nameProgVacant')= link_to educational_program.name, educational_program if educational_program.name
+              td(itemprop='specialVacant')= link_to educational_program.name, educational_program if educational_program.name
+              - case educational_program.level
+                - when 'специалитет'
+                  td(itemprop='specialityVacant')= educational_program.level if educational_program.level
+                - when 'аспирантура'
+                  td(itemprop='postgraduateVacant')= educational_program.level if educational_program.level
+                - else
+                  td= educational_program.level if educational_program.level                
+              td= educational_program_vacant.stage
+              td= educational_program.form if educational_program.form
+              td(itemprop='numberBFVacant')= educational_program_vacant.number_federal
+              td(itemprop='numberBRVacant')= educational_program_vacant.number_regional
+              td(itemprop='numberBMVacant')= educational_program_vacant.number_local
+              td(itemprop='numberPVacant')= educational_program_vacant.number_personal

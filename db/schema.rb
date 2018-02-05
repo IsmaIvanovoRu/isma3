@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180122100258) do
+ActiveRecord::Schema.define(version: 20180205071604) do
 
   create_table "academic_plans", force: :cascade do |t|
     t.string   "name",                   limit: 255
@@ -222,6 +222,20 @@ ActiveRecord::Schema.define(version: 20180122100258) do
 
   add_index "educational_program_priems", ["educational_program_id"], name: "index_educational_program_priems_on_educational_program_id", using: :btree
 
+  create_table "educational_program_vacants", force: :cascade do |t|
+    t.integer  "educational_program_id", limit: 4
+    t.integer  "stage",                  limit: 4, default: 0
+    t.integer  "number_federal",         limit: 4, default: 0
+    t.integer  "number_regional",        limit: 4, default: 0
+    t.integer  "number_local",           limit: 4, default: 0
+    t.integer  "number_personal",        limit: 4, default: 0
+    t.date     "date"
+    t.datetime "created_at",                                   null: false
+    t.datetime "updated_at",                                   null: false
+  end
+
+  add_index "educational_program_vacants", ["educational_program_id"], name: "index_educational_program_vacants_on_educational_program_id", using: :btree
+
   create_table "educational_programs", force: :cascade do |t|
     t.string   "name",                    limit: 255
     t.string   "code",                    limit: 255
@@ -403,6 +417,7 @@ ActiveRecord::Schema.define(version: 20180122100258) do
   add_foreign_key "achievements", "users"
   add_foreign_key "educational_program_numbers", "educational_programs"
   add_foreign_key "educational_program_priems", "educational_programs"
+  add_foreign_key "educational_program_vacants", "educational_programs"
   add_foreign_key "educational_programs", "accreditations"
   add_foreign_key "educational_programs", "attachments"
   add_foreign_key "educational_programs", "educational_standarts"

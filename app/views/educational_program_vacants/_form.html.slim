@@ -1,0 +1,28 @@
+= form_for @educational_program_vacant do |f|
+  - if @educational_program_vacant.errors.any?
+    ul
+      - @educational_program_vacant.errors.full_messages.each do |msg|
+        li= msg
+  .field
+    = f.label 'Курс'
+    = f.number_field :stage
+  .field
+    = f.label 'За счет федерального бюджета'
+    = f.number_field :number_federal
+  .field
+    = f.label 'За счет регионального бюджета'
+    = f.number_field :number_regional
+  .field
+    = f.label 'За счет местного бюджета'
+    = f.number_field :number_local
+  .field
+    = f.label 'За счет частных лиц'
+    = f.number_field :number_personal
+  .field
+    = f.label 'Дата предоставления информации'
+    = f.date_field :date, value: Time.now.to_date
+  .field
+    = f.label 'Образовательная программа'
+    = f.select :educational_program_id, option_for_select = @educational_programs.collect {|p| ["#{p.full_name} (#{p.educational_standart ? p.educational_standart.level : 'нет стандарта'})", p.id]}, {include_blank: ''}
+  .actions
+    = f.submit 'Добавить', class: 'button tiny'

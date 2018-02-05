@@ -19,7 +19,7 @@ class SvedenController < ApplicationController
   end
   
   def education
-    @educational_programs = EducationalProgram.includes(:educational_standart, :educational_program_numbers, {academic_plans: :attachment}, {academic_schedules: :attachment}, {practices: :attachment}, {subjects: :attachment}, :accreditation, {methodological_supports: :attachment}, :attachment).order('level DESC').order([:code, :name])
+    @educational_programs = EducationalProgram.includes(:educational_standart, :educational_program_numbers, :educational_program_priems, {academic_plans: :attachment}, {academic_schedules: :attachment}, {practices: :attachment}, {subjects: :attachment}, :accreditation, {methodological_supports: :attachment}, :attachment).order('level DESC').order([:code, :name])
   end
   
   def eduStandarts
@@ -60,6 +60,6 @@ class SvedenController < ApplicationController
   end
   
   def vacant
-    redirect_to article_path(1152)
+    @educational_programs = EducationalProgram.includes(:educational_program_vacants).order('level DESC').order([:code, :name])
   end
 end

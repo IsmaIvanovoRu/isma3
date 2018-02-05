@@ -113,6 +113,12 @@ Isma::Application.routes.draw do
     end
   end
   
+  resources :educational_program_vacants do
+    collection do
+      post :import
+    end
+  end
+  
   resources :academic_plans
   
   resources :academic_schedules
