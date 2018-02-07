@@ -1,7 +1,10 @@
 section.panel
   h1 Материально-техническое обеспечение и оснащённость образовательного процесса
   p= autosub_details("&amp;[Навигация сведений об образовательной организации]").html_safe
-  table(itemprop='')
+  
+  
+  
+  table
     caption Cведения о наличии библиотек, объектов спорта, об условиях питания и охраны здоровья обучающихся
     thead
       tr
@@ -54,3 +57,56 @@ section.panel
         td 160
         td(itemprop='mealsOvz') Столовая расположена  на цокольном этаже в главном корпусе академии. Обеспечена возможность выдачи питания на первом этаже главного корпуса.
   p(itemprop='mealsDocLink')= link_to 'Ссылка на копию документа, содержащего сведения об условиях питания обучающихся', attachment_path(16036), target: 'blank'
+
+  table
+    caption Сведения о доступе к информационным системам и информационно-телекоммуникационным сетям
+    thead
+      tr
+        th Показатель
+        th Значение
+    tbody
+      tr(itemprop='purposeEios')
+        td Наличие в образовательной организации электронной информационно-образовательной среды:
+        td да
+      tr(itemprop='purposeInternet')
+        td Общее количество компьютеров с выходом в информационно-телекоммуникационную сеть «Интернет», к которым имеют доступ обучающиеся:
+        td 100
+      tr(itemprop='purposeEbs')
+        td Общее количество ЭБС, к которым имеют доступ обучающиеся (собственных или на договорной основе):
+        td 3
+      tr(itemprop='eoisOwn')
+        td Количество собственных электронных образовательных и информационных ресурсов:
+        td 2
+      tr(itemprop='eoisSide')
+        td Количество сторонних электронных образовательных и информационных ресурсов:
+        td 13
+      tr(itemprop='bdec')
+        td Количество баз данных электронного каталога:
+        td 8
+        
+  h2 Перечень электронных образовательных ресурсов
+  ul(itemprop='erList')
+    li= link_to 'Электронная библиотека ИвГМА', 'http://libisma.ru',  target: 'blank'
+    li БД «MedArt»
+    li СПС Консультант Плюс
+    li= link_to 'ЭБС «Консультант студента»', 'http://www.studmedlib.ru',  target: 'blank'
+    li= link_to 'БД «Консультант врача - Электронная медицинская библиотека»', 'http://www.rosmedlib.ru',  target: 'blank'
+    li= link_to 'ЭБС «Лань»', 'http://e.lanbook.com',  target: 'blank'
+    li= link_to 'БД «Web of Science»', 'http://apps.webofknowledge.com',  target: 'blank'
+    li= link_to 'Федеральная электронная медицинская библиотека (ФЭМБ)', 'www.feml.scsml.rssi.ru',  target: 'blank'
+    li= link_to 'Центральная Научная Медицинская Библиотека (ЦНМБ)', 'http://www.scsml.rssi.ru',  target: 'blank'
+    li= link_to 'Polpred.com, Med.polpred.com', 'http://polpred.com',  target: 'blank'
+    li= link_to 'Научная электронная библиотека elibrary.ru', 'http://elibrary.ru',  target: 'blank'
+    li= link_to 'Научная электронная библиотека «КИБЕРЛЕНИНКА»', 'http://cyberleninka.ru',  target: 'blank'
+    li= link_to 'Национальная электронная библиотека НЭБ', 'http://нэб.рф',  target: 'blank'
+    li= link_to 'Российская Государственная Библиотека (РГБ)', 'http://www.rsl.ru',  target: 'blank'
+    li= link_to 'Consilium Medicum', 'http://con-med.ru',  target: 'blank'
+    li= link_to 'MEDLINE', 'www.pubmed.gov',  target: 'blank'
+    li= link_to 'BioMed Central (ВМС)', 'www.biomedcentral.com',  target: 'blank'
+    li= link_to 'Министерство здравоохранения Российской Федерации', 'https://www.rosminzdrav.ru',  target: 'blank'
+    li= link_to 'Министерство образования Российской Федерации', 'http://минобрнауки.рф',  target: 'blank'
+    li= link_to 'Федеральный портал «Российское образование»', 'http://www.edu.ru',  target: 'blank'
+    li= link_to 'Единое окно доступа', 'http://window.edu.ru',  target: 'blank'
+    li= link_to 'Федеральный центр информационно-образовательных ресурсов', 'http://fcior.edu.ru',  target: 'blank'
+    li= link_to 'Всемирная организация здравоохранения', 'http://www.who.int/en',  target: 'blank'
+    
