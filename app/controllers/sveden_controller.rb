@@ -44,7 +44,6 @@ class SvedenController < ApplicationController
   end
 
   def objects
-    redirect_to article_path(1148)
   end
   
   def grants
