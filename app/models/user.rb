@@ -47,6 +47,7 @@ class User < ActiveRecord::Base
           if user.save!
             user.profile.import(row)
             if user_groups
+              user.groups = []
               user_groups.each{|group| user.groups << Group.where(name: group)}
             end
             if row['name']
