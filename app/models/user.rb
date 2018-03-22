@@ -20,6 +20,7 @@ class User < ActiveRecord::Base
   has_many :feedbacks
   has_many :comments
   has_many :achievements
+  has_many :achievement_categories, through: :achievements
    
   after_create :add_default_groups, :build_default_profile
   
