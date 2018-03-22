@@ -1,5 +1,5 @@
 class AchievementsController < ApplicationController
-  before_action :require_administrator, only: [:index, :published_toggle]
+  before_action :require_administrator, only: [:index, :published_toggle, :report]
   before_action :set_achievement, only: [:edit, :update, :published_toggle, :destroy, :achievement_owner?]
   before_action :set_selects, only: [:edit, :new, :update, :create]
   before_action :can, only: [:edit, :update, :destroy]
@@ -67,6 +67,15 @@ class AchievementsController < ApplicationController
   def destroy
     @achievement.destroy
     redirect_to :back
+  end
+  
+  def report
+    @achievements = Achievement.joins(:groups).where(groups: {name: 'students'})
+    @achievements_count = @achievements.count
+    @achievements_users = User.includes(:achievements, :profile).joins(:achievements).where(achievements: {id: @achievements.map(&:id)}).uniq
+    @achievements_users_rank = @achievements_users.map{|u| [u, u.achievements.count]}.sort_by{|i| i.last}.reverse
+    @achievement_results = AchievementResult.includes(:achievements).load
+    @achievement_categories = AchievementCategory.includes(:achievements).load
   end
 
   private

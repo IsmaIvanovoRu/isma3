@@ -132,6 +132,9 @@ Isma::Application.routes.draw do
   resources :subjects
 
   resources :achievements do
+    collection do
+      get :report
+    end
     member do
       put :published_toggle
     end

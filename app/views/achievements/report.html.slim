@@ -1,0 +1,44 @@
+section.panel
+  h1 Отчет по индивидуальным достижениям обучающихся
+  table
+    caption Общая статистика
+    thead
+      tr
+        th Количество обучающихся с достижениями
+        th Общее количество достижений
+        th Среднее количество достижения на одного обучающегося
+    tbody
+      tr
+        td= @achievements_users.count
+        td= @achievements_count
+        td= (@achievements_count/@achievements_users.count.to_f).round(2)
+  .row
+    .small-12.large-4.columns
+      table
+        caption Статистика по результатам
+        thead
+          tr
+            - @achievement_results.each do |achievement_result|
+              th= achievement_result.name
+        tbody
+          tr
+            - @achievement_results.each do |achievement_result|
+              td= @achievements.where(achievement_result_id: achievement_result).count
+    .small-12.large-8.columns
+      table
+        caption Статистика по категориям
+        thead
+          tr
+            - @achievement_categories.each do |achievement_category|
+              th= achievement_category.name
+        tbody
+          tr
+            - @achievement_categories.each do |achievement_category|
+              td= @achievements.where(achievement_category_id: achievement_category).count
+              
+  .row
+    .small-12.large-12.columns
+      h2 Список лидеров по количеству достижений
+      ol
+        - @achievements_users_rank.first(50).each do |achievements_count|
+            li= link_to "#{achievements_count.first.profile.full_name} - #{achievements_count.last}", achievements_count.first
