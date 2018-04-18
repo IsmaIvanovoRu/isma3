@@ -52,7 +52,7 @@ class User < ActiveRecord::Base
               user_groups.each{|group| user.groups << Group.where(name: group)}
             end
             if row['name']
-                Division.import_from_row(row, user)
+              Division.import_from_row(row, user)
             end
           end
 	end

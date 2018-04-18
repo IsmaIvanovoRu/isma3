@@ -83,3 +83,5 @@ gem 'russian_inflect'
 gem 'petrovich'
 
 gem 'net-ldap'
+
+gem 'translit'
