@@ -7,7 +7,7 @@ module Devise
       def authenticate!
         if params[:user]
           ldap = Net::LDAP.new
-          ldap.host = ENV[LDAP_HOST]
+          ldap.host = ENV['LDAP_HOST']
           ldap.auth "cn=#{login},ou=Employees,dc=isma,dc=ivanovo,dc=ru", password
         
           if ldap.bind
