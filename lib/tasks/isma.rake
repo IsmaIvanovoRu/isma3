@@ -62,16 +62,21 @@ namespace :isma do
   task openldap_sync_employees: :environment do
     require 'net/ldap'
     
-    base_dn = "cn=#{ENV['LDAP_USER']},dc=isma,dc=ivanovo,dc=ru"
+    base_dn = "dc=isma,dc=ivanovo,dc=ru"
     extended_dn = "ou=people,#{base_dn}"
     unused_logins = []
 # настройка подключения к серверу openldap
     ldap = Net::LDAP.new
     ldap.host = ENV['LDAP_HOST']
-    ldap.auth base_dn, ENV['LDAP_PASS']
+    ldap.auth "cn=#{ENV['LDAP_USER']},#{base_dn}", ENV['LDAP_PASS']
     ldap.bind
 # выгрузка существующих записей
-    list = ldap.search(base: extended_dn, attributes: ['uid', 'cn', 'sn', 'givenname', 'mail']) || ldap.add(dn: extended_dn, attributes: {ou: 'people', objectClass: 'organizationalUnit'})
+    if ldap.search(base: extended_dn, attributes: ['uid', 'cn', 'sn', 'givenname', 'mail'])
+      list = ldap.search(base: extended_dn, attributes: ['uid', 'cn', 'sn', 'givenname', 'mail'])
+    else
+      ldap.add(dn: extended_dn, attributes: {ou: 'people', objectClass: 'organizationalUnit'})
+      list = ldap.search(base: extended_dn, attributes: ['uid', 'cn', 'sn', 'givenname', 'mail'])
+    end
     openldap_hash = {}
     list.each do |item|
       unless item[:uid].empty?
@@ -131,13 +136,13 @@ namespace :isma do
   task openldap_sync_students: :environment do
     require 'net/ldap'
     
-    base_dn = 'cn=admin,dc=isma,dc=ivanovo,dc=ru'
+    base_dn = "cn=#{ENV['LDAP_USER']},dc=isma,dc=ivanovo,dc=ru"
     extended_dn = "ou=people,#{base_dn}"
     unused_logins = []
 # настройка подключения к серверу openldap
     ldap = Net::LDAP.new
-    ldap.host = '10.0.3.218'
-    ldap.auth base_dn, 'admin'
+    ldap.host = ENV['LDAP_HOST']
+    ldap.auth base_dn, ENV['LDAP_PASS']
     ldap.bind
 # выгрузка существующих записей
     list = ldap.search(base: extended_dn, attributes: ['uid', 'cn', 'sn', 'givenname', 'mail']) || ldap.add(dn: extended_dn, attributes: {ou: 'people', objectClass: 'organizationalUnit'})
@@ -210,6 +215,28 @@ namespace :isma do
     end
     puts unused_rows
     puts "обработка студентов завершена, #{unused_rows.count - 1} строк не найдено"
+  end
+  
+  desc 'clear openldap db'
+  task openldap_clear: :environment do
+    require 'net/ldap'
+    
+    base_dn = "cn=#{ENV['LDAP_USER']},dc=isma,dc=ivanovo,dc=ru"
+    extended_dn = "ou=people,#{base_dn}"
+# настройка подключения к серверу openldap
+    ldap = Net::LDAP.new
+    ldap.host = ENV['LDAP_HOST']
+    ldap.auth base_dn, ENV['LDAP_PASS']
+    ldap.bind
+# выгрузка существующих записей
+    list = ldap.search(base: extended_dn, attributes: ['uid', 'cn', 'sn', 'givenname', 'mail'])
+    openldap_hash = {}
+    list.each do |item|
+      unless item[:uid].empty?
+        ldap.delete dn: item[:dn].first
+      end
+    end
+    
   end
   
   private
