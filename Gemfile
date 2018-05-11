@@ -74,7 +74,7 @@ gem 'jquery-ui-rails'
 
 gem 'yaml_db'
 
-gem 'sidekiq'
+gem 'sidekiq', '~> 4.0'
 
 gem 'slim'
 
