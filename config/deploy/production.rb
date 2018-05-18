@@ -4,9 +4,9 @@
 # server in each group is considered to be the first
 # unless any hosts have the primary property set.
 # Don't declare `role :all`, it's a meta role
-role :app, %w{isma}
-role :web, %w{isma}
-role :db,  %w{isma}
+role :app, %w{isma_production}
+role :web, %w{isma_production}
+role :db,  %w{isma_production}
 
 # Extended Server Syntax
 # ======================
@@ -14,7 +14,7 @@ role :db,  %w{isma}
 # definition into the server list. The second argument
 # something that quacks like a hash can be used to set
 # extended properties on the server.
-server 'isma', user: 'ubuntu', roles: %w{web app}
+server 'isma_production', user: 'ubuntu', roles: %w{web app}
 
 # you can set custom ssh options
 # it's possible to pass any option but you need to keep in mind that net/ssh understand limited list of options
