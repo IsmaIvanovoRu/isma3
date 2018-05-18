@@ -80,12 +80,13 @@ namespace :isma do
     openldap_hash = {}
     list.each do |item|
       unless item[:uid].empty?
-        openldap_hash[item[:uid]] = {}
-        openldap_hash[item[:uid]][:dn] = item[:dn]
-        openldap_hash[item[:uid]][:cn] = item[:cn] if item[:cn]
-        openldap_hash[item[:uid]][:sn] = item[:sn] if item[:sn]
-        openldap_hash[item[:uid]][:givenname] = item[:givenname] if item[:givenname]
-        openldap_hash[item[:uid]][:mail] = item[:mail] if item[:mail]
+        uid = item[:uid].first
+        openldap_hash[uid] = {}
+        openldap_hash[uid][:dn] = item[:dn].first
+        openldap_hash[uid][:cn] = item[:cn].first if item[:cn]
+        openldap_hash[uid][:sn] = item[:sn].first if item[:sn]
+        openldap_hash[uid][:givenname] = item[:givenname].first if item[:givenname]
+        openldap_hash[uid][:mail] = item[:mail].first if item[:mail]
       end
     end
 # выгрузка списка сотрудников с сайта
@@ -99,7 +100,7 @@ namespace :isma do
       puts "обрабатываем #{row['login']} - запись #{i} из #{employees_logins.last_row - 1}"
       employee = employees.find_by_login(row['login'])
       login_lat = Translit.convert(row['login'])
-      openldap_entry = openldap_hash[[login_lat]]
+      openldap_entry = openldap_hash[login_lat]
       if employee
         if openldap_entry
           puts 'обновляем атрибуты'
@@ -114,6 +115,7 @@ namespace :isma do
                                                                        cn: employee.login,
                                                                        sn: employee.profile.last_name,
                                                                        givenname: employee.profile.first_name,
+                                                                       employeeType: 'employee',
                                                                        objectClass: 'inetOrgPerson',
                                                                        userPassword: row['password'],
                                                                        mail: mail}
@@ -123,7 +125,7 @@ namespace :isma do
       else
         if openldap_entry
           puts 'удаляем запись'
-          ldap.delete dn: openldap_entry['dn']
+          ldap.delete dn: openldap_entry[:dn]
           puts ldap.get_operation_result.code == 0 ? 'запись успешно удалена' : "ошибка удаления записи - #{ldap.get_operation_result.message}"
         end
       end
@@ -221,16 +223,15 @@ namespace :isma do
   task openldap_clear: :environment do
     require 'net/ldap'
     
-    base_dn = "cn=#{ENV['LDAP_USER']},dc=isma,dc=ivanovo,dc=ru"
+    base_dn = "dc=isma,dc=ivanovo,dc=ru"
     extended_dn = "ou=people,#{base_dn}"
 # настройка подключения к серверу openldap
     ldap = Net::LDAP.new
     ldap.host = ENV['LDAP_HOST']
-    ldap.auth base_dn, ENV['LDAP_PASS']
+    ldap.auth "cn=#{ENV['LDAP_USER']},#{base_dn}", ENV['LDAP_PASS']
     ldap.bind
 # выгрузка существующих записей
     list = ldap.search(base: extended_dn, attributes: ['uid', 'cn', 'sn', 'givenname', 'mail'])
-    openldap_hash = {}
     list.each do |item|
       unless item[:uid].empty?
         ldap.delete dn: item[:dn].first
