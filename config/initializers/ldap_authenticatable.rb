@@ -6,9 +6,12 @@ module Devise
     class LdapAuthenticatable < Authenticatable
       def authenticate!
         if params[:user]
+          base_dn = "dc=isma,dc=ivanovo,dc=ru"
+          extended_dn = "ou=people,#{base_dn}"
           ldap = Net::LDAP.new
           ldap.host = ENV['LDAP_HOST']
-          ldap.auth "cn=#{login},ou=Employees,dc=isma,dc=ivanovo,dc=ru", password
+          login_lat = Translit.convert(login, :english)
+          ldap.auth "uid=#{login_lat},#{extended_dn}", password
         
           if ldap.bind
             user = User.find_or_create_by(login: login)
