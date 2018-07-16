@@ -44,6 +44,7 @@ class SvedenController < ApplicationController
   end
 
   def objects
+    @educational_programs = EducationalProgram.select(:id, :code, :name, :level).includes(:subjects, :classrooms).order('level DESC').order([:code, :name]).where(level: 'специалитет')
   end
   
   def grants

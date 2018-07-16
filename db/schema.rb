@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180205071604) do
+ActiveRecord::Schema.define(version: 20180716122137) do
 
   create_table "academic_plans", force: :cascade do |t|
     t.string   "name",                   limit: 255
@@ -142,6 +142,17 @@ ActiveRecord::Schema.define(version: 20180205071604) do
     t.integer "profile_id",    limit: 4, null: false
     t.integer "attachment_id", limit: 4, null: false
   end
+
+  create_table "classrooms", force: :cascade do |t|
+    t.integer  "subject_id",  limit: 4
+    t.text     "description", limit: 65535
+    t.text     "location",    limit: 65535
+    t.text     "equipment",   limit: 65535
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
+  end
+
+  add_index "classrooms", ["subject_id"], name: "index_classrooms_on_subject_id", using: :btree
 
   create_table "comments", force: :cascade do |t|
     t.integer  "article_id", limit: 4
@@ -415,6 +426,7 @@ ActiveRecord::Schema.define(version: 20180205071604) do
   add_foreign_key "achievements", "achievement_categories"
   add_foreign_key "achievements", "achievement_results"
   add_foreign_key "achievements", "users"
+  add_foreign_key "classrooms", "subjects"
   add_foreign_key "educational_program_numbers", "educational_programs"
   add_foreign_key "educational_program_priems", "educational_programs"
   add_foreign_key "educational_program_vacants", "educational_programs"

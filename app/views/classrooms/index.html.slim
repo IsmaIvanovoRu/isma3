@@ -1,0 +1,9 @@
+h1 Учебные помещения
+- if @moderator_permission
+    h2 Импорт учебных помещений
+    = form_tag import_classrooms_path, multipart: true do
+      = file_field_tag :file
+      = submit_tag "Загрузить", class: 'button'
+ul
+  - @classrooms.each do |classroom|
+    li= classroom.description
