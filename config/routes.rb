@@ -130,6 +130,12 @@ Isma::Application.routes.draw do
   resources :accreditations
   
   resources :subjects
+  
+  resources :classrooms do
+    collection do
+      post :import
+    end
+  end
 
   resources :achievements do
     collection do
