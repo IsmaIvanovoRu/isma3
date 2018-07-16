@@ -1,0 +1,49 @@
+= form_tag('#', method: 'post', id: 'entrant')
+  . v-if="errors.length"
+    ul.no-bullet
+      li v-for='error in errors' == '{{ error.message }}'
+        
+  fieldset
+    legend Персональные данные
+    .row
+      .large-4.small-12.columns
+        = label_tag :entrant_last_name
+          span Фамилия
+          = text_field_tag :entrant_last_name, nil, 'v-bind:placeholder': 'personal.lastNamePlaceholder', 'v-model.trim': 'personal.lastName', 'v-on:change': 'checkForm', class: 'error'
+        small.error v-if="checkLastName" == "{{ checkLastName }}"
+      .large-4.small-12.columns
+        = label_tag :entrant_first_name
+          span Имя
+          = text_field_tag :entrant_first_name, nil, 'v-bind:placeholder': 'personal.firstNamePlaceholder', 'v-model.trim': 'personal.firstName', 'v-on:change': 'checkForm', class: 'error'
+        small.error v-if="checkFirstName" == "{{ checkFirstName }}"
+      .large-4.small-12.columns
+        = label_tag :entrant_middle_name
+          span Отчество
+          = text_field_tag :entrant_middle_name, nil, 'v-bind:placeholder': 'personal.middleNamePlaceholder', 'v-model.trim': 'personal.middleName', 'v-on:change': 'checkForm', class: 'error'
+        small.error v-if="checkMiddleName" == "{{ checkMiddleName }}"
+    .row
+      .large-6.small-12.columns
+        = label_tag :birth_date
+          span Дата рождения
+          = date_field_tag :birth_date, nil, 'v-model': 'personal.birthDate', 'v-on:change': 'checkForm', class: 'error'
+        small.error v-if='checkBirthDate' == "{{ checkBirthDate }}"
+      .large-6.small-12.columns
+        = label_tag :gender, 'Пол'
+        = radio_button_tag :gender, 'женский'
+        = label_tag 'женский'
+        = radio_button_tag :gender, 'мужской'
+        = label_tag 'мужской'
+  fieldset
+    legend Документы, удостоверяющие личность
+    .row v-for="document in identityDocuments"
+      .large-4.small-12.columns
+        = label_tag :identity_document_type
+          span Вид документа
+          = text_field_tag :identity_document_type, nil, placeholder: 'Выберите вид документа', 'v-model.trim': 'document.documentType', 'v-on:change': 'checkForm', class: 'error'
+        small.error v-if="checkDocumentType" == "{{ checkDocumentType }}"
+      .large-4.small-12.columns
+        = label_tag :identity_document_serie
+          span Вид документа
+          = text_field_tag :identity_document_serie, nil, placeholder: 'Укажите серию документа', 'v-model.trim': 'document.documentSerie', 'v-on:change': 'checkForm', class: 'error'
+        small.error v-if="checkDocumentSerie" == "{{ checkDocumentSerie }}"
+    .btn @click="addIdentityDocument" Добавить документ

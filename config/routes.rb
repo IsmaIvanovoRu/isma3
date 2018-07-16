@@ -4,6 +4,10 @@ Isma::Application.routes.draw do
   
   resources :comments
   
+  controller :entrants do
+    get 'entrants/new' => :new
+  end
+  
   controller :sveden do
     get 'sveden' => :index
   end
