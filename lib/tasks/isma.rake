@@ -87,6 +87,8 @@ namespace :isma do
           ldap.replace_attribute(openldap_entry[:dn], :sn, employee.profile.last_name) || ldap.add_attribute(openldap_entry[:dn], :sn, employee.profile.last_name)
           ldap.replace_attribute(openldap_entry[:dn], :givenname, employee.profile.first_name) || ldap.add_attribute(openldap_entry[:dn], :givenname, employee.profile.first_name)
           ldap.replace_attribute(openldap_entry[:dn], :userPassword, row['password']) || ldap.add_attribute(openldap_entry[:dn], :userPassword, row['password'])
+          ldap.replace_attribute(openldap_entry[:dn], :objectClass, 'inetOrgPerson') || ldap.add_attribute(openldap_entry[:dn], :objectClass, 'inetOrgPerson')
+          ldap.replace_attribute(openldap_entry[:dn], :employeeType, 'employee') || ldap.add_attribute(openldap_entry[:dn], :employeeType, 'employee')
         else
           puts 'добавляем запись'
           mail = employee.profile.email.empty? ? 'no-reply@isma.ivanovo.ru' : employee.profile.email
@@ -94,8 +96,8 @@ namespace :isma do
                                                                        cn: employee.login,
                                                                        sn: employee.profile.last_name,
                                                                        givenname: employee.profile.first_name,
-                                                                       employeeType: 'employee',
                                                                        objectClass: 'inetOrgPerson',
+                                                                       employeeType: 'employee',
                                                                        userPassword: row['password'],
                                                                        mail: mail}
           puts ldap.get_operation_result.code == 0 ? 'запись успешно добавлена' : "ошибка добавления записи - #{ldap.get_operation_result.message}"
@@ -278,6 +280,7 @@ namespace :isma do
         openldap_hash[uid][:sn] = item[:sn].first if item[:sn]
         openldap_hash[uid][:givenname] = item[:givenname].first if item[:givenname]
         openldap_hash[uid][:mail] = item[:mail].first if item[:mail]
+        openldap_hash[uid][:employee_type] = item[:employeeType] if item[:employeeType]
       end
     end
     return openldap_hash
