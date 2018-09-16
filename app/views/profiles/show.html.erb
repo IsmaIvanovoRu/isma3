@@ -85,11 +85,12 @@
     </section>
     </div>
   <% end %>
-  <% if @user.groups.map(&:id).include?(9) %>
-    <% if !@achievements.empty? || current_user == @user %>
-      <div class="small-12 large-12 columns">
-        <section class="panel clearfix">
+  <% if !@achievements.empty? || current_user == @user %>
+    <div class="small-12 large-12 columns">
+      <section class="panel clearfix">
+        <% if @user.groups.map(&:id).include?(9) %>
           <%= link_to 'Добавить достижение', new_achievement_path, class: "button tiny" if current_user == @user %>
+        <% end %>
           <% unless @achievements.empty? %>
                 <h2>
                   Перечень достижений
@@ -110,9 +111,8 @@
                   </tbody>
                 </table>
           <% end %>
-        </section>
-      </div>
-    <% end %>
+      </section>
+    </div>
   <% end %>
   <% unless @articles.empty? %>
   <div class="small-12 large-12 columns">
