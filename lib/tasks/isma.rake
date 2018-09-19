@@ -124,14 +124,13 @@ namespace :isma do
 # выгрузка существующих записей
     list = ldap_search(ldap, extended_dn)
     openldap_hash = openldap_hash_create(list)
-     
 # выгрузка списка обучающихся с сайта
     students = load_users('students')
 # чтение актуального списка студентов
     students_1c = open_spreadsheet('students_1c.csv')
     unused_rows = []
 # чтение списка учетных записей обучающихся
-    students_logins = open_spreadsheet('data/students_logins.csv')
+    students_logins = open_spreadsheet('students_logins.csv')
     header = students_1c.row(1)
     (2..students_1c.last_row).each do |i|
       row = Hash[[header, students_1c.row(i)].transpose]
@@ -147,7 +146,7 @@ namespace :isma do
         else
           student_groups = student.groups.map(&:name)
           student.groups << Group.find_by_name('students') unless student_groups.include? 'students'
-          student.groups << Group.find_by_name('writers') unless student_groups.include? 'students'
+          student.groups << Group.find_by_name('writers') unless student_groups.include? 'writers'
           
           divisions = student.divisions.where(division_type_id: 6)
           speciality_inflect = case row['Направление (специальность)']
@@ -161,7 +160,7 @@ namespace :isma do
                                   'ординатура'
                                 end
           division_1c_name = row['Представление учебного плана'].match('Специалист') ? "#{row['Группа']} группа #{row['Курс']} курса #{speciality_inflect}" : "#{speciality_inflect} по специальности #{row['Направление (специальность)']}, #{row['Курс']} год обучения"
-          if divisions.first.name != division_1c_name
+          unless divisions.map(&:name).include?(division_1c_name)
             puts "переводим студента #{student.profile.full_name} в другую группу"
             division_new = Division.find_by_name(division_1c_name) || Division.create(name: division_1c_name)
             divisions.first.posts.where(user_id: student.id).first.update_attributes(division_id: division_new.id)
@@ -179,7 +178,6 @@ namespace :isma do
     divisions.each{|d| d.destroy}
     
     # чтение списка учетных записей студентов
-    students_logins = open_spreadsheet('students_logins.csv')
     unused_logins = students
     header = students_logins.row(1)
     (2..students_logins.last_row).each do |i|
