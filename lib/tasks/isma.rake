@@ -127,55 +127,57 @@ namespace :isma do
 # выгрузка списка обучающихся с сайта
     students = load_users('students')
 # чтение актуального списка студентов
-    students_1c = open_spreadsheet('students_1c.csv')
+    students_1c = open_spreadsheet('students_1c.csv') if file_exist?('students_1c.csv')
     unused_rows = []
 # чтение списка учетных записей обучающихся
     students_logins = open_spreadsheet('students_logins.csv')
-    header = students_1c.row(1)
-    (2..students_1c.last_row).each do |i|
-      row = Hash[[header, students_1c.row(i)].transpose]
-      puts "обрабатываем запись #{i} из #{students_1c.last_row - 1}"
-      login = student_login(row)
-      student = students.find_by_login(login)
-      openldap_entry = openldap_hash[login]
-      if student
-        if row['Состояние'] != 'Является студентом'
-          puts "удаляем студента #{student.profile.full_name} из группы"
-          student.groups.delete(Group.find_by_name('students'))
-          student.posts.each{|p| p.destroy if p.division.division_type_id == 6}
-        else
-          student_groups = student.groups.map(&:name)
-          student.groups << Group.find_by_name('students') unless student_groups.include? 'students'
-          student.groups << Group.find_by_name('writers') unless student_groups.include? 'writers'
-          
-          divisions = student.divisions.where(division_type_id: 6)
-          speciality_inflect = case row['Направление (специальность)']
-                                when 'Лечебное дело'
-                                  'лечебного факультета'
-                                when 'Педиатрия'
-                                  'педиатрического факультета'
-                                when 'Стоматология'
-                                  'стоматологического факультета'
-                                else
-                                  'ординатура'
-                                end
-          division_1c_name = row['Представление учебного плана'].match('Специалист') ? "#{row['Группа']} группа #{row['Курс']} курса #{speciality_inflect}" : "#{speciality_inflect} по специальности #{row['Направление (специальность)']}, #{row['Курс']} год обучения"
-          unless divisions.map(&:name).include?(division_1c_name)
-            puts "переводим студента #{student.profile.full_name} в другую группу"
-            division_new = Division.find_by_name(division_1c_name) || Division.create(name: division_1c_name)
-            divisions.first.posts.where(user_id: student.id).first.update_attributes(division_id: division_new.id)
+    if students_1c
+      header = students_1c.row(1)
+      (2..students_1c.last_row).each do |i|
+        row = Hash[[header, students_1c.row(i)].transpose]
+        puts "обрабатываем запись #{i} из #{students_1c.last_row - 1}"
+        login = student_login(row)
+        student = students.find_by_login(login)
+        openldap_entry = openldap_hash[login]
+        if student
+          if row['Состояние'] != 'Является студентом'
+            puts "удаляем студента #{student.profile.full_name} из группы"
+            student.groups.delete(Group.find_by_name('students'))
+            student.posts.each{|p| p.destroy if p.division.division_type_id == 6}
+          else
+            student_groups = student.groups.map(&:name)
+            student.groups << Group.find_by_name('students') unless student_groups.include? 'students'
+            student.groups << Group.find_by_name('writers') unless student_groups.include? 'writers'
+            
+            divisions = student.divisions.where(division_type_id: 6)
+            speciality_inflect = case row['Направление (специальность)']
+                                  when 'Лечебное дело'
+                                    'лечебного факультета'
+                                  when 'Педиатрия'
+                                    'педиатрического факультета'
+                                  when 'Стоматология'
+                                    'стоматологического факультета'
+                                  else
+                                    'ординатура'
+                                  end
+            division_1c_name = row['Представление учебного плана'].match('Специалист') ? "#{row['Группа']} группа #{row['Курс']} курса #{speciality_inflect}" : "#{speciality_inflect} по специальности #{row['Направление (специальность)']}, #{row['Курс']} год обучения"
+            unless divisions.map(&:name).include?(division_1c_name)
+              puts "переводим студента #{student.profile.full_name} в другую группу"
+              division_new = Division.find_by_name(division_1c_name) || Division.create(name: division_1c_name)
+              divisions.first.posts.where(user_id: student.id).first.update_attributes(division_id: division_new.id)
+            end
           end
+        else
+          unused_rows.push row
         end
-      else
-        unused_rows.push row
       end
+      puts unused_rows
+      puts "обработка студентов завершена, #{unused_rows.count - 1} строк не найдено"
+      puts 'Удаляем пустые группы'
+      divisions = Division.select(:id, :division_type_id).where(division_type_id: 6).select{|d| d.posts.count == 0}
+      puts "Будет удалено групп: #{divisions.count}"
+      divisions.each{|d| d.destroy}
     end
-    puts unused_rows
-    puts "обработка студентов завершена, #{unused_rows.count - 1} строк не найдено"
-    puts 'Удаляем пустые группы'
-    divisions = Division.select(:id, :division_type_id).where(division_type_id: 6).select{|d| d.posts.count == 0}
-    puts "Будет удалено групп: #{divisions.count}"
-    divisions.each{|d| d.destroy}
     
     # чтение списка учетных записей студентов
     unused_logins = students
@@ -192,6 +194,8 @@ namespace :isma do
           ldap.replace_attribute(openldap_entry[:dn], :sn, student.profile.last_name) || ldap.add_attribute(openldap_entry[:dn], :sn, student.profile.last_name)
           ldap.replace_attribute(openldap_entry[:dn], :givenname, student.profile.first_name) || ldap.add_attribute(openldap_entry[:dn], :givenname, student.profile.first_name)
           ldap.replace_attribute(openldap_entry[:dn], :userPassword, row['password']) || ldap.add_attribute(openldap_entry[:dn], :userPassword, row['password'])
+          ldap.replace_attribute(openldap_entry[:dn], :objectClass, 'inetOrgPerson') || ldap.add_attribute(openldap_entry[:dn], :objectClass, 'inetOrgPerson')
+          ldap.replace_attribute(openldap_entry[:dn], :employeeType, 'student') || ldap.add_attribute(openldap_entry[:dn], :employeeType, 'student')
         else
           puts 'добавляем запись'
           mail = student.profile.email.empty? ? 'no-reply@isma.ivanovo.ru' : student.profile.email
@@ -199,8 +203,8 @@ namespace :isma do
                                                                        cn: student.login,
                                                                        sn: student.profile.last_name,
                                                                        givenname: student.profile.first_name,
-                                                                       employeeType: 'student',
                                                                        objectClass: 'inetOrgPerson',
+                                                                       employeeType: 'student',
                                                                        userPassword: row['password'],
                                                                        mail: mail}
           puts ldap.get_operation_result.code == 0 ? 'запись успешно добавлена' : "ошибка добавления записи - #{ldap.get_operation_result.message}"
@@ -240,6 +244,10 @@ namespace :isma do
 # метод чтения csv-файла
   def open_spreadsheet(file)
     Roo::CSV.new([Rails.root, 'lib', 'tasks', 'data', file].join('/'))
+  end
+  
+  def file_exist?(file)
+    File.exist?([Rails.root, 'lib', 'tasks', 'data', file].join('/'))
   end
 
 # метод загрузки пользователей сайта
