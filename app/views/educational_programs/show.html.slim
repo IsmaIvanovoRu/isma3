@@ -49,8 +49,8 @@ section.panel
                     i.fi-page-edit
                   = link_to educational_program_number, title: 'Удалить', method: :delete, data: { confirm: 'Are you sure?' } do
                     i.fi-x
+  h2 Методическое обеспечение
   - unless @methodological_supports.empty?    
-    h2 Методическое обеспечение
     ul
       - @methodological_supports.each do |methodological_support|
         - if @moderator_permission
@@ -58,14 +58,14 @@ section.panel
             = link_to methodological_support, title: 'Удалить', method: :delete, data: { confirm: 'Are you sure?' } do
               i.fi-x
         li= link_to methodological_support.attachment.title_sen_dot, methodological_support.attachment
-    - if @moderator_permission
-      = form_for @methodological_support do |f|
-        .(style="display: none;")
-          = f.text_field :educational_program_id, value: @educational_program.id
-        .field
-          = f.select :attachment_id, option_for_select = @attachments.collect {|p| ["#{p.title} (#{p.id})", p.id]}, {include_blank: ''}
-        .action
-          = f.submit 'Добавить методические разработки', class: 'button tiny'
+  - if @moderator_permission
+    = form_for @methodological_support do |f|
+      .(style="display: none;")
+        = f.text_field :educational_program_id, value: @educational_program.id
+      .field
+        = f.select :attachment_id, option_for_select = @attachments.collect {|p| ["#{p.title} (#{p.id})", p.id]}, {include_blank: ''}
+      .action
+        = f.submit 'Добавить методические разработки', class: 'button tiny'
     h2 Дисциплины
     ul
       - @subjects.each do |subject|
