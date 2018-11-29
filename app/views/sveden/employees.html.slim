@@ -43,8 +43,8 @@ section.panel
               td= link_to employee.full_name, user_profile_path(employee.user), itemprop: 'fio'
               td itemprop='post'= @posts_hash[employee.user.id][:posts]
               td itemprop='teachingDiscipline'= @posts_hash[employee.user.id][:subjects].empty? ? employee.discipline : @posts_hash[employee.user.id][:subjects].mb_chars.downcase.to_s
-              td itemprop='teachingLevel' 'высшее образование'
-              td itemprop='teachingQual' ''
+              td itemprop='teachingLevel' высшее образование
+              td itemprop='teachingQual'
               td itemprop='degree'= employee.degree.name if employee.degree
               td itemprop='academStat'= employee.academic_title.name if employee.academic_title
               td itemprop='employeeQualification'= employee.qualification
