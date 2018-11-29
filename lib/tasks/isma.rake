@@ -136,9 +136,13 @@ namespace :isma do
       (2..students_1c.last_row).each do |i|
         row = Hash[[header, students_1c.row(i)].transpose]
         puts "обрабатываем запись #{i} из #{students_1c.last_row - 1}"
-        login = student_login(row)
-        student = students.find_by_login(login)
-        openldap_entry = openldap_hash[login]
+        logins = student_login(row)
+        student = nil
+        openldap_entry = nil
+        logins.each do |login|
+          student ||= students.find_by_login(login)
+          openldap_entry ||= openldap_hash[login]
+        end
         if student
           if row['Состояние'] != 'Является студентом'
             puts "удаляем студента #{student.profile.full_name} из группы"
@@ -295,13 +299,13 @@ namespace :isma do
   def student_login(row)
     case row['Направление (специальность)']
     when 'Лечебное дело'
-      row['Курс'].to_s == '1' ? "lech#{row['Зачетная книга']}" : "l#{row['Зачетная книга']}"
+      ["lech#{row['Зачетная книга']}", "l#{row['Зачетная книга']}"]
     when 'Педиатрия'
-      row['Курс'].to_s == '1' ? "ped#{row['Зачетная книга']}" : "p#{row['Зачетная книга']}"
+      ["ped#{row['Зачетная книга']}", "p#{row['Зачетная книга']}"]
     when 'Стоматология'
-      row['Курс'].to_s == '1' ? "stomat#{row['Зачетная книга']}" : "s#{row['Зачетная книга']}"
+      ["stomat#{row['Зачетная книга']}", "s#{row['Зачетная книга']}"]
     else
-      "ord#{row['Зачетная книга']}"
+      ["ord#{row['Зачетная книга']}", "o#{row['Зачетная книга']}"]
     end
   end
 end
