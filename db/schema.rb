@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180716122137) do
+ActiveRecord::Schema.define(version: 20190110100258) do
 
   create_table "academic_plans", force: :cascade do |t|
     t.string   "name",                   limit: 255
@@ -145,11 +145,11 @@ ActiveRecord::Schema.define(version: 20180716122137) do
 
   create_table "classrooms", force: :cascade do |t|
     t.integer  "subject_id",  limit: 4
-    t.text     "description", limit: 65535
-    t.text     "location",    limit: 65535
-    t.text     "equipment",   limit: 65535
-    t.datetime "created_at",                null: false
-    t.datetime "updated_at",                null: false
+    t.text     "description", limit: 16777215
+    t.text     "location",    limit: 16777215
+    t.text     "equipment",   limit: 16777215
+    t.datetime "created_at",                   null: false
+    t.datetime "updated_at",                   null: false
   end
 
   add_index "classrooms", ["subject_id"], name: "index_classrooms_on_subject_id", using: :btree
@@ -218,6 +218,19 @@ ActiveRecord::Schema.define(version: 20180716122137) do
   end
 
   add_index "educational_program_numbers", ["educational_program_id"], name: "index_educational_program_numbers_on_educational_program_id", using: :btree
+
+  create_table "educational_program_perevods", force: :cascade do |t|
+    t.integer  "educational_program_id", limit: 4
+    t.integer  "number_out_perevod",     limit: 4, default: 0
+    t.integer  "number_to_perevod",      limit: 4, default: 0
+    t.integer  "number_res_perevod",     limit: 4, default: 0
+    t.integer  "number_exp_perevod",     limit: 4, default: 0
+    t.date     "date"
+    t.datetime "created_at",                                   null: false
+    t.datetime "updated_at",                                   null: false
+  end
+
+  add_index "educational_program_perevods", ["educational_program_id"], name: "index_educational_program_perevods_on_educational_program_id", using: :btree
 
   create_table "educational_program_priems", force: :cascade do |t|
     t.integer  "educational_program_id", limit: 4
@@ -428,6 +441,7 @@ ActiveRecord::Schema.define(version: 20180716122137) do
   add_foreign_key "achievements", "users"
   add_foreign_key "classrooms", "subjects"
   add_foreign_key "educational_program_numbers", "educational_programs"
+  add_foreign_key "educational_program_perevods", "educational_programs"
   add_foreign_key "educational_program_priems", "educational_programs"
   add_foreign_key "educational_program_vacants", "educational_programs"
   add_foreign_key "educational_programs", "accreditations"

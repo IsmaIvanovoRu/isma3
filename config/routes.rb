@@ -117,6 +117,12 @@ Isma::Application.routes.draw do
     end
   end
   
+  resources :educational_program_perevods do
+    collection do
+      post :import
+    end
+  end
+  
   resources :educational_program_vacants do
     collection do
       post :import
