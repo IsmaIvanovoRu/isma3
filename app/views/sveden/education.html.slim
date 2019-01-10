@@ -77,6 +77,31 @@ section.panel
             td(itemprop='numberBMpriem')= educational_program_priem.number_local
             td(itemprop='numberPpriem')= educational_program_priem.number_personal
             td(itemprop='scorePriem')= educational_program_priem.summa
+  table(itemprop='eduPerevod')
+    caption Информация о результатах перевода, восстановления и отчисления
+    thead
+      tr
+        th Код
+        th Наименование специальности, направления подготовки
+        th Уровень образования
+        th Форма обучения
+        th Численность обучающихся, переведенных в другие образовательные организации
+        th Численность обучающихся, переведенных из других образовательных организаций
+        th Численность восстановленных обучающихся
+        th Численность отчисленых обучающихся
+    tbody
+      - @educational_programs.each do |educational_program|
+        - educational_program_perevod = educational_program.educational_program_perevods.sort_by(&:date).last
+        - if educational_program_perevod
+          tr
+            td(itemprop='eduCode')=  educational_program.code
+            td(itemprop='eduName')= link_to educational_program.full_name, educational_program if educational_program.full_name
+            td(itemprop='eduLevel')= educational_program.level if educational_program.level
+            td(itemprop='eduForm')= educational_program.form if educational_program.form
+            td(itemprop='numberOutPerevod')= educational_program_perevod.number_out_perevod
+            td(itemprop='numberToPerevod')= educational_program_perevod.number_to_perevod
+            td(itemprop='numberResPerevod')= educational_program_perevod.number_res_perevod
+            td(itemprop='numberExpPerevod')= educational_program_perevod.number_exp_perevod
   table
     caption Информация по образовательным программам, в том числе адаптированным
     thead
@@ -121,7 +146,6 @@ section.panel
               - educational_program.practices.each do |practic|
                 li(itemprop='eduPr')= link_to practic.name, practic.attachment, target: 'blank'
           td(itemprop="eduEl", style="vertical-align: top;") -
-  p= autosub_details("&amp;[Информация о результатах приёма]").html_safe
   p= autosub_details("&amp;[Информация о результатах перевода, восстановления и отчисления]").html_safe
   p= autosub_details("&amp;[Информация о направлениях и результатах научной (научно- исследовательской) деятельности и научно- исследовательской базе для её осуществления]").html_safe
   

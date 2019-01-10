@@ -9,6 +9,7 @@ class EducationalProgram < ActiveRecord::Base
   has_many :subjects, dependent: :destroy
   has_many :educational_program_numbers
   has_many :educational_program_priems
+  has_many :educational_program_perevods
   has_many :educational_program_vacants
   has_many :classrooms, through: :subjects
   
