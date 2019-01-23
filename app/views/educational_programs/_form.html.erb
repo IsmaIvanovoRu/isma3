@@ -38,6 +38,10 @@
     <%= f.label 'Ссылка на образовательную программу' %>
     <%= f.select :attachment_id, option_for_select = @attachments.collect {|p| ["#{p.title} (#{p.id})", p.id]}, {include_blank: ''} %>
   </div>
+  <div class=field>
+    <%= f.label 'Действующая' %>
+    <%= f.check_box :active %>
+  </div>
   <div class=actions>
     <%= f.submit 'Добавить', class: 'button tiny' %>
   </div>

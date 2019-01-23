@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190110100258) do
+ActiveRecord::Schema.define(version: 20190114114328) do
 
   create_table "academic_plans", force: :cascade do |t|
     t.string   "name",                   limit: 255
@@ -269,8 +269,9 @@ ActiveRecord::Schema.define(version: 20190110100258) do
     t.string   "level",                   limit: 255
     t.integer  "accreditation_id",        limit: 4
     t.integer  "attachment_id",           limit: 4
-    t.datetime "created_at",                          null: false
-    t.datetime "updated_at",                          null: false
+    t.datetime "created_at",                                         null: false
+    t.datetime "updated_at",                                         null: false
+    t.boolean  "active",                              default: true
   end
 
   add_index "educational_programs", ["accreditation_id"], name: "index_educational_programs_on_accreditation_id", using: :btree
@@ -314,6 +315,18 @@ ActiveRecord::Schema.define(version: 20190110100258) do
     t.integer "user_id",  limit: 4, null: false
     t.integer "group_id", limit: 4, null: false
   end
+
+  create_table "marks", force: :cascade do |t|
+    t.integer  "user_id",                limit: 4
+    t.integer  "educational_program_id", limit: 4
+    t.string   "subject",                limit: 255, default: ""
+    t.integer  "value",                  limit: 4,   default: 0
+    t.datetime "created_at",                                      null: false
+    t.datetime "updated_at",                                      null: false
+  end
+
+  add_index "marks", ["educational_program_id"], name: "index_marks_on_educational_program_id", using: :btree
+  add_index "marks", ["user_id"], name: "index_marks_on_user_id", using: :btree
 
   create_table "menus", force: :cascade do |t|
     t.string   "location",   limit: 255, default: "",    null: false
@@ -447,6 +460,8 @@ ActiveRecord::Schema.define(version: 20190110100258) do
   add_foreign_key "educational_programs", "accreditations"
   add_foreign_key "educational_programs", "attachments"
   add_foreign_key "educational_programs", "educational_standarts"
+  add_foreign_key "marks", "educational_programs"
+  add_foreign_key "marks", "users"
   add_foreign_key "methodological_supports", "attachments"
   add_foreign_key "methodological_supports", "educational_programs"
   add_foreign_key "practices", "attachments"

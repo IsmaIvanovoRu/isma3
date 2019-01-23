@@ -21,8 +21,23 @@ class User < ActiveRecord::Base
   has_many :comments
   has_many :achievements
   has_many :achievement_categories, through: :achievements
+  has_many :marks
    
   after_create :add_default_groups, :build_default_profile
+  
+  def marks_hash
+    marks_hash = {}
+    exams = {}
+    educational_program_ids = marks.map(&:educational_program_id).uniq
+    educational_program_ids.each do |educational_program_id|
+      educational_program = EducationalProgram.find_by_id(educational_program_id)
+      marks_hash[educational_program] = {}
+      marks_hash[educational_program][:marks] = marks.where(educational_program_id: educational_program_id)
+      exams = marks_hash[educational_program][:marks].select{|i| i.value > 1}.map(&:value)
+      marks_hash[educational_program][:mean] = exams.empty? ? 0 : (exams.sum.to_f/exams.length).round(2)
+    end
+    return marks_hash
+  end
   
   private
   def add_default_groups
