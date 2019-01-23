@@ -4,6 +4,11 @@ Isma::Application.routes.draw do
   
   resources :comments
   
+  controller :test_converters do
+    get 'test_converters' => :index
+    post 'test_converters/mytest2moodle' => :mytest2moodle
+  end
+  
   controller :entrants do
     get 'entrants/new' => :new
   end
@@ -107,6 +112,13 @@ Isma::Application.routes.draw do
   
   resources :educational_program_numbers do
     collection do
+      post :import
+    end
+  end
+  
+  resources :marks do
+    collection do
+      get :report
       post :import
     end
   end

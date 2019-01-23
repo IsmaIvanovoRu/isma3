@@ -39,7 +39,7 @@ class EducationalProgramsController < ApplicationController
   end
   
   def destroy
-    @educational_program.destroy
+    @educational_program.toggle!(:active) if @educational_program.active
     redirect_to educational_programs_url
   end
   
@@ -50,7 +50,7 @@ class EducationalProgramsController < ApplicationController
   end
   
   def educational_program_params
-    params.require(:educational_program).permit(:id, :name, :code, :level, :form, :duration, :educational_standart_id, :accreditation_id, :attachment_id)
+    params.require(:educational_program).permit(:id, :name, :code, :level, :form, :duration, :educational_standart_id, :accreditation_id, :attachment_id, :active)
   end
   
   def options_for_select

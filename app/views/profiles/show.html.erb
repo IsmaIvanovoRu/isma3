@@ -85,6 +85,58 @@
     </section>
     </div>
   <% end %>
+  <% unless @marks_hash.empty? %>
+    <div class="small-12 large-12 columns">
+      <section class="panel clearfix">
+        <h2>
+          Результаты освоения основной образовательной программы (по данным промежуточной аттестации)
+        </h2>
+        <% @marks_hash.each do |educational_program, values| %>
+          <% mean_string = "#{educational_program.name} (#{educational_program.code} - #{educational_program.level}) - cредний балл зачетной книжки #{values[:mean]}" %>
+          <% if @administrator_permission || current_user == @user %>
+            <dl class="accordion" data-accordion>
+              <dd>
+                <%= link_to("#marks") do %>
+                  <%= mean_string %>
+                <% end %>
+                <div id="marks" class="content">
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th>Дисциплина</th>
+                      <th>Результат освоения</th>
+                    </tr>
+                    </thead>
+                  <tbody>
+                    <% values[:marks].each do |mark| %>
+                      <% mark_text = case mark.value %>
+                                  <% when 1 %>
+                                    <% 'зачтено' %>
+                                  <% when 2 %>
+                                    <% 'неудовлетворительно' %>
+                                  <% when 3 %>
+                                    <% 'удовлетворительно' %>
+                                  <% when 4 %>
+                                    <% 'хорошо' %>
+                                  <% when 5 %>
+                                    <% 'отлично' %>
+                                  <% else %>
+                                    <% 'нет оценки' %>
+                                  <% end %>
+                      <tr>
+                        <td><%= "#{mark.subject}" %></td>
+                        <td><%= "#{mark_text}" %></td>
+                      </tr>
+                    <% end %>
+                  </tbody>
+                </table>
+          <% else %>
+            <%= mean_string %>
+          <% end %>
+        <% end %>
+      </section>
+    </div>
+  <% end %>
   <% if !@achievements.empty? || current_user == @user %>
     <div class="small-12 large-12 columns">
       <section class="panel clearfix">

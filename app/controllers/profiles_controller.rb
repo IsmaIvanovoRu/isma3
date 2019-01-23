@@ -21,6 +21,7 @@ class ProfilesController < UsersController
       @user_groups = @user.groups
       @not_user_groups = Group.order(:name).where.not(id: g) - @user_groups
       @achievements = current_user_moderator? || current_user_owner? ? @user.achievements.order(:event_date).includes(:achievement_category, :achievement_result) : @user.achievements.order(:event_date).includes(:achievement_category, :achievement_result).where(published: true)
+      @marks_hash = @user.marks_hash
       if current_user.nil?
        @articles = Article.includes(:attachments).includes(:article_type).order('updated_at DESC').where(published: true, group_id: nil, user_id: @user).where("exp_date >= ? or exp_date IS ?", Time.now.to_date, nil).paginate(:page => params[:page])
       else

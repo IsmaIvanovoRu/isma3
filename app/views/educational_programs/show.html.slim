@@ -8,6 +8,10 @@ section.panel
       = link_to @educational_program, title: 'Удалить', method: :delete, data: { confirm: 'Are you sure?' } do
         i.fi-x
   h1= link_to @educational_program.full_name, @educational_program.attachment, target: 'blank'
+  - if @educational_program.active
+    .success.label Действующая
+  - else
+    .alert.label Архивная
   dl
     dt Уровень обучения
     dd= @educational_program.level
