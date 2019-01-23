@@ -5,6 +5,7 @@ Isma::Application.routes.draw do
   resources :comments
   
   controller :test_converters do
+    get 'test_converters' => :index
     post 'test_converters/mytest2moodle' => :mytest2moodle
   end
   

@@ -11,11 +11,6 @@
       <%= file_field_tag :file %>
       <%= submit_tag "Загрузить" %>
     <% end %>
-    <h2>Конвертер тестов в формат moodle</h2>
-    <%= form_tag test_converters_mytest2moodle_path, multipart: true do %>
-      <%= file_field_tag :file %>
-      <%= submit_tag "Загрузить" %>
-    <% end %>
   <%= link_to 'Скачать список пользователей', users_path(format: :xls) %>
   <% end %>
 </div>
