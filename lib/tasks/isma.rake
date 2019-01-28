@@ -119,6 +119,7 @@ namespace :isma do
   task openldap_sync_students: :environment do
     base_dn = "dc=isma,dc=ivanovo,dc=ru"
     extended_dn = "ou=people,#{base_dn}"
+    group_of_names = {}
     ldap = ldap_create(base_dn)
     ldap.bind
 # выгрузка существующих записей
@@ -147,7 +148,7 @@ namespace :isma do
           if row['Состояние'] != 'Является студентом'
             puts "удаляем студента #{student.profile.full_name} из группы"
             student.groups.delete(Group.find_by_name('students'))
-            student.posts.each{|p| p.destroy if p.division.division_type_id == 6}
+            student.posts.each{|p| p.destroy if p.division.division_type_id == 6} if student.posts
           else
             student_groups = student.groups.map(&:name)
             student.groups << Group.find_by_name('students') unless student_groups.include? 'students'
@@ -170,13 +171,14 @@ namespace :isma do
               division_new = Division.find_by_name(division_1c_name) || Division.create(name: division_1c_name)
               divisions.first.posts.where(user_id: student.id).first.update_attributes(division_id: division_new.id)
             end
+            puts "добавляем студента в группу ldap"
+            group_of_names[division_1c_name] ||= []
+            group_of_names[division_1c_name].push student.login
           end
         else
           unused_rows.push row
         end
       end
-      puts unused_rows
-      puts "обработка студентов завершена, #{unused_rows.count - 1} строк не найдено"
       puts 'Удаляем пустые группы'
       divisions = Division.select(:id, :division_type_id).where(division_type_id: 6).select{|d| d.posts.count == 0}
       puts "Будет удалено групп: #{divisions.count}"
@@ -184,6 +186,7 @@ namespace :isma do
     end
     
     # чтение списка учетных записей студентов
+    students = load_users('students')
     unused_logins = students
     header = students_logins.row(1)
     (2..students_logins.last_row).each do |i|
@@ -224,6 +227,21 @@ namespace :isma do
     end
     puts unused_logins.map(&:login)
     puts "обработка списка студентов завершена, учетных записей не найдено: #{unused_logins.count} "
+    puts unused_rows
+    puts "обработка студентов завершена, #{unused_rows.count - 1} строк не найдено"
+    
+    puts group_of_names
+    # обрабатываем группы ldap
+    group_of_names.each do |cn, members|
+      ldap.delete(dn: "cn=#{cn},ou=groups,#{base_dn}")
+      a = []
+      members.each do |member|
+        a.push "uid=#{member},#{extended_dn}"
+      end
+      ldap.add(dn: "cn=#{cn},ou=groups,#{base_dn}", attributes: {cn: cn,
+                                                                 objectClass: 'groupOfNames',
+                                                                 member: a})
+    end
   end
   
   desc 'clear openldap db'
@@ -240,7 +258,10 @@ namespace :isma do
         ldap.delete dn: item[:dn].first
       end
     end
-    
+    list = ldap.search(base: "ou=groups,dc=isma,dc=ivanovo,dc=ru")
+    list.each do |item|
+      ldap.delete dn: item[:dn].first
+    end
   end
   
   private
@@ -270,11 +291,11 @@ namespace :isma do
   end
   
   def ldap_search(ldap, dn)
-    if ldap.search(base: dn, attributes: ['uid', 'cn', 'sn', 'givenname', 'mail'])
-      list = ldap.search(base: dn, attributes: ['uid', 'cn', 'sn', 'givenname', 'mail'])
+    if ldap.search(base: dn, attributes: ['uid'])
+      list = ldap.search(base: dn, attributes: ['uid', 'cn', 'sn', 'givenname', 'mail', 'employeetype'])
     else
       ldap.add(dn: dn, attributes: {ou: 'people', objectClass: 'organizationalUnit'})
-      list = ldap.search(base: dn, attributes: ['uid', 'cn', 'sn', 'givenname', 'mail'])
+      list = ldap.search(base: dn, attributes: ['uid', 'cn', 'sn', 'givenname', 'mail', 'employeetype'])
     end
     return list
   end
