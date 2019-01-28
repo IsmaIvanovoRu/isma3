@@ -233,14 +233,17 @@ namespace :isma do
     puts group_of_names
     # обрабатываем группы ldap
     group_of_names.each do |cn, members|
+      puts "Удаляем когорту #{cn}"
       ldap.delete(dn: "cn=#{cn},ou=groups,#{base_dn}")
       a = []
       members.each do |member|
         a.push "uid=#{member},#{extended_dn}"
       end
+      puts "Добавляем когорту #{cn}"
       ldap.add(dn: "cn=#{cn},ou=groups,#{base_dn}", attributes: {cn: cn,
                                                                  objectClass: 'groupOfNames',
                                                                  member: a})
+      puts ldap.get_operation_result.code == 0 ? 'когорта успешно добавлена' : "ошибка добавления когорты - #{ldap.get_operation_result.message}"
     end
   end
   
