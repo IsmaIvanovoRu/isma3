@@ -92,9 +92,6 @@
               <%= link_to current_user.login, "#" %>
 	      <ul class="dropdown">
 		<% if @administrator_permission %>
-		  <li><%= link_to 'Добавить пункт меню', "#", "data-reveal-id" => 'add_menu' %></li>
-		  <li><%= link_to 'Меню', menus_path %></li>
-		  <li><%= link_to 'Пользователи', users_path %></li>
 		  <li class="has-dropdown">
                     <%= link_to 'Образование', "#" %>
                     <ul class="dropdown">
@@ -110,8 +107,12 @@
                       <li><%= link_to 'Учебные графики', academic_schedules_path %></li>
                       <li><%= link_to 'Практики', practices_path %></li>
                       <li><%= link_to 'Методическое обеспечение', methodological_supports_path %></li>
+                      <li><%= link_to 'НИР', educational_program_researches_path %></li>
                     </ul>
 		  </li>
+		  <li><%= link_to 'Добавить пункт меню', "#", "data-reveal-id" => 'add_menu' %></li>
+		  <li><%= link_to 'Меню', menus_path %></li>
+		  <li><%= link_to 'Пользователи', users_path %></li>
 		  <li class="has-dropdown">
 		  	<%= link_to 'Достижения', '#' %>
 		  	<ul class="dropdown">

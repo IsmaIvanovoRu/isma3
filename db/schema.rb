@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190114114328) do
+ActiveRecord::Schema.define(version: 20190405071725) do
 
   create_table "academic_plans", force: :cascade do |t|
     t.string   "name",                   limit: 255
@@ -246,6 +246,26 @@ ActiveRecord::Schema.define(version: 20190114114328) do
 
   add_index "educational_program_priems", ["educational_program_id"], name: "index_educational_program_priems_on_educational_program_id", using: :btree
 
+  create_table "educational_program_researches", force: :cascade do |t|
+    t.integer  "educational_program_id", limit: 4
+    t.text     "perechen_nir",           limit: 65535
+    t.text     "base_nir",               limit: 65535
+    t.integer  "npr_nir",                limit: 4,     default: 0
+    t.integer  "stud_nir",               limit: 4,     default: 0
+    t.integer  "monograf_nir",           limit: 4,     default: 0
+    t.integer  "article_nir",            limit: 4,     default: 0
+    t.integer  "patent_r_nir",           limit: 4,     default: 0
+    t.integer  "patent_z_nir",           limit: 4,     default: 0
+    t.integer  "svid_r_nir",             limit: 4,     default: 0
+    t.integer  "svid_z_nir",             limit: 4,     default: 0
+    t.integer  "finance_nir",            limit: 4,     default: 0
+    t.date     "date"
+    t.datetime "created_at",                                       null: false
+    t.datetime "updated_at",                                       null: false
+  end
+
+  add_index "educational_program_researches", ["educational_program_id"], name: "educational_program_researches_index", using: :btree
+
   create_table "educational_program_vacants", force: :cascade do |t|
     t.integer  "educational_program_id", limit: 4
     t.integer  "stage",                  limit: 4, default: 0
@@ -456,6 +476,7 @@ ActiveRecord::Schema.define(version: 20190114114328) do
   add_foreign_key "educational_program_numbers", "educational_programs"
   add_foreign_key "educational_program_perevods", "educational_programs"
   add_foreign_key "educational_program_priems", "educational_programs"
+  add_foreign_key "educational_program_researches", "educational_programs"
   add_foreign_key "educational_program_vacants", "educational_programs"
   add_foreign_key "educational_programs", "accreditations"
   add_foreign_key "educational_programs", "attachments"
