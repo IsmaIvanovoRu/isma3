@@ -11,6 +11,7 @@ class EducationalProgram < ActiveRecord::Base
   has_many :educational_program_priems
   has_many :educational_program_perevods
   has_many :educational_program_vacants
+  has_many :educational_program_researches
   has_many :classrooms, through: :subjects
   has_many :marks
   

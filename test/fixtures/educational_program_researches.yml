@@ -1,0 +1,29 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  educational_program_id: 
+  perechen_nir: MyText
+  base_nir: MyText
+  npr_nir: 1
+  stud_nir: 1
+  monograf_nir: 1
+  article_nir: 1
+  patent_r_nir: 1
+  patent_z_nir: 1
+  svid_r_nir: 1
+  svid_z_nir: 1
+  finance_nir: 1
+
+two:
+  educational_program_id: 
+  perechen_nir: MyText
+  base_nir: MyText
+  npr_nir: 1
+  stud_nir: 1
+  monograf_nir: 1
+  article_nir: 1
+  patent_r_nir: 1
+  patent_z_nir: 1
+  svid_r_nir: 1
+  svid_z_nir: 1
+  finance_nir: 1

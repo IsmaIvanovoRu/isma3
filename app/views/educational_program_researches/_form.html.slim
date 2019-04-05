@@ -1,0 +1,46 @@
+= form_for @educational_program_research do |f|
+  - if @educational_program_research.errors.any?
+    ul
+      - @educational_program_research.errors.full_messages.each do |msg|
+        li= msg
+  .field
+    = f.label 'Перечень научных направлений'
+    = f.text_area :perechen_nir
+  .field
+    = f.label 'Сведения о научно-исследовательской базе'
+    = f.text_area :base_nir
+  .field
+    = f.label 'Количество НПР'
+    = f.number_field :npr_nir
+  .field
+    = f.label 'Количество студентов'
+    = f.number_field :stud_nir
+  .field
+    = f.label 'Количество монографий'
+    = f.number_field :monograf_nir
+  .field
+    = f.label 'Количество публикаций'
+    = f.number_field :article_nir
+  .field
+    = f.label 'Количество российских патентов'
+    = f.number_field :patent_r_nir
+  .field
+    = f.label 'Количество зарубежных патентов'
+    = f.number_field :patent_z_nir
+  .field
+    = f.label 'Количество российских свидетельств о регистрации интеллектуальной собственности'
+    = f.number_field :svid_r_nir
+  .field
+    = f.label 'Количество зарубежных свидетельств о регистрации интеллектуальной собственности'
+    = f.number_field :svid_z_nir
+  .field
+    = f.label 'Среднегодовой объем финансирования'
+    = f.number_field :finance_nir
+  .field
+    = f.label 'Дата предоставления информации'
+    = f.date_field :date, value: Time.now.to_date
+  .field
+    = f.label 'Образовательная программа'
+    = f.select :educational_program_id, option_for_select = @educational_programs.collect {|p| ["#{p.full_name} (#{p.educational_standart ? p.educational_standart.level : 'нет стандарта'})", p.id]}, {include_blank: ''}
+  .actions
+    = f.submit 'Добавить', class: 'button tiny'

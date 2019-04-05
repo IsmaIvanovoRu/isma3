@@ -116,6 +116,12 @@ Isma::Application.routes.draw do
     end
   end
   
+  resources :educational_program_researches do
+    collection do
+      post :import
+    end
+  end
+  
   resources :marks do
     collection do
       get :report
