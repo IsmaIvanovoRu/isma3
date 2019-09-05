@@ -2,6 +2,12 @@ module ApplicationHelper
   def sanitize_full(text)
     options = Sanitize::Config.merge(Sanitize::Config::RELAXED, 
                                      attributes: {'a' => Sanitize::Config::RELAXED[:attributes]['a'] + ["target"], all: Sanitize::Config::RELAXED[:attributes][:all] + ['itemprop', 'itemscope', 'itemtype']})
+    
+    if controller_name == 'divisions'
+      options = Sanitize::Config.merge(Sanitize::Config::RELAXED,
+                                     attributes: {'a' => Sanitize::Config::RELAXED[:attributes]['a'] + ["target"], 'iframe' => ['width', 'height', 'src', 'frameborder', 'allowfullscreen', 'style'], all: Sanitize::Config::RELAXED[:attributes][:all] + ['itemprop', 'itemscope', 'itemtype']},
+	                             elements: Sanitize::Config::RELAXED[:elements] + ['iframe'])
+    end
     if text =~ /(youtu.be|youtube.com)/ 
       if action_name == 'show'
 	options = Sanitize::Config.merge(Sanitize::Config::RELAXED,
