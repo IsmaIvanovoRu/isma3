@@ -303,7 +303,7 @@ var entrants = new Vue({
       return message;
     },
   },
-  mounted() {
+  mounted: function() {
     axios
       .get('http://' + this.api.host + '/api/campaigns')
       .then(response => (this.api.campaigns = response.data.campaigns));
