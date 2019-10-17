@@ -139,4 +139,19 @@ class ApplicationController < ActionController::Base
   def set_layout
     session[:blind] ? 'blind' : 'application'
   end
+  
+  def http_params
+    case Rails.env
+      when 'development'
+        url = '10.0.3.133:3000'
+        proxy_ip = nil
+        proxy_port = nil
+      when 'production' 
+        url = '10.0.5.131:3000'
+        proxy_ip = nil
+        proxy_port = nil
+    end
+    uri = URI.parse('http://' + url + '/api/')
+    return {uri_host: uri.host, uri_path: uri.path, uri_port: uri.port, proxy_ip: proxy_ip, proxy_port: proxy_port}
+  end
 end

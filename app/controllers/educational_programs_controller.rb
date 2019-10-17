@@ -4,7 +4,7 @@ class EducationalProgramsController < ApplicationController
   before_action :require_moderator, only: [:new, :edit, :update, :create, :destroy]
   before_action :set_educational_program, only: [:show, :edit, :destroy, :update]
   before_action :educational_program_params, only: [:create, :update]
-  before_action :options_for_select, only: [:new, :edit]
+  before_action :options_for_select, only: [:new, :edit, :update]
   
   def index
     @educational_programs = EducationalProgram.order('level DESC').order([:code, :name])
@@ -26,7 +26,7 @@ class EducationalProgramsController < ApplicationController
     if @educational_program.save!
       redirect_to @educational_program, notice: "New program added successfully"
     else
-      render action 'new'
+      render action: 'new'
     end
   end
   
@@ -34,7 +34,7 @@ class EducationalProgramsController < ApplicationController
     if @educational_program.update(educational_program_params)
       redirect_to @educational_program
     else
-      render action 'edit'
+      render action: 'edit'
     end
   end
   
