@@ -1,7 +1,13 @@
 class ClassroomsController < ApplicationController
-  before_filter :require_moderator, only: [:index, :import]
+  before_filter :require_moderator
   def index
-    @classrooms = Classroom.order(:description)
+    @classrooms = Classroom.includes(:subject).order(:description)
+  end
+  
+  def destroy
+    @classroom = Classroom.find(params[:id])
+    @classroom.destroy
+    redirect_to classrooms_url, notice: 'Classroom deleted'
   end
   
   def import
