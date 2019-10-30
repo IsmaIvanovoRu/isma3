@@ -50,7 +50,7 @@ class EducationalProgramsController < ApplicationController
   end
   
   def educational_program_params
-    params.require(:educational_program).permit(:id, :name, :code, :level, :form, :duration, :educational_standart_id, :accreditation_id, :attachment_id, :active, :language)
+    params.require(:educational_program).permit(:id, :name, :code, :level, :form, :duration, :educational_standart_id, :accreditation_id, :attachment_id, :active, :language, :adaptive)
   end
   
   def options_for_select
