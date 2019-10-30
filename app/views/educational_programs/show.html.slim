@@ -12,6 +12,8 @@ section.panel
     .success.label Действующая
   - else
     .alert.label Архивная
+  - if @educational_program.adaptive
+    .warning.label Адаптированная
   dl
     dt Уровень обучения
     dd= @educational_program.level

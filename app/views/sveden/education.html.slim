@@ -119,33 +119,33 @@ section.panel
         th Информация об использовании при реализации образовательной программы электронного обучения и дистанционных образовательных технологий
     tbody
       - @educational_programs.each do |educational_program|
-        tr(itemprop='eduOp')
+        tr(itemprop="#{educational_program.adaptive ? 'adeduOp' : 'eduOp'}")
           td(itemprop="eduCode", style="vertical-align: top;")= educational_program.code
           td(itemprop="eduName", style="vertical-align: top;")= educational_program.name
           td(itemprop="eduLevel", style="vertical-align: top;")= educational_program.level
           td(itemprop="eduForm", style="vertical-align: top;")= educational_program.form
-          td(itemprop="opMain", style="vertical-align: top;")= link_to educational_program.full_name, educational_program.attachment, target: 'blank', itemprop: 'opMain' if educational_program.full_name
+          td(itemprop="#{educational_program.adaptive ? 'adOpMain' : 'opMain'}", style="vertical-align: top;")= link_to educational_program.full_name, educational_program.attachment, target: 'blank' if educational_program.full_name
           td(style="vertical-align: top;")
             ul
               - educational_program.academic_plans.each do |academic_plan|
-                li(itemprop='educationPlan')= link_to academic_plan.name, academic_plan.attachment, target: 'blank'
+                li(itemprop="#{educational_program.adaptive ? 'adEducationPlan' : 'educationPlan'}")= link_to academic_plan.name, academic_plan.attachment, target: 'blank'
           td(style="vertical-align: top;")
             ul
               - educational_program.subjects.each do |subject|
-                li(itemprop='educationAnnotation')= link_to subject.name, subject.attachment, target: 'blank'
+                li(itemprop="#{educational_program.adaptive ? 'adEducationAnnotation' : 'educationAnnotation'}")= link_to subject.name, subject.attachment, target: 'blank'
           td(style="vertical-align: top;")
             ul
               - educational_program.academic_schedules.each do |academic_schedule|
-                li(itemprop='educationShedule')= link_to academic_schedule.name, academic_schedule.attachment, target: 'blank'
+                li(itemprop="#{educational_program.adaptive ? 'adEducationShedule' : 'educationShedule'}")= link_to academic_schedule.name, academic_schedule.attachment, target: 'blank'
           td(style="vertical-align: top;")
             ul
               - educational_program.methodological_supports.each do |methodological_support|
-                li(itemprop='methodology')= link_to methodological_support.attachment.title_sen_dot, methodological_support.attachment, target: 'blank'
+                li(itemprop="#{educational_program.adaptive ? 'adMethology' : 'methodology'}")= link_to methodological_support.attachment.title_sen_dot, methodological_support.attachment, target: 'blank'
           td(style="vertical-align: top;")
             ul
               - educational_program.practices.each do |practic|
-                li(itemprop='eduPr')= link_to practic.name, practic.attachment, target: 'blank'
-          td(itemprop="eduEl", style="vertical-align: top;") -
+                li(itemprop="#{educational_program.adaptive ? 'adEduPr' : 'eduPr'}")= link_to practic.name, practic.attachment, target: 'blank'
+          td(itemprop="#{educational_program.adaptive ? 'adEduEl' : 'eduEl'}", style="vertical-align: top;") -
   table(itemprop='eduNir')
     caption Направления и результаты научной (научно-исследовательской) деятельности
     thead

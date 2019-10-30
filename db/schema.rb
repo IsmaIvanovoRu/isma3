@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20191024111428) do
+ActiveRecord::Schema.define(version: 20191030123205) do
 
   create_table "academic_plans", force: :cascade do |t|
     t.string   "name",                   limit: 255
@@ -289,10 +289,11 @@ ActiveRecord::Schema.define(version: 20191024111428) do
     t.string   "level",                   limit: 255
     t.integer  "accreditation_id",        limit: 4
     t.integer  "attachment_id",           limit: 4
-    t.datetime "created_at",                                         null: false
-    t.datetime "updated_at",                                         null: false
+    t.datetime "created_at",                                          null: false
+    t.datetime "updated_at",                                          null: false
     t.boolean  "active",                              default: true
     t.string   "language",                limit: 255
+    t.boolean  "adaptive",                            default: false
   end
 
   add_index "educational_programs", ["accreditation_id"], name: "index_educational_programs_on_accreditation_id", using: :btree
