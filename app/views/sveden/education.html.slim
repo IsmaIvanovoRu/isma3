@@ -124,7 +124,8 @@ section.panel
           td(itemprop="eduName", style="vertical-align: top;")= educational_program.name
           td(itemprop="eduLevel", style="vertical-align: top;")= educational_program.level
           td(itemprop="eduForm", style="vertical-align: top;")= educational_program.form
-          td(itemprop="#{educational_program.adaptive ? 'adOpMain' : 'opMain'}", style="vertical-align: top;")= link_to educational_program.full_name, educational_program.attachment, target: 'blank' if educational_program.full_name
+          - amp = educational_program.adaptive ? '*' : ''
+          td(itemprop="#{educational_program.adaptive ? 'adOpMain' : 'opMain'}", style="vertical-align: top;")= link_to "#{educational_program.full_name}#{amp}", educational_program.attachment, target: 'blank' if educational_program.full_name
           td(style="vertical-align: top;")
             ul
               - educational_program.academic_plans.each do |academic_plan|
@@ -146,6 +147,7 @@ section.panel
               - educational_program.practices.each do |practic|
                 li(itemprop="#{educational_program.adaptive ? 'adEduPr' : 'eduPr'}")= link_to practic.name, practic.attachment, target: 'blank'
           td(itemprop="#{educational_program.adaptive ? 'adEduEl' : 'eduEl'}", style="vertical-align: top;") -
+  p.sub * - адаптированная образовательная программа
   table(itemprop='eduNir')
     caption Направления и результаты научной (научно-исследовательской) деятельности
     thead
