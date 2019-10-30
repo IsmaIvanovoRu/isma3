@@ -15,7 +15,7 @@ class EducationalProgram < ActiveRecord::Base
   has_many :classrooms, through: :subjects
   has_many :marks
   
-  validates :name, :level, :form, :duration, :attachment_id, presence: true
+  validates :name, :level, :form, :duration, :attachment_id, :language, presence: true
   validates :attachment_id, numericality: { integer_only: true }
   
   def full_name
