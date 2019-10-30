@@ -140,7 +140,7 @@ section.panel
           td(style="vertical-align: top;")
             ul
               - educational_program.methodological_supports.each do |methodological_support|
-                li(itemprop="#{educational_program.adaptive ? 'adMethology' : 'methodology'}")= link_to methodological_support.attachment.title_sen_dot, methodological_support.attachment, target: 'blank'
+                li(itemprop="#{educational_program.adaptive ? 'adMethodology' : 'methodology'}")= link_to methodological_support.attachment.title_sen_dot, methodological_support.attachment, target: 'blank'
           td(style="vertical-align: top;")
             ul
               - educational_program.practices.each do |practic|
