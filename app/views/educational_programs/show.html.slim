@@ -21,6 +21,8 @@ section.panel
     dd= @educational_program.form
     dt Продолжительность обучения
     dd= @educational_program.duration
+    dt Язык обучения
+    dd= @educational_program.language
     dt Сведения об аккредитации
     - if @educational_program.accreditation
       dd= link_to "Свидетельство об аккредитации номер #{@educational_program.accreditation.number}, выдано #{@educational_program.accreditation.date_of_issue}, действительно до #{@educational_program.accreditation.expiration_date}", @educational_program.accreditation

@@ -27,6 +27,10 @@
     <%= f.select :level, option_for_select = ['специалитет', 'интернатура', 'ординатура', 'аспирантура', 'дополнительное образование'], {:include_blank => ''} %>
   </div>
   <div class=field>
+    <%= f.label 'Язык обучения' %>
+    <%= f.text_field :language %>
+  </div>
+  <div class=field>
     <%= f.label 'Стандарт' %>
     <%= f.select :educational_standart_id, option_for_select = @educational_standarts.collect {|p| ["#{p.name} (#{p.level})", p.id]}, {:include_blank => ''} %>
   </div>
