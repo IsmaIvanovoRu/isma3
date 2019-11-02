@@ -1,0 +1,31 @@
+= form_for @financial_activity do |f|
+  - if @financial_activity.errors.any?
+    ul
+      - @financial_activity.errors.full_messages.each do |msg|
+        li= msg
+  .field
+    = f.label 'Год'
+    = f.number_field :year, value: Time.now.year - 1
+  .field
+    = f.label 'За счет федерального бюджета'
+    = f.number_field :federal_volume, step: :any
+  .field
+    = f.label 'За счет регионального бюджета'
+    = f.number_field :regional_volume, step: :any
+  .field
+    = f.label 'За счет местного бюджета'
+    = f.number_field :municipal_volume, step: :any
+  .field
+    = f.label 'За счет частных лиц'
+    = f.number_field :personal_volume, step: :any
+  .field
+    = f.label 'Ссылка на страницу вуза на официальном сайте РФ'
+    = f.text_field :bus_gov_link
+  .field
+    = f.label 'Ссылка на план ФХД'
+    = f.text_field :financial_plan_link
+  .field
+    = f.label 'Ссылка на отчет ФХД'
+    = f.text_field :financial_report_link
+  .actions
+    = f.submit 'Добавить', class: 'button tiny'

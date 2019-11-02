@@ -1,0 +1,29 @@
+section.panel
+  h1 Финансовая деятельность
+  .
+    = link_to "Добавить", new_financial_activity_path, class: 'button'
+    table
+      thead
+        tr
+          th colspan=4 Объем образовательной деятельности, финансовое обеспечение которой осуществляется
+          th rowspan=2 Год
+          th rowspan=2 Действия
+        tr
+          th за счёт бюджетных ассигнований федерального бюджета (тыс. руб.)
+          th за счёт бюджетов субъектов Российской Федерации (тыс. руб.)
+          th за счёт местных бюджетов (тыс. руб.)
+          th по договорам об образовании за счет средств физических и (или) юридических лиц (тыс. руб.)
+      tbody
+        - @financial_activities.each do |financial_activity|
+          tr
+            td(itemprop='finBFVolume')= financial_activity.federal_volume
+            td(itemprop='finBRVolume')= financial_activity.regional_volume
+            td(itemprop='finBMVolume')= financial_activity.municipal_volume
+            td(itemprop='finPVolume')= financial_activity.personal_volume
+            td= financial_activity.year
+            td
+              - if @moderator_permission
+                = link_to edit_financial_activity_path(financial_activity), title: 'Редактировать' do
+                  i.fi-page-edit
+                = link_to financial_activity, title: 'Удалить', method: :delete, data: { confirm: 'Are you sure?' } do
+                  i.fi-x

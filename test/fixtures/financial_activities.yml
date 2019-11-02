@@ -1,0 +1,19 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  federal_volume: 1.5
+  regional_volume: 1.5
+  municipal_volume: 1.5
+  personal_volume: 1.5
+  financial_report_link: MyString
+  financial_plan_link: MyString
+  bus_gov_link: MyString
+
+two:
+  federal_volume: 1.5
+  regional_volume: 1.5
+  municipal_volume: 1.5
+  personal_volume: 1.5
+  financial_report_link: MyString
+  financial_plan_link: MyString
+  bus_gov_link: MyString

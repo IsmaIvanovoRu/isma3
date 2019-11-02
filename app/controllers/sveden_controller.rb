@@ -58,7 +58,7 @@ class SvedenController < ApplicationController
   end
   
   def budget
-    redirect_to article_path(1151)
+    @financial_activity = FinancialActivity.order(:year).last
   end
   
   def vacant
