@@ -18,6 +18,6 @@ section.panel
           td(itemprop='finBMVolume')= @financial_activity.municipal_volume
           td(itemprop='finPVolume')= @financial_activity.personal_volume
           
-    p(itemprop='planFinRec')= link_to 'План финансово-хозяйственной деятельности', @financial_activity.financial_plan_link, target: '_blank'
-    p(itemprop='finRec')= link_to 'Отчет о финансово-хозяйственной деятельности', @financial_activity.financial_report_link, target: '_blank'
+    p= link_to 'План финансово-хозяйственной деятельности', @financial_activity.financial_plan_link, target: '_blank', itemprop: 'planFinRec'
+    p= link_to 'Отчет о финансово-хозяйственной деятельности', @financial_activity.financial_report_link, target: '_blank', itemprop: 'finRec'
     p= link_to 'Страница ФГБОУ ВО ИвГМА Минздрава России на Официальном сайте для размещения информации о государственных (муниципальных) учреждениях', @financial_activity.bus_gov_link, target: '_blank'
