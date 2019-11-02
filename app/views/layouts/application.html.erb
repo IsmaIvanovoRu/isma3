@@ -92,42 +92,51 @@
               <%= link_to current_user.login, "#" %>
 	      <ul class="dropdown">
 		<% if @administrator_permission %>
+                  <li class="has-dropdown">
+                    <%= link_to 'Администрирование', '#' %>
+                    <ul class='dropdown'>
+                      <li><%= link_to 'Добавить пункт меню', "#", "data-reveal-id" => 'add_menu' %></li>
+                      <li><%= link_to 'Меню', menus_path %></li>
+                      <li><%= link_to 'Пользователи', users_path %></li>
+                      <li><%= link_to 'Группы', groups_path %></li>
+                      <li><%= link_to 'Детали', details_path %></li>
+                    </ul>
+                  </li>
 		  <li class="has-dropdown">
-                    <%= link_to 'Образование', "#" %>
+                    <%= link_to 'Сведения об организации', "#" %>
+                      <ul class='dropdown'>
+                        <li class="has-dropdown">
+                          <%= link_to 'Образование', "#" %>
+                          <ul class="dropdown">
+                            <li><%= link_to 'Свидетельства об аккредитации', accreditations_path %></li>
+                            <li><%= link_to 'Образовательные стандарты', educational_standarts_path %></li>
+                            <li><%= link_to 'Образовательные программы', educational_programs_path %></li>
+                            <li><%= link_to 'Дисциплины', subjects_path %></li>
+                            <li><%= link_to 'Учебные планы', academic_plans_path %></li>
+                            <li><%= link_to 'Учебные графики', academic_schedules_path %></li>
+                            <li><%= link_to 'Практики', practices_path %></li>
+                            <li><%= link_to 'Численность обучающихся', educational_program_numbers_path %></li>
+                            <li><%= link_to 'Результаты приема', educational_program_priems_path %></li>
+                            <li><%= link_to 'Информация о результатах перевода, восстановления и отчисления', educational_program_perevods_path %></li>
+                            <li><%= link_to 'Количество мест для восстановления (перевода)', educational_program_vacants_path %></li>
+                          </ul>
+                        </li>
+                        <li><%= link_to 'Учебные комнаты', classrooms_path %></li>
+                        <li><%= link_to 'НИР', educational_program_researches_path %></li>
+                        <li><%= link_to 'Финансово-хозяйственная деятельность', financial_activities_path %></li>
+                      </ul>
+		  </li>
+		  <li class="has-dropdown">
+                    <%= link_to 'Достижения', '#' %>
                     <ul class="dropdown">
-                      <li><%= link_to 'Свидетельства об аккредитации', accreditations_path %></li>
-                      <li><%= link_to 'Образовательные стандарты', educational_standarts_path %></li>
-                      <li><%= link_to 'Образовательные программы', educational_programs_path %></li>
-                      <li><%= link_to 'Численность обучающихся', educational_program_numbers_path %></li>
-                      <li><%= link_to 'Результаты приема', educational_program_priems_path %></li>
-                      <li><%= link_to 'Информация о результатах перевода, восстановления и отчисления', educational_program_perevods_path %></li>
-                      <li><%= link_to 'Количество мест для восстановления (перевода)', educational_program_vacants_path %></li>
-                      <li><%= link_to 'Дисциплины', subjects_path %></li>
-                      <li><%= link_to 'Учебные планы', academic_plans_path %></li>
-                      <li><%= link_to 'Учебные графики', academic_schedules_path %></li>
-                      <li><%= link_to 'Практики', practices_path %></li>
-                      <li><%= link_to 'Учебные комнаты', classrooms_path %></li>
-                      <li><%= link_to 'НИР', educational_program_researches_path %></li>
+                      <li><%= link_to 'Отчет', report_achievements_url %></li>
+                      <li><%= link_to 'Неопубликованные достижения', achievements_url + "?achievement[published]=false" %></li>
+                      <li><%= link_to 'Категории достижений', achievement_categories_url %></li>
+                      <li><%= link_to 'Результаты достижеий', achievement_results_url %></li>
                     </ul>
 		  </li>
-		  <li><%= link_to 'Добавить пункт меню', "#", "data-reveal-id" => 'add_menu' %></li>
-		  <li><%= link_to 'Меню', menus_path %></li>
-		  <li><%= link_to 'Пользователи', users_path %></li>
-		  <li class="has-dropdown">
-		  	<%= link_to 'Достижения', '#' %>
-		  	<ul class="dropdown">
-                                <li><%= link_to 'Отчет', report_achievements_url %></li>
-		  		<li><%= link_to 'Неопубликованные достижения', achievements_url + "?achievement[published]=false" %></li>
-		  		<li><%= link_to 'Категории достижений', achievement_categories_url %></li>
-		  		<li><%= link_to 'Результаты достижеий', achievement_results_url %></li>
-		  	</ul>
-		  </li>
-		  <li><%= link_to 'Группы', groups_path %></li>
-		  <li><%= link_to 'Детали', details_path %></li>
-		  <li><%= link_to 'Вложения', attachments_path %></li>
 		<% end %>
 		<% if @moderator_permission %>
-		  <li><%= link_to 'Неопубликованные статьи', archives_path + "?published=0" %></li>
 		  <li><%= link_to 'Конвертер тестов', test_converters_path %></li>
 		<% end %>
 		<% if @writer_permission %>

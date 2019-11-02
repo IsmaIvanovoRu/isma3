@@ -160,6 +160,8 @@ Isma::Application.routes.draw do
     end
   end
   
+  resources :financial_activities
+  
   resources :academic_plans
   
   resources :academic_schedules

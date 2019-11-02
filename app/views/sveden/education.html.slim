@@ -16,11 +16,13 @@ section.panel
       - @educational_programs.each do |educational_program|
         tr
           td(itemprop='eduCode')=  educational_program.code
-          td(itemprop='eduName')= link_to educational_program.full_name, educational_program if educational_program.full_name
+          - amp = educational_program.adaptive ? '*' : ''
+          td(itemprop='eduName')= link_to "#{educational_program.full_name}#{amp}", educational_program if educational_program.full_name
           td(itemprop='eduLevel')= educational_program.level if educational_program.level
           td(itemprop='dateEnd')= (educational_program.accreditation.expiration_date ? educational_program.accreditation.expiration_date.strftime("%d.%m.%Y") : 'бессрочно') if educational_program.accreditation
           td(itemprop='language')= educational_program.language
           td(itemprop='learningTerm')= educational_program.duration if educational_program.duration
+  p.sub * - адаптированная образовательная программа
   table(itemprop='eduChislen')
     caption Информация о численности обучающихся по реализуемым образовательным программам за счет бюджетных ассигнований федерального бюджета, бюджетов субъектов Российской Федерации, местных бюджетов и по договорам об образовании за счет средств физических и (или) юридических лиц
     thead

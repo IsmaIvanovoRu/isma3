@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20191030123205) do
+ActiveRecord::Schema.define(version: 20191031114518) do
 
   create_table "academic_plans", force: :cascade do |t|
     t.string   "name",                   limit: 255
@@ -317,6 +317,19 @@ ActiveRecord::Schema.define(version: 20191030123205) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.boolean  "private",                  default: false
+  end
+
+  create_table "financial_activities", force: :cascade do |t|
+    t.integer  "year",                  limit: 4
+    t.decimal  "federal_volume",                    precision: 16, scale: 2, default: 0.0
+    t.decimal  "regional_volume",                   precision: 16, scale: 2, default: 0.0
+    t.decimal  "municipal_volume",                  precision: 16, scale: 2, default: 0.0
+    t.decimal  "personal_volume",                   precision: 16, scale: 2, default: 0.0
+    t.string   "financial_report_link", limit: 255
+    t.string   "financial_plan_link",   limit: 255
+    t.string   "bus_gov_link",          limit: 255
+    t.datetime "created_at",                                                               null: false
+    t.datetime "updated_at",                                                               null: false
   end
 
   create_table "groups", force: :cascade do |t|
