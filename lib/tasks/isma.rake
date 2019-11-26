@@ -168,8 +168,12 @@ namespace :isma do
             division_1c_name = row['Представление учебного плана'].match('Специалист') ? "#{row['Группа']} группа #{row['Курс']} курса #{speciality_inflect}" : "#{speciality_inflect} по специальности #{row['Направление (специальность)']}, #{row['Курс']} год обучения"
             unless divisions.map(&:name).include?(division_1c_name)
               puts "переводим студента #{student.profile.full_name} в другую группу"
-              division_new = Division.find_by_name(division_1c_name) || Division.create(name: division_1c_name)
-              divisions.first.posts.where(user_id: student.id).first.update_attributes(division_id: division_new.id)
+              division_new = Division.find_by_name(division_1c_name) || Division.create(name: division_1c_name, division_type_id: 6)
+              unless divisions.empty?
+                divisions.first.posts.where(user_id: student.id).first.update_attributes(division_id: division_new.id)
+              else
+                division_new.posts.create(user_id: student.id, name: 'обучающийся')
+              end
             end
             puts "добавляем студента в группу ldap"
             group_of_names[division_1c_name] ||= []
