@@ -12,7 +12,7 @@ class Mark < ActiveRecord::Base
   def self.import(file)
     spreadsheet = open_spreadsheet(file)
     header = spreadsheet.row(1)
-    students = load_users('students')
+    students = load_users(['students', 'graduates'])
     common_columns = 6
     (2..spreadsheet.last_row).to_a.in_groups_of(100, false) do |group|
       ActiveRecord::Base.transaction do
