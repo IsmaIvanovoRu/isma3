@@ -135,7 +135,7 @@ namespace :isma do
     if students_1c
       header = students_1c.row(1)
       (2..students_1c.last_row).each do |i|
-        row = Hash[[header, students_1c.row(i)].transpose]
+        row = Hash[[header, students_1c.row(i)].  transpose]
         puts "обрабатываем запись #{i} из #{students_1c.last_row - 1}"
         logins = student_login(row)
         student = nil
@@ -268,6 +268,64 @@ namespace :isma do
     list = ldap.search(base: "ou=groups,dc=isma,dc=ivanovo,dc=ru")
     list.each do |item|
       ldap.delete dn: item[:dn].first
+    end
+  end
+  
+  desc 'export students data to library'
+  task library_export: :environment do
+    filename = 'library_export.csv'
+    path = [Rails.root, 'lib', 'tasks', 'data', filename].join('/')
+    file = File.open(path, 'w:Windows-1251')
+    first_line = ['Фамилия', 'Имя', 'Отчество', 'Идентификатор', 'Пароль', 'Направление', 'Специальность', 'Факультет', 'Год', 'Семестр', 'Форма', 'Вид'].join(';') + ";\n"
+    file.write(first_line)
+    # выгрузка списка обучающихся с сайта
+    students = load_users('students')
+    # чтение актуального списка студентов
+    students_1c = open_spreadsheet('students_1c.csv') if file_exist?('students_1c.csv')
+    # чтение списка учетных записей обучающихся
+    students_logins = open_spreadsheet('students_logins.csv')
+    logins_hash = {}
+    (2..students_logins.last_row).each do |i|
+      logins_hash[students_logins.row(i)[0]] = students_logins.row(i)[1]
+    end
+    if students_1c
+      header = students_1c.row(1)
+      (2..students_1c.last_row).each do |i|
+        row = Hash[[header, students_1c.row(i)].transpose]
+        puts "обрабатываем запись #{i} из #{students_1c.last_row - 1}"
+        logins = student_login(row)
+        student = nil
+        openldap_entry = nil
+        logins.each do |login|
+          student ||= students.find_by_login(login)
+        end
+        faculty = case row['Направление (специальность)']
+                                  when 'Лечебное дело'
+                                    'лечебный факультет'
+                                  when 'Педиатрия'
+                                    'педиатрический факультет'
+                                  when 'Стоматология'
+                                    'стоматологический факультет'
+                                  else
+                                    'ординатура'
+                                  end
+        if student
+          s = []
+          s << (student.profile.last_name.strip if student.profile.last_name)
+          s << (student.profile.first_name.strip if student.profile.first_name)
+          s << (student.profile.middle_name.strip if student.profile.middle_name)
+          s << student.login
+          s << logins_hash[student.login]
+          s << row['Направление (специальность)']
+          s << row['Направление (специальность)']
+          s << (faculty == 'ординатура' ? 'подготовки кадров высшей квалификации' : faculty)
+          s << row['Курс']
+          s << (Time.now.month.between?(2, 8) ? row['Курс'].to_i * 2 : row['Курс'].to_i * 2 - 1)
+          s << 'очная'
+          s << (faculty == 'ординатура' ? 'кадры высшей квалификации' : 'специалитет')
+          file.write((s.join(';') + ";\n").encode('Windows-1251', invalid: :replace, undef: :replace, replade: ''))
+        end
+      end
     end
   end
   
