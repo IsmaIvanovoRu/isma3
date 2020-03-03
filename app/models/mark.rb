@@ -52,7 +52,7 @@ class Mark < ActiveRecord::Base
     if educational_program
       case educational_program.name
       when 'Лечебное дело'
-        ["lech#{row['Зачетная книга']}", "l#{row['Зачетная книга']}"]
+        ["inter#{row['Зачетная книга']}", "lech#{row['Зачетная книга']}", "l#{row['Зачетная книга']}"]
       when 'Педиатрия'
         ["ped#{row['Зачетная книга']}", "p#{row['Зачетная книга']}"]
       when 'Стоматология'
