@@ -34,7 +34,7 @@ class ArticlesController < ApplicationController
   def show
     if can?
       @attachment = Attachment.new
-      @attachments = Attachment.select(:id, :title).order(:title).load
+#       @attachments = Attachment.select(:id, :title).order(:title).load
     end
     attachments = @article.attachments
     @first_image_attachment = attachments.select {|a| a.mime_type =~ /image/}.first
