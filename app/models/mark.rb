@@ -26,6 +26,7 @@ class Mark < ActiveRecord::Base
                 student ||= students.find_by_login(login)
               end
             else
+              login = row['Имя пользователя']
               student = students.find_by_login(login)
             end
             if student
