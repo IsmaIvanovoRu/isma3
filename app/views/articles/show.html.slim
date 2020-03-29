@@ -13,8 +13,6 @@ section.panel
       div style = "display: none;"
         = text_field_tag :article_id, @article.id
       .filefild
-        = f.select :id, options_for_select = @attachments.collect {|p| [p.title, p.id] }, {:include_blank => ''}
-      .filefild
         = f.file_field :file, name: 'attachment[files][]', id: :files, multiple: true
       .actions
         = f.submit 'Прикрепить файл', class: "button tiny"

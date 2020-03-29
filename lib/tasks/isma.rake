@@ -126,12 +126,14 @@ namespace :isma do
     list = ldap_search(ldap, extended_dn)
     openldap_hash = openldap_hash_create(list)
 # выгрузка списка обучающихся с сайта
-    students = load_users('students')
+    students_logins = open_spreadsheet('students_logins.csv')
+    logins_array = students_logins.column(1)
+    logins_array.delete('login')
+    students = User.includes(:profile).where(login: logins_array).select(:id, :login)
 # чтение актуального списка студентов
     students_1c = open_spreadsheet('students_1c.csv') if file_exist?('students_1c.csv')
     unused_rows = []
 # чтение списка учетных записей обучающихся
-    students_logins = open_spreadsheet('students_logins.csv')
     if students_1c
       header = students_1c.row(1)
       (2..students_1c.last_row).each do |i|
@@ -145,11 +147,8 @@ namespace :isma do
           openldap_entry ||= openldap_hash[login]
         end
         if student
-          if row['Состояние'] != 'Является студентом'
-            puts "удаляем студента #{student.profile.full_name} из группы"
-            student.groups.delete(Group.find_by_name('students'))
-            student.posts.each{|p| p.destroy if p.division.division_type_id == 6} if student.posts
-          else
+          case row['Состояние'] 
+          when 'Является студентом'
             student_groups = student.groups.map(&:name)
             student.groups << Group.find_by_name('students') unless student_groups.include? 'students'
             student.groups << Group.find_by_name('writers') unless student_groups.include? 'writers'
@@ -178,9 +177,17 @@ namespace :isma do
             puts "добавляем студента в группу ldap"
             group_of_names[division_1c_name] ||= []
             group_of_names[division_1c_name].push student.login
+          when 'Находится в академическом отпуске'
+            puts "удаляем студента #{student.profile.full_name} из группы"
+            student.posts.each{|p| p.destroy if p.division.division_type_id == 6} if student.posts
+          when 'Отчислен'
+            puts "удаляем студента #{student.profile.full_name} из группы"
+            student.groups.delete(Group.find_by_name('students'))
+            student.groups.delete(Group.find_by_name('writers'))
+            student.posts.each{|p| p.destroy if p.division.division_type_id == 6} if student.posts
+          else
+            unused_rows.push row
           end
-        else
-          unused_rows.push row
         end
       end
       puts 'Удаляем пустые группы'

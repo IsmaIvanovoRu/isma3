@@ -19,10 +19,15 @@ class Mark < ActiveRecord::Base
 	group.each do |i|
 	  row = Hash[[header, spreadsheet.row(i)].transpose]
           if row.select{|k, v| v != nil}.length > common_columns
-            logins = student_login(row)
-            student = nil
-            logins.each do |login|
-              student ||= students.find_by_login(login)
+            unless row['Имя пользователя']
+              logins = student_login(row)
+              student = nil
+              logins.each do |login|
+                student ||= students.find_by_login(login)
+              end
+            else
+              login = row['Имя пользователя']
+              student = students.find_by_login(login)
             end
             if student
               educational_program_id = row['Направление (специальность)']
