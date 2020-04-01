@@ -5,5 +5,5 @@ User-agent: *
 Allow: /
 Disallow: /kiosk.txt
 Host: https://isma.ivanovo.ru
-sitemap: https://isma.ivanovo.ru/sitemaps/sitemap.xml
+sitemap: https://isma.ivanovo.ru/storage/data/sitemaps/sitemap.xml
 
