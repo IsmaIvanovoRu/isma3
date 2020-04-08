@@ -18,16 +18,16 @@ module ApplicationHelper
         remove_youtube(text)
       end
     end
-    if text =~ /(docs.google.com\/forms)/ 
-      if action_name == 'show'
-	options = Sanitize::Config.merge(Sanitize::Config::RELAXED,
-                                     attributes: {'a' => Sanitize::Config::RELAXED[:attributes]['a'] + ["target"], 'iframe' => ['width', 'height', 'src', 'frameborder', 'allowfullscreen', 'style'], all: Sanitize::Config::RELAXED[:attributes][:all] + ['itemprop', 'itemscope', 'itemtype']},
-	                             elements: Sanitize::Config::RELAXED[:elements] + ['iframe'])
-	insert_googleform(text)
-      else
-        remove_googleform(text)
-      end
-    end
+#     if text =~ /(docs.google.com\/forms)/ 
+#       if action_name == 'show'
+# 	options = Sanitize::Config.merge(Sanitize::Config::RELAXED,
+#                                      attributes: {'a' => Sanitize::Config::RELAXED[:attributes]['a'] + ["target"], 'iframe' => ['width', 'height', 'src', 'frameborder', 'allowfullscreen', 'style'], all: Sanitize::Config::RELAXED[:attributes][:all] + ['itemprop', 'itemscope', 'itemtype']},
+# 	                             elements: Sanitize::Config::RELAXED[:elements] + ['iframe'])
+# 	insert_googleform(text)
+#       else
+#         remove_googleform(text)
+#       end
+#     end
     Sanitize.clean(text, options).gsub('itemscope=""', 'itemscope').html_safe
   end
   
