@@ -143,11 +143,11 @@ class ApplicationController < ActionController::Base
   def http_params
     case Rails.env
       when 'development'
-        url = '10.0.3.133:3000'
+        url = '10.245.150.67:3000'
         proxy_ip = nil
         proxy_port = nil
       when 'production' 
-        url = '10.0.5.131:3000'
+        url = 'priem.isma.ivanovo.ru'
         proxy_ip = nil
         proxy_port = nil
     end

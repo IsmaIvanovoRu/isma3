@@ -12,8 +12,8 @@ class Api::EntrantApplicationsController < ApplicationController
     method = 'entrant_applications/'
     http_params = http_params()
     http = Net::HTTP.new(http_params[:uri_host], http_params[:uri_port], http_params[:proxy_ip], http_params[:proxy_port])
-    headers = {'Content-Type': 'application/json'}
-    response = http.post(http_params[:uri_path] + method, '{}', headers)
-    render json: response.body
+    headers = {"Content-Type" => "application/json", "Accept" => "application/json"}
+    response = http.post(http_params[:uri_path] + method, params.to_json, headers)
+    redirect_to entrant_url(JSON.parse(response.body)['hash'])
   end
 end

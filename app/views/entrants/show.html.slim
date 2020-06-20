@@ -1,0 +1,194 @@
+section.panel
+  .row
+    .large-12.small-12.columns
+      h2.right 
+        span Номер личного дела: 
+        span= @entrant_application['entrant_application']['application_number'] ? "#{"%04d" % @entrant_application['entrant_application']['application_number']}" : "еще не присвоен"
+      h2= [@entrant_application['entrant_application']['entrant_last_name'], @entrant_application['entrant_application']['entrant_first_name'], @entrant_application['entrant_application']['entrant_middle_name']].compact.join(' ')
+      - case @entrant_application['entrant_application']['status_id']
+      - when 2
+        .label.info= 'Ваше заявление находится на рассмотрении'
+      - when 4
+        .label.success= 'Ваше заявление допущено к участию в конкурсе'
+      - when 6
+        .label.alert= 'исключено из участия в конкурсе'
+      p
+      - @entrant_application['attachments'].each do |attachment|
+        - if attachment['document_type'] == 'entrant_application' && attachment['document_id'] == @entrant_application['entrant_application']['id'] && attachment['template']
+          .= link_to 'Скачать бланк заявления', "#{api_attachment_path(attachment['data_hash'])}?filename=#{attachment['filename']}"
+        - else
+          .= link_to attachment['filename'], "#{api_attachment_path(attachment['data_hash'])}?filename=#{attachment['filename']}"
+      = form_tag("/api/attachments", method: 'post', multipart: true) do
+        .hide
+          = text_field_tag :entrant_application_id, @entrant_application['entrant_application']['id']
+          = text_field_tag :document_type, 'entrant_application'
+          = text_field_tag :document_id, @entrant_application['entrant_application']['id']
+        .filefild
+          = file_field_tag 'files[]', name: 'files[]', id: :files, multiple: true
+        = submit_tag 'Прикрепить подписанную копию заявления', class: "button tiny"
+  .row
+    .large-12.small-12.columns
+      table.table
+        caption Перечень конкурсов
+        thead
+          tr
+            th.text-center Конкурсная группа
+            th.text-center Наличие согласия
+            th.text-center Наличие договора
+            th.text-center Статус зачисления
+        tbody
+          - @entrant_application['competitive_groups'].each do |competitive_group|
+            - agreement_exists = @entrant_application['entrant_application']['budget_agr'] == competitive_group['id'] || @entrant_application['paid_agr'] == competitive_group['id']
+            - contract_exists = @entrant_application['contracts'].include?(competitive_group['id'])
+            tr
+              td
+                = competitive_group['name']
+              td.text-center
+                span= "+" if agreement_exists
+              td.text-center
+                - if contract_exists
+                  span= '+'
+                - else
+                  - if competitive_group['name'] =~ /Леч/ && competitive_group['education_source_id'] == 15
+                    = link_to 'Скачать бланк договора', attachment_url(49994), target: :blank
+                  - if competitive_group['name'] =~ /Пед/ && competitive_group['education_source_id'] == 15
+                    = link_to 'Скачать бланк договора', attachment_url(49993), target: :blank
+                  - if competitive_group['name'] =~ /Стомат/ && competitive_group['education_source_id'] == 15
+                    = link_to 'Скачать бланк договора', attachment_url(49992), target: :blank
+              td
+                span= "зачислен #{@entrant_application['entrant_application']['enrolled_date']}" if @entrant_application['entrant_application']['enrolled'] == competitive_group['id']
+      p 
+        span Заполненный бланк договора по каждой специальности необходимо отсканировать и выслать на адрес электронной почты: 
+        span= mail_to 'contract@isma.ivanovo.ru'
+      p После подписания договора со стороны академии в строках вместо ссылки на загрузку бланков появится знак +
+  .row
+    .large-12.small-12.columns
+      table.table
+        caption Конкурсные баллы
+        thead
+          tr
+            - @entrant_application['marks'].each do |mark|
+              th = mark['subject']
+            th Сумма
+            th С учетом достижений
+        tbody
+          tr
+            - @entrant_application['marks'].each do |mark|
+              td= "Форма экзамена - #{mark['form']}, оценка #{mark['value'] ? mark['value'] : 'еще не известна'}"
+            td= @entrant_application['sum']
+            td= @entrant_application['full_sum']
+  .row
+    .large-12.small-12.columns
+      - unless @entrant_application['achievements'].empty?
+        table
+          caption Индивидуальные достижения
+          th Название достижения
+          th Файлы
+          th Действие
+          - @entrant_application['achievements'].each do |achievement|
+            tr
+              td
+                = achievement['name']
+              = form_tag("/api/attachments", method: 'post', multipart: true) do
+                td
+                  ul
+                  - @entrant_application['attachments'].each do |attachment|
+                    - if attachment['document_type'] == 'achievement' && attachment['document_id'] == achievement['id']
+                      li= link_to attachment['filename'], "#{api_attachment_path(attachment['data_hash'])}?filename=#{attachment['filename']}"
+                  hr
+                  .hide
+                    = text_field_tag :entrant_application_id, @entrant_application['entrant_application']['id']
+                    = text_field_tag :document_type, 'achievement'
+                    = text_field_tag :document_id, achievement['id']
+                  .filefild
+                    = file_field_tag 'files[]', name: 'files[]', id: :files, multiple: true
+                td
+                  = submit_tag 'Прикрепить документ, подтверждающий индивидуальное достижение', class: "button tiny"
+      h2= "Льготы" if @entrant_application['entrant_application']['olympionic'] || @entrant_application['entrant_application']['benefit']
+      p= "Олимпиада" if @entrant_application['entrant_application']['olympionic']
+      p= "Особое право поступления" if @entrant_application['entrant_application']['benefit']
+  .row
+    .large-12.small-12.columns
+      h2 Документы
+      dl
+        dt
+          h3 Документ, удостоверяющий личность
+          - @entrant_application['identity_documents'].each do |identity_document|
+            dd= identity_document['identity_document_data']
+            - @entrant_application['attachments'].each do |attachment|
+              - if attachment['document_type'] == 'identity_document' && attachment['document_id'] == identity_document['id']
+                dd= link_to attachment['filename'], "#{api_attachment_path(attachment['data_hash'])}?filename=#{attachment['filename']}"
+            dd
+              = form_tag("/api/attachments", method: 'post', multipart: true) do
+                .hide
+                  = text_field_tag :entrant_application_id, @entrant_application['entrant_application']['id']
+                  = text_field_tag :document_type, 'identity_document'
+                  = text_field_tag :document_id, identity_document['id']
+                .filefild
+                  = file_field_tag 'files[]', name: 'files[]', id: :files, multiple: true
+                = submit_tag 'Прикрепить копию документа, удостоверяющего личность', class: "button tiny"
+        dt
+          h3 Документ об образовании
+          - if @entrant_application['education_document']['education_document_type']
+            - case @entrant_application['education_document']['education_document_type']
+            - when 'HighEduDiplomaDocument'
+              - education_document_name = 'Диплом о высшем профессиональном образовании'
+            - when 'MiddleEduDiplomaDocument'
+              - education_document_name = 'Диплом о среднем специальном образовании'
+            - when 'SchoolCertificateDocument'
+              - education_document_name = 'Аттестат о среднем общем образовании'
+          dd
+            = "#{education_document_name} #{@entrant_application['education_document']['education_document_data']}"
+            span &nbsp;
+            p= @entrant_application['education_document']['education_speciality_code']
+            - @entrant_application['attachments'].each do |attachment|
+              - if attachment['document_type'] == 'education_document' && attachment['document_id'] == @entrant_application['education_document']['id']
+                dd= link_to attachment['filename'], "#{api_attachment_path(attachment['data_hash'])}?filename=#{attachment['filename']}"
+          dd
+            = form_tag("/api/attachments", method: 'post', multipart: true) do
+              .hide
+                = text_field_tag :entrant_application_id, @entrant_application['entrant_application']['id']
+                = text_field_tag :document_type, 'education_document'
+                = text_field_tag :document_id, @entrant_application['education_document']['id']
+              .filefild
+                = file_field_tag 'files[]', name: 'files[]', id: :files, multiple: true
+              = submit_tag 'Прикрепить копию документа об образовании', class: "button tiny"
+        - unless @entrant_application['target_contracts'].empty?
+          dt
+            h3 Целевые договоры
+            - @entrant_application['target_contracts'].each do |target_contract|
+              dd= "#{target_contract['competitive_group_name']} - #{target_contract['target_organization_name']}"
+              - @entrant_application['attachments'].each do |attachment|
+                - if attachment['document_type'] == 'target_contract' && attachment['document_id'] == target_contract['id']
+                  dd= link_to attachment['filename'], "#{api_attachment_path(attachment['data_hash'])}?filename=#{attachment['filename']}"
+              dd
+                = form_tag("/api/attachments", method: 'post', multipart: true) do
+                  .hide
+                    = text_field_tag :entrant_application_id, @entrant_application['entrant_application']['id']
+                    = text_field_tag :document_type, 'target_contract'
+                    = text_field_tag :document_id, target_contract['id']
+                  .filefild
+                    = file_field_tag 'files[]', name: 'files[]', id: :files, multiple: true
+                  = submit_tag 'Прикрепить копию целевого договора', class: "button tiny"
+        - if  @entrant_application['entrant_application']['benefit']
+          dt
+            h3 Документы на льготу
+            - @entrant_application['benefit_documents'].each do |benefit_document|
+              dd= benefit_document['benefit_document_data']
+              - @entrant_application['attachments'].each do |attachment|
+                - if attachment['document_type'] == 'benefit_document' && attachment['document_id'] == benefit_document['id']
+                  dd= link_to attachment['filename'], "#{api_attachment_path(attachment['data_hash'])}?filename=#{attachment['filename']}"
+              dd
+                = form_tag("/api/attachments", method: 'post', multipart: true) do
+                  .hide
+                    = text_field_tag :entrant_application_id, @entrant_application['entrant_application']['id']
+                    = text_field_tag :document_type, 'benefit_document'
+                    = text_field_tag :document_id, benefit_document['id']
+                  .filefild
+                    = file_field_tag 'files[]', name: 'files[]', id: :files, multiple: true
+                  = submit_tag 'Прикрепить копию документа, подтверждающего льготу', class: "button tiny"
+        - if @entrant_application['entrant_application']['olympionic']
+          dt
+            h3 Диплом победителя/призера олимпиады
+            - @entrant_application['olympic_documents'].each do |olympic_document|
+              dd= olympic_document['olympic_document_data']
