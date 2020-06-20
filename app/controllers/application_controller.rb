@@ -143,15 +143,17 @@ class ApplicationController < ActionController::Base
   def http_params
     case Rails.env
       when 'development'
+        protocol = 'http://'
         url = '10.245.150.67:3000'
         proxy_ip = nil
         proxy_port = nil
-      when 'production' 
+      when 'production'
+        protocol = 'https://'
         url = 'priem.isma.ivanovo.ru'
         proxy_ip = nil
         proxy_port = nil
     end
-    uri = URI.parse('http://' + url + '/api/')
+    uri = URI.parse(protocol + url + '/api/')
     return {uri_host: uri.host, uri_path: uri.path, uri_port: uri.port, proxy_ip: proxy_ip, proxy_port: proxy_port}
   end
 end
