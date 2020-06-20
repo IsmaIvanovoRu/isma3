@@ -12,7 +12,7 @@ class Api::AttachmentsController < ApplicationController
   def create
     method = 'attachments/'
     http_params = http_params()
-    url = [[http_params[:uri_host], http_params[:uri_port]].join(':'), http_params[:uri_path], method].join('/')
+    url = ['https:/', [http_params[:uri_host], http_params[:uri_port]].join(':'), http_params[:uri_path], method].join('/')
     RestClient.post url, attachment: params
     redirect_to :back
   end
