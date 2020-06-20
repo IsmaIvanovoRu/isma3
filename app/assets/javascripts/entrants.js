@@ -307,16 +307,16 @@ var entrants = new Vue({
   },
   mounted: function() {
     axios
-      .get('http://' + this.api.host + '/api/campaigns')
+      .get('https://' + this.api.host + '/api/campaigns')
       .then(response => (this.api.campaigns = response.data.campaigns));
     axios
-      .get('http://' + this.api.host + '/api/dictionaries/10')
+      .get('https://' + this.api.host + '/api/dictionaries/10')
       .then(response => (this.api.specialities_dictionary = response.data.dictionary.items));
     axios
-      .get('http://' + this.api.host + '/api/dictionaries/21')
+      .get('https://' + this.api.host + '/api/dictionaries/21')
       .then(response => (this.api.countries = response.data.dictionary.items));
     axios
-      .get('http://' + this.api.host + '/api/dictionaries/22')
+      .get('https://' + this.api.host + '/api/dictionaries/22')
       .then(response => (this.api.identity_document_types = response.data.dictionary.items));
   }
 })
