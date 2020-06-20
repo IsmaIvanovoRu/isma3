@@ -13,19 +13,21 @@ section.panel
       - when 6
         .label.alert= 'исключено из участия в конкурсе'
       p
+      - n = 0
       - @entrant_application['attachments'].each do |attachment|
         - if attachment['document_type'] == 'entrant_application' && attachment['document_id'] == @entrant_application['entrant_application']['id'] && attachment['template']
           .= link_to 'Скачать бланк заявления', "#{api_attachment_path(attachment['data_hash'])}?filename=#{attachment['filename']}"
+          p После скачивания необходимо распечатать и подписать заявление и загрузить обратно электронную копию
+          = form_tag("/api/attachments", method: 'post', multipart: true) do
+            .hide
+              = text_field_tag :entrant_application_id, @entrant_application['entrant_application']['id']
+              = text_field_tag :document_type, 'entrant_application'
+              = text_field_tag :document_id, @entrant_application['entrant_application']['id']
+            .filefild
+              = file_field_tag 'files[]', name: 'files[]', id: :files, multiple: true
+            = submit_tag 'Прикрепить подписанную копию заявления', class: "button tiny"
         - else
-          .= link_to attachment['filename'], "#{api_attachment_path(attachment['data_hash'])}?filename=#{attachment['filename']}"
-      = form_tag("/api/attachments", method: 'post', multipart: true) do
-        .hide
-          = text_field_tag :entrant_application_id, @entrant_application['entrant_application']['id']
-          = text_field_tag :document_type, 'entrant_application'
-          = text_field_tag :document_id, @entrant_application['entrant_application']['id']
-        .filefild
-          = file_field_tag 'files[]', name: 'files[]', id: :files, multiple: true
-        = submit_tag 'Прикрепить подписанную копию заявления', class: "button tiny"
+          .= link_to attachment['filename'], "#{api_attachment_path(attachment['data_hash'])}?filename=#{attachment['filename']}" if attachment['document_type'] == 'entrant_application' && attachment['document_id'] == @entrant_application['entrant_application']['id']
   .row
     .large-12.small-12.columns
       table.table
