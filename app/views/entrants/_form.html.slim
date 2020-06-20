@@ -191,9 +191,9 @@
                       = text_field_tag 'marks[][subject_id]', nil, 'v-bind:value': 'mark.entranceSubjectId'
                   td
                     .(v-if="findCampaign(campaign_id).campaign_type_id == 1")
-                      = select_tag 'marks[][form]', options_for_select(['ЕГЭ', 'Экзамен']), include_blank: ''
+                      = select_tag 'marks[][form]', options_for_select(['ЕГЭ', 'Экзамен']), include_blank: '', 'v-model.trim': 'mark.form'
                     .(v-if="findCampaign(campaign_id).campaign_type_id == 4")
-                      = select_tag 'marks[][form]', options_for_select(['Аккредитация', 'Экзамен']), include_blank: ''
+                      = select_tag 'marks[][form]', options_for_select(['Аккредитация', 'Экзамен']), include_blank: '', 'v-model.trim': 'mark.form'
                     
                     small.error v-if="findErrorMessage('mark.form')" == "{{ findErrorMessage('mark.form') }}"
                   td(v-show="mark.form == 'Аккредитация'")

@@ -193,7 +193,7 @@ var entrants = new Vue({
       var birthMonth = Number(numbers[1]);
       var birthDay = Number(numbers[2]);
       var message = [];
-      var year = (new Date()).getFullYear();
+      var year = (new Date()).getFullYear() + 1;
       if(birthYear + birthMonth + birthDay) {
         if(!(Number(numbers[0]) > 0 && Number(numbers[0]) < Number(year))) message.push('Неверный год');
         if(!(Number(numbers[1]) > 0 && Number(numbers[1]) < 13)) message.push('Неверный месяц');
@@ -251,18 +251,18 @@ var entrants = new Vue({
           entrants.errors.push({element: 'identityDocumentDate', message: 'Необходимо указать дату выдачи документа, удостоверяющего личность', level: 'red'});
         };
       }));
-      if(this.educationDocument.documentType == '') this.errors.push({element: 'education_document_type_id', message: 'Необходимо выбрать тип документа об образовании', level: 'red'});
+//       if(this.educationDocument.documentType == '') this.errors.push({element: 'education_document_type_id', message: 'Необходимо выбрать тип документа об образовании', level: 'red'});
       if(this.educationDocument.documentNumber == '') this.errors.push({element: 'education_document_number', message: 'Необходимо указать номер документа об образовании', level: 'red'});
       if(this.marks.find(function(element) {
         if(element.form == ''){
           entrants.errors.push({element: 'mark', message: 'Необходимо указать указать форму вступительного испытания', level: 'red'});
         };
       }));
-      if(this.competitions.find(function(element) {
-        if(element.id == ''){
-          entrants.errors.push({element: 'competition', message: 'Необходимо выбрать конкурсы для участия', level: 'red'});
-        };
-      }));
+//       if(this.competitions.find(function(element) {
+//         if(element.id == ''){
+//           entrants.errors.push({element: 'competition', message: 'Необходимо выбрать конкурсы для участия', level: 'red'});
+//         };
+//       }));
       if(this.checkContactInformationAddress) this.errors.push({element: 'address', message: this.checkContactInformationAddress, level: 'yellow'});
       if(this.checkContactInformationEmail) this.errors.push({element: 'email', message: this.checkContactInformationEmail, level: 'red'});
       if(this.errors.length == 0) return true;
