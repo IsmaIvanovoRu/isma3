@@ -85,3 +85,5 @@ gem 'petrovich'
 gem 'net-ldap'
 
 gem 'translit'
+
+gem 'rest-client'

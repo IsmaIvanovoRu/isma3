@@ -8,6 +8,6 @@ class EntrantsController < ApplicationController
     http_params = http_params()
     http = Net::HTTP.new(http_params[:uri_host], http_params[:uri_port], http_params[:proxy_ip], http_params[:proxy_port])
     response = http.get(http_params[:uri_path] + method + params[:id])
-    render json: response.body
+    @entrant_application = JSON.parse(response.body)
   end
 end
