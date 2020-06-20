@@ -154,6 +154,6 @@ class ApplicationController < ActionController::Base
         proxy_port = nil
     end
     uri = URI.parse(protocol + url + '/api/')
-    return {uri_host: uri.host, uri_path: uri.path, uri_port: uri.port, proxy_ip: proxy_ip, proxy_port: proxy_port}
+    return {uri_host: uri.host, uri_path: uri.path, uri_port: uri.port, proxy_ip: proxy_ip, proxy_port: proxy_port, :use_ssl => uri.scheme == 'https'}
   end
 end
