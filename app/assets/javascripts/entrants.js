@@ -193,7 +193,7 @@ var entrants = new Vue({
       var birthMonth = Number(numbers[1]);
       var birthDay = Number(numbers[2]);
       var message = [];
-      var year = (new Date()).getFullYear();
+      var year = (new Date()).getFullYear() + 1;
       if(birthYear + birthMonth + birthDay) {
         if(!(Number(numbers[0]) > 0 && Number(numbers[0]) < Number(year))) message.push('Неверный год');
         if(!(Number(numbers[1]) > 0 && Number(numbers[1]) < 13)) message.push('Неверный месяц');
