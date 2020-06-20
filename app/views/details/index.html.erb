@@ -1,0 +1,30 @@
+<h1>Listing details</h1>
+
+<%= link_to 'New Detail', new_detail_path, class: "button" %>
+<table>
+  <tr>
+    <th>Key</th>
+    <th>Value</th>
+    <th>Tag Type</th>
+    <th>Block</th>
+    <th>Tag Name</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @details.each do |detail| %>
+  <tr>
+    <td><%= detail.key %></td>
+    <td><%= detail.value %></td>
+    <td><%= detail.tag_type if detail.tag_type %></td>
+    <td><%= detail.tag_name if detail.tag_name %></td>
+    <td><%= detail.block if detail.block %></td>
+    <td><%= link_to 'Show', detail %></td>
+    <td><%= link_to 'Edit', edit_detail_path(detail) %></td>
+    <td><%= link_to 'Destroy', detail, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />

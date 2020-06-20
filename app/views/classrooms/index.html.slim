@@ -1,0 +1,30 @@
+h1 Учебные помещения
+- if @moderator_permission
+    h2 Импорт учебных помещений
+    = form_tag import_classrooms_path, multipart: true do
+      = file_field_tag :file
+      = submit_tag "Загрузить", class: 'button'
+table
+  caption Cведения о наличии оборудованных учебных кабинетов
+  thead
+    tr
+      th Код
+      th Наименование специальности, направления подготовки
+      th Наименование дисциплины (модуля), практик в соответствии с учебным планом
+      th Наименование специальных помещений и помещений для самостоятельной работы
+      th Оснащенность специальных помещений и помещений для самостоятельной работы
+      th Приспособленность помещений для использования инвалидами и лицами с ограниченными возможностями здоровья
+      th Действия
+  tbody
+  - @classrooms.each do |classroom|
+    tr
+      td= classroom.subject.educational_program.code
+      td= classroom.subject.educational_program.name
+      td= classroom.subject.name
+      td= classroom.description
+      td= classroom.equipment
+      td= classroom.location
+      td
+        - if @moderator_permission
+          = link_to classroom, title: 'Удалить', method: :delete, data: { confirm: 'Are you sure?' } do
+            i.fi-x

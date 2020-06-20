@@ -1,0 +1,57 @@
+<%= form_for(@division) do |f| %>
+  <% if @division.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@division.errors.count, "error") %> prohibited this division from being saved:</h2>
+
+      <ul>
+      <% @division.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label 'Название' %>
+    <%= f.text_field :name %>
+  </div>
+  <div class="field">
+    <%= f.label 'division_type_id', 'Тип подразделения' %>
+    <%= f.select :division_type_id, options_for_select = @division_types.collect {|p| [t(p.name, :scope => [:division_types]), p.id] }, {:include_blank => ''} %>
+  </div>
+  <div class="field">
+    <%= f.label :about, 'О подразделении' %>
+    <%= f.text_area :about %>
+  </div><br />
+  <div class="field">
+    <%= f.label 'Адрес' %>
+    <%= f.text_field :address %>
+  </div>
+  <div class="field">
+    <%= f.label :email, 'Электронная почта' %>
+    <%= f.email_field :email %>
+  </div>  
+  <div class="field">
+    <%= f.label 'Широта' %>
+    <%= f.text_field :latitude %>
+  </div>
+  <div class="field">
+    <%= f.label 'Долгота' %>
+    <%= f.text_field :longitude %>
+  </div>
+  <div class="field">
+    <%= f.label 'Сайт подразделения' %>
+    <%= f.text_field :url %>
+  </div>
+  <div>
+    <%= f.label 'Номер вложения положения о подразделении' %>
+    <%= f.select :reference, options_for_select = @references.collect {|r| [r.title_sen_dot, r.id] }, {:include_blank => ''} %>
+  </div>
+  <div class="field">
+    <%= f.check_box :in_structure %>
+    <%= f.label 'Отображать в структуре академии' %>
+  </div>
+  <div class="actions">
+    <%= f.submit 'Сохранить', class: 'button small' %>
+  </div>
+<% end %>

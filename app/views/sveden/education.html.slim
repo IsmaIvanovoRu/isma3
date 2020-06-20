@@ -1,0 +1,187 @@
+section.panel
+  h1 Образование
+  p= autosub_details("&amp;[Навигация сведений об образовательной организации]").html_safe
+  p Ивановская государственная медицинская академия имеет право на осуществление образовательной деятельности в сфере высшего профессионального образования (лицензия Федеральной службы по надзору в сфере образования и науки № 0702 от 24 апреля 2013 года).
+  table(itemprop='eduAccred')
+    caption Информация о сроке действия государственной аккредитации образовательной программы, о языках, на которых осуществляется образование (обучение)
+    thead
+      tr
+        th Код
+        th Наименование специальности, направления подготовки
+        th Уровень образования
+        th Срок действия государственной аккредитации
+        th Языки, на которых осуществляется образование (обучение)
+        th Сведения о нормативных сроках обучения
+    tbody
+      - @educational_programs.each do |educational_program|
+        tr
+          td(itemprop='eduCode')=  educational_program.code
+          - amp = educational_program.adaptive ? '*' : ''
+          td(itemprop='eduName')= link_to "#{educational_program.full_name}#{amp}", educational_program if educational_program.full_name
+          td(itemprop='eduLevel')= educational_program.level if educational_program.level
+          td(itemprop='dateEnd')= (educational_program.accreditation.expiration_date ? educational_program.accreditation.expiration_date.strftime("%d.%m.%Y") : 'бессрочно') if educational_program.accreditation
+          td(itemprop='language')= educational_program.language
+          td(itemprop='learningTerm')= educational_program.duration if educational_program.duration
+  p.sub * - адаптированная образовательная программа
+  table(itemprop='eduChislen')
+    caption Информация о численности обучающихся по реализуемым образовательным программам за счет бюджетных ассигнований федерального бюджета, бюджетов субъектов Российской Федерации, местных бюджетов и по договорам об образовании за счет средств физических и (или) юридических лиц
+    thead
+      tr
+        th rowspan=2 Код
+        th rowspan=2 Наименование специальности, направления подготовки
+        th rowspan=2 Уровень образования
+        th rowspan=2 Форма обучения
+        th colspan=4 Численность обучающихся за счет (количество человек):
+      tr
+        th бюджетных ассигнований федерального бюджета
+        th бюджетов субъектов Российской Федерации
+        th местных бюджетов
+        th средств физических и (или) юридических лиц
+    tbody
+      - @educational_programs.each do |educational_program|
+        - educational_program_number = educational_program.educational_program_numbers.sort_by(&:date).last
+        - if educational_program_number
+          tr
+            td(itemprop='eduCode')=  educational_program.code
+            td(itemprop='eduName')= link_to educational_program.full_name, educational_program if educational_program.full_name
+            td(itemprop='eduLevel')= educational_program.level if educational_program.level
+            td(itemprop='eduForm')= educational_program.form if educational_program.form
+            td(itemprop='numberBFpriem')= educational_program_number.number_federal
+            td(itemprop='numberBRpriem')= educational_program_number.number_regional
+            td(itemprop='numberBMpriem')= educational_program_number.number_local
+            td(itemprop='numberPpriem')= educational_program_number.number_personal
+  table(itemprop='eduPriem')
+    caption Информация о результатах приема по каждой профессии, специальности среднего профессионального образования (при наличии вступительных испытаний), каждому направлению подготовки или специальности высшего образования с различными условиями приема (на места, финансируемые за счет бюджетных ассигнований федерального бюджета, бюджетов субъектов Российской Федерации, местных бюджетов, по договорам об образовании за счет средств физических и (или) юридических лиц
+    thead
+      tr
+        th rowspan=2 Код
+        th rowspan=2 Наименование специальности, направления подготовки
+        th rowspan=2 Уровень образования
+        th rowspan=2 Форма обучения
+        th colspan=4 Результаты приема обучающихся за счет (количество человек):
+        th rowspan=2 Средняя сумма набранных баллов по всем вступительным испытаниям
+      tr
+        th бюджетных ассигнований федерального бюджета
+        th бюджетов субъектов Российской Федерации
+        th местных бюджетов
+        th средств физических и (или) юридических лиц
+    tbody
+      - @educational_programs.each do |educational_program|
+        - educational_program_priem = educational_program.educational_program_priems.sort_by(&:date).last
+        - if educational_program_priem
+          tr
+            td(itemprop='eduCode')=  educational_program.code
+            td(itemprop='eduName')= link_to educational_program.full_name, educational_program if educational_program.full_name
+            td(itemprop='eduLevel')= educational_program.level if educational_program.level
+            td(itemprop='eduForm')= educational_program.form if educational_program.form
+            td(itemprop='numberBFpriem')= educational_program_priem.number_federal
+            td(itemprop='numberBRpriem')= educational_program_priem.number_regional
+            td(itemprop='numberBMpriem')= educational_program_priem.number_local
+            td(itemprop='numberPpriem')= educational_program_priem.number_personal
+            td(itemprop='scorePriem')= educational_program_priem.summa
+  table(itemprop='eduPerevod')
+    caption Информация о результатах перевода, восстановления и отчисления
+    thead
+      tr
+        th Код
+        th Наименование специальности, направления подготовки
+        th Уровень образования
+        th Форма обучения
+        th Численность обучающихся, переведенных в другие образовательные организации
+        th Численность обучающихся, переведенных из других образовательных организаций
+        th Численность восстановленных обучающихся
+        th Численность отчисленых обучающихся
+    tbody
+      - @educational_programs.each do |educational_program|
+        - educational_program_perevod = educational_program.educational_program_perevods.sort_by(&:date).last
+        - if educational_program_perevod
+          tr
+            td(itemprop='eduCode')=  educational_program.code
+            td(itemprop='eduName')= link_to educational_program.full_name, educational_program if educational_program.full_name
+            td(itemprop='eduLevel')= educational_program.level if educational_program.level
+            td(itemprop='eduForm')= educational_program.form if educational_program.form
+            td(itemprop='numberOutPerevod')= educational_program_perevod.number_out_perevod
+            td(itemprop='numberToPerevod')= educational_program_perevod.number_to_perevod
+            td(itemprop='numberResPerevod')= educational_program_perevod.number_res_perevod
+            td(itemprop='numberExpPerevod')= educational_program_perevod.number_exp_perevod
+  table
+    caption Информация по образовательным программам, в том числе адаптированным
+    thead
+      tr
+        th Код
+        th Наименование специальности, направления подготовки
+        th Уровень образования
+        th Форма обучения
+        th Описание образовательной программы с приложением ее копии
+        th Учебный план с приложением его копии
+        th Аннотации к рабочим программам дисциплин с приложением их копий
+        th Календарный учебный график с приложением его копии
+        th Методические и иные документы, разработанные образовательной организацией для обеспечения образовательного процесса
+        th Информация о практиках, предусмотренных соответствующей образовательной программой
+        th Информация об использовании при реализации образовательной программы электронного обучения и дистанционных образовательных технологий
+    tbody
+      - @educational_programs.each do |educational_program|
+        tr(itemprop="#{educational_program.adaptive ? 'adeduOp' : 'eduOp'}")
+          td(itemprop="eduCode", style="vertical-align: top;")= educational_program.code
+          td(itemprop="eduName", style="vertical-align: top;")= educational_program.name
+          td(itemprop="eduLevel", style="vertical-align: top;")= educational_program.level
+          td(itemprop="eduForm", style="vertical-align: top;")= educational_program.form
+          - amp = educational_program.adaptive ? '*' : ''
+          td(itemprop="#{educational_program.adaptive ? 'adOpMain' : 'opMain'}", style="vertical-align: top;")= link_to "#{educational_program.full_name}#{amp}", educational_program.attachment, target: 'blank' if educational_program.full_name
+          td(style="vertical-align: top;")
+            ul
+              - educational_program.academic_plans.each do |academic_plan|
+                li(itemprop="#{educational_program.adaptive ? 'adEducationPlan' : 'educationPlan'}")= link_to academic_plan.name, academic_plan.attachment, target: 'blank'
+          td(style="vertical-align: top;")
+            ul
+              - educational_program.subjects.each do |subject|
+                li(itemprop="#{educational_program.adaptive ? 'adEducationAnnotation' : 'educationAnnotation'}")= link_to subject.name, subject.attachment, target: 'blank'
+          td(style="vertical-align: top;")
+            ul
+              - educational_program.academic_schedules.each do |academic_schedule|
+                li(itemprop="#{educational_program.adaptive ? 'adEducationShedule' : 'educationShedule'}")= link_to academic_schedule.name, academic_schedule.attachment, target: 'blank'
+          td(style="vertical-align: top;")
+            ul
+              - educational_program.methodological_supports.each do |methodological_support|
+                li(itemprop="#{educational_program.adaptive ? 'adMethodology' : 'methodology'}")= link_to methodological_support.attachment.title_sen_dot, methodological_support.attachment, target: 'blank'
+          td(style="vertical-align: top;")
+            ul
+              - educational_program.practices.each do |practic|
+                li(itemprop="#{educational_program.adaptive ? 'adEduPr' : 'eduPr'}")= link_to practic.name, practic.attachment, target: 'blank'
+          td(itemprop="#{educational_program.adaptive ? 'adEduEl' : 'eduEl'}", style="vertical-align: top;") -
+  p.sub * - адаптированная образовательная программа
+  table(itemprop='eduNir')
+    caption Направления и результаты научной (научно-исследовательской) деятельности
+    thead
+      tr
+        th Код
+        th Наименование специальности, направления подготовки
+        th Перечень научных направлений
+        th.hidden Сведения о научно-исследовательской базе
+        th Количество НПР
+        th Количество студентов
+        th Количество монографий
+        th Количество публикаций
+        th Количество российских патентов
+        th Количество зарубежных патентов
+        th Количество российских свидетельств о регистрации интеллектуальной собственности
+        th Количество зарубежных свидетельств о регистрации интеллектуальной собственности
+        th Среднегодовой объем финансирования
+    tbody
+      - @educational_programs.each do |educational_program|
+        - educational_program_research = educational_program.educational_program_researches.sort_by(&:date).last
+        - if educational_program_research
+          tr
+            td(itemprop='eduCode')=  educational_program.code
+            td(itemprop='eduName')= link_to educational_program.full_name, educational_program if educational_program.full_name
+            td(itemprop='perechenNir')= educational_program_research.perechen_nir
+            td.hidden(itemprop='baseNir')= educational_program_research.base_nir
+            td(itemprop='nprNir')= educational_program_research.npr_nir
+            td(itemprop='studNir')= educational_program_research.stud_nir
+            td(itemprop='monografNir')= educational_program_research.monograf_nir
+            td(itemprop='articleNir')= educational_program_research.article_nir
+            td(itemprop='patentRNir')= educational_program_research.patent_r_nir
+            td(itemprop='patentZNir')= educational_program_research.patent_z_nir
+            td(itemprop='svidRNir')= educational_program_research.svid_r_nir
+            td(itemprop='svidZNir')= educational_program_research.svid_z_nir
+            td(itemprop='financeNir')= educational_program_research.finance_nir

@@ -1,0 +1,80 @@
+section.panel
+  .
+    = link_to 'К списку образовательных программ', educational_programs_path if @moderator_permission
+  - if @moderator_permission
+    .right
+      = link_to edit_educational_program_path(@educational_program), title: 'Редактировать' do
+        i.fi-page-edit
+      = link_to @educational_program, title: 'Удалить', method: :delete, data: { confirm: 'Are you sure?' } do
+        i.fi-x
+  h1= link_to @educational_program.full_name, @educational_program.attachment, target: 'blank'
+  - if @educational_program.active
+    .success.label Действующая
+  - else
+    .alert.label Архивная
+  - if @educational_program.adaptive
+    .warning.label Адаптированная
+  dl
+    dt Уровень обучения
+    dd= @educational_program.level
+    dt Код специальности
+    dd= @educational_program.code
+    dt Форма обучения
+    dd= @educational_program.form
+    dt Продолжительность обучения
+    dd= @educational_program.duration
+    dt Язык обучения
+    dd= @educational_program.language
+    dt Сведения об аккредитации
+    - if @educational_program.accreditation
+      dd= link_to "Свидетельство об аккредитации номер #{@educational_program.accreditation.number}, выдано #{@educational_program.accreditation.date_of_issue}, действительно до #{@educational_program.accreditation.expiration_date}", @educational_program.accreditation
+    - else
+      dd нет аккредитации
+    dt Численность обучающихся
+    - educational_program_numbers = @educational_program.educational_program_numbers.sort_by(&:date)
+    - if educational_program_numbers.count > 0
+      table
+        thead
+          tr
+            th colspan=4 Количество обучающихся
+            th rowspan=2 Дата
+            th rowspan=2 Действия
+          tr
+            th за счет средств федерального бюджета
+            th за счет средств регионального бюджета
+            th за счет средств местного бюджета
+            th за счет средств физических лиц
+          - educational_program_numbers.each do |educational_program_number|
+            tr
+              td= educational_program_number.number_federal
+              td= educational_program_number.number_regional
+              td= educational_program_number.number_local
+              td= educational_program_number.number_personal
+              td= educational_program_number.date.strftime('%e.%m.%Y')
+              td
+                - if @moderator_permission
+                  = link_to edit_educational_program_number_path(educational_program_number), title: 'Редактировать' do
+                    i.fi-page-edit
+                  = link_to educational_program_number, title: 'Удалить', method: :delete, data: { confirm: 'Are you sure?' } do
+                    i.fi-x
+  h2 Методическое обеспечение
+  - unless @methodological_supports.empty?    
+    ul
+      - @methodological_supports.each do |methodological_support|
+        - if @moderator_permission
+          .right
+            = link_to methodological_support, title: 'Удалить', method: :delete, data: { confirm: 'Are you sure?' } do
+              i.fi-x
+        li= link_to methodological_support.attachment.title_sen_dot, methodological_support.attachment
+  - if @moderator_permission
+    = form_for @methodological_support do |f|
+      .(style="display: none;")
+        = f.text_field :educational_program_id, value: @educational_program.id
+      .field
+        = f.select :attachment_id, option_for_select = @attachments.collect {|p| ["#{p.title} (#{p.id})", p.id]}, {include_blank: ''}
+      .action
+        = f.submit 'Добавить методические разработки', class: 'button tiny'
+    h2 Дисциплины
+    ul
+      - @subjects.each do |subject|
+        li= link_to subject.name, subject

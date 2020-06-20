@@ -1,0 +1,38 @@
+<section class="panel">
+<p><%= "Вы искали: \"#{params[:search]}\". Найдено совпадений - #{@search.count}" %>
+<ol start="<%= (params[:page].to_i - 1) * 30 + 1  if params[:page] %>" style="list-style-position: outside;">
+<% @search.sort_by(&:updated_at).reverse.each do |search| %>
+  <% if search.class == Attachment %>
+    <% if search.mime_type =~ /image/ %>
+        <li><%= link_to(image_tag(minify_img_path(search), size: '75x75'), "#", class: 'th', :title => search.title_sen_dot, "data-reveal-id" => "attachment_#{search.id}") %>
+      <div id="<%= "attachment_#{search.id}" %>" class="reveal-modal medium" data-reveal align="center">
+	<%= image_tag(inline_path(search)) %>
+	<a class="close-reveal-modal">&#215;</a>
+      </div>
+    <% else %>
+	  <li><i class="fi-paperclip" title="Вложение">&nbsp;</i><%= link_to search.title_sen_dot, attachment_path(search), target: 'blank' %>
+      <br />
+    <% end %>
+	  <ul>
+	  <% search.articles.each do |article| %>
+	    <li style="color: #6f6f6f;">В статье: <%= link_to article.title, article_path(article),  style: "color: #6495D3;" %></li>
+	  <% end %>
+	  </ul>
+	  </li>
+  <% end %>
+  <% if search.class == Article %>
+      <li><i class="fi-page" title="Статья">&nbsp;</i><%= link_to search.title, article_path(search) %>
+  <% end %>
+  <% if search.class == Profile %>
+      <li><i class="fi-torso" title="Пользователь">&nbsp;</i><%= link_to search.full_name, user_profile_path(search.user) %>
+  <% end %>
+  <%  if search.class == Division %>
+      <li><i class="fi-torsos-all" title="Подразделение">&nbsp;</i><%= link_to search.name, division_path(search) %>
+  <% end %>
+  <%  if search.class == Post %>
+      <li><i class="fi-torso-business" title="Должность">&nbsp;</i><%= link_to "#{search.name} - #{search.user.profile.full_name if search.user && search.user.profile}", division_post_path(search.division, search) %>
+  <% end %>
+<% end %>
+</ol>
+<%= will_paginate @search, next_label: "Вперед", previous_label: 'Назад' %>
+</section>

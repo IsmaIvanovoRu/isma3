@@ -1,0 +1,25 @@
+<div class="row">
+  <div class="large-4 large-centered small-12 columns panel">
+    <h2>Регистрация</h2>
+      <div class="label alert text-justify" style="white-space: normal;">
+      Если Вы являетесь сотрудником академии или обучающимся, то для получения учетной записи Вам необходимо обратиться в центр информатизации или свой деканат. Это связано с необходимостью получения дополнительных прав для работы на сайте.
+      </div>
+
+    <%= form_for(resource, :as => resource_name, :url => registration_path(resource_name)) do |f| %>
+      <%= devise_error_messages! %>
+
+      <div><%= f.label :login, 'Имя пользователя' %>
+      <%= f.text_field :login, :autofocus => true %></div>
+
+      <div><%= f.label :password, 'Пароль' %>
+      <%= f.password_field :password %></div>
+
+      <div><%= f.label :password_confirmation, 'Подтверждение пароля' %>
+      <%= f.password_field :password_confirmation %></div>
+
+      <div><%= f.submit "Регистрация", class: 'button small' %></div>
+    <% end %>
+
+    <%= render "devise/shared/links" %>
+  </div>
+</div>

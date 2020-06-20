@@ -1,0 +1,5 @@
+section.panel
+  h2 Конвертер тестов в формат moodle
+  = form_tag test_converters_mytest2moodle_path, multipart: true do
+    = file_field_tag :file
+    = submit_tag "Загрузить"

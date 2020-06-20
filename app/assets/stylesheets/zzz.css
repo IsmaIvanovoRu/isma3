@@ -1,0 +1,150 @@
+p.clearing-caption {
+  color: rgba(13,40,175,1)}
+.visible-img > img {
+  box-shadow: 0 0 10px rgba(0,0,0,0.5);
+}
+body {
+  background-color: rgb(67,65,59);
+  background-image: url("/assets/isma.jpg");
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  background-size: 100% auto;
+}
+hr {
+  border: 0;
+  height: 1px;
+  background-image: -webkit-linear-gradient(left, rgba(0,0,0,0), rgba(0,0,0,0.75), rgba(0,0,0,0)); 
+  background-image: -moz-linear-gradient(left, rgba(0,0,0,0), rgba(0,0,0,0.75), rgba(0,0,0,0)); 
+  background-image: -ms-linear-gradient(left, rgba(0,0,0,0), rgba(0,0,0,0.75), rgba(0,0,0,0)); 
+  background-image: -o-linear-gradient(left, rgba(0,0,0,0), rgba(0,0,0,0.75), rgba(0,0,0,0));
+  margin: 5px;
+}
+.index {
+  text-align : left;
+  line-height: 1.2;
+  font-size: 100%
+}
+ul, ol {
+  list-style-position: inside;
+}
+.side-nav {
+  line-height: 1;
+}
+.superscript, .subscript {
+  font-size : 75%;
+  line-height: normal;
+  font-style : italic;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  text-align: right;
+}
+.block {
+  font-size : 120%;
+  width: 7em;
+  background-color: rgba(255,255,255,0.6);
+  color: rgba(13,40,175, 1);
+  margin: 0;
+  padding: 2px;
+  text-align : center;
+  -webkit-border-top-left-radius: 15px;
+  -webkit-border-top-right-radius: 15px;
+  -moz-border-radius-topleft: 15px;
+  -moz-border-radius-topright: 15px;
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
+}
+.title {
+  color : rgb(122,8,3);
+  font-family : Garamond, serif;
+  text-shadow: 1px 1px 2px black, 0 0 1em white;
+  font-size : 150%;
+  text-align : center;
+  font-weight: bold;
+  text-transform: uppercase
+}
+.title-super {
+  font-family: Garamond, serif;
+  color: rgb(122,8,3);
+  text-transform: uppercase;
+  font-size: 0.8125rem;
+  font-weight: bold;
+  position: relative;
+  display: block;
+  padding: 0 15px;
+  height: 45px;
+  line-height: 45px;
+}
+.rows-40 {
+  height: 40em;
+}
+.pink {
+  background-color: rgba(204,0,0,0.5);
+}
+.content {
+  width: 100%;
+}
+.th {
+  margin-right: 1%;
+  margin-bottom: 1%;
+}
+.thumb {
+width: 49%;
+float: left;
+margin: 0.5%;
+padding: 0;
+  height:32px;
+}
+.thumb-title {
+  font-size: 90%;
+  height: 16px;
+  overflow: hidden;
+}
+footer {
+  font-size: 60%;
+}
+footer.panel {
+  margin-bottom: 0;
+}
+.wrap {
+  position: relative;
+}
+.wrap i {
+  position: absolute;
+  top: 0px;
+  right: 5px;
+}
+.welcome-img {
+  max-width: 100%;
+  height: auto;
+}
+.welcome-img + .panel {
+  height: 70px;
+}
+section.panel {
+  border-top: 3px solid rgb(0,0,205);
+  box-shadow: 0 0 10px rgba(0,0,0,0.5);
+}
+#feedback {
+  position: fixed;
+  bottom: -20px;
+  right: 20px;
+}
+.fi-social-twitter, .fi-rss {
+  font-size: 20px;
+  vertical-align: middle;
+}
+.fi-rss {
+  color: orange;
+}
+.fi-social-twitter {
+  color: blue;
+}
+.inline-list {
+  margin-left: -0.5rem;
+}
+.inline-list > li {
+  margin-left: 0.5rem;
+}
+.side-nav li a:not(.button) {
+  padding: 0 0;
+}

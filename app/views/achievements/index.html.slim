@@ -1,0 +1,13 @@
+section.panel
+  - unless @achievements.empty?
+    h1 Перечень достижений
+    table.table
+      thead
+        th Название мероприятия
+        th Категория
+        th Дата
+        th Результат
+        th Подтверждено документом
+        th Действия
+      tbody
+        = render partial: 'achievement', collection: @achievements

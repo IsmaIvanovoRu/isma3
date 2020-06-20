@@ -1,0 +1,24 @@
+<%= form_for @educational_standart do |f| %>
+  <% if @educational_standart.errors.any? %>
+    <ul>
+      <% @educational_standart.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+    </ul>
+  <% end %>
+  <div class=field>
+    <%= f.label 'Название' %>
+    <%= f.text_field :name %>
+  </div>
+  <div class=field>
+    <%= f.label 'Уровень стандарта' %>
+    <%= f.text_field :level %>
+  </div>
+  <div class=field>
+    <%= f.label 'Ссылка на стандарт' %>
+    <%= f.text_field :url %>
+  </div>
+  <div class=actions>
+    <%= f.submit 'Добавить', class: 'button tiny' %>
+  </div>
+<% end %>

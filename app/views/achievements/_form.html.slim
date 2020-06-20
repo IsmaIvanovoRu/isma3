@@ -1,0 +1,42 @@
+= form_for @achievement do |f|
+  - if @achievement.errors.any?
+    ul
+      - @achievement.errors.full_messages.each do |msg|
+        li= msg
+  .row
+    .large-6.small-12.columns
+      = f.label 'Название'
+      = f.text_field :event_name
+    .large-6.small-12.columns
+      = f.label 'Дата мероприятия'
+      = f.text_field :event_date, class: 'datepicker'
+  .row
+    .large-6.small-12.columns
+      = f.label 'Категория достижения'
+      = f.select :achievement_category_id, options_for_select = @achievement_categories.collect {|p| ["#{p.name} (#{p.description})", p.id] }, {:include_blank => ''}
+    .large-6.small-12.columns
+      = f.label 'Результат участия'
+      = f.select :achievement_result_id, options_for_select = @achievement_results.collect {|p| [p.name, p.id] }, {:include_blank => ''}
+  - attachments = @achievement.attachments
+  - if attachments.count > 0
+    .row
+      .large-6.small-12.columns
+        h2 Подтверждающие документы
+        ul
+          - attachments.each do |attachment|
+            li
+              = link_to attachment.title, attachment
+              span &nbsp
+              = link_to attachment, title: 'Удалить', method: :delete, data: { confirm: 'Are you sure?' } do
+                i.fi-x
+  .row
+    .large-12.small-12.columns
+      .filefild
+      = f.label 'Подтверждающий документ'
+      = f.file_field :file, name: 'attachment[files][]', id: :files, multiple: true
+  .row
+    .large-12.small-12.columns
+      = f.label 'Комментарий'
+      = f.text_field :comment
+  .actions
+    = f.submit 'Добавить', class: 'button tiny'

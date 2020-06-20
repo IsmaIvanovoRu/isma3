@@ -1,0 +1,42 @@
+<section class="panel">
+<div class='right'>
+  <% if @administrator_permission %>
+    <h2>Импорт пользователей</h2>
+    <%= form_tag import_users_path, multipart: true do %>
+      <%= file_field_tag :file %>
+      <%= submit_tag "Загрузить" %>
+    <% end %>
+    <h2>Импорт оценок</h2>
+    <%= form_tag import_marks_path, multipart: true do %>
+      <%= file_field_tag :file %>
+      <%= submit_tag "Загрузить" %>
+    <% end %>
+  <%= link_to 'Скачать список пользователей', users_path(format: :xls) %>
+  <% end %>
+</div>
+<h1>Список пользователей</h1>
+<%= will_paginate @users, next_label: "Вперед", previous_label: 'Назад' %>
+<hr />
+<dl>
+  <% @users.each do |user| %>
+    <dt>
+      <% if @administrator_permission %>
+        <span>&nbsp;</span>
+        <%= link_to published_toggle_user_profile_path(user), title: 'Опубликовать', class: 'right', method: :put do %>
+          <i class="fi-eye"></i>
+        <% end %>
+      <% end %>
+    <%= user.login %>
+| дата регистрации: <%= user.created_at.to_date %>
+    </dt>
+    <dd>
+    <%= user.profile.full_name.empty? ? (link_to 'Профиль не заполнен', edit_user_profile_path(user)) : (link_to user.profile.full_name, user_profile_path(user)) %>
+      <ul class='inline-list'>
+	<% user.groups.each do |g| %>
+	  <li><%= link_to t(g.name, scope: :groups), g %></li>
+	<% end %>
+      </ul>
+    </dd>
+  <% end %>
+<dl>
+</seciton>

@@ -1,0 +1,38 @@
+- class_name = 'pink' unless feedback.public
+.panel{class=class_name}
+  - if @moderator_permission
+    .left.subscript
+      = "#{feedback.post.division.name} - #{feedback.post.name}" if feedback.post
+  .right
+    - if @moderator_permission || can_edit?(feedback)
+      = link_to published_toggle_feedback_path(feedback), title: (feedback.public ? 'Снять с публикации' : 'Опубликовать'), method: :put do
+        i.fi-eye
+      = link_to up_feedback_path(feedback), title: 'Поднять наверх', method: :put do
+        i.fi-arrow-up
+      = link_to edit_feedback_path(feedback), title: 'Редактировать ответ' do
+        i.fi-page-edit
+      = link_to feedback, title: 'Удалить вопрос', method: :delete, data: { confirm: 'Are you sure?' } do
+        i.fi-x
+  p.clearfix
+  dt
+    = sanitize_full feedback.question if feedback.question
+    p.subscript
+      = feedback.user.profile.full_name.empty? ? feedback.user.login : feedback.user.profile.full_name
+      - case feedback.created_at.to_date
+        - when Time.now.to_date
+          = "&nbsp;|&nbsp;сегодня в #{time_tag feedback.created_at, :pubdate => true, :format => '%R'}".html_safe
+        - else
+          = "&nbsp;|&nbsp;#{time_tag feedback.created_at, :pubdate => true, :format => '%e.%m.%Y %R'}".html_safe
+  - if feedback.answer
+    dd
+      = sanitize_full feedback.answer
+      - if !feedback.answer.empty? || @moderator_permission
+        p.subscript
+          - s = feedback.post.user.profile.full_name if feedback.post && feedback.post.user && feedback.answer
+          - if feedback.answer
+            - case feedback.updated_at.to_date
+              - when Time.now.to_date
+                - s += "&nbsp;|&nbsp;сегодня в #{time_tag feedback.updated_at, :pubdate => true, :format => '%R'}"
+              - else
+                - s += "&nbsp;|&nbsp;#{time_tag feedback.updated_at, :pubdate => true, :format => '%e.%m.%Y %R'}"
+          = s.html_safe

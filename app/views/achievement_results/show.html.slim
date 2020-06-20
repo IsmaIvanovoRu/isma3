@@ -1,0 +1,10 @@
+section.panel
+  .
+    = link_to 'К списку результатов достижений', achievement_results_path
+  .right
+    - if @moderator_permission
+      = link_to edit_achievement_result_path(@achievement_result), title: 'Редактировать' do
+        i.fi-page-edit
+      = link_to @achievement_result, title: 'Удалить', method: :delete, data: { confirm: 'Are you sure?' } do
+        i.fi-x
+  h1= @achievement_result.name

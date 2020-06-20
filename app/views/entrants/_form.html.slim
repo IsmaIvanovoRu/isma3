@@ -1,0 +1,335 @@
+= form_tag(api_entrant_applications_path, method: 'post', id: 'entrant_application')
+  .row
+    .large-12.small-12.columns
+      input.error#citizenship(type="checkbox" name="citizenship" v-bind:value="true" v-model="citizenship")
+      label(for='citizenship') 
+        span Подтверждаю, что являюсь гражданином Российской Федерации
+      small.error v-if="findErrorMessage('citizenship')" == "{{ findErrorMessage('citizenship') }}"
+  .row(v-show="citizenship")
+    fieldset
+      legend Выбор приемной кампании
+      .row
+        .large-12.small-12.columns
+          label
+            span При поступлении на первый курс для получения диплома врача необходимо выбрать Специалитет, для последипломного обучения в ординатуре - Кадры высшей квалификации
+            select.error#campaign_id(name="campaign_id" v-model='campaign_id' v-on:change='fillMarks(findCampaign(campaign_id).entrance_test_items)')
+              option(v-for="campaign_item in api.campaigns" v-bind:value="campaign_item.id") {{ campaign_item.name }}
+            small.error v-if="findErrorMessage('campaign_id')" == "{{ findErrorMessage('campaign_id') }}"
+    fieldset
+      legend Персональные данные
+      p Фамилию, имя и отчество следует писать в именительном падеже в строгом соответствии с паспортными данными. Особое внимание стоит обратить на наличие или отсутствие буквы Ё, вариантное написание имен типа НаталЬЯ/НаталИЯ и т.д. При наличии составных имени, фамилии или отчества также необходимо ориентироваться на написание в паспорте - поставить пробел или дефис. Перед дефисом и после него пробел не ставится.
+      .row
+        .large-4.small-12.columns
+          = label_tag :entrant_last_name
+            span Фамилия
+            = text_field_tag :entrant_last_name, nil, placeholder: 'Как в паспорте', 'v-model.trim': 'personal.lastName', class: 'error'
+          small.error v-if="checkLastName" == "{{ checkLastName }}"
+        .large-4.small-12.columns
+          = label_tag :entrant_first_name
+            span Имя
+            = text_field_tag :entrant_first_name, nil, placeholder: 'Как в паспорте', 'v-model.trim': 'personal.firstName', class: 'error'
+          small.error v-if="checkFirstName" == "{{ checkFirstName }}"
+        .large-4.small-12.columns
+          = label_tag :entrant_middle_name
+            span Отчество
+            = text_field_tag :entrant_middle_name, nil, placeholder: 'Как в паспорте, если есть', 'v-model.trim': 'personal.middleName', class: 'error'
+          small.error v-if="checkMiddleName" == "{{ checkMiddleName }}"
+      .row
+        .large-6.small-12.columns
+          = label_tag :birth_date
+            span Дата рождения
+            = date_field_tag :birth_date, nil, 'v-model': 'personal.birthDate', class: 'error'
+          small.error v-if="findErrorMessage('BirthDate')" == "{{ findErrorMessage('BirthDate') }}"
+        .large-6.small-12.columns
+          = label_tag :gender_id, 'Пол'
+          p
+          = radio_button_tag :gender_id, '2', true, 'v-model': 'personal.gender'
+          = label_tag :gender_id, 'женский'
+          = radio_button_tag :gender_id, '1', false, 'v-model': 'personal.gender'
+          = label_tag :gender_id, 'мужской'
+          small.error v-if="findErrorMessage('gender')" == "{{ findErrorMessage('gender') }}"
+    fieldset
+      legend Документы, удостоверяющие личность
+      p Указываются данные действующего документа, удостоверяющего личность. Если паспорт меняли после сдачи ЕГЭ, то необходимо также указать данные ранее выданного паспорта, нажав на кнопку "Указать данные дополнительного документа". Эти сведения используются при проверке результатов ЕГЭ.
+      . v-for="document in identityDocuments"
+        .row
+          .(v-show="identityDocuments.indexOf(document) > 0") Предыдущий документ
+          .large-4.small-12.columns
+            label
+              span Вид документа
+            select.error#identity_document_type(name="identity_documents[][identity_document_type]" v-model='document.documentType')
+              option(value) Выберите вид документа
+              option(v-for="identity_document_type in api.identity_document_types" v-bind:value="identity_document_type.id") {{ identity_document_type.name }}
+          .large-4.small-12.columns
+            = label_tag :identity_document_seriess
+              span Серия документа
+              = text_field_tag 'identity_documents[][identity_document_series]', nil, placeholder: 'Укажите серию документа', 'v-model.trim': 'document.documentSerie', class: 'error'
+          .large-4.small-12.columns
+            = label_tag :identity_document_number
+              span Номер документа
+              = text_field_tag 'identity_documents[][identity_document_number]', nil, placeholder: 'Укажите номер документа', 'v-model.trim': 'document.documentNumber', class: 'error'
+        .row
+          .large-4.small-12.columns
+            = label_tag :identity_document_date
+              span Дата выдачи документа
+              = date_field_tag 'identity_documents[][identity_document_date]', nil, placeholder: 'Дата выдачи документа', 'v-model.trim': 'document.documentDate', class: 'error'
+            small.error v-if="checkIdentityDocumentDate" == "{{ checkIdentityDocumentDate }}"
+          .large-8.small-12.columns(v-show="identityDocuments.indexOf(document) < 1")
+            = label_tag :identity_document_issuer
+              span Кем выдан документ
+              = text_field_tag 'identity_documents[][identity_document_issuer]', nil, placeholder: 'Укажите, кто выдал документ', 'v-model.trim': 'document.documentIssuer', class: 'error'
+        .row
+          .large-4.small-12.columns(v-show="identityDocuments.indexOf(document) > 0")
+            = label_tag :alt_entrant_last_name
+              span Прежняя фамилия
+              = text_field_tag 'identity_documents[][alt_entrant_last_name]', nil, placeholder: 'Как в паспорте, если меняли', 'v-model.trim': 'document.altEntrantLastName', class: 'error'
+            small.error v-if="checkLastName" == "{{ checkLastName }}"
+          .large-4.small-12.columns(v-show="identityDocuments.indexOf(document) > 0")
+            = label_tag :alt_entrant_first_name
+              span Прежнее имя
+              = text_field_tag 'identity_documents[][alt_entrant_first_name]', nil, placeholder: 'Как в паспорте, если меняли', 'v-model.trim': 'document.altEntrantFirstName', class: 'error'
+            small.error v-if="checkFirstName" == "{{ checkFirstName }}"
+          .large-4.small-12.columns(v-show="identityDocuments.indexOf(document) > 0")
+            = label_tag :alt_entrant_middle_name
+              span Прежнее отчество
+              = text_field_tag 'identity_documents[][alt_entrant_middle_name]', nil, placeholder: 'Как в паспорте, если есть', 'v-model.trim': 'document.altEntrantMiddleName', class: 'error'
+            small.error v-if="checkMiddleName" == "{{ checkMiddleName }}"
+        hr
+      .row
+        .button.tiny @click="addIdentityDocument" Указать данные дополнительного документа
+        span &nbsp;
+        .button.tiny(v-if="identityDocuments.length > 1" @click="deleteIdentityDocument") Удалить документ
+    fieldset
+      legend Документ об образовании
+      p Сведения о документе об образовании — это данные того документа, который будет подан в приемную комиссию. При поступлении по результатам ЕГЭ обычно это аттестат, но при наличии у Вас нескольких документов об образовании (аттестата и диплома), Вы можете выбрать, какой из них подать. При поступлении по результатам внутренних экзаменов абитуриент подает диплом о среднем профессиональном или высшем образовании. Современные аттестаты, как правило, не содержат серии - в том случае соответствующее поле заполнять не нужно.
+      .row
+        .large-4.small-12.columns
+          label
+            span Вид документа
+          select.error#education_document_type(name="education_document[education_document_type]" v-model='educationDocument.DocumentType')
+            option(value) Выберите вид документа
+            option(v-for="education_document_type in api.education_document_types" v-bind:value="education_document_type.id") {{ education_document_type.name }}
+          small.error v-if="findErrorMessage('educationDocument.documentType')" == "{{ findErrorMessage('educationDocument.documentType') }}"
+        .large-4.small-12.columns
+          = label_tag :education_document_series
+            span Серия документа
+            = text_field_tag 'education_document[education_document_series]', nil, placeholder: 'Укажите серию документа, если есть', 'v-model.trim': 'educationDocument.documentSerie', class: 'error'
+          small.error v-if="findErrorMessage('educationDocument.documentSerie')" == "{{ findErrorMessage('educationDocument.documentSerie') }}"
+        .large-4.small-12.columns
+          = label_tag :education_document_number
+            span Номер документа
+            = text_field_tag 'education_document[education_document_number]', nil, placeholder: 'Укажите номер документа', 'v-model.trim': 'educationDocument.documentNumber', class: 'error'
+          small.error v-if="findErrorMessage('educationDocument.documentNumber')" == "{{ findErrorMessage('educationDocument.documentNumber') }}"
+      .row
+        .large-4.small-12.columns
+          = label_tag :education_document_date
+            span Дата выдачи документа
+            = date_field_tag 'education_document[education_document_date]', nil, placeholder: 'Дата выдачи документа', 'v-model.trim': 'educationDocument.documentDate', class: 'error'
+          small.error v-if="checkEducationDocumentDate" == "{{ checkEducationDocumentDate }}"
+          small.error v-if="findErrorMessage('educationDocument.documentDate')" == "{{ findErrorMessage('educationDocument.documentDate') }}"
+        .large-4.small-12.columns
+          = label_tag :education_document_issuer
+            span Кем выдан документ
+            = text_field_tag 'education_document[education_document_issuer]', nil, placeholder: 'Укажите, кто выдал документ', 'v-model.trim': 'educationDocument.documentIssuer', class: 'error'
+          small.error v-if="findErrorMessage('educationDocument.documentIssuer')" == "{{ findErrorMessage('educationDocument.documentIssuer') }}"
+    fieldset
+      legend Контактные данные
+      p Необходимо указать место фактического проживания. В интересах абитуриента указать тот контактный телефон, по которому можно будет дозвониться в любое время. Он будет использоваться для экстренной связи с абитуриентом, если у приемной комиссии возникнут вопросы по документам или зачислению. Необходимо также указать действующий адрес электронной почты, на которую будет выслана ссылка на вход в личный кабинет абитуриента и результаты рассмотрения документов.
+      .row
+        .large-12.small-12.columns
+          = label_tag :address
+            span Адрес проживания
+            = text_field_tag :address, nil, placeholder: 'Фактический адрес проживания', 'v-model.trim': 'contactInformation.address', class: 'error'
+          small.error v-if="findErrorMessage('contactInformation.address')" == "{{ findErrorMessage('contactInformation.address') }}"
+      .row
+        .large-4.small-12.columns
+          = label_tag :zip_code
+            span Почтовый индекс
+            = number_field_tag :zip_code, nil, min: 0, max: 999999, placeholder: '000000', 'v-model.trim': 'contactInformation.zipCode', class: 'error'
+          small.error v-if="findErrorMessage('contactInformation.zipCode')" == "{{ findErrorMessage('contactInformation.zipCode') }}"
+        .large-4.small-12.columns
+          = label_tag :email
+            span Адрес электронной почты
+            = email_field_tag :email, nil, placeholder: 'user@domain.com', 'v-model.trim': 'contactInformation.email', class: 'error'
+          small.error v-if="findErrorMessage('contactInformation.email')" == "{{ findErrorMessage('contactInformation.email') }}"
+        .large-4.small-12.columns
+          = label_tag :phone
+            span Мобильный телефон
+            = phone_field_tag :phone, nil, placeholder: '+7(999)999-99-99', 'v-model.trim': 'contactInformation.phone', class: 'error'
+          small.error v-if="findErrorMessage('contactInformation.phone')" == "{{ findErrorMessage('contactInformation.phone') }}"
+
+    fieldset(v-show="campaign_id != ''")
+      legend Указать индивидуальные достижения
+      p Поступающему может быть начислено за индивидуальные достижения не более 10 баллов суммарно
+      .row
+        .large-12.small-12.columns
+          .(v-for="campaign_item in api.campaigns" v-if="campaign_item.id == campaign_id")
+            .(v-for="institution_achievement in campaign_item.institution_achievements")
+              input.error(type="checkbox" v-bind:id="'institution_achievement' + institution_achievement.id" v-bind:name="'institution_achievement_ids[]'" v-bind:value="institution_achievement.id" v-model="institutionAchievements")
+              label(v-bind:for="institution_achievement.id")
+                span = "{{ institution_achievement.name }} (дополнительные баллы: {{ institution_achievement.max_value }})"
+    fieldset(v-if="campaign_id != ''")
+      legend Выбор вступительных испытаний
+      p В качестве вступительных испытаний указывается ЕГЭ или внутренний экзамен, проводимый ИвГМА. Сдавать внутренние испытания, проводимые академией, имеют право дети-инвалиды, инвалиды, а также абитуриенты, поступающие на базе среднего или высшего профессионального образования вне зависимости от того, сдавали они ЕГЭ или нет. При этом они имеют право выбора - по каким предметам указать результаты ЕГЭ, а по камим сдавать внутренние экзамены. Также внутренние испытания в академии могут сдавать лица, указанные в подпунктах "б" и "в" подпункта 1 и в подпункте 2 пункта 2.3 Правил приема. Абитуриент, набравший менее 42 баллов по любому из предметов, в конкурсе участвовать не может (минимальный балл установлен Министерством здравоохранения Российской Федерации).  
+      .row
+        .large-12.small-12.columns
+          .(v-for="campaign_item in api.campaigns" v-if="campaign_item.id == campaign_id")
+            table
+              thead
+                tr
+                  th Предмет
+                  th(v-show="false")
+                  th Форма экзамена
+                  th(v-show="findCampaign(campaign_id).campaign_type_id == 4") Оценка
+                  th(v-show="findCampaign(campaign_id).campaign_type_id == 4")
+                    span(v-if="findCampaign(campaign_id).campaign_type_id == 4") Год сдачи
+                  th(v-if="findCampaign(campaign_id).campaign_type_id == 4") Название организации сдачи экзамена
+              tbody
+                tr(v-for="mark in marks")
+                  td = "{{ mark.subjectName }} (минимальный балл {{ mark.minScore }})"
+                  td(v-show="false")
+                      = text_field_tag 'marks[][subject_id]', nil, 'v-bind:value': 'mark.entranceSubjectId'
+                  td
+                    .(v-if="findCampaign(campaign_id).campaign_type_id == 1")
+                      = select_tag 'marks[][form]', options_for_select(['ЕГЭ', 'Экзамен']), include_blank: ''
+                    .(v-if="findCampaign(campaign_id).campaign_type_id == 4")
+                      = select_tag 'marks[][form]', options_for_select(['Аккредитация', 'Экзамен']), include_blank: ''
+                    
+                    small.error v-if="findErrorMessage('mark.form')" == "{{ findErrorMessage('mark.form') }}"
+                  td(v-show="mark.form == 'Аккредитация'")
+                    = number_field_tag 'marks[][value]', nil, 'v-bind:min': 'mark.minScore', max: 100, 'v-model.trim': 'mark.value'
+                  td(v-show="mark.form == 'Аккредитация'")
+                    = number_field_tag 'marks[][year]', nil, 'v-bind:min': 'findCampaign(campaign_id).year_start - 4', 'v-bind:max': 'findCampaign(campaign_id).year_start', 'v-model.trim':'mark.year'
+                    small.error v-if="findErrorMessage('mark.form')" == "{{ findErrorMessage('mark.form') }}"
+                  td(v-if="findCampaign(campaign_id).campaign_type_id == 4")
+                    = text_field_tag 'marks[][organization_uid]', nil, 'v-model.tirm': 'mark.organizationUid'
+
+    fieldset(v-show="campaign_id != ''")
+      legend Выбор условий поступления
+      p Вы имеете право отметить любое количество конкурсов при наличии оснований для участия в них. Каждый абитуриент, не имеющий высшего образования и являющийся гражданином России, может участвовать в общем конкурсе на каждую специальность на бюджетной и внебюджетной основе. Для участия в конкурсе в пределах квоты целевого приема необходимо заключить договор с заказчиком целевого обучения. Чтобы претендовать на места в пределах особой квоты, необходимо иметь те или иные федеральные льготы. Без испытаний поступают некоторые победители и призеры олимпиад школьников. Лица, имеющие высшее образование, могут поступать только на внебюджетной основе. В соответствии с законодательством абитуриент имеет право претендовать на поступление одновременно не более чем по трем специальностям в один вуз. Поскольку в ИвГМА реализуются три образовательные программы специалитета, Вы можете отметить все три специальности.
+      .row
+        .large-12.small-12.columns
+          .(v-for="campaign_item in api.campaigns" v-if="campaign_item.id == campaign_id")
+            .(v-for="admission_volume in campaign_item.admission_volumes")
+              input.error(type="checkbox" v-bind:id="admission_volume.direction_id" v-bind:name="admission_volume.direction_id" v-bind:value="admission_volume.direction_id" v-model="specialities")
+              label(v-bind:for="specialityName(admission_volume.direction_id)")
+                span = "{{ specialityName(admission_volume.direction_id) }}"
+              .(v-for="competitive_groups_item in campaign_item.competitive_groups" v-if="competitive_groups_item.direction_id == admission_volume.direction_id && specialities.includes(admission_volume.direction_id)")
+                span &nbsp;&nbsp;
+                input.error(type="checkbox" v-bind:id="'competitive_group_' + competitive_groups_item.id" v-bind:name="'competitive_groups[][id]'" v-model="competitions" v-bind:value="competitive_groups_item.id")
+                label(v-bind:for="competitive_groups_item.id")
+                  span = "{{ competitive_groups_item.name }}"
+                span &nbsp;&nbsp;
+                .(v-if="competitive_groups_item.name.match(/Целевые/) && competitions.includes(competitive_groups_item.id)")
+                  p Прием на целевое обучение осуществляется при наличии договора о целевом обучении. При подаче заявления о приеме на целевое обучение поступающий представляет помимо документов, указанных в пункте 6.14 Правил приема, копию договора о целевом обучении, заверенную заказчиком целевого обучения, или незаверенную копию указанного договора с предъявлением его оригинала.
+                  select.error#target_organization_name(name="competitive_groups[][target_organization_id]")
+                    option(value) Выберите заказчика целевого приема
+                    option(v-for="target_organization in competitive_groups_item.target_organizations" v-bind:value="target_organization.id") {{ target_organization.target_organization_name }}
+                  small.error v-if="findErrorMessage('campaign_id')" == "{{ findErrorMessage('campaign_id') }}"
+                .(v-if="competitive_groups_item.name.match(/Квота особого/) && competitions.includes(competitive_groups_item.id)")
+                  p Право на прием на обучение в пределах особой квоты имеют дети-инвалиды, инвалиды I и II групп, инвалиды с детства, инвалиды вследствие военной травмы или заболевания, полученных в период прохождения военной службы, дети-сироты и дети, оставшиеся без попечения родителей, а также лица из числа детей-сирот и детей, оставшихся без попечения родителей, ветераны боевых действий из числа лиц, указанных в подпунктах 1-4 пункта 1 статьи 3 Федерального закона от 12 января 1995 года N 5-ФЗ «О ветеранах». Необходимо предоставить документ, подтверждающий данное право. В поле "Реквизиты документа" необходимо указать название документа, номер (при наличии), дату выдачи, срок действия документа (при наличии), каким органом/организацией выдан документ. В этом случае Вы можете участвовать в конкурсе на поступление по всем трем специальностям.
+    fieldset(v-if="campaign_id != '' && findCampaign(campaign_id).campaign_type_id == 1")
+      legend Документы, подтверждающие льготу
+      p Если Вы имеете особые права, определенные федеральным законодательством, то необходимо указать реквизиты документа, подтверждающего льготу. Наличие особых прав позволяет участвовать в конкурсе по особой квоте, получить преимущественное право зачисления.
+      . v-for="document in benefitDocuments"
+        .row
+          .(v-show="benefitDocuments.indexOf(document) > 0") Следующий документ документ
+          .large-4.small-12.columns
+            label
+              span Вид документа
+            select.error#benefit_document_type(name="benefit_documents[][benefit_document_type_id]" v-model='document.documentTypeId')
+              option(value) Выберите вид документа
+              option(v-for="benefit_document_type in api.benefit_document_types" v-bind:value="benefit_document_type.id") {{ benefit_document_type.name }}
+            small.error v-if="findErrorMessage('document.documentType')" == "{{ findErrorMessage('document.documentType') }}"
+          .large-4.small-12.columns
+            = label_tag :benefit_document_series
+              span Серия документа
+              = text_field_tag 'benefit_documents[][benefit_document_series]', nil, placeholder: 'Укажите серию документа', 'v-model.trim': 'document.documentSerie', class: 'error'
+            small.error v-if="findErrorMessage('document.documentSerie')" == "{{ findErrorMessage('document.documentSerie') }}"
+          .large-4.small-12.columns
+            = label_tag 'benefit_documents[][benefit_document_number]'
+              span Номер документа
+              = text_field_tag 'benefit_documents[][benefit_document_number]', nil, placeholder: 'Укажите номер документа', 'v-model.trim': 'document.documentNumber', class: 'error'
+            small.error v-if="findErrorMessage('document.documentNumber')" == "{{ findErrorMessage('document.documentNumber') }}"
+        .row
+          .large-4.small-12.columns
+            = label_tag :benefit_document_date
+              span Дата выдачи документа
+              = date_field_tag 'benefit_documents[][benefit_document_date]', nil, placeholder: 'Дата выдачи документа', 'v-model.trim': 'document.documentDate', class: 'error'
+            small.error v-if="checkIdentityDocumentDate" == "{{ checkIdentityDocumentDate }}"
+            small.error v-if="findErrorMessage('document.documentDate')" == "{{ findErrorMessage('document.documentDate') }}"
+          .large-8.small-12.columns
+            = label_tag :benefit_document_organization
+              span Кем выдан документ
+              = text_field_tag 'benefit_documents[][benefit_document_organization]', nil, placeholder: 'Укажите, кто выдал документ', 'v-model.trim': 'document.documentIssuer', class: 'error'
+            small.error v-if="findErrorMessage('document.documentIssuer')" == "{{ findErrorMessage('document.documentIssuer') }}"
+        hr
+      .row
+        .button.tiny @click="addBenefitDocument" Указать данные дополнительного документа
+        span &nbsp;
+        .button.tiny(v-if="benefitDocuments.length > 1" @click="deleteBenefitDocument") Удалить документ
+
+    fieldset(v-if="campaign_id != '' && findCampaign(campaign_id).campaign_type_id == 1")
+      legend Дипломы олимпиад
+      p Право на прием без вступительных испытаний имеют победители и призеры заключительного этапа всероссийской олимпиады школьников; члены сборных команд Российской Федерации, участвовавших в международных олимпиадах по химии; победители и призеры олимпиад школьников первого, второго и третьего уровня по химии (из списка, утвержденного ИвГМА), в течение 4 лет, следующих за годом проведения соответствующей олимпиады (то есть 2016-2020 годов). Необходимо представить копию диплома олимпиады.
+      p Быть приравненными к лицам, набравшим максимальное количество баллов ЕГЭ (100 баллов) по общеобразовательному предмету, соответствующему профилю олимпиады школьников могут победители и призеры олимпиад школьников первого, второго и третьего уровня по общеобразовательным предметам «химия», «биология», «русский язык» (из списка, утвержденного ИвГМА). Право на 100 баллов предоставляется при наличии результатов ЕГЭ по данному предмету не ниже 75 баллов.
+      . v-for="document in olympicDocuments"
+        .row
+          .(v-show="olympicDocuments.indexOf(document) > 0") Следующий документ документ
+          .large-4.small-12.columns
+            label
+              span Вид документа
+            select.error#olympic_document_type(name="olympic_documents[][olympic_document_type_id]" v-model='document.documentType')
+              option(value) Выберите вид документа
+              option(v-for="olympic_document_type in api.olympic_document_types" v-bind:value="olympic_document_type.id") {{ olympic_document_type.name }}
+            small.error v-if="findErrorMessage('document.documentType')" == "{{ findErrorMessage('document.documentType') }}"
+          .large-4.small-12.columns
+            = label_tag :olympic_document_series
+              span Серия документа
+              = text_field_tag 'olympic_documents[][olympic_document_series]', nil, placeholder: 'Укажите серию документа', 'v-model.trim': 'document.documentSerie', class: 'error'
+            small.error v-if="findErrorMessage('document.documentSerie')" == "{{ findErrorMessage('document.documentSerie') }}"
+          .large-4.small-12.columns
+            = label_tag :olympic_document_number
+              span Номер документа
+              = text_field_tag 'olympic_documents[][olympic_document_number]', nil, placeholder: 'Укажите номер документа', 'v-model.trim': 'document.documentNumber', class: 'error'
+            small.error v-if="findErrorMessage('document.documentNumber')" == "{{ findErrorMessage('document.documentNumber') }}"
+        .row
+          .large-4.small-12.columns
+            = label_tag :olympic_document_date
+              span Дата выдачи документа
+              = date_field_tag 'olympic_documents[][olympic_document_date]', nil, placeholder: 'Дата выдачи документа', 'v-model.trim': 'document.documentDate', class: 'error'
+            small.error v-if="findErrorMessage('document.documentDate')" == "{{ findErrorMessage('document.documentDate') }}"
+          .large-4.small-12.columns
+            = label_tag :diploma_type_id
+              span Результат участия
+              = select_tag 'olympic_documents[][diploma_type_id]', options_for_select([['Победитель', 1], ['Призер', 2]]), include_blank: true, 'v-model.trim': 'document.olympicResult', class: 'error'
+            small.error v-if="findErrorMessage('document.olympicResult')" == "{{ findErrorMessage('document.olympicResult') }}"
+          .large-4.small-12.columns
+            = label_tag :class_number
+              span В каком классе получен диплом
+              = number_field_tag 'olympic_documents[][class_number]', nil, placeholder: '00', min: 9, max: 11, 'v-model.trim': 'document.classNumber', class: 'error'
+            small.error v-if="findErrorMessage('document.classNumber')" == "{{ findErrorMessage('document.classNumber') }}"
+        hr
+      .row
+        .button.tiny @click="addOlympicDocument" Указать данные дополнительного документа
+        span &nbsp;
+        .button.tiny(v-if="olympicDocuments.length > 1" @click="deleteOlympicDocument") Удалить документ
+      .row
+        .large-12.small-12.columns
+          p Пункт "Нуждаюсь в предоставлении общежития" необходимо отметить, если Вы в процессе обучения собираетесь проживать в общежитии академии. Количество мест в общежитиях, предоставляемых поступившим на первый курс - 100.
+          input#need_hostel(type="checkbox" name="need_hostel" v-model.trim="needHostel")
+          label(for='need_hostel') 
+            span Нуждаюсь в предоставлении общежития на период обучения
+      .row(v-if="campaign_id != '' && findCampaign(campaign_id).campaign_type_id == 1")
+        .large-12.small-12.columns
+          input#special_entrant(type="checkbox" name="special_entrant" v-model.trim="specialEntrant")
+          label(for='special_entrant')
+            span Нуждаюсь в предоставлении особых условий при прохождении вступительных испытаний
+        .large-12.small-12.columns(v-if="specialEntrant")
+          = text_area_tag :special_conditions, nil, placeholder: 'Укажите особые условия', 'v-model.trim':'specialConditions'
+      .row(v-if="errors.length")
+        .large-12.small-12.columns.label.warning
+          h3 Исправьте ошибки и повторно нажмите кнопку Отправить
+          ul.no-bullet
+            li v-for='error in errors' v-if='error.level == "red"' == '{{ error.message }}'
+      = submit_tag 'Отправить', class: 'button', '@click': 'checkForm'

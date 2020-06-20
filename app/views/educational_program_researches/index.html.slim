@@ -1,0 +1,53 @@
+section.panel
+  h1 Направления и результаты научной деятельности
+  - if @moderator_permission
+    h2 Импорт направлений и результатов научной деятельности
+    = form_tag import_educational_program_researches_path, multipart: true do
+      = file_field_tag :file
+      = submit_tag "Загрузить", class: 'button'
+  hr
+  .
+    = link_to "Добавить", new_educational_program_research_path, class: 'button'
+    table
+      thead
+        tr
+          th Образовательная программа
+          th Перечень научных направлений
+          th Сведения о научно-исследовательской базе
+          th Количество НПР
+          th Количество студентов
+          th Количество монографий
+          th Количество публикаций
+          th Количество российских патентов
+          th Количество зарубежных патентов
+          th Количество российских свидетельств о регистрации интеллектуальной собственности
+          th Количество зарубежных свидетельств о регистрации интеллектуальной собственности
+          th Среднегодовой объем финансирования
+          th Дата
+          th Действия
+      tbody
+        - @educational_program_researches.each do |educational_program_research|
+          tr
+            td
+              - if educational_program_research.educational_program.educational_standart
+                = link_to "#{educational_program_research.educational_program.full_name} (#{educational_program_research.educational_program.educational_standart.level})", educational_program_research.educational_program
+              - else 
+                = link_to "#{educational_program_research.educational_program.full_name}", educational_program_research.educational_program
+            td= educational_program_research.perechen_nir
+            td= educational_program_research.base_nir
+            td= educational_program_research.npr_nir
+            td= educational_program_research.stud_nir
+            td= educational_program_research.monograf_nir
+            td= educational_program_research.article_nir
+            td= educational_program_research.patent_r_nir
+            td= educational_program_research.patent_z_nir
+            td= educational_program_research.svid_r_nir
+            td= educational_program_research.svid_z_nir
+            td= educational_program_research.finance_nir
+            td= educational_program_research.date.strftime('%e.%m.%Y')
+            td
+              - if @moderator_permission
+                = link_to edit_educational_program_research_path(educational_program_research), title: 'Редактировать' do
+                  i.fi-page-edit
+                = link_to educational_program_research, title: 'Удалить', method: :delete, data: { confirm: 'Are you sure?' } do
+                  i.fi-x

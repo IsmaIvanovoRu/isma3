@@ -1,0 +1,17 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  educational_program_id: 
+  number_federal: 1
+  number_regional: 1
+  number_local: 1
+  number_personal: 1
+  date: 2017-12-07
+
+two:
+  educational_program_id: 
+  number_federal: 1
+  number_regional: 1
+  number_local: 1
+  number_personal: 1
+  date: 2017-12-07

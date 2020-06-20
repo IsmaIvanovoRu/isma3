@@ -1,0 +1,39 @@
+section.panel
+  h1 Численность переведенных
+  - if @moderator_permission
+    h2 Импорт численности Переведенных
+    = form_tag import_educational_program_perevods_path, multipart: true do
+      = file_field_tag :file
+      = submit_tag "Загрузить", class: 'button'
+  hr
+  .
+    = link_to "Добавить", new_educational_program_perevod_path, class: 'button'
+    table
+      thead
+        tr
+          th Образовательная программа
+          th Численность обучающихся, переведенных в другие образовательные организации
+          th Численность обучающихся, переведенных из других образовательных организаций
+          th Численность восстановленных обучающихся
+          th Численность отчисленых обучающихся
+          th Дата
+          th Действия
+      tbody
+        - @educational_program_perevods.each do |educational_program_perevod|
+          tr
+            td
+              - if educational_program_perevod.educational_program.educational_standart
+                = link_to "#{educational_program_perevod.educational_program.full_name} (#{educational_program_perevod.educational_program.educational_standart.level})", educational_program_perevod.educational_program
+              - else 
+                = link_to "#{educational_program_perevod.educational_program.full_name}", educational_program_perevod.educational_program
+            td= educational_program_perevod.number_out_perevod
+            td= educational_program_perevod.number_to_perevod
+            td= educational_program_perevod.number_res_perevod
+            td= educational_program_perevod.number_exp_perevod
+            td= educational_program_perevod.date.strftime('%e.%m.%Y')
+            td
+              - if @moderator_permission
+                = link_to edit_educational_program_perevod_path(educational_program_perevod), title: 'Редактировать' do
+                  i.fi-page-edit
+                = link_to educational_program_perevod, title: 'Удалить', method: :delete, data: { confirm: 'Are you sure?' } do
+                  i.fi-x

@@ -1,0 +1,4 @@
+<%= @article.user.profile.full_name if @article.user %> написал(а) новую статью на сайт.
+<%= autosub_details_in_title @article.title %>
+<%= article_url(@article) %>
+<%= sanitize_truncate(autosub_details @article.content) %>

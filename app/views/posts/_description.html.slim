@@ -1,0 +1,2 @@
+- content_for :description
+  = "Страница #{RussianInflect.inflect(@post.name, :genitive)} #{RussianInflect.inflect(@post.division.name, :genitive)}"

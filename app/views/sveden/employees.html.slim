@@ -1,0 +1,53 @@
+- content_for :title do
+  Сведения об образовательной организации. Руководство. Педагогический (научно-педагогический) состав.
+section.panel
+  h1 Руководство. Педагогический (научно-педагогический) состав.
+  p= autosub_details("&amp;[Навигация сведений об образовательной организации]").html_safe
+  . itemprop='rucovodstvo'
+    h2 Руководство
+    table
+      thead
+        tr
+          th Ф.И.О.
+          th width='30%' Занимаемая должность
+          th Телефон
+          th Электронная почта
+      tbody
+        - @posts.each do |post|
+          tr
+            td= link_to post.profile.full_name, user_profile_path(post.user), itemprop: 'fio' if post.user
+            td itemprop='post'= post.name
+            td itemprop='telephone'= number_to_phone(post.phone, country_code: 7, area_code: true) if post && !post.phone.empty?
+            td itemprop='email'= mail_to post.division.email, post.division.email, itemprop: 'e-mail' if post.division.email
+  . itemprop='teachingStaff'
+    h2 Педагогический (научно-педагогический) состав
+    - if @administrator_permission
+      = link_to "Скачать список ППС", "/sveden/employees.xls"
+    table
+      thead
+        tr
+          th Ф.И.О.
+          th Занимаемая должность
+          th Преподаваемые дисциплины
+          th Уровень образования
+          th Квалификация
+          th Ученая степень
+          th Ученое звание
+          th Наименование направления подготовки и (или) специальность
+          th Повышение квалификации и (или) профессиональная переподготовка
+          th Общий стаж работы
+          th Стаж работы по специальности
+      tbody
+        - @employees.each do |employee|
+            tr
+              td= link_to employee.full_name, user_profile_path(employee.user), itemprop: 'fio'
+              td itemprop='post'= @posts_hash[employee.user.id][:posts]
+              td itemprop='teachingDiscipline'= @posts_hash[employee.user.id][:subjects].empty? ? employee.discipline : @posts_hash[employee.user.id][:subjects].mb_chars.downcase.to_s
+              td itemprop='teachingLevel' высшее образование
+              td itemprop='teachingQual'
+              td itemprop='degree'= employee.degree.name if employee.degree
+              td itemprop='academStat'= employee.academic_title.name if employee.academic_title
+              td itemprop='employeeQualification'= employee.qualification
+              td itemprop='profDevelopment'= employee.development
+              td itemprop='genExperience'= employee.general_experience
+              td itemprop='specExperience'= employee.special_experience

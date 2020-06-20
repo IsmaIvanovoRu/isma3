@@ -1,0 +1,21 @@
+<section class=panel>
+  <h1>Дисциплины</h1>
+  <div>
+    <%= link_to "Добавить", new_subject_path, class: 'button' %>
+  </div>
+  <ul>
+    <% @subjects.each do |subject| %>
+      <div class="right">
+        <% if @moderator_permission %>
+          <%= link_to edit_subject_path(subject), title: 'Редактировать' do %>
+            <i class="fi-page-edit"></i>
+          <% end %>
+          <%= link_to subject, title: 'Удалить', method: :delete, data: { confirm: 'Are you sure?' } do %>
+            <i class="fi-x"></i>
+          <% end %>
+        <% end %>
+      </div>
+        <li><%= link_to subject.educational_program.educational_standart ? "#{subject.name} - #{subject.educational_program.full_name} (#{subject.educational_program.educational_standart.level})" : "#{subject.name} - #{subject.educational_program.full_name}", subject %></li>
+    <% end %>
+  </ul>
+</section>

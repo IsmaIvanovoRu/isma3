@@ -1,0 +1,10 @@
+h1.block = title
+section.panel
+  = render partial: 'articles/article', collection: articles, locals: { dimension: '75x75', composition: composition }
+  - case title
+  - when 'Новости'
+    = link_to 'Архив новостей', archives_path + "?article_type_id=2"
+  - when 'Материалы'
+    = link_to 'Архив материалов', archives_path + "?article_type_id=1"
+  - when 'Анонсы'
+    = link_to 'Архив анонсов', archives_path + "?article_type_id=3"

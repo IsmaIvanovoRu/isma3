@@ -1,0 +1,16 @@
+<section class="panel">
+<h1><%= t(@group.name, scope: :groups) %></h1>
+
+<ul class="no-bullet">
+  <li>администратор: <%= @group.administrator? ? "+" : "-"  %></li>
+  <li>модератор: <%= @group.moderator? ? "+" : "-"  %></li>
+  <li>писатель: <%= @group.writer? ? "+" : "-"  %></li>
+  <li>читатель: <%= @group.reader? ? "+" : "-"  %></li>
+  <li>комментатор: <%= @group.commentator? ? "+" : "-"  %></li>
+</ul>
+<ul>
+<% @group.users.sort_by(&:created_at).each do |user| %>
+  <li><%= user.profile.full_name.empty? ? (link_to user.login, edit_user_profile_path(user)) : (link_to user.profile.full_name, user_profile_path(user)) %>
+<% end %>
+</ul>
+</section>

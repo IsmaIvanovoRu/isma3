@@ -1,0 +1,20 @@
+<article class="<%= " pink" unless comment.published %>">
+<div class="right">
+  <% if @moderator_permission %>
+    <%= link_to published_toggle_article_comment_path(article, comment), title: (comment.published ? 'Снять с публикации' : 'Опубликовать'), method: :put, data: {remote: true} do %>
+      <i class="fi-eye"></i>
+    <% end %>
+  <% end %>
+  <% if @moderator_permission %>
+    <%= link_to(article_comment_path(article, comment), method: :delete, data: {remote: true, confirm: 'Уверены?'}) do %>
+      <i class="fi-x" title="Удалить"></i>
+    <% end %>
+  <% end %>
+</div>
+<p class="text-justify clearfix">
+<%= comment.content%>
+</p>
+<p class=subscript>
+  <%= comment.user && comment.user.profile.full_name.empty? ? comment.user.login : (link_to comment.user.profile.full_name, user_profile_path(comment.user))  %>
+<%= time_tag comment.created_at, :format => :short, :pubdate => true %></p>
+</article>

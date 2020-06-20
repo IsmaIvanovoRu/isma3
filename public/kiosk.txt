@@ -1,0 +1,16 @@
+connection=wired
+network_interface=eth0
+dhcp=yes
+browser=firefox
+touchscreen_calibration="MASTouch TouchSystems MASTouch USB Touchscreen" "Evdev Axis Calibration" 32 108 1286 106 1044
+homepage_append=mac
+homepage=https://isma.ivanovo.ru/articles
+session_idle=2
+hide_mouse=yes
+disable_navigation_bar=yes
+#scheduled_action=Monday-17:00 Tuesday-17:00 Wednesday-17:00 Thursday-17:00 Friday-17:00 Saturday-17:00 Sunday-17:00 action:halt
+#rtc_wake=Monday-05:00 Tuesday-05:00 Wednesday-05:00 Thursday-05:00 Friday-05:00 Saturday-05:00 Sunday-05:00
+search_engine=duckduckgo
+wallpaper=https://isma.ivanovo.ru/assets/isma.jpg
+whitelist=isma.ivanovo.ru
+additional_components=uefi.zip 06-fonts.xzm

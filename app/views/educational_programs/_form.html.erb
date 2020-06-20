@@ -1,0 +1,56 @@
+<%= form_for @educational_program do |f| %>
+  <% if @educational_program.errors.any? %>
+    <ul>
+      <% @educational_program.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+    </ul>
+  <% end %>
+  <div class=field>
+    <%= f.label 'Название' %>
+    <%= f.text_field :name %>
+  </div>
+  <div class=field>
+    <%= f.label 'Код специальности' %>
+    <%= f.text_field :code %>
+  </div>
+  <div class=field>
+    <%= f.label 'Форма обучения' %>
+    <%= f.select :form, option_for_select = ['очная', 'заочная', 'очно-заочная'], {:include_blank => ''} %>
+  </div>
+  <div class=field>
+    <%= f.label 'Продолжительность обучения' %>
+    <%= f.text_field :duration %>
+  </div>
+  <div class=field>
+    <%= f.label 'Уровень образования' %>
+    <%= f.select :level, option_for_select = ['специалитет', 'интернатура', 'ординатура', 'аспирантура', 'дополнительное образование'], {:include_blank => ''} %>
+  </div>
+  <div class=field>
+    <%= f.label 'Язык обучения' %>
+    <%= f.text_field :language %>
+  </div>
+  <div class=field>
+    <%= f.label 'Стандарт' %>
+    <%= f.select :educational_standart_id, option_for_select = @educational_standarts.collect {|p| ["#{p.name} (#{p.level})", p.id]}, {:include_blank => ''} %>
+  </div>
+  <div class=field>
+    <%= f.label 'Свидетельство об аккредитации' %>
+    <%= f.select :accreditation_id, option_for_select = @accreditations.collect {|p| [p.number, p.id]}, {include_blank: ''} %>
+  </div>
+  <div>
+    <%= f.label 'Ссылка на образовательную программу' %>
+    <%= f.select :attachment_id, option_for_select = @attachments.collect {|p| ["#{p.title} (#{p.id})", p.id]}, {include_blank: ''} %>
+  </div>
+  <div class=field>
+    <%= f.label 'Действующая' %>
+    <%= f.check_box :active %>
+  </div>
+  <div class=field>
+    <%= f.label 'Адаптивная' %>
+    <%= f.check_box :adaptive %>
+  </div>
+  <div class=actions>
+    <%= f.submit 'Добавить', class: 'button tiny' %>
+  </div>
+<% end %>

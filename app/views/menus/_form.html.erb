@@ -1,0 +1,38 @@
+<%= form_for(@menu) do |f| %>
+  <% if @menu.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@menu.errors.count, "error") %> prohibited this menu from being saved:</h2>
+
+      <ul>
+      <% @menu.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+  <div class="row">
+    <div class="large-12 columns">
+      <%= f.label 'location' %>
+      <%= f.select :location, options_for_select = ["up", "left", "down", "center"] %>
+    </div>
+  </div>
+  <div>
+  <%= f.label :parent_id %><br>
+  <%= f.select :parent_id, options_for_select= @parent_menus.collect {|p| [p.title, p.id]}, {:include_blank => true, placeholder: 'Родитель'} %>
+  </div>
+  <div class="field">
+    <%= f.label :title %><br>
+    <%= f.text_field :title, value: @menu_title %>
+  </div>
+  <div class="field">
+    <%= f.label :path %><br>
+    <%= f.text_field :path, value: @url %>
+  </div>
+  <div class="field">
+    <%= f.label :weigth %><br>
+    <%= f.number_field :weigth %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

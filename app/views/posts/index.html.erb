@@ -1,0 +1,31 @@
+<h1>Listing posts</h1>
+
+<table>
+  <tr>
+    <th>Name</th>
+    <th>Post type</th>
+    <th>Division</th>
+    <th>Parent</th>
+    <th>User</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @division_posts.each do |post| %>
+  <tr>
+    <td><%= post.name %></td>
+    <td><%= post.post_type.name if post.post_type %></td>
+    <td><%= post.division.name %></td>
+    <td><%= post.parent.name if post.parent %></td>
+    <td><%= post.user.profile.full_name if post.user %></td>
+    <td><%= link_to 'Show', division_post_path(@division, post) %></td>
+    <td><%= link_to 'Edit', edit_division_post_path(@division, post) %></td>
+    <td><%= link_to 'Destroy', division_post_path(@division, post), method: :delete, data: { confirm: 'Are you sure?' } %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Post', new_division_post_path(@division) %>

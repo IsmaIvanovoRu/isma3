@@ -1,0 +1,32 @@
+section.panel
+  .
+    = link_to 'К списку численности студентов', educational_program_numbers_path
+  .right
+    - if @moderator_permission
+      = link_to edit_educational_program_number_path(@educational_program_number), title: 'Редактировать' do
+        i.fi-page-edit
+      = link_to @educational_program_number, title: 'Удалить', method: :delete, data: { confirm: 'Are you sure?' } do
+        i.fi-x
+  table
+    thead
+      tr
+        th rowspan=2 Образовательная программа
+        th colspan=4 Количество обучающихся
+        th rowspan=2 Дата
+      tr
+        th за счет средств федерального бюджета
+        th за счет средств регионального бюджета
+        th за счет средств местного бюджета
+        th за счет средств физических лиц
+      tbody
+        tr
+          td
+            - if @educational_program_number.educational_program.educational_standart
+              = link_to "#{@educational_program_number.educational_program.full_name} (#{@educational_program_number.educational_program.educational_standart.level})", @educational_program
+            - else 
+              = link_to "#{@educational_program_number.educational_program.full_name}", @educational_program
+          td= @educational_program_number.number_federal
+          td= @educational_program_number.number_regional
+          td= @educational_program_number.number_local
+          td= @educational_program_number.number_personal
+          td= @educational_program_number.date.strftime('%e.%m.%Y')

@@ -12,5 +12,9 @@
 //
 //= require jquery
 //= require jquery_ujs
-//= require turbolinks
-//= require_tree .
+//= require jquery-ui/widgets/datepicker
+//= require foundation/foundation
+//= require foundation
+$(document).foundation();
+var CKEDITOR_BASEPATH = '/assets/ckeditor/'
+Foundation.libs.topbar['settings']['back_text'] = 'Назад'

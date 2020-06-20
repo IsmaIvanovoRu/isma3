@@ -1,0 +1,10 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+  </head>
+  <body>
+    <%= @feedback.user.profile.full_name.empty? ? @feedback.user.login : @feedback.user.profile.full_name %> задал(а) новый <%= link_to ' вопрос.', feedbacks_url %>
+    <%= sanitize_full(@feedback.question) %>
+  </body>
+</html>

@@ -1,0 +1,62 @@
+<%= render partial: 'title' %>
+<%= render partial: 'description' %>
+<section class="panel clearfix">
+  <div class='right'>
+    <% if @administrator_permission %>
+      <%= link_to new_division_post_path(@division), title: 'Новая должность' do %>
+	<i class="fi-plus"></i>
+      <% end %>
+      <%= link_to edit_division_post_path(@division, @post), title: 'Редактировать должность' do %>
+	<i class="fi-page-edit"></i>
+      <% end %>
+      <%= link_to division_post_path(@division, @post), title: 'Удалить должность', method: :delete, data: { confirm: 'Are you sure?' } do %>
+	<i class="fi-x"></i>
+      <% end %>
+    <% end %>
+  </div>
+  <br />
+  <%= link_to 'К подразделению', @post.division, class: "superscript right" %>
+  <h1><%= @post.division.name == @post.name ? "#{@post.name}" : "#{@post.division.name} - #{@post.name}" %></h1>
+  <%= render partial: 'articles/first_image_attachment', locals: {image_attachment: @last_image_attachment, dimension: '150x150' } if @last_image_attachment %>
+  <p><%= link_to @profile.full_name_reg, user_profile_path(@profile.user) if @profile %>
+  <div class="text-justify"><%= sanitize_full(autosub_details @profile.about) if @profile && @profile.about %></div>
+<% if @division.division_type_id == 3 %>
+  <% if @administrator_permission %>
+    <% unless @post.subjects.empty? %>
+      <h2>Преподаваемые дисциплины</h2>
+      <ul>
+        <% @post.subjects.each do |subject| %>
+          <li><%= link_to "#{subject.name} (#{subject.educational_program.full_name})", remove_subject_division_post_path(@division, @post) + "?subject_id=#{subject.id}", method: :delete %></li>
+        <% end %>
+      </ul> 
+    <% end %>
+    <% unless @subjects.empty? %>
+    <h2>Другие дисциплины</h2>
+    <ul>
+      <% @division_subjects.each do |subject| %>
+        <li><%= link_to "#{subject.name} (#{subject.educational_program.full_name})", add_subject_division_post_path(@division, @post) + "?subject_id=#{subject.id}" %></li>
+      <% end %>
+      <% @subjects.each do |subject| %>
+        <li><%= link_to "#{subject.name} (#{subject.educational_program.full_name})", add_subject_division_post_path(@division, @post) + "?subject_id=#{subject.id}" %></li>    
+      <% end %>
+    </ul>
+    <% end %>
+  <% else %>
+    <% unless @post.subjects.empty? %>
+      <h2>Преподаваемые дисциплины</h2>
+      <ul>
+        <% @post.subjects.each do |subject| %>
+          <li><%= "#{subject.name} (#{subject.educational_program.full_name})" %></li>
+        <% end %>
+      </ul> 
+    <% end %>
+  <% end %>
+<% end %>
+  <% unless @division.email.empty? || @post.phone.empty? %>
+  <dl>
+    <dt>Контакты</dt>
+    <dd><p><%= mail_to @division.email, 'Написать письмо', encode: "javascript", subject: "Для #{@profile.full_name if @profile}" unless @division.email.empty? %></dd>
+    <dd><p><%= "Телефон: #{multi_number_to_phone(@post.phone, country_code: 7, area_code: true)}" unless @post.phone.empty? %></dd>
+  </dl>
+  <% end %>
+</section>

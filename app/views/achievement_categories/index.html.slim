@@ -1,0 +1,6 @@
+section.panel
+	h1 Список категорий достижений
+	ul
+  	- @achievement_categories.each do |achievement_category|
+    	li= link_to achievement_category.name, achievement_category
+	=link_to "Добавить категорию", new_achievement_category_url, class: 'button'

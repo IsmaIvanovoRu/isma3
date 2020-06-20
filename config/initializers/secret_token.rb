@@ -9,4 +9,4 @@
 
 # Make sure your secret_key_base is kept private
 # if you're sharing your code publicly.
-Isma::Application.config.secret_key_base = '47c0dfc19a9d311ed57a2547ca3875aca520f369f2ae7c83a9e6d33b8dee8279eeeb52aa9d300adcd8ce62aa71ed88f5c15d5819a835c5494b1c43e3b9a9ba02'
+Isma::Application.config.secret_key_base = 'b0e67b685458e04ea05f96228c0e0423f98fa35bf9be92d4a69b789ff831a8c002699637694c039b77805338d2d94e414583970c19c58eaf99d1055246c08f16'

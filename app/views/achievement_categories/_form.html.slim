@@ -1,0 +1,13 @@
+= form_for @achievement_category do |f|
+  - if @achievement_category.errors.any?
+    ul
+      - @achievement_category.errors.full_messages.each do |msg|
+        li= msg
+  .field
+    = f.label 'Название'
+    = f.text_field :name
+  .field
+    = f.label 'Описание'
+    = f.text_field :description
+  .actions
+    = f.submit 'Добавить', class: 'button tiny'

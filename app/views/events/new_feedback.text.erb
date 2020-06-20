@@ -1,0 +1,3 @@
+<%= @feedback.user.profile.full_name.empty? ? @feedback.user.login : @feedback.user.profile.full_name %> задал(а) новый вопрос: 
+<%= feedbacks_url %>
+<%= sanitize_truncate(@feedback.question) %>

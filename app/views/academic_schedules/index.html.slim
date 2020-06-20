@@ -1,0 +1,12 @@
+section.panel
+  h1 Учебные графики
+  = link_to "Добавить", new_academic_schedule_path, class: 'button'
+  ul
+    - @academic_schedules.each do |academic_schedule|
+      .right
+        - if @moderator_permission
+          = link_to edit_academic_schedule_path(academic_schedule), title: 'Редактировать' do
+            i.fi-page-edit
+          = link_to academic_schedule, title: 'Удалить', method: :delete, data: { confirm: 'Are you sure?' } do
+            i.fi-x
+      li= link_to academic_schedule.educational_program.educational_standart ? "#{academic_schedule.name} - #{academic_schedule.educational_program.full_name} (#{academic_schedule.educational_program.educational_standart.level})" : "#{academic_schedule.name} - #{academic_schedule.educational_program.full_name}", academic_schedule

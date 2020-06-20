@@ -1,0 +1,10 @@
+= form_for @achievement_result do |f|
+  - if @achievement_result.errors.any?
+    ul
+      - @achievement_result.errors.full_messages.each do |msg|
+        li= msg
+  .field
+    = f.label 'Название'
+    = f.text_field :name
+  .actions
+    = f.submit 'Добавить', class: 'button tiny'

@@ -1,0 +1,6 @@
+section.panel
+	h1 Список результатов достижений
+	ul
+  	- @achievement_results.each do |achievement_result|
+    	li= link_to achievement_result.name, achievement_result
+	=link_to "Добавить результат", new_achievement_result_url, class: 'button'
