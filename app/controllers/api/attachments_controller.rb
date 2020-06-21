@@ -12,7 +12,8 @@ class Api::AttachmentsController < ApplicationController
   def create
     method = 'attachments/'
     http_params = http_params()
-    url = ['https:/', [http_params[:uri_host], http_params[:uri_port]].join(':'), http_params[:uri_path], method].join('/')
+    protocol = Rails.env == 'production' ? 'https:/' : 'http:/'
+    url = [protocol, [http_params[:uri_host], http_params[:uri_port]].join(':'), http_params[:uri_path], method].join('/')
     RestClient.post url, attachment: params
     redirect_to :back
   end
