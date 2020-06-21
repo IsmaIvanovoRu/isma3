@@ -10,10 +10,15 @@ class Api::AttachmentsController < ApplicationController
   end
   
   def create
-    method = 'attachments/'
-    http_params = http_params()
-    url = ['https:/', [http_params[:uri_host], http_params[:uri_port]].join(':'), http_params[:uri_path], method].join('/')
-    RestClient.post url, attachment: params
+    if params[:entrant_application_id].blank? || params[:files].nil?
+      flash[:alert] = 'Необходимо выбрать файл'
+    else
+      method = 'attachments/'
+      http_params = http_params()
+      protocol = Rails.env == 'production' ? 'https:/' : 'http:/'
+      url = [protocol, [http_params[:uri_host], http_params[:uri_port]].join(':'), http_params[:uri_path], method].join('/')
+      RestClient.post url, attachment: params
+    end
     redirect_to :back
   end
 end
