@@ -18,14 +18,7 @@ section.panel
         - if attachment['document_type'] == 'entrant_application' && attachment['document_id'] == @entrant_application['entrant_application']['id'] && attachment['template']
           .= link_to 'Скачать бланк заявления', "#{api_attachment_path(attachment['data_hash'])}?filename=#{attachment['filename']}"
           p После скачивания необходимо распечатать и подписать заявление и загрузить обратно электронную копию
-          = form_tag("/api/attachments", method: 'post', multipart: true) do
-            .hide
-              = text_field_tag :entrant_application_id, @entrant_application['entrant_application']['id']
-              = text_field_tag :document_type, 'entrant_application'
-              = text_field_tag :document_id, @entrant_application['entrant_application']['id']
-            .filefild
-              = file_field_tag 'files[]', name: 'files[]', id: :files, multiple: true
-            = submit_tag 'Прикрепить подписанную копию заявления', class: "button tiny"
+          = render partial: 'add_attachment', locals: { document_type: 'entrant_application', document_id: @entrant_application['entrant_application']['id'], button_name: 'Прикрепить подписанную копию заявления' }
         - else
           .= link_to attachment['filename'], "#{api_attachment_path(attachment['data_hash'])}?filename=#{attachment['filename']}" if attachment['document_type'] == 'entrant_application' && attachment['document_id'] == @entrant_application['entrant_application']['id']
   .row
@@ -91,21 +84,13 @@ section.panel
             tr
               td
                 = achievement['name']
-              = form_tag("/api/attachments", method: 'post', multipart: true) do
                 td
                   ul
                   - @entrant_application['attachments'].each do |attachment|
                     - if attachment['document_type'] == 'achievement' && attachment['document_id'] == achievement['id']
                       li= link_to attachment['filename'], "#{api_attachment_path(attachment['data_hash'])}?filename=#{attachment['filename']}"
-                  hr
-                  .hide
-                    = text_field_tag :entrant_application_id, @entrant_application['entrant_application']['id']
-                    = text_field_tag :document_type, 'achievement'
-                    = text_field_tag :document_id, achievement['id']
-                  .filefild
-                    = file_field_tag 'files[]', name: 'files[]', id: :files, multiple: true
                 td
-                  = submit_tag 'Прикрепить документ, подтверждающий индивидуальное достижение', class: "button tiny"
+                  = render partial: 'add_attachment', locals: { document_type: 'achievement', document_id: achievement['id'], button_name: 'Прикрепить документ, подтверждающий индивидуальное достижение' }
       h2= "Льготы" if @entrant_application['entrant_application']['olympionic'] || @entrant_application['entrant_application']['benefit']
       p= "Олимпиада" if @entrant_application['entrant_application']['olympionic']
       p= "Особое право поступления" if @entrant_application['entrant_application']['benefit']
@@ -120,15 +105,7 @@ section.panel
             - @entrant_application['attachments'].each do |attachment|
               - if attachment['document_type'] == 'identity_document' && attachment['document_id'] == identity_document['id']
                 dd= link_to attachment['filename'], "#{api_attachment_path(attachment['data_hash'])}?filename=#{attachment['filename']}"
-            dd
-              = form_tag("/api/attachments", method: 'post', multipart: true) do
-                .hide
-                  = text_field_tag :entrant_application_id, @entrant_application['entrant_application']['id']
-                  = text_field_tag :document_type, 'identity_document'
-                  = text_field_tag :document_id, identity_document['id']
-                .filefild
-                  = file_field_tag 'files[]', name: 'files[]', id: :files, multiple: true
-                = submit_tag 'Прикрепить копию документа, удостоверяющего личность', class: "button tiny"
+            dd= render partial: 'add_attachment', locals: { document_type: 'identity_document', document_id: identity_document['id'], button_name: 'Прикрепить копию документа, удостоверяющего личность' }
         dt
           h3 Документ об образовании
           - if @entrant_application['education_document']['education_document_type']
@@ -146,15 +123,7 @@ section.panel
             - @entrant_application['attachments'].each do |attachment|
               - if attachment['document_type'] == 'education_document' && attachment['document_id'] == @entrant_application['education_document']['id']
                 dd= link_to attachment['filename'], "#{api_attachment_path(attachment['data_hash'])}?filename=#{attachment['filename']}"
-          dd
-            = form_tag("/api/attachments", method: 'post', multipart: true) do
-              .hide
-                = text_field_tag :entrant_application_id, @entrant_application['entrant_application']['id']
-                = text_field_tag :document_type, 'education_document'
-                = text_field_tag :document_id, @entrant_application['education_document']['id']
-              .filefild
-                = file_field_tag 'files[]', name: 'files[]', id: :files, multiple: true
-              = submit_tag 'Прикрепить копию документа об образовании', class: "button tiny"
+          dd= render partial: 'add_attachment', locals: { document_type: 'education_document', document_id: @entrant_application['education_document']['id'], button_name: 'Прикрепить копию документа об образовании' }
         - unless @entrant_application['target_contracts'].empty?
           dt
             h3 Целевые договоры
@@ -163,15 +132,7 @@ section.panel
               - @entrant_application['attachments'].each do |attachment|
                 - if attachment['document_type'] == 'target_contract' && attachment['document_id'] == target_contract['id']
                   dd= link_to attachment['filename'], "#{api_attachment_path(attachment['data_hash'])}?filename=#{attachment['filename']}"
-              dd
-                = form_tag("/api/attachments", method: 'post', multipart: true) do
-                  .hide
-                    = text_field_tag :entrant_application_id, @entrant_application['entrant_application']['id']
-                    = text_field_tag :document_type, 'target_contract'
-                    = text_field_tag :document_id, target_contract['id']
-                  .filefild
-                    = file_field_tag 'files[]', name: 'files[]', id: :files, multiple: true
-                  = submit_tag 'Прикрепить копию целевого договора', class: "button tiny"
+              dd= render partial: 'add_attachment', locals: { document_type: 'target_contract', document_id: target_contract['id'], button_name: 'Прикрепить копию целевого договора' }
         - if  @entrant_application['entrant_application']['benefit']
           dt
             h3 Документы на льготу
@@ -180,17 +141,10 @@ section.panel
               - @entrant_application['attachments'].each do |attachment|
                 - if attachment['document_type'] == 'benefit_document' && attachment['document_id'] == benefit_document['id']
                   dd= link_to attachment['filename'], "#{api_attachment_path(attachment['data_hash'])}?filename=#{attachment['filename']}"
-              dd
-                = form_tag("/api/attachments", method: 'post', multipart: true) do
-                  .hide
-                    = text_field_tag :entrant_application_id, @entrant_application['entrant_application']['id']
-                    = text_field_tag :document_type, 'benefit_document'
-                    = text_field_tag :document_id, benefit_document['id']
-                  .filefild
-                    = file_field_tag 'files[]', name: 'files[]', id: :files, multiple: true
-                  = submit_tag 'Прикрепить копию документа, подтверждающего льготу', class: "button tiny"
+              dd= render partial: 'add_attachment', locals: { document_type: 'benefit_document', document_id: benefit_document['id'], button_name: 'Прикрепить копию документа, подтверждающего льготу' }
         - if @entrant_application['entrant_application']['olympionic']
           dt
             h3 Диплом победителя/призера олимпиады
             - @entrant_application['olympic_documents'].each do |olympic_document|
               dd= olympic_document['olympic_document_data']
+              dd= render partial: 'add_attachment', locals: { document_type: 'olympic_document', document_id: olympic_document['id'], button_name: 'Прикрепить копию диплома победителя/призера олимпиады' }
