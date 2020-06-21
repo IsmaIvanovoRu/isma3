@@ -23,13 +23,15 @@ section.panel
           .= link_to attachment['filename'], "#{api_attachment_path(attachment['data_hash'])}?filename=#{attachment['filename']}" if attachment['document_type'] == 'entrant_application' && attachment['document_id'] == @entrant_application['entrant_application']['id']
   .row
     .large-12.small-12.columns
+      - contracts_exist = @entrant_application['competitive_groups'].select{|competitive_group| competitive_group['education_source_id'] == 15}.length > 0
       table.table
         caption Перечень конкурсов
         thead
           tr
             th.text-center Конкурсная группа
             th.text-center Наличие согласия
-            th.text-center Наличие договора
+            - if contracts_exist
+              th.text-center Наличие договора
             th.text-center Статус зачисления
         tbody
           - @entrant_application['competitive_groups'].each do |competitive_group|
@@ -40,22 +42,24 @@ section.panel
                 = competitive_group['name']
               td.text-center
                 span= "+" if agreement_exists
-              td.text-center
-                - if contract_exists
-                  span= '+'
-                - else
-                  - if competitive_group['name'] =~ /Леч/ && competitive_group['education_source_id'] == 15
-                    = link_to 'Скачать бланк договора', attachment_url(49994), target: :blank
-                  - if competitive_group['name'] =~ /Пед/ && competitive_group['education_source_id'] == 15
-                    = link_to 'Скачать бланк договора', attachment_url(49993), target: :blank
-                  - if competitive_group['name'] =~ /Стомат/ && competitive_group['education_source_id'] == 15
-                    = link_to 'Скачать бланк договора', attachment_url(49992), target: :blank
+              - if contracts_exist
+                td.text-center
+                  - if contract_exists
+                    span= '+'
+                  - else
+                    - if competitive_group['name'] =~ /Леч/ && competitive_group['education_source_id'] == 15
+                      = link_to 'Скачать бланк договора', attachment_url(49994), target: :blank
+                    - if competitive_group['name'] =~ /Пед/ && competitive_group['education_source_id'] == 15
+                      = link_to 'Скачать бланк договора', attachment_url(49993), target: :blank
+                    - if competitive_group['name'] =~ /Стомат/ && competitive_group['education_source_id'] == 15
+                      = link_to 'Скачать бланк договора', attachment_url(49992), target: :blank
               td
                 span= "зачислен #{@entrant_application['entrant_application']['enrolled_date']}" if @entrant_application['entrant_application']['enrolled'] == competitive_group['id']
-      p 
-        span Заполненный бланк договора по каждой специальности необходимо отсканировать и выслать на адрес электронной почты: 
-        span= mail_to 'contract@isma.ivanovo.ru'
-      p После подписания договора со стороны академии в строках вместо ссылки на загрузку бланков появится знак +
+      - if contracts_exist
+        p 
+          span Заполненный бланк договора о платном обучении по каждой специальности необходимо отсканировать и выслать на адрес электронной почты: 
+          span= mail_to 'contract@isma.ivanovo.ru'
+        p После подписания договора со стороны академии в строках вместо ссылки на загрузку бланков появится знак +
   .row
     .large-12.small-12.columns
       table.table
