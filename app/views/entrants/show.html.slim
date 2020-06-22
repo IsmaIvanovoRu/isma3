@@ -155,4 +155,7 @@ section.panel
             h3 Диплом победителя/призера олимпиады
             - @entrant_application['olympic_documents'].each do |olympic_document|
               dd= olympic_document['olympic_document_data']
+              - @entrant_application['attachments'].each do |attachment|
+                - if attachment['document_type'] == 'olympic_document' && attachment['document_id'] == olympic_document['id']
+                  dd= link_to attachment['filename'], "#{api_attachment_path(attachment['data_hash'])}?filename=#{attachment['filename']}"
               dd= render partial: 'add_attachment', locals: { message: 'Выберите и прикрепите файл с электронной копией диплома', document_type: 'olympic_document', document_id: olympic_document['id'] }
