@@ -11,7 +11,10 @@ section.panel
       - when 4
         .label.success= 'Ваше заявление допущено к участию в конкурсе'
       - when 6
-        .label.alert= 'исключено из участия в конкурсе'
+        .label.alert= 'Ваше заявление отзвано'
+      - if @entrant_application['entrant_application']['comment']
+        h3 Внимание, при рассмотрении Вашего дела выявлены следующие замечания
+        p= @entrant_application['entrant_application']['comment']
       p
       - n = 0
       - @entrant_application['attachments'].each do |attachment|
