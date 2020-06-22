@@ -77,7 +77,7 @@ section.panel
         tbody
           tr
             - @entrant_application['marks'].each do |mark|
-              td= "Форма экзамена - #{mark['form']}, оценка #{mark['value'] ? mark['value'] : 'еще не известна'}"
+              td= "Форма экзамена - #{mark['form']}, оценка #{mark['value'] == 0 ? 'еще не известна' : mark['value'] }"
             td= @entrant_application['sum']
             td= @entrant_application['full_sum']
   .row
