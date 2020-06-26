@@ -306,7 +306,7 @@ var entrants = new Vue({
     },
   },
   mounted: function() {
-    if(this.api.host == 'isma.ivanovo.ru') {
+    if(this.api.host == 'isma.ivanovo.ru' || this.api.host == 'www.isma.ivanovo.ru') {
       var protocol = 'https://'
     }
     else {
