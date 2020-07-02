@@ -112,22 +112,17 @@
       legend Документ об образовании
       p(v-if="campaign_id != '' && findCampaign(campaign_id).campaign_type_id == 1") Сведения о документе об образовании — это данные того документа, который будет подан в приемную комиссию. При поступлении по результатам ЕГЭ обычно это аттестат, но при наличии у Вас нескольких документов об образовании (аттестата и диплома), Вы можете выбрать, какой из них подать. При поступлении по результатам внутренних экзаменов абитуриент подает диплом о среднем профессиональном или высшем образовании. Современные аттестаты, как правило, не содержат серии - в том случае соответствующее поле заполнять не нужно.
       .row
-        .large-4.small-12.columns
+        .large-6.small-12.columns
           label
             span Вид документа
           select.error#education_document_type(name="education_document[education_document_type]" v-model='educationDocument.DocumentType')
             option(disabled value) Выберите вид документа
             option(v-for="education_document_type in api.education_document_types" v-bind:value="education_document_type.id") {{ education_document_type.name }}
           small.error v-if="findErrorMessage('educationDocument.documentType')" == "{{ findErrorMessage('educationDocument.documentType') }}"
-        .large-4.small-12.columns
-          = label_tag :education_document_series
-            span Серия документа
-            = text_field_tag 'education_document[education_document_series]', nil, placeholder: 'Укажите серию документа, если есть', 'v-model.trim': 'educationDocument.documentSerie', class: 'error'
-          small.error v-if="findErrorMessage('educationDocument.documentSerie')" == "{{ findErrorMessage('educationDocument.documentSerie') }}"
-        .large-4.small-12.columns
+        .large-6.small-12.columns
           = label_tag :education_document_number
-            span Номер документа
-            = text_field_tag 'education_document[education_document_number]', nil, placeholder: 'Укажите номер документа', 'v-model.trim': 'educationDocument.documentNumber', class: 'error'
+            span Серия и номер документа
+            = text_field_tag 'education_document[education_document_number]', nil, placeholder: 'Укажите серию и номер документа', 'v-model.trim': 'educationDocument.documentNumber', class: 'error'
           small.error v-if="findErrorMessage('educationDocument.documentNumber')" == "{{ findErrorMessage('educationDocument.documentNumber') }}"
       .row
         .large-4.small-12.columns
