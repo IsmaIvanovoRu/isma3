@@ -195,7 +195,7 @@ section.panel
                   dd= link_to attachment['filename'], "#{api_attachment_path(attachment['data_hash'])}?filename=#{attachment['filename']}"
               dd= render partial: 'add_attachment', locals: { message: 'Выберите и прикрепите файл с электронной копией диплома', document_type: 'olympic_document', document_id: olympic_document['id'] }
               
-  - unless @entrant_application['entrant_application']['status'] == 'запрошены изменения'
+  - if @entrant_application['entrant_application']['request'].nil?
     .row
       .large-12.small-12.columns
         = form_tag api_entrant_application_path, method: :put
