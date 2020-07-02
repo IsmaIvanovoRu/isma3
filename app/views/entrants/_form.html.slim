@@ -35,12 +35,12 @@
             = text_field_tag :entrant_middle_name, nil, placeholder: 'Как в паспорте, если есть', 'v-model.trim': 'personal.middleName', class: 'error'
           small.error v-if="checkMiddleName" == "{{ checkMiddleName }}"
       .row
-        .large-6.small-12.columns
+        .large-4.small-12.columns
           = label_tag :birth_date
             span Дата рождения
             = date_field_tag :birth_date, nil, 'v-model': 'personal.birthDate', class: 'error'
           small.error v-if="findErrorMessage('BirthDate')" == "{{ findErrorMessage('BirthDate') }}"
-        .large-6.small-12.columns
+        .large-8.small-12.columns
           = label_tag :gender_id, 'Пол'
           p
           = radio_button_tag :gender_id, '2', true, 'v-model': 'personal.gender'
@@ -48,9 +48,18 @@
           = radio_button_tag :gender_id, '1', false, 'v-model': 'personal.gender'
           = label_tag :gender_id, 'мужской'
           small.error v-if="findErrorMessage('gender')" == "{{ findErrorMessage('gender') }}"
+      .row
+        .large-4.small-12.columns(v-if="campaign_id != '' && findCampaign(campaign_id).campaign_type_id == 4")
+          = label_tag :snils
+            span СНИЛС (только цифры)
+            = text_field_tag :snils, nil, 'v-model': 'personal.snils', class: 'error', maxlength: 11, placeholder: '00000000000'
+          small.error v-if="findErrorMessage('snils')" == "{{ findErrorMessage('snils') }}"
     fieldset
       legend Документы, удостоверяющие личность
-      p Указываются данные действующего документа, удостоверяющего личность. Если паспорт меняли после сдачи ЕГЭ, то необходимо также указать данные ранее выданного паспорта, нажав на кнопку "Указать данные дополнительного документа". Эти сведения используются при проверке результатов ЕГЭ.
+      p 
+        span Указываются данные действующего документа, удостоверяющего личность. 
+        span(v-if="campaign_id != '' && findCampaign(campaign_id).campaign_type_id == 1") Если паспорт меняли после сдачи ЕГЭ, то необходимо также указать данные ранее выданного паспорта, нажав на кнопку "Указать данные дополнительного документа". Эти сведения используются при проверке результатов ЕГЭ.
+        span(v-if="campaign_id != '' && findCampaign(campaign_id).campaign_type_id == 4") Если сдавали аккредитацию и сменили паспорт после ее сдачи, то необходимо также указать данные ранее выданного паспорта, нажав на кнопку "Указать данные дополнительного документа". Эти сведения используются при проверке результатов теста.
       . v-for="document in identityDocuments"
         .row
           .(v-show="identityDocuments.indexOf(document) > 0") Предыдущий документ
@@ -58,7 +67,7 @@
             label
               span Вид документа
             select.error#identity_document_type(name="identity_documents[][identity_document_type]" v-model='document.documentType')
-              option(value) Выберите вид документа
+              option(disabled value) Выберите вид документа
               option(v-for="identity_document_type in api.identity_document_types" v-bind:value="identity_document_type.id") {{ identity_document_type.name }}
           .large-4.small-12.columns
             = label_tag :identity_document_seriess
@@ -101,13 +110,13 @@
         .button.tiny(v-if="identityDocuments.length > 1" @click="deleteIdentityDocument") Удалить документ
     fieldset
       legend Документ об образовании
-      p Сведения о документе об образовании — это данные того документа, который будет подан в приемную комиссию. При поступлении по результатам ЕГЭ обычно это аттестат, но при наличии у Вас нескольких документов об образовании (аттестата и диплома), Вы можете выбрать, какой из них подать. При поступлении по результатам внутренних экзаменов абитуриент подает диплом о среднем профессиональном или высшем образовании. Современные аттестаты, как правило, не содержат серии - в том случае соответствующее поле заполнять не нужно.
+      p(v-if="campaign_id != '' && findCampaign(campaign_id).campaign_type_id == 1") Сведения о документе об образовании — это данные того документа, который будет подан в приемную комиссию. При поступлении по результатам ЕГЭ обычно это аттестат, но при наличии у Вас нескольких документов об образовании (аттестата и диплома), Вы можете выбрать, какой из них подать. При поступлении по результатам внутренних экзаменов абитуриент подает диплом о среднем профессиональном или высшем образовании. Современные аттестаты, как правило, не содержат серии - в том случае соответствующее поле заполнять не нужно.
       .row
         .large-4.small-12.columns
           label
             span Вид документа
           select.error#education_document_type(name="education_document[education_document_type]" v-model='educationDocument.DocumentType')
-            option(value) Выберите вид документа
+            option(disabled value) Выберите вид документа
             option(v-for="education_document_type in api.education_document_types" v-bind:value="education_document_type.id") {{ education_document_type.name }}
           small.error v-if="findErrorMessage('educationDocument.documentType')" == "{{ findErrorMessage('educationDocument.documentType') }}"
         .large-4.small-12.columns
@@ -160,8 +169,8 @@
 
     fieldset(v-show="campaign_id != ''")
       legend Указать индивидуальные достижения
-      p Поступающему может быть начислено за индивидуальные достижения не более 10 баллов суммарно
-      p Обращаем Ваше внимание, что аттестаты для награжденных медалями - это аттестаты старого образца (полученные до 2014 года). Современные аттестаты - это Аттестаты с отличием.
+      p(v-if="campaign_id != '' && findCampaign(campaign_id).campaign_type_id == 1") Поступающему может быть начислено за индивидуальные достижения не более 10 баллов суммарно
+      p(v-if="campaign_id != '' && findCampaign(campaign_id).campaign_type_id == 1") Обращаем Ваше внимание, что аттестаты для награжденных медалями - это аттестаты старого образца (полученные до 2014 года). Современные аттестаты - это Аттестаты с отличием.
       .row
         .large-12.small-12.columns
           .(v-for="campaign_item in api.campaigns" v-if="campaign_item.id == campaign_id")
@@ -171,7 +180,8 @@
                 span = "{{ institution_achievement.name }} (дополнительные баллы: {{ institution_achievement.max_value }})"
     fieldset(v-if="campaign_id != ''")
       legend Выбор вступительных испытаний
-      p В качестве вступительных испытаний указывается ЕГЭ или внутренний экзамен, проводимый ИвГМА. Сдавать внутренние испытания, проводимые академией, имеют право дети-инвалиды, инвалиды, а также абитуриенты, поступающие на базе среднего или высшего профессионального образования вне зависимости от того, сдавали они ЕГЭ или нет. При этом они имеют право выбора - по каким предметам указать результаты ЕГЭ, а по камим сдавать внутренние экзамены. Также внутренние испытания в академии могут сдавать лица, указанные в подпунктах "б" и "в" подпункта 1 и в подпункте 2 пункта 2.3 Правил приема. Абитуриент, набравший менее 42 баллов по любому из предметов, в конкурсе участвовать не может (минимальный балл установлен Министерством здравоохранения Российской Федерации).  
+      p(v-if="campaign_id != '' && findCampaign(campaign_id).campaign_type_id == 1") В качестве вступительных испытаний указывается ЕГЭ или внутренний экзамен, проводимый ИвГМА. Сдавать внутренние испытания, проводимые академией, имеют право дети-инвалиды, инвалиды, а также абитуриенты, поступающие на базе среднего или высшего профессионального образования вне зависимости от того, сдавали они ЕГЭ или нет. При этом они имеют право выбора - по каким предметам указать результаты ЕГЭ, а по камим сдавать внутренние экзамены. Также внутренние испытания в академии могут сдавать лица, указанные в подпунктах "б" и "в" подпункта 1 и в подпункте 2 пункта 2.3 Правил приема. Абитуриент, набравший менее 42 баллов по любому из предметов, в конкурсе участвовать не может (минимальный балл установлен Министерством здравоохранения Российской Федерации).  
+      p(v-if="campaign_id != '' && findCampaign(campaign_id).campaign_type_id == 4") В качестве вступительных испытаний указывается результат аккредитационного теста или экзамен, проводимый на базе ИвГМА. Выбранную форму (а также место сдачи теста) необходимо указывать во всех вузах, куда Вы собираетесь подавать документы. Министерство здравоохранения отслеживает, что поступающий указывает в качестве вступительного испытания.
       .row
         .large-12.small-12.columns
           .(v-for="campaign_item in api.campaigns" v-if="campaign_item.id == campaign_id")
@@ -197,17 +207,18 @@
                       = select_tag 'marks[][form]', options_for_select(['Аккредитация', 'Экзамен']), include_blank: '', 'v-model.trim': 'mark.form'
                     
                     small.error v-if="findErrorMessage('mark.form')" == "{{ findErrorMessage('mark.form') }}"
-                  td(v-show="mark.form == 'Аккредитация'")
-                    = number_field_tag 'marks[][value]', nil, 'v-bind:min': 'mark.minScore', max: 100, 'v-model.trim': 'mark.value'
-                  td(v-show="mark.form == 'Аккредитация'")
-                    = number_field_tag 'marks[][year]', nil, 'v-bind:min': 'findCampaign(campaign_id).year_start - 4', 'v-bind:max': 'findCampaign(campaign_id).year_start', 'v-model.trim':'mark.year'
+                  td
+                    span(v-show="mark.form == 'Аккредитация'")= number_field_tag 'marks[][value]', nil, 'v-bind:min': 'mark.minScore', max: 100, 'v-model.trim': 'mark.value'
+                  td
+                    span(v-show="mark.form == 'Аккредитация'")= number_field_tag 'marks[][year]', nil, 'v-bind:min': 'findCampaign(campaign_id).year_start - 1', 'v-bind:max': 'findCampaign(campaign_id).year_start', 'v-model.trim':'mark.year'
                     small.error v-if="findErrorMessage('mark.form')" == "{{ findErrorMessage('mark.form') }}"
                   td(v-if="findCampaign(campaign_id).campaign_type_id == 4")
                     = text_field_tag 'marks[][organization_uid]', nil, 'v-model.tirm': 'mark.organizationUid'
 
     fieldset(v-show="campaign_id != ''")
       legend Выбор условий поступления
-      p Вы имеете право отметить любое количество конкурсов при наличии оснований для участия в них. Каждый абитуриент, не имеющий высшего образования и являющийся гражданином России, может участвовать в общем конкурсе на каждую специальность на бюджетной и внебюджетной основе. Для участия в конкурсе в пределах квоты целевого приема необходимо заключить договор с заказчиком целевого обучения. Чтобы претендовать на места в пределах особой квоты, необходимо иметь те или иные федеральные льготы. Без испытаний поступают некоторые победители и призеры олимпиад школьников. Лица, имеющие высшее образование, могут поступать только на внебюджетной основе. В соответствии с законодательством абитуриент имеет право претендовать на поступление одновременно не более чем по трем специальностям в один вуз. Поскольку в ИвГМА реализуются три образовательные программы специалитета, Вы можете отметить все три специальности.
+      p(v-if="campaign_id != '' && findCampaign(campaign_id).campaign_type_id == 1") Вы имеете право отметить любое количество конкурсов при наличии оснований для участия в них. Каждый абитуриент, не имеющий высшего образования и являющийся гражданином России, может участвовать в общем конкурсе на каждую специальность на бюджетной и внебюджетной основе. Для участия в конкурсе в пределах квоты целевого приема необходимо заключить договор с заказчиком целевого обучения. Чтобы претендовать на места в пределах особой квоты, необходимо иметь те или иные федеральные льготы. Без испытаний поступают некоторые победители и призеры олимпиад школьников. Лица, имеющие высшее образование, могут поступать только на внебюджетной основе. В соответствии с законодательством абитуриент имеет право претендовать на поступление одновременно не более чем по трем специальностям в один вуз. Поскольку в ИвГМА реализуются три образовательные программы специалитета, Вы можете отметить все три специальности.
+      p(v-if="campaign_id != '' && findCampaign(campaign_id).campaign_type_id == 4") Вы имеете право выбрать две специальности для поступления, внутри которых Вы можете отметить любое количество конкурсов при наличии оснований для участия в них. Для участия в конкурсе в пределах квоты целевого приема необходимо заключить договор с заказчиком целевого обучения.
       .row
         .large-12.small-12.columns
           .(v-for="campaign_item in api.campaigns" v-if="campaign_item.id == campaign_id")
@@ -224,7 +235,7 @@
                 .(v-if="competitive_groups_item.name.match(/Целевые/) && competitions.includes(competitive_groups_item.id)")
                   p Прием на целевое обучение осуществляется при наличии договора о целевом обучении. При подаче заявления о приеме на целевое обучение поступающий представляет помимо документов, указанных в пункте 6.14 Правил приема, копию договора о целевом обучении, заверенную заказчиком целевого обучения, или незаверенную копию указанного договора с предъявлением его оригинала.
                   select.error#target_organization_name(name="competitive_groups[][target_organization_id]")
-                    option(value) Выберите заказчика целевого приема
+                    option(disabled value) Выберите заказчика целевого приема
                     option(v-for="target_organization in competitive_groups_item.target_organizations" v-bind:value="target_organization.id") {{ target_organization.target_organization_name }}
                   small.error v-if="findErrorMessage('campaign_id')" == "{{ findErrorMessage('campaign_id') }}"
                 .(v-if="competitive_groups_item.name.match(/Квота особого/) && competitions.includes(competitive_groups_item.id)")
@@ -239,7 +250,7 @@
             label
               span Вид документа
             select.error#benefit_document_type(name="benefit_documents[][benefit_document_type_id]" v-model='document.documentTypeId')
-              option(value) Выберите вид документа
+              option(disabled value) Выберите вид документа
               option(v-for="benefit_document_type in api.benefit_document_types" v-bind:value="benefit_document_type.id") {{ benefit_document_type.name }}
             small.error v-if="findErrorMessage('document.documentType')" == "{{ findErrorMessage('document.documentType') }}"
           .large-4.small-12.columns
@@ -281,7 +292,7 @@
             label
               span Вид документа
             select.error#olympic_document_type(name="olympic_documents[][olympic_document_type_id]" v-model='document.documentType')
-              option(value) Выберите вид документа
+              option(disabled value) Выберите вид документа
               option(v-for="olympic_document_type in api.olympic_document_types" v-bind:value="olympic_document_type.id") {{ olympic_document_type.name }}
             small.error v-if="findErrorMessage('document.documentType')" == "{{ findErrorMessage('document.documentType') }}"
           .large-4.small-12.columns
@@ -315,6 +326,7 @@
         .button.tiny @click="addOlympicDocument" Указать данные дополнительного документа
         span &nbsp;
         .button.tiny(v-if="olympicDocuments.length > 1" @click="deleteOlympicDocument") Удалить документ
+    fieldset(v-if="campaign_id != ''")
       .row
         .large-12.small-12.columns
           p Пункт "Нуждаюсь в предоставлении общежития" необходимо отметить, если Вы в процессе обучения собираетесь проживать в общежитии академии. Количество мест в общежитиях, предоставляемых поступившим на первый курс - 100.
