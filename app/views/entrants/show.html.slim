@@ -76,12 +76,16 @@ section.panel
                   - if contract_exists
                     .label.success= '+'
                   - else
-                    - if competitive_group['name'] =~ /Леч/ && competitive_group['education_source_id'] == 15
-                      = link_to 'Скачать бланк договора', attachment_url(49994), target: :blank
-                    - if competitive_group['name'] =~ /Пед/ && competitive_group['education_source_id'] == 15
-                      = link_to 'Скачать бланк договора', attachment_url(49993), target: :blank
-                    - if competitive_group['name'] =~ /Стомат/ && competitive_group['education_source_id'] == 15
-                      = link_to 'Скачать бланк договора', attachment_url(49992), target: :blank
+                    - if competitive_group['education_level_id'] == 18
+                      - if competitive_group['education_source_id'] == 15
+                        = link_to 'Скачать бланк договора', attachment_url(6909), target: :blank
+                    - else
+                      - if competitive_group['name'] =~ /Леч/ && competitive_group['education_source_id'] == 15
+                        = link_to 'Скачать бланк договора', attachment_url(49994), target: :blank
+                      - if competitive_group['name'] =~ /Пед/ && competitive_group['education_source_id'] == 15
+                        = link_to 'Скачать бланк договора', attachment_url(49993), target: :blank
+                      - if competitive_group['name'] =~ /Стомат/ && competitive_group['education_source_id'] == 15
+                        = link_to 'Скачать бланк договора', attachment_url(49992), target: :blank
               td.text-center
                 - if @entrant_application['entrant_application']['enrolled'] == competitive_group['id']
                   .label.success= "зачислен #{@entrant_application['entrant_application']['enrolled_date']}" 
@@ -194,6 +198,15 @@ section.panel
                 - if attachment['document_type'] == 'olympic_document' && attachment['document_id'] == olympic_document['id']
                   dd= link_to attachment['filename'], "#{api_attachment_path(attachment['data_hash'])}?filename=#{attachment['filename']}"
               dd= render partial: 'add_attachment', locals: { message: 'Выберите и прикрепите файл с электронной копией диплома', document_type: 'olympic_document', document_id: olympic_document['id'] }
+        - unless @entrant_application['other_documents'].empty?
+          dt
+            h3 Прочие документы
+            - @entrant_application['other_documents'].each do |other_document|
+              dd= other_document['other_document_data']
+              - @entrant_application['attachments'].each do |attachment|
+                - if attachment['document_type'] == 'other_document' && attachment['document_id'] == other_document['id']
+                  dd= link_to attachment['filename'], "#{api_attachment_path(attachment['data_hash'])}?filename=#{attachment['filename']}"
+              dd= render partial: 'add_attachment', locals: { message: 'Выберите и прикрепите электронную копию документа', document_type: 'other_document', document_id: other_document['id'] }
               
   - if @entrant_application['entrant_application']['request'].nil?
     .row
