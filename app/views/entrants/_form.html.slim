@@ -138,7 +138,7 @@
         .large-4.small-12.columns(v-if="campaign_id != '' && findCampaign(campaign_id).campaign_type_id == 4")
           label
             span Специальность по диплому
-          select.error#education_speciality_code(name="education_document[education_speciality_code]" v-model='educationDocument.DocumentType')
+          select.error#education_speciality_code(name="education_document[education_speciality_code]" v-model='educationDocument.documentSpecialityCode')
             option(disabled value) Выберите специальность
             option(v-for="education_speciality_code in api.education_speciality_codes" v-bind:value="education_speciality_code.code") {{ education_speciality_code.name }}
     fieldset
