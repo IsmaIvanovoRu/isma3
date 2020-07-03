@@ -60,6 +60,49 @@ var entrants = new Vue({
           id: 'HighEduDiplomaDocument',
           name: "Диплом о высшем профессиональном образовании"
         }
+      ],
+      other_document_types: ['Свидетельство об аккредитации специалиста', 'Выписка из итогового протокола заседания аккредитационной комиссии', 'Сертификат специалиста', 'Военный билет'],
+      education_speciality_codes: [
+        {
+          code: '31.05.01',
+          name: 'Лечебное дело'
+        },
+        {
+          code: '31.05.02',
+          name: 'Педиатрия'
+        },
+        {
+          code: '31.05.03',
+          name: 'Стоматология'
+        },
+        {
+          code: '32.05.01',
+          name: 'Медико-профилактическое дело'
+        },
+        {
+          code: '33.05.01',
+          name: 'Фармация'
+        },
+        {
+          code: '30.05.01',
+          name: 'Медицинская биохимия'
+        },
+        {
+          code: '30.05.02',
+          name: 'Медицинская биофизика'
+        },
+        {
+          code: '30.05.03',
+          name: 'Медицинская кибернетика'
+        },
+        {
+          code: '37.05.01',
+          name: 'Клиническая психология'
+        },
+        {
+          code: '00.00.00',
+          name: 'Другая'
+        }
       ]
     },
     errors: [],
@@ -87,6 +130,7 @@ var entrants = new Vue({
     documentNumber: '',
     documentDate: '',
     documentIssuer: '',
+    documentSpecialityCode: '',
     isOriginal: false
     },
   contactInformation: {
@@ -113,6 +157,15 @@ var entrants = new Vue({
     documentDate: '',
     classNumber: '',
     olympicResult: ''
+    }
+  ],
+  otherDocuments: [
+    {
+      documentName: '',
+      documentSerie: '',
+      documentNumber: '',
+      documentIssuer: '',
+      documentDate: ''
     }
   ],
   specialities: [],
@@ -285,6 +338,12 @@ var entrants = new Vue({
     },
     deleteOlympicDocument: function() {
       if(this.olympicDocuments.length > 1) this.olympicDocuments.splice(-1, 1);
+    },
+    addOtherDocument: function() {
+      this.otherDocuments.push({documentName: '', documentSerie: '', documentNumber: '', documentDate: '', documentIssuer: ''});
+    },
+    deleteOtherDocument: function() {
+      if(this.otherDocuments.length > 1) this.otherDocuments.splice(-1, 1);
     },
     specialityName: function(direction_id) {
       var name = '';
