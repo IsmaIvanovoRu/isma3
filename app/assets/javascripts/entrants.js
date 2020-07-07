@@ -60,6 +60,49 @@ var entrants = new Vue({
           id: 'HighEduDiplomaDocument',
           name: "Диплом о высшем профессиональном образовании"
         }
+      ],
+      other_document_types: ['Свидетельство об аккредитации специалиста', 'Выписка из итогового протокола заседания аккредитационной комиссии', 'Сертификат специалиста', 'Военный билет'],
+      education_speciality_codes: [
+        {
+          code: '31.05.01',
+          name: 'Лечебное дело'
+        },
+        {
+          code: '31.05.02',
+          name: 'Педиатрия'
+        },
+        {
+          code: '31.05.03',
+          name: 'Стоматология'
+        },
+        {
+          code: '32.05.01',
+          name: 'Медико-профилактическое дело'
+        },
+        {
+          code: '33.05.01',
+          name: 'Фармация'
+        },
+        {
+          code: '30.05.01',
+          name: 'Медицинская биохимия'
+        },
+        {
+          code: '30.05.02',
+          name: 'Медицинская биофизика'
+        },
+        {
+          code: '30.05.03',
+          name: 'Медицинская кибернетика'
+        },
+        {
+          code: '37.05.01',
+          name: 'Клиническая психология'
+        },
+        {
+          code: '00.00.00',
+          name: 'Другая'
+        }
       ]
     },
     errors: [],
@@ -87,6 +130,7 @@ var entrants = new Vue({
     documentNumber: '',
     documentDate: '',
     documentIssuer: '',
+    documentSpecialityCode: '',
     isOriginal: false
     },
   contactInformation: {
@@ -113,6 +157,15 @@ var entrants = new Vue({
     documentDate: '',
     classNumber: '',
     olympicResult: ''
+    }
+  ],
+  otherDocuments: [
+    {
+      documentName: '',
+      documentSerie: '',
+      documentNumber: '',
+      documentIssuer: '',
+      documentDate: ''
     }
   ],
   specialities: [],
@@ -193,7 +246,7 @@ var entrants = new Vue({
       var birthMonth = Number(numbers[1]);
       var birthDay = Number(numbers[2]);
       var message = [];
-      var year = (new Date()).getFullYear();
+      var year = (new Date()).getFullYear() + 1;
       if(birthYear + birthMonth + birthDay) {
         if(!(Number(numbers[0]) > 0 && Number(numbers[0]) < Number(year))) message.push('Неверный год');
         if(!(Number(numbers[1]) > 0 && Number(numbers[1]) < 13)) message.push('Неверный месяц');
@@ -251,18 +304,18 @@ var entrants = new Vue({
           entrants.errors.push({element: 'identityDocumentDate', message: 'Необходимо указать дату выдачи документа, удостоверяющего личность', level: 'red'});
         };
       }));
-      if(this.educationDocument.documentType == '') this.errors.push({element: 'education_document_type_id', message: 'Необходимо выбрать тип документа об образовании', level: 'red'});
+//       if(this.educationDocument.documentType == '') this.errors.push({element: 'education_document_type_id', message: 'Необходимо выбрать тип документа об образовании', level: 'red'});
       if(this.educationDocument.documentNumber == '') this.errors.push({element: 'education_document_number', message: 'Необходимо указать номер документа об образовании', level: 'red'});
       if(this.marks.find(function(element) {
         if(element.form == ''){
           entrants.errors.push({element: 'mark', message: 'Необходимо указать указать форму вступительного испытания', level: 'red'});
         };
       }));
-      if(this.competitions.find(function(element) {
-        if(element.id == ''){
-          entrants.errors.push({element: 'competition', message: 'Необходимо выбрать конкурсы для участия', level: 'red'});
-        };
-      }));
+//       if(this.competitions.find(function(element) {
+//         if(element.id == ''){
+//           entrants.errors.push({element: 'competition', message: 'Необходимо выбрать конкурсы для участия', level: 'red'});
+//         };
+//       }));
       if(this.checkContactInformationAddress) this.errors.push({element: 'address', message: this.checkContactInformationAddress, level: 'yellow'});
       if(this.checkContactInformationEmail) this.errors.push({element: 'email', message: this.checkContactInformationEmail, level: 'red'});
       if(this.errors.length == 0) return true;
@@ -286,6 +339,12 @@ var entrants = new Vue({
     deleteOlympicDocument: function() {
       if(this.olympicDocuments.length > 1) this.olympicDocuments.splice(-1, 1);
     },
+    addOtherDocument: function() {
+      this.otherDocuments.push({documentName: '', documentSerie: '', documentNumber: '', documentDate: '', documentIssuer: ''});
+    },
+    deleteOtherDocument: function() {
+      if(this.otherDocuments.length > 1) this.otherDocuments.splice(-1, 1);
+    },
     specialityName: function(direction_id) {
       var name = '';
       this.api.specialities_dictionary.find(function(element) {
@@ -306,17 +365,23 @@ var entrants = new Vue({
     },
   },
   mounted: function() {
+    if(this.api.host == 'isma.ivanovo.ru' || this.api.host == 'www.isma.ivanovo.ru') {
+      var protocol = 'https://'
+    }
+    else {
+      var protocol = 'http://'
+    };
     axios
-      .get('http://' + this.api.host + '/api/campaigns')
+      .get(protocol + this.api.host + '/api/campaigns')
       .then(response => (this.api.campaigns = response.data.campaigns));
     axios
-      .get('http://' + this.api.host + '/api/dictionaries/10')
+      .get(protocol + this.api.host + '/api/dictionaries/10')
       .then(response => (this.api.specialities_dictionary = response.data.dictionary.items));
     axios
-      .get('http://' + this.api.host + '/api/dictionaries/21')
+      .get(protocol + this.api.host + '/api/dictionaries/21')
       .then(response => (this.api.countries = response.data.dictionary.items));
     axios
-      .get('http://' + this.api.host + '/api/dictionaries/22')
+      .get(protocol + this.api.host + '/api/dictionaries/22')
       .then(response => (this.api.identity_document_types = response.data.dictionary.items));
   }
 })

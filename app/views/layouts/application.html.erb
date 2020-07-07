@@ -8,6 +8,9 @@
       <meta name="google-site-verification" content="0Q_dWen2iLrRIDHR_F5M9T68VvJi91AMy-AWKX5yHUo" />
     <% end %>
     <title><%= content_for?(:title) ? yield(:title) : "ИвГМА" %></title>
+    <% if action_name == 'entrants' || action_name == 'show' %>
+      <meta name="robots" content="noindex">
+    <% end %>
     <meta name="description" content="<%= content_for?(:description)? yield(:description) : "Официальный сайт Ивановской медицинской академии" %>">
     <%= yield(:twitter_card) if content_for?(:twitter_card) %>
     <%= yield(:vk_card) if content_for?(:vk_card) %>
