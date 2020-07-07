@@ -1,5 +1,6 @@
 class Api::EntrantApplicationsController < ApplicationController
   skip_before_filter :authenticate_user!
+  skip_before_action :verify_authenticity_token
   def show
     method = 'entrant_applications/'
     http_params = http_params()
