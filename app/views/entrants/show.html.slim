@@ -68,9 +68,10 @@ section.panel
                     - if attachment['document_type'] == 'withdraw_application' && attachment['document_id'] == competitive_group['id'] && attachment['template']
                       .= link_to 'Скачать бланк заявления об отказе', "#{api_attachment_path(attachment['data_hash'])}?filename=#{attachment['filename']}"
                 - else
-                  - @entrant_application['attachments'].each do |attachment|
-                    - if attachment['document_type'] == 'consent_application' && attachment['document_id'] == competitive_group['id'] && attachment['template']
-                      .= link_to 'Скачать бланк заявления о согласии', "#{api_attachment_path(attachment['data_hash'])}?filename=#{attachment['filename']}"
+                  - unless @entrant_application['attachments'].select{|attachment| attachment['document_type'] == 'consent_application' && !attachment['template']}.length > @entrant_application['attachments'].select{|attachment| attachment['document_type'] == 'withdraw_application' && !attachment['template']}.length
+                    - @entrant_application['attachments'].each do |attachment|
+                      - if attachment['document_type'] == 'consent_application' && attachment['document_id'] == competitive_group['id'] && attachment['template']
+                        .= link_to 'Скачать бланк заявления о согласии', "#{api_attachment_path(attachment['data_hash'])}?filename=#{attachment['filename']}"
               - if contracts_exist
                 td.text-center
                   - if contract_exists
@@ -81,11 +82,14 @@ section.panel
                         = link_to 'Скачать бланк договора', attachment_url(6909), target: :blank
                     - else
                       - if competitive_group['name'] =~ /Леч/ && competitive_group['education_source_id'] == 15
-                        = link_to 'Скачать бланк договора', attachment_url(49994), target: :blank
+                        p= link_to 'Скачать образец договора', attachment_url(50191), target: :blank
+                        p= link_to 'Скачать бланк договора', attachment_url(49994), target: :blank
                       - if competitive_group['name'] =~ /Пед/ && competitive_group['education_source_id'] == 15
-                        = link_to 'Скачать бланк договора', attachment_url(49993), target: :blank
+                        p= link_to 'Скачать образец договора', attachment_url(50192), target: :blank
+                        p= link_to 'Скачать бланк договора', attachment_url(49993), target: :blank
                       - if competitive_group['name'] =~ /Стомат/ && competitive_group['education_source_id'] == 15
-                        = link_to 'Скачать бланк договора', attachment_url(49992), target: :blank
+                        p= link_to 'Скачать образец договора', attachment_url(50193), target: :blank
+                        p= link_to 'Скачать бланк договора', attachment_url(49992), target: :blank
               td.text-center
                 - if @entrant_application['entrant_application']['enrolled'] == competitive_group['id']
                   .label.success= "зачислен #{@entrant_application['entrant_application']['enrolled_date']}" 
@@ -221,3 +225,5 @@ section.panel
       .large-12.small-12.columns
         p После завершения прикрепления документов можно отправить Ваши данные на проверку сотрудниками приемной комиссии.
         = link_to 'Отправить на проверку', api_entrant_application_path, class: 'button tiny', method: :put
+
+        
