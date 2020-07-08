@@ -37,12 +37,19 @@ section.panel
                 dd= link_to 'Заявление об отзыве документов', "#{api_attachment_path(attachment['data_hash'])}?filename=#{attachment['filename']}"
             
           dt
-            - if @entrant_application['attachments'].select{|attachment| attachment['document_type'] == 'entrant_application' && attachment['document_id'] == @entrant_application['entrant_application']['id'] && attachment['template']}.length > 0
-              h3 Бланк заявления о приеме
-            - @entrant_application['attachments'].each do |attachment|
-              - if attachment['document_type'] == 'entrant_application' && attachment['document_id'] == @entrant_application['entrant_application']['id'] && attachment['template']
-                dd= link_to 'Скачать', "#{api_attachment_path(attachment['data_hash'])}?filename=#{attachment['filename']}"
-                dd= render partial: 'add_attachment', locals: { message: 'После скачивания необходимо распечатать и подписать заявление и загрузить обратно электронную копию', document_type: 'entrant_application', document_id: @entrant_application['entrant_application']['id'] }
+            - if @entrant_application['attachments'].select{|attachment| attachment['document_type'] == 'entrant_application' && attachment['template']}.length > 0
+              - if @entrant_application['attachments'].select{|attachment| attachment['document_type'] == 'entrant_application' && !attachment['template']}.length > 0
+                h3 Бланк заявления об отзыве документов
+                - @entrant_application['attachments'].each do |attachment|
+                  - if attachment['document_type'] == 'recall_application' && attachment['template']
+                    dd= link_to 'Скачать', "#{api_attachment_path(attachment['data_hash'])}?filename=#{attachment['filename']}"
+                    dd= render partial: 'add_attachment', locals: { message: 'Для отзыва документов после скачивания необходимо распечатать и подписать заявление и загрузить обратно электронную копию', document_type: 'recall_application', document_id: @entrant_application['entrant_application']['id'] }              
+              - else
+                h3 Бланк заявления о приеме
+                - @entrant_application['attachments'].each do |attachment|
+                  - if attachment['document_type'] == 'entrant_application' && attachment['template']
+                    dd= link_to 'Скачать', "#{api_attachment_path(attachment['data_hash'])}?filename=#{attachment['filename']}"
+                    dd= render partial: 'add_attachment', locals: { message: 'После скачивания необходимо распечатать и подписать заявление и загрузить обратно электронную копию', document_type: 'entrant_application', document_id: @entrant_application['entrant_application']['id'] }
   .row
     .large-12.small-12.columns
       - contracts_exist = @entrant_application['competitive_groups'].select{|competitive_group| competitive_group['education_source_id'] == 15}.length > 0
