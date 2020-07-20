@@ -165,9 +165,8 @@ section.panel
                         - if attachment['document_type'] == 'achievement' && attachment['document_id'] == achievement['id']
                           dd= link_to attachment['filename'], "#{api_attachment_path(attachment['data_hash'])}?filename=#{attachment['filename']}"
                 td
-                  - unless templates_exist 
-                    - if @entrant_application['entrant_application']['status'] == 'проверено, есть замечания' || @entrant_application['entrant_application']['status'] == 'внесены изменения'
-                      = render partial: 'add_attachment', locals: { message: 'Выберите и прикрепите файл с электронной копией документа, подтверждающего наличие достижения', document_type: 'achievement', document_id: achievement['id'] }
+                  - unless templates_exist && !(@entrant_application['entrant_application']['status'] == 'проверено, есть замечания' || @entrant_application['entrant_application']['status'] == 'внесены изменения')
+                    = render partial: 'add_attachment', locals: { message: 'Выберите и прикрепите файл с электронной копией документа, подтверждающего наличие достижения', document_type: 'achievement', document_id: achievement['id'] }
         hr
   .row
     .large-12.small-12.columns
@@ -187,9 +186,8 @@ section.panel
             - @entrant_application['attachments'].each do |attachment|
               - if attachment['document_type'] == 'identity_document' && attachment['document_id'] == identity_document['id']
                 dd= link_to attachment['filename'], "#{api_attachment_path(attachment['data_hash'])}?filename=#{attachment['filename']}"
-            - unless templates_exist 
-              - if @entrant_application['entrant_application']['status'] == 'проверено, есть замечания' || @entrant_application['entrant_application']['status'] == 'внесены изменения'
-                dd= render partial: 'add_attachment', locals: { message: identity_document['identity_document_type'] == 1 ? 'Выберите и прикрепите файл(ы) с электронной копией первой страницы, страницы с регистрацией и страницы с данными о ранее выданных паспортах (если такие были)' : 'Выберите и прикрепите электронную копию документа, удостоверяющего личность', document_type: 'identity_document', document_id: identity_document['id'] }
+            - unless templates_exist && !(@entrant_application['entrant_application']['status'] == 'проверено, есть замечания' || @entrant_application['entrant_application']['status'] == 'внесены изменения')
+              dd= render partial: 'add_attachment', locals: { message: identity_document['identity_document_type'] == 1 ? 'Выберите и прикрепите файл(ы) с электронной копией первой страницы, страницы с регистрацией и страницы с данными о ранее выданных паспортах (если такие были)' : 'Выберите и прикрепите электронную копию документа, удостоверяющего личность', document_type: 'identity_document', document_id: identity_document['id'] }
         dt
           h3 Документ об образовании
           - if @entrant_application['education_document']['education_document_type']
@@ -207,9 +205,8 @@ section.panel
             - @entrant_application['attachments'].each do |attachment|
               - if attachment['document_type'] == 'education_document' && attachment['document_id'] == @entrant_application['education_document']['id']
                 dd= link_to attachment['filename'], "#{api_attachment_path(attachment['data_hash'])}?filename=#{attachment['filename']}"
-          - unless templates_exist 
-            - if @entrant_application['entrant_application']['status'] == 'проверено, есть замечания' || @entrant_application['entrant_application']['status'] == 'внесены изменения'
-              dd= render partial: 'add_attachment', locals: { message: 'Выберите и прикрепите файл(ы) с полной электронной копией документа об образовании (включая приложение с оценками и страницей с подписью и печатью)', document_type: 'education_document', document_id: @entrant_application['education_document']['id'] }
+          - unless templates_exist && !(@entrant_application['entrant_application']['status'] == 'проверено, есть замечания' || @entrant_application['entrant_application']['status'] == 'внесены изменения')
+            dd= render partial: 'add_attachment', locals: { message: 'Выберите и прикрепите файл(ы) с полной электронной копией документа об образовании (включая приложение с оценками и страницей с подписью и печатью)', document_type: 'education_document', document_id: @entrant_application['education_document']['id'] }
         - unless @entrant_application['target_contracts'].empty?
           dt
             h3 Целевые договоры
@@ -220,9 +217,8 @@ section.panel
                   dd= link_to attachment['filename'], "#{api_attachment_path(attachment['data_hash'])}?filename=#{attachment['filename']}"
                 - if attachment['document_type'] == 'target_contract' && attachment['document_id'].nil?
                   dd= link_to attachment['filename'], "#{api_attachment_path(attachment['data_hash'])}?filename=#{attachment['filename']}"
-              - unless templates_exist 
-                - if @entrant_application['entrant_application']['status'] == 'проверено, есть замечания' || @entrant_application['entrant_application']['status'] == 'внесены изменения'
-                  dd= render partial: 'add_attachment', locals: { message: 'Выберите и прикрепите файл с электронной копией целевого договора (должен быть подписан всеми сторонами)', document_type: 'target_contract', document_id: target_contract['id'] }
+              - unless templates_exist && !(@entrant_application['entrant_application']['status'] == 'проверено, есть замечания' || @entrant_application['entrant_application']['status'] == 'внесены изменения')
+                dd= render partial: 'add_attachment', locals: { message: 'Выберите и прикрепите файл с электронной копией целевого договора (должен быть подписан всеми сторонами)', document_type: 'target_contract', document_id: target_contract['id'] }
         - if  @entrant_application['entrant_application']['benefit']
           dt
             h3 Документы на льготу
@@ -231,9 +227,8 @@ section.panel
               - @entrant_application['attachments'].each do |attachment|
                 - if attachment['document_type'] == 'benefit_document' && attachment['document_id'] == benefit_document['id']
                   dd= link_to attachment['filename'], "#{api_attachment_path(attachment['data_hash'])}?filename=#{attachment['filename']}"
-              - unless templates_exist 
-                - if @entrant_application['entrant_application']['status'] == 'проверено, есть замечания' || @entrant_application['entrant_application']['status'] == 'внесены изменения'
-                  dd= render partial: 'add_attachment', locals: { message: 'Выберите и прикрепите файл с электронной копией документа, подтверждающего наличие льготы', document_type: 'benefit_document', document_id: benefit_document['id'] }
+              - unless templates_exist && !(@entrant_application['entrant_application']['status'] == 'проверено, есть замечания' || @entrant_application['entrant_application']['status'] == 'внесены изменения')
+                dd= render partial: 'add_attachment', locals: { message: 'Выберите и прикрепите файл с электронной копией документа, подтверждающего наличие льготы', document_type: 'benefit_document', document_id: benefit_document['id'] }
         - if @entrant_application['entrant_application']['olympionic']
           dt
             h3 Диплом победителя/призера олимпиады
@@ -242,9 +237,8 @@ section.panel
               - @entrant_application['attachments'].each do |attachment|
                 - if attachment['document_type'] == 'olympic_document' && attachment['document_id'] == olympic_document['id']
                   dd= link_to attachment['filename'], "#{api_attachment_path(attachment['data_hash'])}?filename=#{attachment['filename']}"
-              - unless templates_exist 
-                - if @entrant_application['entrant_application']['status'] == 'проверено, есть замечания' || @entrant_application['entrant_application']['status'] == 'внесены изменения'
-                  dd= render partial: 'add_attachment', locals: { message: 'Выберите и прикрепите файл с электронной копией диплома', document_type: 'olympic_document', document_id: olympic_document['id'] }
+              - unless templates_exist && !(@entrant_application['entrant_application']['status'] == 'проверено, есть замечания' || @entrant_application['entrant_application']['status'] == 'внесены изменения')
+                dd= render partial: 'add_attachment', locals: { message: 'Выберите и прикрепите файл с электронной копией диплома', document_type: 'olympic_document', document_id: olympic_document['id'] }
         - unless @entrant_application['other_documents'].empty?
           dt
             h3 Прочие документы
@@ -253,9 +247,8 @@ section.panel
               - @entrant_application['attachments'].each do |attachment|
                 - if attachment['document_type'] == 'other_document' && attachment['document_id'] == other_document['id']
                   dd= link_to attachment['filename'], "#{api_attachment_path(attachment['data_hash'])}?filename=#{attachment['filename']}"
-              - unless templates_exist 
-                - if @entrant_application['entrant_application']['status'] == 'проверено, есть замечания' || @entrant_application['entrant_application']['status'] == 'внесены изменения'
-                  dd= render partial: 'add_attachment', locals: { message: 'Выберите и прикрепите электронную копию документа', document_type: 'other_document', document_id: other_document['id'] }
+              - unless templates_exist && !(@entrant_application['entrant_application']['status'] == 'проверено, есть замечания' || @entrant_application['entrant_application']['status'] == 'внесены изменения')
+                dd= render partial: 'add_attachment', locals: { message: 'Выберите и прикрепите электронную копию документа', document_type: 'other_document', document_id: other_document['id'] }
     hr
   - if @entrant_application['entrant_application']['request'].nil?
     .row
