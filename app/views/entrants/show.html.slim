@@ -1,3 +1,4 @@
+- templates_exist = @entrant_application['attachments'].select{|attachment| attachment['document_type'] == 'entrant_application' && attachment['template']}.length > 0
 section.panel
   .row
     .large-12.small-12.columns
@@ -14,38 +15,67 @@ section.panel
         .label.alert= 'Ваше заявление отзвано'
   .row
     .large-12.small-12.columns
+      - if @entrant_application['entrant_application']['comment']
+        h3 Внимание! При рассмотрении Вашего дела выявлены следующие замечания
+        p
+          strong= @entrant_application['entrant_application']['comment']
+        hr
       p Добро пожаловать в Ваш личный кабинет абитуриента.
-      p Осталось сделать несколько шагов и Ваши документы будут приняты.
-      p В первую очередь, Вам нужно прикрепить электронные копии документов, необходимых для поступления. Подойдут файлы в любых графических форматах. Затем отправьте их на проверку, нажав на кнопку в конце страницы. Если с документами все будет в порядке, сотрудник приемной комиссии сформирует Вам шаблон заявления, или укажет на наличие замечаний к пакету документов (в том и другом случае Вы получите уведомление на электронную почту, указанную в анкете).
+      - unless templates_exist
+        p Осталось сделать несколько шагов и Ваши документы будут приняты.
+        p В первую очередь, Вам нужно прикрепить электронные копии документов, необходимых для поступления. Подойдут файлы в любых графических форматах. Затем отправьте их на проверку, нажав на кнопку в конце страницы. Если с документами все будет в порядке, сотрудник приемной комиссии сформирует Вам шаблон заявления, или укажет на наличие замечаний к пакету документов (в том и другом случае Вы получите уведомление на электронную почту, указанную в анкете).
       p Если на любом этапе рассмотрения пакета документов Вам потребуется добавить конкурс или индивидуальное достижение, сменить форму сдачи вступительных испытаний, сообщить об ошибке, воспользуйтесь полем "Запросить изменения" внизу страницы. Нет необходимости заполнять новую анкету.
       p После внесения необходимых изменений в Ваше дело сотрудник приемной комиссии повторно сформирует бланк заявления о приеме и пришлет Вам уведомление.
-      dl
-        dt
-          - if @entrant_application['entrant_application']['comment']
-            h3 Внимание, при рассмотрении Вашего дела выявлены следующие замечания
-            p= @entrant_application['entrant_application']['comment']
-          - if @entrant_application['attachments'].select{|attachment| attachment['document_type'] =~ /_application/ && !attachment['template']}.length > 0
+      hr
+  .row
+    .large-12.small-12.columns
+      - if @entrant_application['attachments'].select{|attachment| attachment['document_type'] =~ /_application/ && !attachment['template']}.length > 0
+        dl
+          dt
             h3 Ваши заявления
             - @entrant_application['attachments'].each do |attachment|
               - if attachment['document_type'] == 'entrant_application' && !attachment['template']
                 dd= link_to 'Заявление о приеме', "#{api_attachment_path(attachment['data_hash'])}?filename=#{attachment['filename']}"
               - if attachment['document_type'] == 'consent_application' && !attachment['template']
-                dd= link_to 'Заявление о согласии', "#{api_attachment_path(attachment['data_hash'])}?filename=#{attachment['filename']}"
+                dd= link_to 'Заявление о согласии на зачисление', "#{api_attachment_path(attachment['data_hash'])}?filename=#{attachment['filename']}"
               - if attachment['document_type'] == 'withdraw_application' && !attachment['template']
                 dd= link_to 'Заявление об отказе от зачисления', "#{api_attachment_path(attachment['data_hash'])}?filename=#{attachment['filename']}"
               - if attachment['document_type'] == 'recall_application' && !attachment['template']
                 dd= link_to 'Заявление об отзыве документов', "#{api_attachment_path(attachment['data_hash'])}?filename=#{attachment['filename']}"
-            
-          dt
-            - if @entrant_application['attachments'].select{|attachment| attachment['document_type'] == 'entrant_application' && attachment['document_id'] == @entrant_application['entrant_application']['id'] && attachment['template']}.length > 0
-              h3 Бланк заявления о приеме
-            - @entrant_application['attachments'].each do |attachment|
-              - if attachment['document_type'] == 'entrant_application' && attachment['document_id'] == @entrant_application['entrant_application']['id'] && attachment['template']
-                dd= link_to 'Скачать', "#{api_attachment_path(attachment['data_hash'])}?filename=#{attachment['filename']}"
-                dd= render partial: 'add_attachment', locals: { message: 'После скачивания необходимо распечатать и подписать заявление и загрузить обратно электронную копию', document_type: 'entrant_application', document_id: @entrant_application['entrant_application']['id'] }
+      - if @entrant_application['attachments'].select{|attachment| attachment['document_type'] == 'entrant_application' && attachment['template']}.length > 0
+        - if @entrant_application['attachments'].select{|attachment| attachment['document_type'] == 'entrant_application' && !attachment['template']}.length > 0
+          dl
+            dt
+              h3 Бланк заявления об отзыве документов 
+              strong заполняется только если Вы хотите полностью отозвать весь пакет документов, поданных в ИвГМА
+              - @entrant_application['attachments'].each do |attachment|
+                - if attachment['document_type'] == 'recall_application' && attachment['template']
+                  dd= link_to 'Скачать', "#{api_attachment_path(attachment['data_hash'])}?filename=#{attachment['filename']}"
+                  dd= render partial: 'add_attachment', locals: { message: 'Для отзыва документов после скачивания необходимо распечатать и подписать заявление и загрузить обратно электронную копию', document_type: 'recall_application', document_id: @entrant_application['entrant_application']['id'] }              
+        - else
+          h3 Бланк заявления о приеме
+          - @entrant_application['attachments'].each do |attachment|
+            - if attachment['document_type'] == 'entrant_application' && attachment['template']
+              dd= link_to 'Скачать', "#{api_attachment_path(attachment['data_hash'])}?filename=#{attachment['filename']}"
+              dd= render partial: 'add_attachment', locals: { message: 'После скачивания необходимо распечатать и подписать заявление и загрузить обратно электронную копию', document_type: 'entrant_application', document_id: @entrant_application['entrant_application']['id'] }
+        hr
   .row
     .large-12.small-12.columns
       - contracts_exist = @entrant_application['competitive_groups'].select{|competitive_group| competitive_group['education_source_id'] == 15}.length > 0
+      - if @entrant_application['attachments'].select{|attachment| attachment['document_type'] =~ /_application/}.length > 0
+        h3 Информация о заявлениях о согласии
+        p Заявление о согласии - это документ, который позволяет приемной комиссии однозначно определить куда зачислить абитуриента в случае его прохождения по нескольким условиям поступления. Наличие согласия в приемной комиссии на момент издания приказа о зачислении является обязательным условием зачисления поступающего в академию.
+        p Обращаем внимание, что одномоментно у поступающего может быть только одно согласие на зачисление, и только в одном вузе. Также, стоит учесть, что на бюджетную форму зачисления согласие можно отозвать и подать заново на другой конкурс только один раз. Поэтому, рекомендуем не подавать согласия заранее, а дождаться окончания подачи документов и формирования конкурсных списков с баллами, по которым можно будет оценить свои шансы на прохождение по тому или иному конкурсу.
+        p Для подачи заявлений о согласии установлены специальные дни непосредственно перед изданием приказов о зачислении. Заявления принимаются в электронном виде.
+        p Однако правила приема требуют предоставить возможность поступающему подать заявление о согласии одновременно с заявлением о приеме, поэтому Ваши бланки заявлений о согласии доступны уже сейчас.
+        hr
+      - if contracts_exist
+        h3 Информация о договорах для поступления на внебюджетные места
+        p 
+          span Заполненный бланк договора о платных образовательных услугах по каждой специальности необходимо отсканировать и выслать на адрес электронной почты: 
+          span= mail_to 'contract@isma.ivanovo.ru'
+        p После подписания договора со стороны академии в строках вместо ссылки на загрузку бланков появится знак +
+        hr
       table.table
         caption Перечень конкурсов
         thead
@@ -93,17 +123,12 @@ section.panel
               td.text-center
                 - if @entrant_application['entrant_application']['enrolled'] == competitive_group['id']
                   .label.success= "зачислен #{@entrant_application['entrant_application']['enrolled_date']}" 
-      - if @entrant_application['attachments'].select{|attachment| attachment['document_type'] =~ /_application/}.length > 0
-        p Обязательным условием зачисления в вуз является наличие согласия на зачисление по конретному конкурсу. Для подачи заявлений о согласии установлены специальные дни перед изданием приказов о зачислении. Заявления принимаются в электронном виде. Обращаем внимание, что одномоментно у поступающего может быть только одно согласие на зачисление, и только в одном вузе. Также, стоит учесть, что на бюджетную форму зачисления согласие можно отозвать и подать заново на другой конкурс только один раз. Поэтому, рекомендуем не подавать согласия заранее, а дождаться окончания подачи документов и формирования конкурсных списков с баллами, по которым можно будет оценить свои шансы на прохождение по тому или иному конкурсу.
-        - unless @entrant_application['entrant_application']['budget_agr'] || @entrant_application['paid_agr']
-          = render partial: 'add_attachment', locals: { message: 'После скачивания необходимо распечатать и подписать заявление о согласии на зачисление и загрузить обратно электронную копию', document_type: 'consent_application', document_id: nil }
-        - else
-          = render partial: 'add_attachment', locals: { message: 'После скачивания необходимо распечатать и подписать заявление об  отказе от зачисление и загрузить обратно электронную копию', document_type: 'withdraw_application', document_id: nil }
-        
-      p 
-        span Заполненный бланк договора о платных образовательных услугах по каждой специальности необходимо отсканировать и выслать на адрес электронной почты: 
-        span= mail_to 'contract@isma.ivanovo.ru'
-      p После подписания договора со стороны академии в строках вместо ссылки на загрузку бланков появится знак +
+      - unless @entrant_application['entrant_application']['budget_agr'] || @entrant_application['paid_agr']
+        = render partial: 'add_attachment', locals: { message: 'После скачивания необходимо распечатать и подписать заявление о согласии на зачисление и загрузить обратно электронную копию', document_type: 'consent_application', document_id: nil }
+        hr
+      - else
+        = render partial: 'add_attachment', locals: { message: 'После скачивания необходимо распечатать и подписать заявление об  отказе от зачисление и загрузить обратно электронную копию', document_type: 'withdraw_application', document_id: nil }
+        hr
   .row
     .large-12.small-12.columns
       table.table
@@ -120,6 +145,7 @@ section.panel
               td= "Форма экзамена - #{mark['form']}, оценка #{mark['value'] == 0 ? 'еще не известна' : mark['value'] }"
             td= @entrant_application['sum']
             td= @entrant_application['full_sum']
+      hr
   .row
     .large-12.small-12.columns
       - unless @entrant_application['achievements'].empty?
@@ -139,10 +165,16 @@ section.panel
                         - if attachment['document_type'] == 'achievement' && attachment['document_id'] == achievement['id']
                           dd= link_to attachment['filename'], "#{api_attachment_path(attachment['data_hash'])}?filename=#{attachment['filename']}"
                 td
-                  = render partial: 'add_attachment', locals: { message: 'Выберите и прикрепите файл с электронной копией документа, подтверждающего наличие достижения', document_type: 'achievement', document_id: achievement['id'] }
-      h2= "Льготы" if @entrant_application['entrant_application']['olympionic'] || @entrant_application['entrant_application']['benefit']
-      p= "Олимпиада" if @entrant_application['entrant_application']['olympionic']
-      p= "Особое право поступления" if @entrant_application['entrant_application']['benefit']
+                  - unless templates_exist && !(@entrant_application['entrant_application']['status'] == 'проверено, есть замечания' || @entrant_application['entrant_application']['status'] == 'внесены изменения')
+                    = render partial: 'add_attachment', locals: { message: 'Выберите и прикрепите файл с электронной копией документа, подтверждающего наличие достижения', document_type: 'achievement', document_id: achievement['id'] }
+        hr
+  .row
+    .large-12.small-12.columns
+      - if @entrant_application['entrant_application']['olympionic'] || @entrant_application['entrant_application']['benefit']
+        h2 "Льготы" 
+        p= "Олимпиада" if @entrant_application['entrant_application']['olympionic']
+        p= "Особое право поступления" if @entrant_application['entrant_application']['benefit']
+        hr
   .row
     .large-12.small-12.columns
       h2 Документы
@@ -154,7 +186,8 @@ section.panel
             - @entrant_application['attachments'].each do |attachment|
               - if attachment['document_type'] == 'identity_document' && attachment['document_id'] == identity_document['id']
                 dd= link_to attachment['filename'], "#{api_attachment_path(attachment['data_hash'])}?filename=#{attachment['filename']}"
-            dd= render partial: 'add_attachment', locals: { message: identity_document['identity_document_type'] == 1 ? 'Выберите и прикрепите файл(ы) с электронной копией первой страницы, страницы с регистрацией и страницы с данными о ранее выданных паспортах (если такие были)' : 'Выберите и прикрепите электронную копию документа, удостоверяющего личность', document_type: 'identity_document', document_id: identity_document['id'] }
+            - unless templates_exist && !(@entrant_application['entrant_application']['status'] == 'проверено, есть замечания' || @entrant_application['entrant_application']['status'] == 'внесены изменения')
+              dd= render partial: 'add_attachment', locals: { message: identity_document['identity_document_type'] == 1 ? 'Выберите и прикрепите файл(ы) с электронной копией первой страницы, страницы с регистрацией и страницы с данными о ранее выданных паспортах (если такие были)' : 'Выберите и прикрепите электронную копию документа, удостоверяющего личность', document_type: 'identity_document', document_id: identity_document['id'] }
         dt
           h3 Документ об образовании
           - if @entrant_application['education_document']['education_document_type']
@@ -172,7 +205,8 @@ section.panel
             - @entrant_application['attachments'].each do |attachment|
               - if attachment['document_type'] == 'education_document' && attachment['document_id'] == @entrant_application['education_document']['id']
                 dd= link_to attachment['filename'], "#{api_attachment_path(attachment['data_hash'])}?filename=#{attachment['filename']}"
-          dd= render partial: 'add_attachment', locals: { message: 'Выберите и прикрепите файл(ы) с полной электронной копией документа об образовании (включая приложение с оценками и страницей с подписью и печатью)', document_type: 'education_document', document_id: @entrant_application['education_document']['id'] }
+          - unless templates_exist && !(@entrant_application['entrant_application']['status'] == 'проверено, есть замечания' || @entrant_application['entrant_application']['status'] == 'внесены изменения')
+            dd= render partial: 'add_attachment', locals: { message: 'Выберите и прикрепите файл(ы) с полной электронной копией документа об образовании (включая приложение с оценками и страницей с подписью и печатью)', document_type: 'education_document', document_id: @entrant_application['education_document']['id'] }
         - unless @entrant_application['target_contracts'].empty?
           dt
             h3 Целевые договоры
@@ -183,7 +217,8 @@ section.panel
                   dd= link_to attachment['filename'], "#{api_attachment_path(attachment['data_hash'])}?filename=#{attachment['filename']}"
                 - if attachment['document_type'] == 'target_contract' && attachment['document_id'].nil?
                   dd= link_to attachment['filename'], "#{api_attachment_path(attachment['data_hash'])}?filename=#{attachment['filename']}"
-              dd= render partial: 'add_attachment', locals: { message: 'Выберите и прикрепите файл с электронной копией целевого договора (должен быть подписан всеми сторонами)', document_type: 'target_contract', document_id: target_contract['id'] }
+              - unless templates_exist && !(@entrant_application['entrant_application']['status'] == 'проверено, есть замечания' || @entrant_application['entrant_application']['status'] == 'внесены изменения')
+                dd= render partial: 'add_attachment', locals: { message: 'Выберите и прикрепите файл с электронной копией целевого договора (должен быть подписан всеми сторонами)', document_type: 'target_contract', document_id: target_contract['id'] }
         - if  @entrant_application['entrant_application']['benefit']
           dt
             h3 Документы на льготу
@@ -192,7 +227,8 @@ section.panel
               - @entrant_application['attachments'].each do |attachment|
                 - if attachment['document_type'] == 'benefit_document' && attachment['document_id'] == benefit_document['id']
                   dd= link_to attachment['filename'], "#{api_attachment_path(attachment['data_hash'])}?filename=#{attachment['filename']}"
-              dd= render partial: 'add_attachment', locals: { message: 'Выберите и прикрепите файл с электронной копией документа, подтверждающего наличие льготы', document_type: 'benefit_document', document_id: benefit_document['id'] }
+              - unless templates_exist && !(@entrant_application['entrant_application']['status'] == 'проверено, есть замечания' || @entrant_application['entrant_application']['status'] == 'внесены изменения')
+                dd= render partial: 'add_attachment', locals: { message: 'Выберите и прикрепите файл с электронной копией документа, подтверждающего наличие льготы', document_type: 'benefit_document', document_id: benefit_document['id'] }
         - if @entrant_application['entrant_application']['olympionic']
           dt
             h3 Диплом победителя/призера олимпиады
@@ -201,7 +237,8 @@ section.panel
               - @entrant_application['attachments'].each do |attachment|
                 - if attachment['document_type'] == 'olympic_document' && attachment['document_id'] == olympic_document['id']
                   dd= link_to attachment['filename'], "#{api_attachment_path(attachment['data_hash'])}?filename=#{attachment['filename']}"
-              dd= render partial: 'add_attachment', locals: { message: 'Выберите и прикрепите файл с электронной копией диплома', document_type: 'olympic_document', document_id: olympic_document['id'] }
+              - unless templates_exist && !(@entrant_application['entrant_application']['status'] == 'проверено, есть замечания' || @entrant_application['entrant_application']['status'] == 'внесены изменения')
+                dd= render partial: 'add_attachment', locals: { message: 'Выберите и прикрепите файл с электронной копией диплома', document_type: 'olympic_document', document_id: olympic_document['id'] }
         - unless @entrant_application['other_documents'].empty?
           dt
             h3 Прочие документы
@@ -210,8 +247,9 @@ section.panel
               - @entrant_application['attachments'].each do |attachment|
                 - if attachment['document_type'] == 'other_document' && attachment['document_id'] == other_document['id']
                   dd= link_to attachment['filename'], "#{api_attachment_path(attachment['data_hash'])}?filename=#{attachment['filename']}"
-              dd= render partial: 'add_attachment', locals: { message: 'Выберите и прикрепите электронную копию документа', document_type: 'other_document', document_id: other_document['id'] }
-              
+              - unless templates_exist && !(@entrant_application['entrant_application']['status'] == 'проверено, есть замечания' || @entrant_application['entrant_application']['status'] == 'внесены изменения')
+                dd= render partial: 'add_attachment', locals: { message: 'Выберите и прикрепите электронную копию документа', document_type: 'other_document', document_id: other_document['id'] }
+    hr
   - if @entrant_application['entrant_application']['request'].nil?
     .row
       .large-12.small-12.columns
@@ -220,10 +258,9 @@ section.panel
             = label_tag 'В случае появления необходимости внесения изменений в указанные в личном кабинете данные (добавить участие в конкурсе, индивидуальное достижение, льготу, внести изменения в документы), сформулируйте в свободной форме, что нужно сделать и нажмите кнопку Запросить изменения'
             = text_area_tag :request
           = submit_tag 'Запросить изменения', class: 'button tiny'
+        hr
   - if @entrant_application['entrant_application']['status'] == 'проверено, есть замечания' || @entrant_application['entrant_application']['status'] == 'новое'
     .row
       .large-12.small-12.columns
         p После завершения прикрепления документов можно отправить Ваши данные на проверку сотрудниками приемной комиссии.
         = link_to 'Отправить на проверку', api_entrant_application_path, class: 'button tiny', method: :put
-
-        
