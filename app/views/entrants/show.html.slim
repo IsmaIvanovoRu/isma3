@@ -87,7 +87,7 @@ section.panel
             th.text-center Статус зачисления
         tbody
           - @entrant_application['competitive_groups'].each do |competitive_group|
-            - agreement_exists = @entrant_application['entrant_application']['budget_agr'] == competitive_group['id'] || @entrant_application['paid_agr'] == competitive_group['id']
+            - agreement_exists = @entrant_application['entrant_application']['budget_agr'] == competitive_group['id'] || @entrant_application['entrant_application']['paid_agr'] == competitive_group['id']
             - contract_exists = @entrant_application['contracts'].include?(competitive_group['id'])
             tr
               td
