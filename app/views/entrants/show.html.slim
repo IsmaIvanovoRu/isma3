@@ -88,7 +88,7 @@ section.panel
         tbody
           - @entrant_application['competitive_groups'].each do |competitive_group|
             - agreement_exists = @entrant_application['entrant_application']['budget_agr'] == competitive_group['id'] || @entrant_application['entrant_application']['paid_agr'] == competitive_group['id']
-            - contract_exists = @entrant_application['contracts'].include?(competitive_group['id'])
+            - contract_exists = @entrant_application['contracts'].map{|c| c['competitive_group_id']}.include?(competitive_group['id'])
             tr
               td
                 = competitive_group['name']
@@ -106,7 +106,7 @@ section.panel
               - if contracts_exist
                 td.text-center
                   - if contract_exists
-                    .label.success= '+'
+                    span +
                   - else
                     - if competitive_group['education_level_id'] == 18
                       - if competitive_group['education_source_id'] == 15
@@ -123,7 +123,7 @@ section.panel
                         p= link_to 'Скачать бланк договора', attachment_url(49992), target: :blank
               td.text-center
                 - if @entrant_application['entrant_application']['enrolled'] == competitive_group['id']
-                  .label.success= "зачислен #{@entrant_application['entrant_application']['enrolled_date']}"
+                  span= "зачислен #{@entrant_application['entrant_application']['enrolled_date']}"
       - if @entrant_application['attachments'].select{|attachment| attachment['document_type'] == 'entrant_application' && !attachment['template']}.length > 0
         - unless @entrant_application['entrant_application']['budget_agr'] || @entrant_application['paid_agr']
           = render partial: 'add_attachment', locals: { message: 'После скачивания необходимо распечатать и подписать заявление о согласии на зачисление и загрузить обратно электронную копию', document_type: 'consent_application', document_id: nil }
