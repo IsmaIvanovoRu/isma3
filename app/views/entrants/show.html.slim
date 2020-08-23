@@ -125,7 +125,7 @@ section.panel
                 - if @entrant_application['entrant_application']['enrolled'] == competitive_group['id']
                   span= "зачислен #{@entrant_application['entrant_application']['enrolled_date']}"
       - if @entrant_application['attachments'].select{|attachment| attachment['document_type'] == 'entrant_application' && !attachment['template']}.length > 0
-        - unless @entrant_application['entrant_application']['budget_agr'] || @entrant_application['paid_agr']
+        - unless @entrant_application['entrant_application']['budget_agr'] || @entrant_application['entrant_application']['paid_agr']
           = render partial: 'add_attachment', locals: { message: 'После скачивания необходимо распечатать и подписать заявление о согласии на зачисление и загрузить обратно электронную копию', document_type: 'consent_application', document_id: nil }
         - else
           = render partial: 'add_attachment', locals: { message: 'После скачивания необходимо распечатать и подписать заявление об  отказе от зачисление и загрузить обратно электронную копию', document_type: 'withdraw_application', document_id: nil }
