@@ -8,7 +8,7 @@ module ApplicationHelper
                                      attributes: {'a' => Sanitize::Config::RELAXED[:attributes]['a'] + ["target"], 'iframe' => ['width', 'height', 'src', 'frameborder', 'allowfullscreen', 'style'], all: Sanitize::Config::RELAXED[:attributes][:all] + ['itemprop', 'itemscope', 'itemtype']},
 	                             elements: Sanitize::Config::RELAXED[:elements] + ['iframe'])
     end
-    if text =~ /(youtu.be|youtube.com)/ 
+    if text =~ /(youtu.be|youtube.com)/ && text !~ /playlist/
       if action_name == 'show'
 	options = Sanitize::Config.merge(Sanitize::Config::RELAXED,
                                      attributes: {'a' => Sanitize::Config::RELAXED[:attributes]['a'] + ["target"], 'iframe' => ['width', 'height', 'src', 'frameborder', 'allowfullscreen', 'style'], all: Sanitize::Config::RELAXED[:attributes][:all] + ['itemprop', 'itemscope', 'itemtype']},
