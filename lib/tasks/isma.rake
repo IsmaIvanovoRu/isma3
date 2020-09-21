@@ -283,7 +283,7 @@ namespace :isma do
     filename = 'library_export.csv'
     path = [Rails.root, 'lib', 'tasks', 'data', filename].join('/')
     file = File.open(path, 'w:Windows-1251')
-    first_line = ['Фамилия', 'Имя', 'Отчество', 'Идентификатор', 'Пароль', 'Направление', 'Специальность', 'Факультет', 'Год', 'Семестр', 'Группа', 'Форма', 'Вид'].join(';') + ";\n"
+    first_line = ['Фамилия', 'Имя', 'Отчество', 'Идентификатор', 'Пароль', 'Направление', 'Специальность', 'Факультет', 'Год', 'Семестр', 'Группа', 'Форма', 'Вид', 'Электронная почта'].join(';') + ";\n"
     file.write(first_line)
     # выгрузка списка обучающихся с сайта
     students = load_users('students')
@@ -332,6 +332,7 @@ namespace :isma do
           s << 'очная'
           s << (faculty == 'ординатура' ? 'кадры высшей квалификации' : 'специалитет')
           file.write((s.join(';') + ";\n").encode('Windows-1251', invalid: :replace, undef: :replace, replade: ''))
+          s << (student.profile.email.strip if student.profile.email)
         end
       end
     end
