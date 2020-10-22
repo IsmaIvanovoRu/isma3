@@ -64,4 +64,10 @@ class SvedenController < ApplicationController
   def vacant
     @educational_programs = EducationalProgram.includes(:educational_program_vacants).order('level DESC').order([:code, :name])
   end
+  
+  def ovz
+  end
+  
+  def inter
+  end
 end
