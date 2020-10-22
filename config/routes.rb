@@ -41,6 +41,8 @@ Isma::Application.routes.draw do
   get 'sveden/paid_edu'
   get 'sveden/budget'
   get 'sveden/vacant'
+  get 'sveden/ovz'
+  get 'sveden/inter'
   controller :abitur do
     get 'abitur' => :index
     get 'Abitur' => :index
