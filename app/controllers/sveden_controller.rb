@@ -7,7 +7,6 @@ class SvedenController < ApplicationController
   end
   
   def common
-    redirect_to article_path(1137)
   end
   
   def struct
