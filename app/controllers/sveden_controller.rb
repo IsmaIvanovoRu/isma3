@@ -24,7 +24,7 @@ class SvedenController < ApplicationController
   end
   
   def eduStandarts
-    redirect_to article_path(1146)
+    @educational_programs = EducationalProgram.includes(:educational_standart).order('level DESC').order([:code, :name]).where(active: true)
   end
   
   def employees
