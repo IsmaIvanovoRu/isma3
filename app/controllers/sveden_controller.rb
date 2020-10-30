@@ -28,7 +28,8 @@ class SvedenController < ApplicationController
   end
   
   def employees
-    @posts = Post.includes(:profile, :division).select{|p| p.name =~ /^(про|)ректор/}
+    @posts_head = Post.includes(:profile, :division).select{|p| p.name =~ /^ректор/}
+    @posts_vice = Post.includes(:profile, :division).select{|p| p.name =~ /^проректор/}
     @employees = Profile.includes([:user, :degree, :academic_title]).joins(:divisions).where(divisions: {division_type_id: 3}).sort_by(&:full_name)
     @posts_hash = {}
     Post.includes(:profile, :division, :subjects).joins(:profile, :division).where(profiles: {id: @employees}).where(divisions: {division_type_id: 3}).group_by(&:user_id).each do |k, v|
