@@ -69,5 +69,6 @@ class SvedenController < ApplicationController
   end
   
   def inter
+    @international_contracts = InternationalContract.all
   end
 end

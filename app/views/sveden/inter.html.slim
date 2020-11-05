@@ -1,0 +1,40 @@
+section.panel
+  h1 Международное сотрудничество
+  p= autosub_details("&amp;[Навигация сведений об образовательной организации]").html_safe
+  - if @moderator_permission
+      = form_tag import_international_contracts_url, multipart: true do
+        = file_field_tag :file
+        = submit_tag "Загрузить", class: 'button'
+  table
+    caption Сведения о заключенных и планируемых к заключению договорах с иностранными и (или) международными организациями по вопросам образования и науки
+    - n = 0
+    thead
+      tr
+        th № п/п
+        th Государство
+        th Наименование организации
+        th Реквизиты договора (наименование, дата, номер, срок действия)
+        th Удалить
+    tbody
+      - @international_contracts.each do |international_contract|
+        tr(itemprop='internationalDog')
+          - n += 1
+          td=  n
+          td(itemprop='stateName')= international_contract.state_name
+          td(itemprop='orgName')= international_contract.org_name
+          td(itemprop='dogReg')= international_contract.dog_reg
+          td= link_to 'Удалить', international_contract, method: :delete
+  table
+    caption Информация о международной аккредитации
+    thead
+      tr
+        th Код
+        th Наименование профессии, специальности, направления подготовки 
+        th Наименование аккредитующей организации
+        th Срок действия международной аккредитации (дата окончания действия свидетельства о международной аккредитации) 
+    tbody
+      tr(itemprop='internationalAccr')
+        td(itemprop='eduCode') отсутствует
+        td(itemprop='eduName') отсутствует
+        td(itemprop='orgName') отсутствует
+        td(itemprop='dateEnd') отсутствует

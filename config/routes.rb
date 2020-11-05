@@ -132,6 +132,12 @@ Isma::Application.routes.draw do
     end
   end
   
+  resources :international_contracts, only: [:destroy] do
+    collection do
+      post :import
+    end
+  end
+  
   resources :educational_program_researches do
     collection do
       post :import
