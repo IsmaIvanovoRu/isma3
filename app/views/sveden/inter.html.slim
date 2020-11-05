@@ -2,7 +2,7 @@ section.panel
   h1 Международное сотрудничество
   p= autosub_details("&amp;[Навигация сведений об образовательной организации]").html_safe
   - if @moderator_permission
-      = form_tag import_international_contracts_url, multipart: true do
+      = form_tag import_international_contracts_path, multipart: true do
         = file_field_tag :file
         = submit_tag "Загрузить", class: 'button'
   table
@@ -14,7 +14,8 @@ section.panel
         th Государство
         th Наименование организации
         th Реквизиты договора (наименование, дата, номер, срок действия)
-        th Удалить
+        - if @moderator_permission
+          th Удалить
     tbody
       - @international_contracts.each do |international_contract|
         tr(itemprop='internationalDog')
@@ -23,7 +24,8 @@ section.panel
           td(itemprop='stateName')= international_contract.state_name
           td(itemprop='orgName')= international_contract.org_name
           td(itemprop='dogReg')= international_contract.dog_reg
-          td= link_to 'Удалить', international_contract, method: :delete
+          - if @moderator_permission
+            td= link_to 'Удалить', international_contract, method: :delete
   table
     caption Информация о международной аккредитации
     thead
