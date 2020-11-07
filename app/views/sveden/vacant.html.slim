@@ -5,8 +5,7 @@ section.panel
     thead
       tr
         th rowspan=2 Код
-        th rowspan=2 Наименование образовательной программы
-        th rowspan=2 Наименование специальности, направления подготовки
+        th rowspan=2 Наименование профессии, специальности, направления подготовки
         th rowspan=2 Уровень образования
         th rowspan=2 Курс
         th rowspan=2 Форма обучения
@@ -22,23 +21,12 @@ section.panel
           - educational_program_vacant = vacants.sort_by(&:date).last
           - if educational_program_vacant
             tr
-              td=  educational_program.code
-              td(itemprop='nameProgVacant')= link_to educational_program.name, educational_program if educational_program.name
-              td(itemprop='specialVacant')= link_to educational_program.name, educational_program if educational_program.name
-              - case educational_program.level
-                - when 'специалитет'
-                  td(itemprop='specialityVacant')= educational_program.level if educational_program.level
-                - when 'аспирантура'
-                  td(itemprop='postgraduateVacant')= educational_program.level if educational_program.level
-                - else
-                  td= educational_program.level if educational_program.level                
-              td= educational_program_vacant.stage
-              td= educational_program.form if educational_program.form
+              td(itemprop='eduCode')=  educational_program.code
+              td(itemprop='eduName')= link_to educational_program.name, educational_program if educational_program.name
+              td(itemprop='eduLevel')= educational_program.level if educational_program.level                
+              td(itemprop='eduCourse')= educational_program_vacant.stage
+              td(itemprop='eduForm')= educational_program.form if educational_program.form
               td(itemprop='numberBFVacant')= educational_program_vacant.number_federal
               td(itemprop='numberBRVacant')= educational_program_vacant.number_regional
               td(itemprop='numberBMVacant')= educational_program_vacant.number_local
               td(itemprop='numberPVacant')= educational_program_vacant.number_personal
-      tr
-        td(itemprop='bachelorVacant' colspan=7) Образовательная деятельность по программам бакалавриата не осуществляется
-      tr
-        td(itemprop='magistracyVacant' colspan=7) Образовательная деятельность по программам магистратуры не осуществляется
