@@ -1,0 +1,68 @@
+- content_for :title do
+  'Контакты и реквизиты
+section.panel.clearfix
+  h1 Реквизиты и контакты
+  dl
+    .(itemscope itemtype="http://schema.org/Organization")
+      dt Наименование академии
+      dd
+        strong полное: 
+        span(itemprop="name")= @details_hash['Полное наименование академии'][:value]
+      dd
+        strong сокращенное: 
+        span(itemprop="name")= @details_hash['Сокращенное наименование академии'][:value]
+      dd
+        strong международное: 
+        span(itemprop="name")= @details_hash['Международное наименование академии'][:value]
+  - if @details_hash['Адрес']
+    .(itemprop="address" itemscope itemtype="http://schema.org/PostalAddress")
+      dl
+        dt Адрес
+        dd
+          span(itemprop="streetAddress")= @details_hash['Адрес'][:value]
+        - if @details_hash['Электронная почта']
+          dt Электронная почта
+          dd
+            span(itemprop="email")= mail_to @details_hash['Электронная почта'][:value]
+        - if @details_hash['Телефон']
+          dt Телефон
+          dd
+            span(itemprop="telephone")= multi_number_to_phone(@details_hash['Телефон'][:value], country_code: 7, area_code: true)
+    dl
+      dt Реквизиты
+      - if @details_hash['ИНН']
+        dd
+          strong ИНН: 
+          span= @details_hash['ИНН'][:value]
+      - if @details_hash['КПП']
+        dd
+          strong КПП: 
+          span= @details_hash['КПП'][:value]
+      - if @details_hash['Получатель платежа']
+        dd
+          strong Получатель платежа: 
+          span= @details_hash['Получатель платежа'][:value]
+      - if @details_hash['Номер казначейского счета']
+        dd
+          strong Номер казначейского счета: 
+          span= @details_hash['Номер казначейского счета'][:value]
+      - if @details_hash['БИК ТОФК']
+        dd
+          strong БИК ТОФК: 
+          span= @details_hash['БИК ТОФК'][:value]
+      - if @details_hash['ЕКС']
+        dd
+          strong ЕКС: 
+          span= @details_hash['ЕКС'][:value]
+      - if @details_hash['Наименование банка']
+        dd
+          strong Наименование банка: 
+          span= @details_hash['Наименование банка'][:value]
+      - if @details_hash['ОКАТО']
+        dd
+          strong ОКАТО: 
+          span= @details_hash['ОКАТО'][:value]
+      - if @details_hash['ОКТМО']
+        dd
+          strong ОКТМО: 
+          span= @details_hash['ОКТМО'][:value]
