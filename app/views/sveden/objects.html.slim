@@ -1,9 +1,11 @@
 section.panel
   h1 Материально-техническое обеспечение и оснащённость образовательного процесса
   p= autosub_details("&amp;[Навигация сведений об образовательной организации]").html_safe
-  
+  p
+    strong Сведения о каждом месте осуществления образовательной деятельности, в том числе не указываемых в соответствии с частью 4 статьи 91 Федерального закона от 29.12.2012 N 273-ФЗ "Об образовании в Российской Федерации" в приложении к лицензии на осуществление образовательной деятельности:
+    p= autosub_details("&amp;[Сведения о каждом месте осуществления образовательной деятельности]").html_safe
   table
-    caption Cведения о наличии оборудованных учебных кабинетов
+    caption о наличии оборудованных учебных кабинетов/объектов для проведения практических занятий
     thead
       tr
         th Код
@@ -16,7 +18,7 @@ section.panel
       - @educational_programs.each do |educational_program|
         - educational_program.subjects.each do |subject|
           - subject.classrooms.each do |classroom|
-            tr
+            tr(itemprop='eduCode')
               td(itemprop='eduCode') = educational_program.code
               td(itemprop='eduName') = educational_program.name
               td = subject.name
