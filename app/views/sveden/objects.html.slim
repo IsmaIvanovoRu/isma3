@@ -5,32 +5,18 @@ section.panel
     strong Сведения о каждом месте осуществления образовательной деятельности, в том числе не указываемых в соответствии с частью 4 статьи 91 Федерального закона от 29.12.2012 N 273-ФЗ "Об образовании в Российской Федерации" в приложении к лицензии на осуществление образовательной деятельности:
     p= autosub_details("&amp;[Сведения о каждом месте осуществления образовательной деятельности]").html_safe
   table
-    caption о наличии оборудованных учебных кабинетов/объектов для проведения практических занятий
+    caption Сведения о наличии оборудованных учебных кабинетов/объектов для проведения практических занятий
     thead
       tr
-        th Код
-        th Наименование специальности, направления подготовки
-        th Наименование дисциплины (модуля), практик в соответствии с учебным планом
-        th Наименование специальных помещений и помещений для самостоятельной работы
-        th Оснащенность специальных помещений и помещений для самостоятельной работы
-        th Приспособленность помещений для использования инвалидами и лицами с ограниченными возможностями здоровья
+        th Адрес
+        th Наименование оборудованных учебных кабинетов/объектов для проведения практических занятий
+        th Оснащенность оборудованных учебных кабинетов/объектов для проведения практических занятий
     tbody
-      - @educational_programs.each do |educational_program|
-        - educational_program.subjects.each do |subject|
-          - subject.classrooms.each do |classroom|
-            tr(itemprop='eduCode')
-              td(itemprop='eduCode') = educational_program.code
-              td(itemprop='eduName') = educational_program.name
-              td = subject.name
-              - if (classroom.description =~ /семинар|практ/)
-                - tag_description = 'purposePrac'
-                - tag_location = 'purposePracOvz'
-              - else
-                - tag_description = 'purposeCab'
-                - tag_location = 'purposeCabOvz'
-              td(itemprop=tag_description) = classroom.description
-              td = classroom.equipment
-              td(itemprop=tag_location) = classroom.location
+      - @classrooms.each do |classroom|
+        tr(itemprop='purposeCab')
+          td(itemprop='addressCab')= classroom.location
+          td(itemprop='nameCab')= classroom.description
+          td(itemprop='osnCab')= classroom.equipment
   
   table
     caption Cведения о наличии библиотек, объектов спорта, об условиях питания и охраны здоровья обучающихся
