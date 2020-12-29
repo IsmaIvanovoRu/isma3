@@ -11,13 +11,14 @@ section.panel
     thead
       tr
         th rowspan=2 Образовательная программа
-        th colspan=4 Количество обучающихся
+        th colspan=4 Численность обучающихся за счет (количество человек):
+        th rowspan=2 Численность обучающихся, являющихся иностранными гражданами
         th rowspan=2 Дата
       tr
-        th за счет средств федерального бюджета
-        th за счет средств регионального бюджета
-        th за счет средств местного бюджета
-        th за счет средств физических лиц
+        th бюджетных ассигнований федерального бюджета
+        th бюджетов субъектов Российской Федерации
+        th местных бюджетов
+        th средств физических и (или) юридических лиц
       tbody
         tr
           td
@@ -29,4 +30,5 @@ section.panel
           td= @educational_program_number.number_regional
           td= @educational_program_number.number_local
           td= @educational_program_number.number_personal
+          td= @educational_program_number.number_foreign
           td= @educational_program_number.date.strftime('%e.%m.%Y')

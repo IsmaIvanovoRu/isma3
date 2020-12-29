@@ -51,7 +51,7 @@ class EducationalProgramNumbersController < ApplicationController
   end
   
   def educational_program_number_params
-    params.require(:educational_program_number).permit(:id, :educational_program_id, :number_federal, :number_regional, :number_local, :number_personal, :date)
+    params.require(:educational_program_number).permit(:id, :educational_program_id, :number_federal, :number_regional, :number_local, :number_personal, :number_foreign, :date)
   end
   
   def options_for_select
