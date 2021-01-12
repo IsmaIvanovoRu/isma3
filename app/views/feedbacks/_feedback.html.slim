@@ -28,7 +28,7 @@
       = sanitize_full feedback.answer
       - if !feedback.answer.empty? || @moderator_permission
         p.subscript
-          - s = feedback.post.user.profile.full_name if feedback.post && feedback.post.user && feedback.answer
+          - s = feedback.post && feedback.post.user && feedback.answer ? feedback.post.user.profile.full_name : ''
           - if feedback.answer
             - case feedback.updated_at.to_date
               - when Time.now.to_date
