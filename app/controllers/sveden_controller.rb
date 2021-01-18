@@ -50,7 +50,6 @@ class SvedenController < ApplicationController
   end
   
   def grants
-    redirect_to article_path(1149)
   end
   
   def paid_edu
