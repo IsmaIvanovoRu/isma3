@@ -66,6 +66,7 @@ class SvedenController < ApplicationController
   end
   
   def ovz
+    @classrooms = Classroom.where.not(ovz: nil)
   end
   
   def inter
