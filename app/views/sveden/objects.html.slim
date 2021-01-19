@@ -13,10 +13,16 @@ section.panel
         th Оснащенность оборудованных учебных кабинетов/объектов для проведения практических занятий
     tbody
       - @classrooms.each do |classroom|
-        tr(itemprop='purposeCab')
-          td(itemprop='addressCab')= classroom.location
-          td(itemprop='nameCab')= classroom.description
-          td(itemprop='osnCab')= classroom.equipment
+        - if classroom.location =~ /Шереметевский/
+          tr(itemprop='purposeCab')
+            td(itemprop='addressCab')= classroom.location
+            td(itemprop='nameCab')= classroom.description
+            td(itemprop='osnCab')= classroom.equipment
+        - else
+          tr(itemprop='purposePrac')
+            td(itemprop='addressPrac')= classroom.location
+            td(itemprop='namePrac')= classroom.description
+            td(itemprop='osnPrac')= classroom.equipment
   
   table
     caption Cведения о наличии библиотек, объектов спорта, об условиях питания и охраны здоровья обучающихся
