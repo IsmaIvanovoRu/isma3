@@ -4,7 +4,7 @@ section.panel
   table
     thead
       tr
-        th Специальность / направление подготовки
+        th Специальность/направление подготовки
         th Копии документов федеральных государственных стандартов и образовательных стандартов
     tbody
       - @educational_programs.each do |educational_program|
@@ -13,4 +13,7 @@ section.panel
           td= "#{educational_program.full_name}#{amp}"
           - standart_level = educational_program.educational_standart.level == 'ФГОС' ? 'eduFedDoc' : 'eduStandartDoc'
           td(itemprop="#{standart_level}")= link_to "#{educational_program.educational_standart.name}", educational_program.educational_standart.url, target: :blank if educational_program.educational_standart
+      tr(itemprop='eduStandartDoc')
+        td образовательных стандартов нет
+        td образовательных стандартов нет
   p.sub * - адаптированная образовательная программа
