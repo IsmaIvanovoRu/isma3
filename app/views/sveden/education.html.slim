@@ -220,9 +220,9 @@ section.panel
         th Уровень образования
         th Перечень научных направлений
         th Результаты НИР
-        th.hidden Сведения о научно-исследовательской базе
+        th Сведения о научно-исследовательской базе
     tbody
-      - @educational_programs.each do |educational_program|
+      - @common_educational_programs.each do |educational_program|
         - educational_program_research = educational_program.educational_program_researches.sort_by(&:date).last
         - if educational_program_research
           tr(itemprop='eduNir')
@@ -230,15 +230,5 @@ section.panel
             td(itemprop='eduName')= link_to educational_program.full_name, educational_program if educational_program.full_name
             td(itemprop='eduLevel')= educational_program.level
             td(itemprop='perechenNir')= educational_program_research.perechen_nir
-            td(itemprop='resultNir')
-              ul
-                li= "Количество НПР - #{educational_program_research.npr_nir}"
-                li= "Количество студентов - #{educational_program_research.stud_nir}"
-                li= "Количество монографий - #{educational_program_research.monograf_nir}"
-                li= "Количество публикаций - #{educational_program_research.article_nir}"
-                li= "Количество российских патентов - #{educational_program_research.patent_r_nir}"
-                li= "Количество зарубежных патентов - #{educational_program_research.patent_z_nir}"
-                li= "Количество российских свидетельств о регистрации интеллектуальной собственности - #{educational_program_research.svid_r_nir}"
-                li= "Количество зарубежных свидетельств о регистрации интеллектуальной собственности - #{educational_program_research.svid_z_nir}"
-                li= "Среднегодовой объем финансирования - #{educational_program_research.finance_nir}"
-            td.hidden(itemprop='baseNir')= educational_program_research.base_nir
+            td(itemprop='resultNir')= educational_program_research.result_nir
+            td(itemprop='baseNir')= educational_program_research.base_nir

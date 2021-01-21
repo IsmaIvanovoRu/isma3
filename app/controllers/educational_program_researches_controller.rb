@@ -28,7 +28,7 @@ class EducationalProgramResearchesController < ApplicationController
   
   def update
     if @educational_program_research.update(educational_program_research_params)
-      redirect_to @educational_program_research
+      redirect_to educational_program_researches_url
     else
       render action 'edit'
     end

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20201229113421) do
+ActiveRecord::Schema.define(version: 20210121073330) do
 
   create_table "academic_plans", force: :cascade do |t|
     t.string   "name",                   limit: 255
@@ -264,6 +264,7 @@ ActiveRecord::Schema.define(version: 20201229113421) do
     t.date     "date"
     t.datetime "created_at",                                          null: false
     t.datetime "updated_at",                                          null: false
+    t.text     "result_nir",             limit: 65535
   end
 
   add_index "educational_program_researches", ["educational_program_id"], name: "educational_program_researches_index", using: :btree
