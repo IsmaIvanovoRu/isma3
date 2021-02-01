@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20210121073330) do
+ActiveRecord::Schema.define(version: 20210201084900) do
 
   create_table "academic_plans", force: :cascade do |t|
     t.string   "name",                   limit: 255
@@ -368,10 +368,10 @@ ActiveRecord::Schema.define(version: 20210121073330) do
   create_table "marks", force: :cascade do |t|
     t.integer  "user_id",                limit: 4
     t.integer  "educational_program_id", limit: 4
-    t.string   "subject",                limit: 255, default: ""
-    t.integer  "value",                  limit: 4,   default: 0
-    t.datetime "created_at",                                      null: false
-    t.datetime "updated_at",                                      null: false
+    t.text     "subject",                limit: 65535
+    t.integer  "value",                  limit: 4,     default: 0
+    t.datetime "created_at",                                       null: false
+    t.datetime "updated_at",                                       null: false
   end
 
   add_index "marks", ["educational_program_id"], name: "index_marks_on_educational_program_id", using: :btree
