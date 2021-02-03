@@ -4,6 +4,7 @@ class Attachment < ActiveRecord::Base
   has_and_belongs_to_many :profiles
   has_and_belongs_to_many :divisions
   has_and_belongs_to_many :achievements
+  belongs_to :user
   
   def uploaded_file(incoming_file, gravity = "default")
     self.title = incoming_file.original_filename

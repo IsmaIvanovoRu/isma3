@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20210201084900) do
+ActiveRecord::Schema.define(version: 20210203111752) do
 
   create_table "academic_plans", force: :cascade do |t|
     t.string   "name",                   limit: 255
@@ -129,9 +129,11 @@ ActiveRecord::Schema.define(version: 20210201084900) do
     t.integer  "score",          limit: 4,        default: 0
     t.string   "file_name",      limit: 255
     t.string   "thumbnail_name", limit: 255
+    t.integer  "user_id",        limit: 4
   end
 
   add_index "attachments", ["article_id"], name: "index_attachments_on_article_id", using: :btree
+  add_index "attachments", ["user_id"], name: "index_attachments_on_user_id", using: :btree
 
   create_table "attachments_divisions", id: false, force: :cascade do |t|
     t.integer "division_id",   limit: 4, null: false
@@ -501,6 +503,7 @@ ActiveRecord::Schema.define(version: 20210201084900) do
   add_foreign_key "achievements", "achievement_categories"
   add_foreign_key "achievements", "achievement_results"
   add_foreign_key "achievements", "users"
+  add_foreign_key "attachments", "users"
   add_foreign_key "classrooms", "subjects"
   add_foreign_key "educational_program_numbers", "educational_programs"
   add_foreign_key "educational_program_perevods", "educational_programs"
