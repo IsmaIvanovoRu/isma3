@@ -7,6 +7,7 @@ class EducationalProgram < ActiveRecord::Base
   has_many :practices, dependent: :destroy
   has_many :methodological_supports, dependent: :destroy
   has_many :subjects, dependent: :destroy
+  has_many :posts, through: :subjects
   has_many :educational_program_numbers
   has_many :educational_program_priems
   has_many :educational_program_perevods

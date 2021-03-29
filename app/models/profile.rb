@@ -24,7 +24,7 @@ class Profile < ActiveRecord::Base
   end
   
   def import(row)
-    self.attributes = row.to_hash.slice('last_name', 'first_name', 'middle_name', 'email', 'phone', 'discipline', 'qualification', 'development', 'general_experience', 'special_experience')
+    self.attributes = row.to_hash.slice('last_name', 'first_name', 'middle_name', 'email', 'phone', 'discipline', 'qualification', 'development', 'general_experience', 'special_experience', 'teaching_level', 'employee_qualification')
     self.academic_title = AcademicTitle.find_by_name(row["academic_title"]) if row["academic_title"]
     self.degree = Degree.find_by_name(row["degree"]) if row["degree"]
     self.save!

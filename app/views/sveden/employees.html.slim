@@ -45,8 +45,8 @@ section.panel
     thead
       tr
         th Ф.И.О.
-        th Занимаемая должность
-        th Преподаваемые дисциплины
+        th Должность
+        th Перечень преподаваемых дисциплин
         th Уровень образования
         th Квалификация
         th Ученая степень
@@ -54,18 +54,18 @@ section.panel
         th Наименование направления подготовки и (или) специальность
         th Повышение квалификации и (или) профессиональная переподготовка
         th Общий стаж работы
-        th Стаж работы по специальности
+        th Стаж работы педагогического работника по специальности
     tbody
       - @employees.each do |employee|
           tr(itemprop='teachingStaff')
             td= link_to employee.full_name, user_profile_path(employee.user), itemprop: 'fio'
             td itemprop='post'= @posts_hash[employee.user.id][:posts]
             td itemprop='teachingDiscipline'= @posts_hash[employee.user.id][:subjects].empty? ? employee.discipline : @posts_hash[employee.user.id][:subjects].mb_chars.downcase.to_s
-            td itemprop='teachingLevel' высшее образование
-            td itemprop='teachingQual'
+            td itemprop='teachingLevel'= employee.teaching_level
+            td itemprop='teachingQual'= employee.qualification
             td itemprop='degree'= employee.degree.name if employee.degree
             td itemprop='academStat'= employee.academic_title.name if employee.academic_title
-            td itemprop='employeeQualification'= employee.qualification
+            td itemprop='employeeQualification'= employee.employee_qualification
             td itemprop='profDevelopment'= employee.development
             td itemprop='genExperience'= employee.general_experience
             td itemprop='specExperience'= employee.special_experience
