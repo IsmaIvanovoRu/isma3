@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20210312091958) do
+ActiveRecord::Schema.define(version: 20210329120527) do
 
   create_table "academic_plans", force: :cascade do |t|
     t.string   "name",                   limit: 255
@@ -470,15 +470,17 @@ ActiveRecord::Schema.define(version: 20210312091958) do
   add_index "profiles", ["user_id"], name: "index_profiles_on_user_id", using: :btree
 
   create_table "subjects", force: :cascade do |t|
-    t.string   "name",                   limit: 255
-    t.integer  "attachment_id",          limit: 4
-    t.integer  "educational_program_id", limit: 4
-    t.datetime "created_at",                         null: false
-    t.datetime "updated_at",                         null: false
+    t.string   "name",                     limit: 255
+    t.integer  "annotation_attachment_id", limit: 4
+    t.integer  "educational_program_id",   limit: 4
+    t.datetime "created_at",                           null: false
+    t.datetime "updated_at",                           null: false
+    t.integer  "full_text_attachment_id",  limit: 4
   end
 
-  add_index "subjects", ["attachment_id"], name: "index_subjects_on_attachment_id", using: :btree
+  add_index "subjects", ["annotation_attachment_id"], name: "index_subjects_on_annotation_attachment_id", using: :btree
   add_index "subjects", ["educational_program_id"], name: "index_subjects_on_educational_program_id", using: :btree
+  add_index "subjects", ["full_text_attachment_id"], name: "index_subjects_on_full_text_attachment_id", using: :btree
 
   create_table "users", force: :cascade do |t|
     t.string   "encrypted_password",     limit: 255, default: "", null: false
@@ -521,6 +523,6 @@ ActiveRecord::Schema.define(version: 20210312091958) do
   add_foreign_key "methodological_supports", "educational_programs"
   add_foreign_key "practices", "attachments"
   add_foreign_key "practices", "educational_programs"
-  add_foreign_key "subjects", "attachments"
+  add_foreign_key "subjects", "attachments", column: "annotation_attachment_id"
   add_foreign_key "subjects", "educational_programs"
 end

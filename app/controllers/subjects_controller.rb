@@ -45,11 +45,13 @@ class SubjectsController < ApplicationController
   end
   
   def subject_params
-    params.require(:subject).permit(:id, :name, :educational_program_id, :attachment_id)
+    params.require(:subject).permit(:id, :name, :educational_program_id, :annotation_attachment_id, :full_text_attachment_id)
   end
   
   def options_for_select
     @educational_programs = EducationalProgram.order(:level, :name).load
-    @attachments = Attachment.order(:title).select(:id, :title).select{|a| a.title =~ /.pdf/}
+    attachments = Attachment.order(:title).select(:id, :title)
+    @annotation_attachments = attachments.select{|a| a.title =~ /.*аннотация.*pdf/}
+    @full_text_attachments = attachments.select{|a| a.title =~ /.*рабочая.*pdf/}
   end
 end

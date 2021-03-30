@@ -1,0 +1,19 @@
+= form_for @subject do |f|
+  - if @subject.errors.any?
+    ul
+      - @subject.errors.full_messages.each do |msg|
+        li= msg
+  .field
+    = f.label 'Название'
+    = f.text_field :name
+  .field
+    = f.label 'Образовательная программа'
+    = f.select :educational_program_id, option_for_select = @educational_programs.collect {|p| ["#{p.name} (#{p.educational_standart ? p.educational_standart.level : 'нет стандарта'})", p.id]}, {include_blank: ''}
+  .field
+    = f.label 'Ссылка на рабочую программу'
+    = f.select :full_text_attachment_id, option_for_select = @full_text_attachments.collect {|p| ["#{p.title} (#{p.id})", p.id]}, {include_blank: ''}
+  .field
+    = f.label 'Ссылка на аннотацию рабочей программы'
+    = f.select :annotation_attachment_id, option_for_select = @annotation_attachments.collect {|p| ["#{p.title} (#{p.id})", p.id]}, {include_blank: ''}
+  .actions
+    = f.submit 'Добавить', class: 'button tiny'
