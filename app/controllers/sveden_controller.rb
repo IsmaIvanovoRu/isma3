@@ -18,7 +18,7 @@ class SvedenController < ApplicationController
   end
   
   def education
-    @educational_programs = EducationalProgram.includes(:educational_standart, :educational_program_numbers, :educational_program_priems, :educational_program_researches, {academic_plans: :attachment}, {academic_schedules: :attachment}, {practices: :attachment}, {subjects: :attachment}, :accreditation, {methodological_supports: :attachment}, :attachment).order('level DESC').order([:code, :name]).where(active: true)
+    @educational_programs = EducationalProgram.includes(:educational_standart, :educational_program_numbers, :educational_program_priems, :educational_program_researches, {academic_plans: :attachment}, {academic_schedules: :attachment}, {practices: :attachment}, {subjects: [:annotation_attachment, :full_text_attachment]}, :accreditation, {methodological_supports: :attachment}, :attachment).order('level DESC').order([:code, :name]).where(active: true)
     @adaptive_educational_programs = @educational_programs.where(adaptive: true)
     @common_educational_programs = @educational_programs.where(adaptive: false)
   end

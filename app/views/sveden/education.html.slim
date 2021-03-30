@@ -144,7 +144,12 @@ section.panel
           td(itemprop="eduName", style="vertical-align: top;")= educational_program.name
           td(itemprop="eduLevel", style="vertical-align: top;")= educational_program.level
           td(itemprop="eduForm", style="vertical-align: top;")= educational_program.form
-          td(itemprop='opMain', style="vertical-align: top;")= link_to educational_program.full_name, educational_program.attachment, target: 'blank' if educational_program.full_name
+          td(itemprop='opMain', style="vertical-align: top;")
+            = link_to educational_program.full_name, educational_program.attachment, target: 'blank' if educational_program.full_name
+            ul
+              - educational_program.subjects.each do |subject|
+                - if subject.full_text_attachment
+                  li(itemprop='educationAnnotation')= link_to subject.name, subject.full_text_attachment, target: 'blank'
           td(style="vertical-align: top;")
             ul
               - educational_program.academic_plans.each do |academic_plan|
@@ -152,7 +157,7 @@ section.panel
           td(style="vertical-align: top;")
             ul
               - educational_program.subjects.each do |subject|
-                li(itemprop='educationAnnotation')= link_to subject.name, subject.attachment, target: 'blank'
+                li(itemprop='educationAnnotation')= link_to subject.name, subject.annotation_attachment, target: 'blank'
           td(style="vertical-align: top;")
             ul
               - educational_program.academic_schedules.each do |academic_schedule|
@@ -189,7 +194,12 @@ section.panel
           td(itemprop="eduLevel", style="vertical-align: top;")= educational_program.level
           td(itemprop="eduForm", style="vertical-align: top;")= educational_program.form
           - amp = educational_program.adaptive ? '*' : ''
-          td(itemprop='opMain', style="vertical-align: top;")= link_to educational_program.full_name, educational_program.attachment, target: 'blank' if educational_program.full_name
+          td(itemprop='opMain', style="vertical-align: top;")
+            = link_to educational_program.full_name, educational_program.attachment, target: 'blank' if educational_program.full_name
+            ul
+              - educational_program.subjects.each do |subject|
+                - if subject.full_text_attachment
+                  li(itemprop='educationAnnotation')= link_to subject.name, subject.full_text_attachment, target: 'blank'
           td(style="vertical-align: top;")
             ul
               - educational_program.academic_plans.each do |academic_plan|
@@ -197,7 +207,7 @@ section.panel
           td(style="vertical-align: top;")
             ul
               - educational_program.subjects.each do |subject|
-                li(itemprop='educationAnnotation')= link_to subject.name, subject.attachment, target: 'blank'
+                li(itemprop='educationAnnotation')= link_to subject.name, subject.annotation_attachment, target: 'blank'
           td(style="vertical-align: top;")
             ul
               - educational_program.academic_schedules.each do |academic_schedule|
