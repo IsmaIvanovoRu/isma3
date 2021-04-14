@@ -157,7 +157,8 @@ section.panel
           td(style="vertical-align: top;")
             ul
               - educational_program.subjects.each do |subject|
-                li(itemprop='educationAnnotation')= link_to subject.name, subject.annotation_attachment, target: 'blank'
+                - if subject.annotation_attachment
+                  li(itemprop='educationAnnotation')= link_to subject.name, subject.annotation_attachment, target: 'blank'
           td(style="vertical-align: top;")
             ul
               - educational_program.academic_schedules.each do |academic_schedule|
