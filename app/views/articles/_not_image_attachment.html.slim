@@ -17,3 +17,6 @@ li.thumb
       = image_tag("unknown.png", size: '32x32', class: "left")
     .thumb-title
       = not_image_attachment.title_sen_dot
+  - if not_image_attachment.user
+    = link_to not_image_attachment.user, title: "Подписано электронной подписью пользователем #{not_image_attachment.user.profile.full_name} #{not_image_attachment.updated_at.strftime('%e.%m.%Y')} г.", class: 'right' do
+      i.fi-key

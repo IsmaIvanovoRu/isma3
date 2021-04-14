@@ -71,12 +71,15 @@ class AttachmentsController < ApplicationController
               @attachment.articles << article
               article.update_attributes(published: false) unless current_user_moderator?
               article.update_attributes(updated_at: Time.now)
+              @attachment.update_attributes(user_id: article.user_id)
             when params[:division_id]
               division = Division.find(params[:division_id])
               @attachment.divisions << division
+              @attachment.update_attributes(user_id: division.head.first.user_id) unless division.head.empty?
             when params[:user_id]
               user = User.find(params[:user_id])
               user.profile.attachments << @attachment
+              @attachment.update_attributes(user_id: params[:user_id])
             end
           else
               flash[:error] = "There was a problem submitting your attachment."
