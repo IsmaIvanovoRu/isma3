@@ -1,3 +1,8 @@
+EducationalProgram.where(level: 'специалите').update_all(level: '')
+EducationalProgram.where(level: 'ординатура').update_all(level: '')
+EducationalProgram.where(level: 'аспирантура').update_all(level: '')
+EducationalProgram.where(level: 'дополнительное образование').update_all(level: 'дополнительное профессиональное образование')
+
 attachments = Attachment.select(:id, :user_id, :title).all
 nn = attachments.size
 n = 1
