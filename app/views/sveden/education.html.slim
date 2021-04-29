@@ -108,7 +108,7 @@ section.panel
         th Численность обучающихся, переведенных в другие образовательные организации
         th Численность обучающихся, переведенных из других образовательных организаций
         th Численность восстановленных обучающихся
-        th Численность отчисленых обучающихся
+        th Численность отчисленных обучающихся
     tbody
       - @educational_programs.each do |educational_program|
         - educational_program_perevod = educational_program.educational_program_perevods.sort_by(&:date).last
