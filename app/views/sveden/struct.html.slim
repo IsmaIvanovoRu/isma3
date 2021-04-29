@@ -4,6 +4,11 @@ section.panel
   h1 Структура и органы управления образовательной организацией
   p= autosub_details("&amp;[Навигация сведений об образовательной организации]").html_safe
   h2 Структура образовательной организации
+  = link_to 'Графическое представление структуры ИвГМА', "#", "data-reveal-id" => 'structure'
+  .reveal-modal.medium id = 'structure' data-reveal=true align="center" 
+    = image_tag('structure')
+    a.close-reveal-modal
+      i.fi-x
   - @divisions.each do |type, divisions|
     - unless type == 'обучающиеся'
       = content_tag(:a, '', name: type, style: 'padding-top: 45px;')
