@@ -7,6 +7,8 @@ section.panel
         tr
           th colspan=4 Объем образовательной деятельности, финансовое обеспечение которой осуществляется
           th rowspan=2 Год
+          th rowspan=2 Поступление средств
+          th rowspan=2 Расходование средств
           th rowspan=2 Действия
         tr
           th за счёт бюджетных ассигнований федерального бюджета (тыс. руб.)
@@ -20,6 +22,8 @@ section.panel
             td(itemprop='finBRVolume')= financial_activity.regional_volume
             td(itemprop='finBMVolume')= financial_activity.municipal_volume
             td(itemprop='finPVolume')= financial_activity.personal_volume
+            td(itemprop='finPVolume')= financial_activity.fin_post
+            td(itemprop='finPVolume')= financial_activity.fin_ras
             td= financial_activity.year
             td
               - if @moderator_permission

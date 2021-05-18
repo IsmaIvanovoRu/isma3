@@ -44,6 +44,6 @@ class FinancialActivitiesController < ApplicationController
   end
   
   def financial_activity_params
-    params.require(:financial_activity).permit(:id, :year, :federal_volume, :regiional_volume, :municipal_volume, :personal_volume, :financial_report_link, :financial_plan_link, :bus_gov_link)
+    params.require(:financial_activity).permit(:id, :year, :federal_volume, :regiional_volume, :municipal_volume, :personal_volume, :fin_post, :fin_ras)
   end
 end

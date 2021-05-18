@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20210329120527) do
+ActiveRecord::Schema.define(version: 20210518081646) do
 
   create_table "academic_plans", force: :cascade do |t|
     t.string   "name",                   limit: 255
@@ -335,6 +335,8 @@ ActiveRecord::Schema.define(version: 20210329120527) do
     t.string   "bus_gov_link",          limit: 255
     t.datetime "created_at",                                                               null: false
     t.datetime "updated_at",                                                               null: false
+    t.decimal  "fin_post",                          precision: 16, scale: 2, default: 0.0
+    t.decimal  "fin_ras",                           precision: 16, scale: 2, default: 0.0
   end
 
   create_table "groups", force: :cascade do |t|

@@ -1,8 +1,10 @@
 section.panel
   h1 Финансово-хозяйственная деятельность
   p= autosub_details("&amp;[Навигация сведений об образовательной организации]").html_safe
-  - if @financial_activity
-    table(itemprop='volume')
+  - if @financial_activities
+    - last_financial_activity = @financial_activities.last
+    table
+      caption Сведения об объеме образовательной деятельности
       thead
         tr
           th colspan=4 Объем образовательной деятельности, финансовое обеспечение которой осуществляется
@@ -13,13 +15,20 @@ section.panel
           th по договорам об образовании за счет средств физических и (или) юридических лиц (тыс. руб.)
       tbody
         tr
-          td(itemprop='finBFVolume')= @financial_activity.federal_volume
-          td(itemprop='finBRVolume')= @financial_activity.regional_volume
-          td(itemprop='finBMVolume')= @financial_activity.municipal_volume
-          td(itemprop='finPVolume')= @financial_activity.personal_volume
+          td(itemprop='finBFVolume')= last_financial_activity.federal_volume
+          td(itemprop='finBRVolume')= last_financial_activity.regional_volume
+          td(itemprop='finBMVolume')= last_financial_activity.municipal_volume
+          td(itemprop='finPVolume')= last_financial_activity.personal_volume
+
+    table
+      caption  Сведения о поступлении финансовых и материальных средств и об их расходовании
+      thead
         tr
-          td(itemprop='planFinRec', colspan=4)= link_to 'План финансово-хозяйственной деятельности', @financial_activity.financial_plan_link, target: '_blank'
-        tr
-          td(itemprop='finRec', colspan=4)= link_to 'Отчет о финансово-хозяйственной деятельности', @financial_activity.financial_report_link, target: '_blank'
-        tr
-          td(colspan=4)= link_to 'Страница ФГБОУ ВО ИвГМА Минздрава России на Официальном сайте для размещения информации о государственных (муниципальных) учреждениях', @financial_activity.bus_gov_link, target: '_blank'
+          th Год
+          th Поступившие финансовые и материальные средства (тыс. руб.)
+          th Расходованные финансовые и материальные средства (тыс. руб.)
+        - @financial_activities.each do |financial_activity|
+          tr(itemprop='volume')
+            td(itemprop = 'finYear')= financial_activity.year
+            td(itemprop = 'finPost')= financial_activity.fin_post
+            td(itemprop = 'finRas')= financial_activity.fin_ras

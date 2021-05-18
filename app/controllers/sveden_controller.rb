@@ -57,7 +57,7 @@ class SvedenController < ApplicationController
   end
   
   def budget
-    @financial_activity = FinancialActivity.order(:year).last
+    @financial_activities = FinancialActivity.order(:year)
   end
   
   def vacant
