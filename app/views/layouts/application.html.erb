@@ -184,6 +184,9 @@
 		      <li><%= link_to c.title, c.path %></li>
 		    <% end %>
 		<% end %>
+                <% if p.title == 'ЭИОС' %>
+                  <li><%= current_user ? (link_to 'Мое портфолио', user_path(current_user)) : (link_to 'Вход в личный кабинет', new_user_session_path) %></li>
+                <% end %>
 		</ul>
 	      </li>
 	    <% else %>
