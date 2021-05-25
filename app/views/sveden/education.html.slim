@@ -171,7 +171,7 @@ section.panel
             ul
               - educational_program.practices.each do |practic|
                 li(itemprop='eduPr')= link_to practic.name, practic.attachment, target: 'blank'
-          td(itemprop='eduEl', style="vertical-align: top;") При реализации образовательной программы используются элементы электронного обучения и дистанционных образовательных технологий посредством ЭИОС вуза
+          td(itemprop='eduEl', style="vertical-align: top;")= educational_program.level == 'высшее образование - специалитет' ? 'Используется система электронной поддержки образовательного процесса' : '-'
   table
     caption Информация по адаптированным образовательным программам
     thead
