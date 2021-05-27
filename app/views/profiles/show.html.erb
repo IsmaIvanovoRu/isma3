@@ -96,10 +96,10 @@
           <% if @administrator_permission || current_user == @user %>
             <dl class="accordion" data-accordion>
               <dd>
-                <%= link_to("#marks") do %>
+                <%= link_to("#marks-#{educational_program.id}") do %>
                   <%= mean_string %>
                 <% end %>
-                <div id="marks" class="content">
+                <div id=<%= "marks-#{educational_program.id}" %> class="content">
                 <table class="table">
                   <thead>
                     <tr>
@@ -130,6 +130,8 @@
                     <% end %>
                   </tbody>
                 </table>
+              </dd>
+            </dl>
           <% else %>
             <%= mean_string %>
           <% end %>

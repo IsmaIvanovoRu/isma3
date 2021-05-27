@@ -1,19 +1,19 @@
 Isma::Application.routes.draw do
 
   namespace :api, defaults: {format: 'json'}, path: '/api' do
-#     resources :entrant_applications, only: [:show, :create, :update, :attachment_create, :attachment_show]
-#     resources :attachments, only: [:show, :create, :destroy]
-#     resources 'stats' do
-#       member do
-#         get 'entrants'
-#         get 'marks'
-#       end
-#       collection do
-#         get 'campaigns'
-#       end
-#     end
-#     resources :dictionaries, only: [:index, :show]
-#     resources :campaigns, only: [:index, :show]
+    resources :entrant_applications, only: [:show, :create, :update, :attachment_create, :attachment_show]
+    resources :attachments, only: [:show, :create, :destroy]
+    resources 'stats' do
+      member do
+        get 'entrants'
+        get 'marks'
+      end
+      collection do
+        get 'campaigns'
+      end
+    end
+    resources :dictionaries, only: [:index, :show]
+    resources :campaigns, only: [:index, :show]
   end
   
   get "sitemaps/sitemap"
@@ -25,7 +25,7 @@ Isma::Application.routes.draw do
     post 'test_converters/mytest2moodle' => :mytest2moodle
   end
   
-#   resources :entrants, only: [:new, :show]
+  resources :entrants, only: [:new, :show]
   
   controller :sveden do
     get 'sveden' => :index
