@@ -62,7 +62,7 @@ section.panel
               tr(itemprop='teachingStaff')
                 td= link_to employee.full_name, user_profile_path(employee.user), itemprop: 'fio'
                 td itemprop='post'= @posts_hash[employee.user.id][:posts]
-                td itemprop='teachingDiscipline'= @posts_hash[employee.user.id][:subjects].empty? ? employee.discipline : @posts_hash[employee.user.id][:subjects].mb_chars.downcase.to_s
+                td itemprop='teachingDiscipline'= employee.subjects.where(educational_program_id: educational_program.id).uniq.map(&:name).compact.join(', ')
                 td itemprop='teachingLevel'= employee.teaching_level
                 td itemprop='teachingQual'= employee.qualification
                 td itemprop='degree'= employee.degree.name if employee.degree
@@ -92,7 +92,7 @@ section.panel
             tr(itemprop='teachingStaff')
               td= link_to employee.full_name, user_profile_path(employee.user), itemprop: 'fio'
               td itemprop='post'= @posts_hash[employee.user.id][:posts]
-              td itemprop='teachingDiscipline'= @posts_hash[employee.user.id][:subjects].empty? ? employee.discipline : @posts_hash[employee.user.id][:subjects].mb_chars.downcase.to_s
+              td itemprop='teachingDiscipline'= employee.discipline
               td itemprop='teachingLevel'= employee.teaching_level
               td itemprop='teachingQual'= employee.qualification
               td itemprop='degree'= employee.degree.name if employee.degree
