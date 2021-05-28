@@ -33,9 +33,11 @@
     <% unless @subjects.empty? %>
     <h2>Другие дисциплины</h2>
     <ul>
+      <h3>Рекомендуемые</h3>
       <% @division_subjects.each do |subject| %>
         <li><%= link_to "#{subject.name} (#{subject.educational_program.full_name})", add_subject_division_post_path(@division, @post) + "?subject_id=#{subject.id}" %></li>
       <% end %>
+      <h3>Прочие</h3>
       <% @subjects.each do |subject| %>
         <li><%= link_to "#{subject.name} (#{subject.educational_program.full_name})", add_subject_division_post_path(@division, @post) + "?subject_id=#{subject.id}" %></li>    
       <% end %>
