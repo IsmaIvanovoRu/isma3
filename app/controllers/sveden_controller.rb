@@ -39,7 +39,7 @@ class SvedenController < ApplicationController
       @posts_hash[k][:posts] = {}
       @posts_hash[k][:posts] = v.map{|p| [p.name, p.division.name].join(' ')}.each{|item| (item =~ /заведую/ ? item.gsub!('кафедра', '') : item.gsub!('кафедра', 'кафедры'))}.join(', ')
     end
-    @educational_programs = EducationalProgram.where(active: true)
+    @educational_programs = EducationalProgram.where(active: true).order(:code)
     respond_to do |format|
       format.html
       format.xls if current_user_administrator?
