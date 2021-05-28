@@ -30,15 +30,18 @@ class SvedenController < ApplicationController
   def employees
     @posts_head = Post.includes(:profile, :division).select{|p| p.name =~ /^ректор/}
     @posts_vice = Post.includes(:profile, :division).select{|p| p.name =~ /^проректор/}
-    @employees = Profile.includes([:user, :degree, :academic_title]).joins(:divisions).where(divisions: {division_type_id: 3}).sort_by(&:full_name)
+    @employees_all = Profile.includes([:user, :degree, :academic_title]).joins(:divisions).where(divisions: {division_type_id: 3}).uniq
+    @employees_educational_programs = Profile.includes([:user, :degree, :academic_title]).joins(:divisions, :educational_programs).where(divisions: {division_type_id: 3}).uniq
+    @employees_not_educational_programs = @employees_all - @employees_educational_programs
     @posts_hash = {}
-    Post.includes(:profile, :division, :subjects).joins(:profile, :division).where(profiles: {id: @employees}).where(divisions: {division_type_id: 3}).group_by(&:user_id).each do |k, v|
+    Post.includes(:profile, :division, :subjects).joins(:profile, :division).where(profiles: {id: @employees_all}).where(divisions: {division_type_id: 3}).group_by(&:user_id).each do |k, v|
       @posts_hash[k] = {}
       @posts_hash[k][:posts] = {}
       @posts_hash[k][:subjects] = {}
       @posts_hash[k][:posts] = v.map{|p| [p.name, p.division.name].join(' ')}.each{|item| (item =~ /заведую/ ? item.gsub!('кафедра', '') : item.gsub!('кафедра', 'кафедры'))}.join(', ')
       @posts_hash[k][:subjects] = v.map{|p| p.subjects.map(&:name).uniq}.join(', ')
     end
+    @educational_programs = EducationalProgram.where(active: true)
     respond_to do |format|
       format.html
       format.xls if current_user_administrator?

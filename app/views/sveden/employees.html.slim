@@ -40,32 +40,64 @@ section.panel
         td(itemprop='email') филиалы отсутствуют
   - if @administrator_permission
     = link_to "Скачать список ППС", "/sveden/employees.xls"
-  table
-    caption Информация о составе педагогических (научно-педагогических) работников образовательной организации
-    thead
-      tr
-        th Ф.И.О. преподавателя, реализующего программу
-        th Должность преподавателя
-        th Перечень преподаваемых дисциплин
-        th Уровень образования
-        th Квалификация
-        th Учёная степень педагогического работника (при наличии) 
-        th Учёное звание педагогического работника (при наличии)
-        th Наименование направления подготовки и (или) специальности педагогического работника
-        th Сведения о повышении квалификации и (или) профессиональной переподготовке педагогического работника (при наличии)
-        th Общий стаж работы
-        th Стаж работы педагогического работника по специальности
-    tbody
-      - @employees.each do |employee|
-          tr(itemprop='teachingStaff')
-            td= link_to employee.full_name, user_profile_path(employee.user), itemprop: 'fio'
-            td itemprop='post'= @posts_hash[employee.user.id][:posts]
-            td itemprop='teachingDiscipline'= @posts_hash[employee.user.id][:subjects].empty? ? employee.discipline : @posts_hash[employee.user.id][:subjects].mb_chars.downcase.to_s
-            td itemprop='teachingLevel'= employee.teaching_level
-            td itemprop='teachingQual'= employee.qualification
-            td itemprop='degree'= employee.degree.name if employee.degree
-            td itemprop='academStat'= employee.academic_title.name if employee.academic_title
-            td itemprop='employeeQualification'= employee.employee_qualification
-            td itemprop='profDevelopment'= employee.development
-            td itemprop='genExperience'= employee.general_experience
-            td itemprop='specExperience'= employee.special_experience
+  - @educational_programs.each do |educational_program|
+    - unless @employees_educational_programs.where(educational_programs: {id: educational_program.id}).empty?
+      table
+        caption= "Информация о составе педагогических (научно-педагогических) работников образовательной организации по образовательной программе: #{educational_program.full_name}"
+        thead
+          tr
+            th Ф.И.О. преподавателя, реализующего программу
+            th Должность преподавателя
+            th Перечень преподаваемых дисциплин
+            th Уровень образования
+            th Квалификация
+            th Учёная степень педагогического работника (при наличии) 
+            th Учёное звание педагогического работника (при наличии)
+            th Наименование направления подготовки и (или) специальности педагогического работника
+            th Сведения о повышении квалификации и (или) профессиональной переподготовке педагогического работника (при наличии)
+            th Общий стаж работы
+            th Стаж работы педагогического работника по специальности
+        tbody
+          - @employees_educational_programs.where(educational_programs: {id: educational_program.id}).sort_by(&:full_name).each do |employee|
+              tr(itemprop='teachingStaff')
+                td= link_to employee.full_name, user_profile_path(employee.user), itemprop: 'fio'
+                td itemprop='post'= @posts_hash[employee.user.id][:posts]
+                td itemprop='teachingDiscipline'= @posts_hash[employee.user.id][:subjects].empty? ? employee.discipline : @posts_hash[employee.user.id][:subjects].mb_chars.downcase.to_s
+                td itemprop='teachingLevel'= employee.teaching_level
+                td itemprop='teachingQual'= employee.qualification
+                td itemprop='degree'= employee.degree.name if employee.degree
+                td itemprop='academStat'= employee.academic_title.name if employee.academic_title
+                td itemprop='employeeQualification'= employee.employee_qualification
+                td itemprop='profDevelopment'= employee.development
+                td itemprop='genExperience'= employee.general_experience
+                td itemprop='specExperience'= employee.special_experience
+  - unless @employees_not_educational_programs.empty?
+    table
+      caption Информация о составе педагогических (научно-педагогических) работников образовательной организации
+      thead
+        tr
+          th Ф.И.О. преподавателя, реализующего программу
+          th Должность преподавателя
+          th Перечень преподаваемых дисциплин
+          th Уровень образования
+          th Квалификация
+          th Учёная степень педагогического работника (при наличии) 
+          th Учёное звание педагогического работника (при наличии)
+          th Наименование направления подготовки и (или) специальности педагогического работника
+          th Сведения о повышении квалификации и (или) профессиональной переподготовке педагогического работника (при наличии)
+          th Общий стаж работы
+          th Стаж работы педагогического работника по специальности
+      tbody
+        - @employees_not_educational_programs.sort_by(&:full_name).each do |employee|
+            tr(itemprop='teachingStaff')
+              td= link_to employee.full_name, user_profile_path(employee.user), itemprop: 'fio'
+              td itemprop='post'= @posts_hash[employee.user.id][:posts]
+              td itemprop='teachingDiscipline'= @posts_hash[employee.user.id][:subjects].empty? ? employee.discipline : @posts_hash[employee.user.id][:subjects].mb_chars.downcase.to_s
+              td itemprop='teachingLevel'= employee.teaching_level
+              td itemprop='teachingQual'= employee.qualification
+              td itemprop='degree'= employee.degree.name if employee.degree
+              td itemprop='academStat'= employee.academic_title.name if employee.academic_title
+              td itemprop='employeeQualification'= employee.employee_qualification
+              td itemprop='profDevelopment'= employee.development
+              td itemprop='genExperience'= employee.general_experience
+              td itemprop='specExperience'= employee.special_experience

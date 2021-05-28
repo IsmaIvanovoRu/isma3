@@ -2,6 +2,8 @@ class Profile < ActiveRecord::Base
   belongs_to :user
   has_many :posts, :through => :user
   has_many :divisions, :through => :posts
+  has_many :subjects, through: :posts
+  has_many :educational_programs, through: :subjects
   has_many :achievements, through: :user
   belongs_to :degree
   belongs_to :academic_title
