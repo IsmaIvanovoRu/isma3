@@ -25,7 +25,7 @@ Isma::Application.routes.draw do
     post 'test_converters/mytest2moodle' => :mytest2moodle
   end
   
-  resources :entrants, only: [:new, :show]
+#   resources :entrants, only: [:new, :show]
   
   controller :sveden do
     get 'sveden' => :index
