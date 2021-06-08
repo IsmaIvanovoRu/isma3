@@ -1,7 +1,12 @@
 Isma::Application.routes.draw do
 
   namespace :api, defaults: {format: 'json'}, path: '/api' do
-    resources :entrant_applications, only: [:show, :create, :update, :attachment_create, :attachment_show]
+    resources :entrant_applications, only: [:show, :create, :update] do
+      member do
+        put 'check_pin'
+        put 'remove_pin'
+      end
+    end
     resources :attachments, only: [:show, :create, :destroy]
     resources 'stats' do
       member do
@@ -25,7 +30,7 @@ Isma::Application.routes.draw do
     post 'test_converters/mytest2moodle' => :mytest2moodle
   end
   
-#   resources :entrants, only: [:new, :show]
+  resources :entrants, only: [:new, :show]
   
   controller :sveden do
     get 'sveden' => :index
