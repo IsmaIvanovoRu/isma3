@@ -1,0 +1,78 @@
+fieldset
+  legend Контактные данные
+  p Необходимо указать место фактического проживания. В интересах абитуриента указать тот контактный телефон, по которому можно будет дозвониться в любое время. Он будет использоваться для экстренной связи с абитуриентом, если у приемной комиссии возникнут вопросы по документам или зачислению. Необходимо также указать действующий адрес электронной почты, на которую будет выслана ссылка на вход в личный кабинет абитуриента и результаты рассмотрения документов.
+  .row
+    .large-12.small-12.columns
+      = label_tag :address
+        span Адрес проживания
+        = text_field_tag :address, nil, placeholder: 'Фактический адрес проживания', 'v-model.trim': 'contactInformation.address', class: 'error'
+      small.error v-if="findErrorMessage('contactInformation.address')" == "{{ findErrorMessage('contactInformation.address') }}"
+  .row
+    .large-4.small-12.columns
+      = label_tag :zip_code
+        span Почтовый индекс
+        = number_field_tag :zip_code, nil, min: 0, max: 999999, placeholder: '000000', 'v-model.trim': 'contactInformation.zipCode', class: 'error'
+      small.error v-if="findErrorMessage('contactInformation.zipCode')" == "{{ findErrorMessage('contactInformation.zipCode') }}"
+    .large-4.small-12.columns
+      = label_tag :email
+        span Адрес электронной почты
+        = email_field_tag :email, nil, placeholder: 'user@domain.com', 'v-model.trim': 'contactInformation.email', class: 'error'
+      small.error v-if="findErrorMessage('contactInformation.email')" == "{{ findErrorMessage('contactInformation.email') }}"
+    .large-4.small-12.columns
+      = label_tag :phone
+        span Мобильный телефон
+        = phone_field_tag :phone, nil, placeholder: '+7(999)999-99-99', 'v-model.trim': 'contactInformation.phone', class: 'error'
+      small.error v-if="findErrorMessage('contactInformation.phone')" == "{{ findErrorMessage('contactInformation.phone') }}"
+fieldset(v-if="campaign_id != '' && findCampaign(campaign_id).campaign_type_id == 4")
+  legend Прочие документы
+  p Необходимо указать данные дополнительных документов, таких как свидетельство об аккредитации специалиста, сертификат специалиста, военный билет (при их наличии).
+  . v-for="document in otherDocuments"
+    .row
+      .(v-show="otherDocuments.indexOf(document) > 0") Следующий документ
+      .large-4.small-12.columns
+        label
+          span Вид документа
+        select.error#other_document_name(name="other_documents[][name]" v-model='document.documentName')
+          option(disabled value) Выберите вид документа
+          option(v-for="other_document_type in api.other_document_types" v-bind:value="other_document_type") {{ other_document_type }}
+        small.error v-if="findErrorMessage('document.documentType')" == "{{ findErrorMessage('document.documentType') }}"
+      .large-4.small-12.columns
+        = label_tag :other_document_series
+          span Серия документа
+          = text_field_tag 'other_documents[][other_document_series]', nil, placeholder: 'Укажите серию документа', 'v-model.trim': 'document.documentSerie', class: 'error'
+        small.error v-if="findErrorMessage('document.documentSerie')" == "{{ findErrorMessage('document.documentSerie') }}"
+      .large-4.small-12.columns
+        = label_tag :other_document_number
+          span Номер документа
+          = text_field_tag 'other_documents[][other_document_number]', nil, placeholder: 'Укажите номер документа', 'v-model.trim': 'document.documentNumber', class: 'error'
+        small.error v-if="findErrorMessage('document.documentNumber')" == "{{ findErrorMessage('document.documentNumber') }}"
+    .row
+      .large-4.small-12.columns
+        = label_tag :other_document_date
+          span Дата выдачи документа
+          = date_field_tag 'other_documents[][other_document_date]', nil, placeholder: 'Дата выдачи документа', 'v-model.trim': 'document.documentDate', class: 'error'
+        small.error v-if="findErrorMessage('document.documentDate')" == "{{ findErrorMessage('document.documentDate') }}"
+      .large-4.small-12.columns
+        = label_tag :other_document_issuer
+          span Дата выдачи документа
+          = text_field_tag 'other_documents[][other_document_issuer]', nil, placeholder: 'Кем выдан документ', 'v-model.trim': 'document.documentIssuer', class: 'error'
+        small.error v-if="findErrorMessage('document.documentIssuer')" == "{{ findErrorMessage('document.documentIssuer') }}"
+    hr
+  .row
+    .button.tiny @click="addOtherDocument" Добавить документ
+    span &nbsp;
+    .button.tiny(v-if="otherDocuments.length > 1" @click="deleteOtherDocument") Удалить документ
+fieldset(v-if="campaign_id != ''")
+  .row
+    .large-12.small-12.columns
+      p Пункт "Нуждаюсь в предоставлении общежития" необходимо отметить, если Вы в процессе обучения собираетесь проживать в общежитии академии. Количество мест в общежитиях, предоставляемых поступившим на первый курс - 100.
+      input#need_hostel(type="checkbox" name="need_hostel" v-model.trim="needHostel")
+      label(for='need_hostel')
+        span Нуждаюсь в предоставлении общежития на период обучения
+  .row(v-if="campaign_id != '' && findCampaign(campaign_id).campaign_type_id == 1")
+    .large-12.small-12.columns
+      input#special_entrant(type="checkbox" name="special_entrant" v-model.trim="specialEntrant")
+      label(for='special_entrant')
+        span Нуждаюсь в предоставлении особых условий при прохождении вступительных испытаний
+    .large-12.small-12.columns(v-if="specialEntrant")
+      = text_area_tag :special_conditions, nil, placeholder: 'Укажите особые условия', 'v-model.trim':'specialConditions'

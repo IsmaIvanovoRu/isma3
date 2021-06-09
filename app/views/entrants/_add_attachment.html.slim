@@ -4,7 +4,6 @@
   .hide
     = text_field_tag :entrant_application_id, @entrant_application['entrant_application']['id']
     = text_field_tag :document_type, document_type
-    = text_field_tag :document_id, document_id
   .filefild
     = file_field_tag 'files[]', name: 'files[]', id: :files, multiple: true
   - button_name = case document_type

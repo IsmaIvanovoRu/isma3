@@ -106,85 +106,98 @@ var entrants = new Vue({
       ]
     },
     errors: [],
-    campaign_id: '',
-    citizenship: false,
-    personal: {
-      lastName: '',
-      firstName: '',
-      middleName: '',
-      gender_id: '',
-      birthDate: ''
-    },
-    identityDocuments: [
-      {
-        documentType: '',
-        documentSerie: '',
-        documentNumber: '',
-        documentDate: '',
-        documentIssuer: '',
-      }
-    ],
-    educationDocument: {
-    documentType: '',
-    documentSerie: '',
-    documentNumber: '',
-    documentDate: '',
-    documentIssuer: '',
-    documentSpecialityCode: '',
-    isOriginal: false
-    },
-  contactInformation: {
-    address: '',
-    zipCode: '',
-    email: '',
-    phone: ''
-  },
-  competitionGroups: [],
-  benefitDocuments: [
-    {
-    documentType: '',
-    documentSerie: '',
-    documentNumber: '',
-    documentDate: '',
-    documentIssuer: ''
-    }
-  ],
-  olympicDocuments: [
-    {
-    documentType: '',
-    documentSerie: '',
-    documentNumber: '',
-    documentDate: '',
-    classNumber: '',
-    olympicResult: ''
-    }
-  ],
-  otherDocuments: [
-    {
-      documentName: '',
+    entrantApplication: {
+      applicationNumber: '',
+      campaignId: '',
+      nationalityTypeId: false,
+      personal: {
+        lastName: '',
+        firstName: '',
+        middleName: '',
+        genderId: '',
+        birthDate: ''
+      },
+      identityDocuments: [
+        {
+          documentType: '',
+          documentSerie: '',
+          documentNumber: '',
+          documentDate: '',
+          documentIssuer: '',
+        }
+      ],
+      educationDocument: {
+      documentType: '',
       documentSerie: '',
       documentNumber: '',
+      documentDate: '',
       documentIssuer: '',
-      documentDate: ''
-    }
-  ],
-  specialities: [],
-  competitions: [
-    {
-      id: '',
-      targetOrganizationName: '',
+      documentSpecialityCode: '',
+      isOriginal: false,
+      originalReceivedDate: false,
+      },
+    contactInformation: {
+      address: '',
+      zipCode: '',
+      email: '',
+      phone: ''
     },
-  ],
-  marks: [],
-  institutionAchievements: [
+    competitionGroups: [],
+    benefitDocuments: [
       {
-        institution_achievement_id: ''
+      documentType: '',
+      documentSerie: '',
+      documentNumber: '',
+      documentDate: '',
+      documentIssuer: ''
       }
     ],
-  needHostel: false,
-  specialEntrant: false,
-  specialConditions: '',
-  originalReceiving: false
+    olympicDocuments: [
+      {
+      documentType: '',
+      documentSerie: '',
+      documentNumber: '',
+      documentDate: '',
+      classNumber: '',
+      olympicResult: ''
+      }
+    ],
+    otherDocuments: [
+      {
+        documentName: '',
+        documentSerie: '',
+        documentNumber: '',
+        documentIssuer: '',
+        documentDate: ''
+      }
+    ],
+    specialities: [],
+    competitions: [
+      {
+        id: '',
+        targetOrganizationName: '',
+      },
+    ],
+    marks: [],
+    institutionAchievements: [
+        {
+          institution_achievement_id: ''
+        }
+      ],
+    benefit: false,
+    olympionic: false,
+    budgetAgr: null,
+    paidAgr: null,
+    statusId: null,
+    comment: '',
+    status: '',
+    request: '',
+    enrolled: null,
+    enrolledDate: '',
+    needHostel: false,
+    specialEntrant: false,
+    specialConditions: '',
+    },
   },
   computed: {
     checkLastName: function() {
@@ -383,5 +396,8 @@ var entrants = new Vue({
     axios
       .get(protocol + this.api.host + '/api/dictionaries/22')
       .then(response => (this.api.identity_document_types = response.data.dictionary.items));
+    axios
+      .get(window.document.location.origin + '/api/entrant_applications/' + window.document.location.pathname.split('/')[2])
+      .then(response => (this.entrant_application = response.data))
   }
 })

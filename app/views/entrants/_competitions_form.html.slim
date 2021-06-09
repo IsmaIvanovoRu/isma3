@@ -1,0 +1,74 @@
+fieldset(v-show="campaign_id != ''")
+  legend Выбор условий поступления
+  p(v-if="campaign_id != '' && findCampaign(campaign_id).campaign_type_id == 1") Вы имеете право отметить любое количество конкурсов при наличии оснований для участия в них. Каждый абитуриент, не имеющий высшего образования и являющийся гражданином России, может участвовать в общем конкурсе на каждую специальность на бюджетной и внебюджетной основе. Для участия в конкурсе в пределах квоты целевого приема необходимо заключить договор с заказчиком целевого обучения. Чтобы претендовать на места в пределах особой квоты, необходимо иметь те или иные федеральные льготы. Без испытаний поступают некоторые победители и призеры олимпиад школьников. Лица, имеющие высшее образование, могут поступать только на внебюджетной основе. В соответствии с законодательством абитуриент имеет право претендовать на поступление одновременно не более чем по трем специальностям в один вуз. Поскольку в ИвГМА реализуются три образовательные программы специалитета, Вы можете отметить все три специальности.
+  p(v-if="campaign_id != '' && findCampaign(campaign_id).campaign_type_id == 4") Вы имеете право выбрать две специальности для поступления, внутри которых Вы можете отметить любое количество конкурсов при наличии оснований для участия в них. Для участия в конкурсе в пределах квоты целевого приема необходимо заключить договор с заказчиком целевого обучения.
+  .row
+    .large-12.small-12.columns
+      .(v-for="campaign_item in api.campaigns" v-if="campaign_item.id == campaign_id")
+        .(v-for="admission_volume in campaign_item.admission_volumes")
+          input.error(type="checkbox" v-bind:id="admission_volume.direction_id" v-bind:name="admission_volume.direction_id" v-bind:value="admission_volume.direction_id" v-model="specialities")
+          label(v-bind:for="specialityName(admission_volume.direction_id)")
+            span = "{{ specialityName(admission_volume.direction_id) }}"
+          .(v-for="competitive_groups_item in campaign_item.competitive_groups" v-if="competitive_groups_item.direction_id == admission_volume.direction_id && specialities.includes(admission_volume.direction_id)")
+            span &nbsp;&nbsp;
+            input.error(type="checkbox" v-bind:id="'competitive_group_' + competitive_groups_item.id" v-bind:name="'competitive_groups[][id]'" v-model="competitions" v-bind:value="competitive_groups_item.id")
+            label(v-bind:for="competitive_groups_item.id")
+              span = "{{ competitive_groups_item.name }}"
+            span &nbsp;&nbsp;
+            .(v-if="competitive_groups_item.name.match(/Целевые/) && competitions.includes(competitive_groups_item.id)")
+              p Прием на целевое обучение осуществляется при наличии договора о целевом обучении. При подаче заявления о приеме на целевое обучение поступающий представляет помимо документов, указанных в пункте 6.14 Правил приема, копию договора о целевом обучении, заверенную заказчиком целевого обучения, или незаверенную копию указанного договора с предъявлением его оригинала.
+              select.error#target_organization_name(name="competitive_groups[][target_organization_id]")
+                option(disabled value) Выберите заказчика целевого приема
+                option(v-for="target_organization in competitive_groups_item.target_organizations" v-bind:value="target_organization.id") {{ target_organization.target_organization_name }}
+              small.error v-if="findErrorMessage('campaign_id')" == "{{ findErrorMessage('campaign_id') }}"
+            .(v-if="competitive_groups_item.name.match(/Квота особого/) && competitions.includes(competitive_groups_item.id)")
+              p Право на прием на обучение в пределах особой квоты имеют дети-инвалиды, инвалиды I и II групп, инвалиды с детства, инвалиды вследствие военной травмы или заболевания, полученных в период прохождения военной службы, дети-сироты и дети, оставшиеся без попечения родителей, а также лица из числа детей-сирот и детей, оставшихся без попечения родителей, ветераны боевых действий из числа лиц, указанных в подпунктах 1-4 пункта 1 статьи 3 Федерального закона от 12 января 1995 года N 5-ФЗ «О ветеранах». Необходимо предоставить документ, подтверждающий данное право. В поле "Реквизиты документа" необходимо указать название документа, номер (при наличии), дату выдачи, срок действия документа (при наличии), каким органом/организацией выдан документ. В этом случае Вы можете участвовать в конкурсе на поступление по всем трем специальностям.
+
+fieldset(v-if="campaign_id != ''")
+  legend Выбор вступительных испытаний
+  p(v-if="campaign_id != '' && findCampaign(campaign_id).campaign_type_id == 1") В качестве вступительных испытаний указывается ЕГЭ.
+  p(v-if="campaign_id != '' && findCampaign(campaign_id).campaign_type_id == 4") В качестве вступительных испытаний указывается результат аккредитационного теста или экзамен, проводимый на базе ИвГМА. Выбранную форму (а также место сдачи теста) необходимо указывать во всех вузах, куда Вы собираетесь подавать документы. Министерство здравоохранения отслеживает, что поступающий указывает в качестве вступительного испытания.
+  .row
+    .large-12.small-12.columns
+      .(v-for="campaign_item in api.campaigns" v-if="campaign_item.id == campaign_id")
+        table
+          thead
+            tr
+              th Предмет
+              th(v-show="false")
+              th Форма экзамена
+              th(v-show="findCampaign(campaign_id).campaign_type_id == 4") Оценка
+              th(v-show="findCampaign(campaign_id).campaign_type_id == 4")
+                span(v-if="findCampaign(campaign_id).campaign_type_id == 4") Год сдачи
+              th(v-if="findCampaign(campaign_id).campaign_type_id == 4") Название организации сдачи экзамена
+          tbody
+            tr(v-for="mark in marks")
+              td = "{{ mark.subjectName }} (минимальный балл {{ mark.minScore }})"
+              td(v-show="false")
+                  = text_field_tag 'marks[][subject_id]', nil, 'v-bind:value': 'mark.entranceSubjectId'
+              td
+                .(v-if="findCampaign(campaign_id).campaign_type_id == 1")
+                  = select_tag 'marks[][form]', options_for_select(['ЕГЭ']), include_blank: '', 'v-model.trim': 'mark.form'
+                .(v-if="findCampaign(campaign_id).campaign_type_id == 4")
+                  = select_tag 'marks[][form]', options_for_select(['Аккредитация', 'Экзамен']), include_blank: '', 'v-model.trim': 'mark.form'
+
+                small.error v-if="findErrorMessage('mark.form')" == "{{ findErrorMessage('mark.form') }}"
+              td
+                span(v-show="mark.form == 'Аккредитация'")= number_field_tag 'marks[][value]', nil, 'v-bind:min': 'mark.minScore', max: 100, 'v-model.trim': 'mark.value'
+              td
+                span(v-show="mark.form == 'Аккредитация'")= number_field_tag 'marks[][year]', nil, 'v-bind:min': 'findCampaign(campaign_id).year_start - 1', 'v-bind:max': 'findCampaign(campaign_id).year_start', 'v-model.trim':'mark.year'
+                small.error v-if="findErrorMessage('mark.form')" == "{{ findErrorMessage('mark.form') }}"
+              td(v-if="findCampaign(campaign_id).campaign_type_id == 4")
+                = text_field_tag 'marks[][organization_uid]', nil, 'v-model.tirm': 'mark.organizationUid'
+
+fieldset(v-show="campaign_id != ''")
+  legend Указать индивидуальные достижения
+  p(v-if="campaign_id != '' && findCampaign(campaign_id).campaign_type_id == 1") Поступающему может быть начислено за индивидуальные достижения не более 10 баллов суммарно
+  p(v-if="campaign_id != '' && findCampaign(campaign_id).campaign_type_id == 1") Обращаем Ваше внимание, что аттестаты для награжденных медалями - это аттестаты старого образца (полученные до 2014 года). Современные аттестаты - это Аттестаты с отличием.
+  .row
+    .large-12.small-12.columns
+      .(v-for="campaign_item in api.campaigns" v-if="campaign_item.id == campaign_id")
+        .(v-for="institution_achievement in campaign_item.institution_achievements")
+          input.error(type="checkbox" v-bind:id="'institution_achievement' + institution_achievement.id" v-bind:name="'institution_achievement_ids[]'" v-bind:value="institution_achievement.id" v-model="institutionAchievements")
+          label(v-bind:for="institution_achievement.id")
+            span = "{{ institution_achievement.name }} (дополнительные баллы: {{ institution_achievement.max_value }})"

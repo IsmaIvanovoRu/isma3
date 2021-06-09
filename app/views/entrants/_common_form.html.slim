@@ -1,0 +1,133 @@
+fieldset
+  legend Персональные данные
+  p Фамилию, имя и отчество следует писать в именительном падеже в строгом соответствии с паспортными данными. Особое внимание стоит обратить на наличие или отсутствие буквы Ё, вариантное написание имен типа НаталЬЯ/НаталИЯ и т.д. При наличии составных имени, фамилии или отчества также необходимо ориентироваться на написание в паспорте - поставить пробел или дефис. Перед дефисом и после него пробел не ставится.
+  .row
+    .large-4.small-12.columns
+      = label_tag :entrant_last_name
+        span Фамилия
+        = text_field_tag :entrant_last_name, nil, placeholder: 'Как в паспорте', 'v-model.trim': 'personal.lastName', class: 'error'
+      small.error v-if="checkLastName" == "{{ checkLastName }}"
+    .large-4.small-12.columns
+      = label_tag :entrant_first_name
+        span Имя
+        = text_field_tag :entrant_first_name, nil, placeholder: 'Как в паспорте', 'v-model.trim': 'personal.firstName', class: 'error'
+      small.error v-if="checkFirstName" == "{{ checkFirstName }}"
+    .large-4.small-12.columns
+      = label_tag :entrant_middle_name
+        span Отчество
+        = text_field_tag :entrant_middle_name, nil, placeholder: 'Как в паспорте, если есть', 'v-model.trim': 'personal.middleName', class: 'error'
+      small.error v-if="checkMiddleName" == "{{ checkMiddleName }}"
+  .row
+    .large-4.small-12.columns
+      = label_tag :birth_date
+        span Дата рождения
+        = date_field_tag :birth_date, nil, 'v-model': 'personal.birthDate', class: 'error'
+      small.error v-if="findErrorMessage('BirthDate')" == "{{ findErrorMessage('BirthDate') }}"
+    .large-4.small-12.columns
+      = label_tag :gender_id, 'Пол'
+      p
+      = radio_button_tag :gender_id, '2', true, 'v-model': 'personal.gender'
+      = label_tag :gender_id, 'женский'
+      = radio_button_tag :gender_id, '1', false, 'v-model': 'personal.gender'
+      = label_tag :gender_id, 'мужской'
+      small.error v-if="findErrorMessage('gender')" == "{{ findErrorMessage('gender') }}"
+    .large-4.small-12.columns(v-if="campaign_id != '' && findCampaign(campaign_id).campaign_type_id == 4")
+      = label_tag :snils
+        span СНИЛС (только цифры)
+        = text_field_tag :snils, nil, 'v-model': 'personal.snils', class: 'error', maxlength: 11, placeholder: '00000000000'
+      small.error v-if="findErrorMessage('snils')" == "{{ findErrorMessage('snils') }}"
+fieldset
+  legend Документы, удостоверяющие личность
+  p
+    span Указываются данные действующего документа, удостоверяющего личность.
+    span(v-if="campaign_id != '' && findCampaign(campaign_id).campaign_type_id == 1") Если паспорт меняли после сдачи ЕГЭ, то необходимо также указать данные ранее выданного паспорта, нажав на кнопку "Указать данные дополнительного документа". Эти сведения используются при проверке результатов ЕГЭ.
+    span(v-if="campaign_id != '' && findCampaign(campaign_id).campaign_type_id == 4") Если сдавали аккредитацию и сменили паспорт после ее сдачи, то необходимо также указать данные ранее выданного паспорта, нажав на кнопку "Указать данные дополнительного документа". Эти сведения используются при проверке результатов теста.
+  . v-for="document in identityDocuments"
+    .row
+      .(v-show="identityDocuments.indexOf(document) > 0") Предыдущий документ
+      .large-4.small-12.columns
+        label
+          span Вид документа
+        select.error#identity_document_type(name="identity_documents[][identity_document_type]" v-model='document.documentType')
+          option(disabled value) Выберите вид документа
+          option(v-for="identity_document_type in api.identity_document_types" v-bind:value="identity_document_type.id") {{ identity_document_type.name }}
+      .large-4.small-12.columns
+        = label_tag :identity_document_seriess
+          span Серия документа
+          = text_field_tag 'identity_documents[][identity_document_series]', nil, placeholder: 'Укажите серию документа', 'v-model.trim': 'document.documentSerie', class: 'error'
+      .large-4.small-12.columns
+        = label_tag :identity_document_number
+          span Номер документа
+          = text_field_tag 'identity_documents[][identity_document_number]', nil, placeholder: 'Укажите номер документа', 'v-model.trim': 'document.documentNumber', class: 'error'
+    .row
+      .large-4.small-12.columns
+        = label_tag :identity_document_date
+          span Дата выдачи документа
+          = date_field_tag 'identity_documents[][identity_document_date]', nil, placeholder: 'Дата выдачи документа', 'v-model.trim': 'document.documentDate', class: 'error'
+        small.error v-if="checkIdentityDocumentDate" == "{{ checkIdentityDocumentDate }}"
+      .large-8.small-12.columns(v-show="identityDocuments.indexOf(document) < 1")
+        = label_tag :identity_document_issuer
+          span Кем выдан документ
+          = text_field_tag 'identity_documents[][identity_document_issuer]', nil, placeholder: 'Укажите, кто выдал документ', 'v-model.trim': 'document.documentIssuer', class: 'error'
+    .row
+      .large-4.small-12.columns(v-show="identityDocuments.indexOf(document) > 0")
+        = label_tag :alt_entrant_last_name
+          span Прежняя фамилия
+          = text_field_tag 'identity_documents[][alt_entrant_last_name]', nil, placeholder: 'Как в паспорте, если меняли', 'v-model.trim': 'document.altEntrantLastName', class: 'error'
+        small.error v-if="checkLastName" == "{{ checkLastName }}"
+      .large-4.small-12.columns(v-show="identityDocuments.indexOf(document) > 0")
+        = label_tag :alt_entrant_first_name
+          span Прежнее имя
+          = text_field_tag 'identity_documents[][alt_entrant_first_name]', nil, placeholder: 'Как в паспорте, если меняли', 'v-model.trim': 'document.altEntrantFirstName', class: 'error'
+        small.error v-if="checkFirstName" == "{{ checkFirstName }}"
+      .large-4.small-12.columns(v-show="identityDocuments.indexOf(document) > 0")
+        = label_tag :alt_entrant_middle_name
+          span Прежнее отчество
+          = text_field_tag 'identity_documents[][alt_entrant_middle_name]', nil, placeholder: 'Как в паспорте, если есть', 'v-model.trim': 'document.altEntrantMiddleName', class: 'error'
+        small.error v-if="checkMiddleName" == "{{ checkMiddleName }}"
+    .row
+      .large-4.small-12.columns
+        br
+        = render partial: 'add_attachment', locals: { message: 'Выберите и прикрепите электронную копию документа, удостоверяющего личность', document_type: 'identity_document'}
+  .row
+    .button.tiny @click="addIdentityDocument" Указать данные дополнительного документа
+    span &nbsp;
+    .button.tiny(v-if="identityDocuments.length > 1" @click="deleteIdentityDocument") Удалить документ
+fieldset
+  legend Документ об образовании
+  p(v-if="campaign_id != '' && findCampaign(campaign_id).campaign_type_id == 1") Сведения о документе об образовании — это данные того документа, который будет подан в приемную комиссию. При поступлении по результатам ЕГЭ обычно это аттестат, но при наличии у Вас нескольких документов об образовании (аттестата и диплома), Вы можете выбрать, какой из них подать. При поступлении по результатам внутренних экзаменов абитуриент подает диплом о среднем профессиональном или высшем образовании. Современные аттестаты, как правило, не содержат серии - в том случае соответствующее поле заполнять не нужно.
+  .row
+    .large-6.small-12.columns
+      label
+        span Вид документа
+      select.error#education_document_type(name="education_document[education_document_type]" v-model='educationDocument.DocumentType')
+        option(disabled value) Выберите вид документа
+        option(v-for="education_document_type in api.education_document_types" v-bind:value="education_document_type.id") {{ education_document_type.name }}
+      small.error v-if="findErrorMessage('educationDocument.documentType')" == "{{ findErrorMessage('educationDocument.documentType') }}"
+    .large-6.small-12.columns
+      = label_tag :education_document_number
+        span Серия и номер документа
+        = text_field_tag 'education_document[education_document_number]', nil, placeholder: 'Укажите серию и номер документа', 'v-model.trim': 'educationDocument.documentNumber', class: 'error'
+      small.error v-if="findErrorMessage('educationDocument.documentNumber')" == "{{ findErrorMessage('educationDocument.documentNumber') }}"
+  .row
+    .large-4.small-12.columns
+      = label_tag :education_document_date
+        span Дата выдачи документа
+        = date_field_tag 'education_document[education_document_date]', nil, placeholder: 'Дата выдачи документа', 'v-model.trim': 'educationDocument.documentDate', class: 'error'
+      small.error v-if="checkEducationDocumentDate" == "{{ checkEducationDocumentDate }}"
+      small.error v-if="findErrorMessage('educationDocument.documentDate')" == "{{ findErrorMessage('educationDocument.documentDate') }}"
+    .large-4.small-12.columns
+      = label_tag :education_document_issuer
+        span Кем выдан документ
+        = text_field_tag 'education_document[education_document_issuer]', nil, placeholder: 'Укажите, кто выдал документ', 'v-model.trim': 'educationDocument.documentIssuer', class: 'error'
+      small.error v-if="findErrorMessage('educationDocument.documentIssuer')" == "{{ findErrorMessage('educationDocument.documentIssuer') }}"
+    .large-4.small-12.columns(v-if="campaign_id != '' && findCampaign(campaign_id).campaign_type_id == 4")
+      label
+        span Специальность по диплому
+      select.error#education_speciality_code(name="education_document[education_speciality_code]" v-model='educationDocument.documentSpecialityCode')
+        option(disabled value) Выберите специальность
+        option(v-for="education_speciality_code in api.education_speciality_codes" v-bind:value="education_speciality_code.code") {{ education_speciality_code.name }}
+  .row
+    .large-4.small-12.columns
+      br
+      dd= render partial: 'add_attachment', locals: { message: 'Выберите и прикрепите файл(ы) с полной электронной копией документа об образовании (включая приложение с оценками и страницей с подписью и печатью)', document_type: 'education_document'}
