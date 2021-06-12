@@ -2,8 +2,6 @@ var entrants = new Vue({
   el: '#entrant_application',
   data: {
     api: {
-      host: window.document.location.hostname,
-      protocol: '',
       campaigns: null
     },
     campaign_id: '',
@@ -123,14 +121,8 @@ var entrants = new Vue({
     }
   },
   mounted: function() {
-    if(this.api.host == 'isma.ivanovo.ru' || this.api.host == 'www.isma.ivanovo.ru') {
-      this.api.protocol = 'https://'
-    }
-    else {
-      this.api.protocol = 'http://'
-    };
     axios
-      .get(this.api.protocol + this.api.host + '/api/campaigns')
+      .get('/api/campaigns')
       .then(response => (this.api.campaigns = response.data.campaigns));
   }
 })

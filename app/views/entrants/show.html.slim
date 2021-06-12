@@ -2,7 +2,8 @@ section.panel#entrant_application
   ul.tabs.vertical(data-tab)
     li.tab-title.active= link_to 'Важное', '#start'
     li.tab-title= link_to 'Общие сведения', '#common'
-    li.tab-title= link_to 'Льготы', '#benefits'
+    li.tab-title
+      = link_to 'Льготы', '#benefits'
     li.tab-title= link_to 'Целевой прием', '#target'
     li.tab-title= link_to 'Условия поступления', '#competitions'
     li.tab-title= link_to 'Прочие сведения', '#start'
@@ -14,9 +15,9 @@ section.panel#entrant_application
           .large-12.small-12.columns
             h2.right
               span Номер личного дела:
-              span= @entrant_application['entrant_application']['application_number'] ? "#{"%04d" % @entrant_application['entrant_application']['application_number']}" : "еще не присвоен"
-            h2= [@entrant_application['entrant_application']['entrant_last_name'], @entrant_application['entrant_application']['entrant_first_name'], @entrant_application['entrant_application']['entrant_middle_name']].compact.join(' ')
-            - case @entrant_application['entrant_application']['status_id']
+              span= @entrant_application['entrantApplication']['application_number'] ? "#{"%04d" % @entrant_application['entrantApplication']['applicationNumber']}" : "еще не присвоен"
+            h2= [@entrant_application['entrantApplication']['entrantLastName'], @entrant_application['entrantApplication']['entrantFirstName'], @entrant_application['entrantApplication']['entrantMiddleName']].compact.join(' ')
+            - case @entrant_application['entrantApplication']['statusId']
             - when 2
               .label.info= 'Ваше заявление находится на рассмотрении'
             - when 4
@@ -25,10 +26,10 @@ section.panel#entrant_application
               .label.alert= 'Ваше заявление отзвано'
         .row
           .large-12.small-12.columns
-            - if @entrant_application['entrant_application']['comment']
+            - if @entrant_application['entrantApplication']['comment']
               h3 Внимание! При рассмотрении Вашего дела выявлены следующие замечания
               p
-                strong= @entrant_application['entrant_application']['comment']
+                strong= @entrant_application['entrantApplication']['comment']
     .content#common
       = render partial: 'common_form'
     .content#benefits

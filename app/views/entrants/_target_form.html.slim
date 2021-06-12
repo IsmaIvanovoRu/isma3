@@ -1,0 +1,21 @@
+fieldset
+  p Прием по целевой квоте осуществляется при наличии договора о целевом обучении. Необходимо представить копию договора о целевом обучении (подписанного всеми сторонами). Вы можете выбрать ту специальность (специальности), по которой (которым) у Вас заключен договор о целевом обучении.
+  legend Целевой договор
+  .(v-for="document in entrantApplication.targetContracts")
+    .row
+      .(v-show="entrantApplication.targetContracts.indexOf(document) > 0") Следующий документ
+      .large-4.small-12.columns
+        label
+          span Конкурс
+        select.error#competitive_group_id(name="target_contracts[][competitive_group_id]" v-model='document.competitiveGroupId')
+          option(disabled value) Выберите конкурсную группу
+        small.error v-if="findErrorMessage('document.competitiveGroupId')" == "{{ findErrorMessage('document.competitiveGroupId') }}"
+    .row
+      .large-4.small-12.columns
+        br
+        dd= render partial: 'add_attachment', locals: { message: 'Выберите и прикрепите файл(ы).', document_type: 'target_contract'}
+    hr
+  .row
+    .button.tiny @click="addTargetContract" Указать данные следующего договора
+    span &nbsp;
+    .button.tiny(v-if="entrantApplication.targetContracts.length > 1" @click="deleteTargetContract") Удалить договор

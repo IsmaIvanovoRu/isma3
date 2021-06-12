@@ -2,7 +2,7 @@
   .label.warning= message
   .span &nbsp;
   .hide
-    = text_field_tag :entrant_application_id, @entrant_application['entrant_application']['id']
+    = text_field_tag :entrant_application_id, @entrant_application['entrantApplication']['id']
     = text_field_tag :document_type, document_type
   .filefild
     = file_field_tag 'files[]', name: 'files[]', id: :files, multiple: true
