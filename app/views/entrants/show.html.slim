@@ -1,46 +1,28 @@
 section.panel#entrant_application
   ul.tabs.vertical(data-tab)
-    li.tab-title.active= link_to 'Важное', '#start'
-    li.tab-title= link_to 'Общие сведения', '#common'
-    li.tab-title
-      = link_to 'Льготы', '#benefits'
-    li.tab-title= link_to 'Целевой прием', '#target'
-    li.tab-title= link_to 'Условия поступления', '#competitions'
-    li.tab-title= link_to 'Прочие сведения', '#start'
-    li.tab-title= link_to 'Заявления', '#applications'
+    li.tab-title v-bind:class = "[api.current_tab == 'start' ? 'active' : '']"= link_to 'Важное', '#start'
+    li.tab-title v-bind:class = "[api.current_tab == 'common' ? 'active' : '']"= link_to 'Общие сведения', '#common'
+    li.tab-title v-bind:class = "[api.current_tab == 'benefits' ? 'active' : '']"= link_to 'Льготы', '#benefits'
+    li.tab-title v-bind:class = "[api.current_tab == 'target' ? 'active' : '']"= link_to 'Целевой прием', '#target'
+    li.tab-title v-bind:class = "[api.current_tab == 'competitions' ? 'active' : '']"= link_to 'Условия поступления', '#competitions'
+    li.tab-title v-bind:class = "[api.current_tab == 'others' ? 'active' : '']"= link_to 'Прочие сведения', '#others'
+    li.tab-title v-bind:class = "[api.current_tab == 'applications' ? 'active' : '']"= link_to 'Заявления', '#applications'
   .tabs-content
-    .content.active#start
-      fieldset
-        .row
-          .large-12.small-12.columns
-            h2.right
-              span Номер личного дела:
-              span= @entrant_application['entrantApplication']['application_number'] ? "#{"%04d" % @entrant_application['entrantApplication']['applicationNumber']}" : "еще не присвоен"
-            h2= [@entrant_application['entrantApplication']['entrantLastName'], @entrant_application['entrantApplication']['entrantFirstName'], @entrant_application['entrantApplication']['entrantMiddleName']].compact.join(' ')
-            - case @entrant_application['entrantApplication']['statusId']
-            - when 2
-              .label.info= 'Ваше заявление находится на рассмотрении'
-            - when 4
-              .label.success= 'Ваше заявление допущено к участию в конкурсе'
-            - when 6
-              .label.alert= 'Ваше заявление отзвано'
-        .row
-          .large-12.small-12.columns
-            - if @entrant_application['entrantApplication']['comment']
-              h3 Внимание! При рассмотрении Вашего дела выявлены следующие замечания
-              p
-                strong= @entrant_application['entrantApplication']['comment']
-    .content#common
+    .content#start v-bind:class = "[api.current_tab == 'start' ? 'active' : '']"
+      = render partial: 'start'
+    .content#common v-bind:class = "[api.current_tab == 'common' ? 'active' : '']"
       = render partial: 'common_form'
-    .content#benefits
+      = link_to 'Назад', '#', class: 'button tiny', '@click': 'setCurrentTab("start")'
+      = link_to 'Далее', '#', class: 'button tiny', '@click': 'setCurrentTab("benefits")'
+    .content#benefits v-bind:class = "[api.current_tab == 'benefits' ? 'active' : '']"
       = render partial: 'benefits_form'
-    .content#target
+    .content#target v-bind:class = "[api.current_tab == 'target' ? 'active' : '']"
       = render partial: 'target_form'
-    .content#competitions
+    .content#competitions v-bind:class = "[api.current_tab == 'competitions' ? 'active' : '']"
       = render partial: 'competitions_form'
-    .content#others
+    .content#others v-bind:class = "[api.current_tab == 'others' ? 'active' : '']"
       = render partial: 'others_form'
-    .content#applications
+    .content#applications v-bind:class = "[api.current_tab == 'applications' ? 'active' : '']"
       = render partial: 'applications_form'
 = javascript_include_tag 'https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js'
 = javascript_include_tag 'https://unpkg.com/axios/dist/axios.min.js'

@@ -4,7 +4,8 @@ var entrants = new Vue({
     api: {
       campaigns: null
     },
-    campaign_id: '',
+    campaignId: '',
+    entrantApplicationId: null,
     email: '',
     pin: '',
     response: null,
@@ -13,7 +14,20 @@ var entrants = new Vue({
     message: '',
     emailConfirmed: false,
     hash: '',
-    errors: []
+    errors: [],
+    attachments: [
+    {
+      id: null,
+      documentType: '',
+      mimeType: '',
+      dataHash: '',
+      status: null,
+      merged: false,
+      template: false,
+      documentId: null,
+      filename: ''
+    }
+    ]
   },
   computed: {
     isNextDisabled: function() {
@@ -61,10 +75,11 @@ var entrants = new Vue({
     sendCode: function() {
       this.errors = [];
       axios
-        .post(this.api.protocol + this.api.host + '/api/entrant_applications', {campaign_id: this.campaign_id, email: this.email})
+        .post('/api/entrant_applications', {campaignId: this.campaignId, email: this.email})
         .then(response => {
           if(response.data.status == 'success') {
             this.hash = response.data.hash;
+            this.entrantApplicationId = response.data.id
             $('#email_code_field').foundation('reveal', 'open');
           }
           if(response.data.status == 'faild') {
@@ -83,10 +98,28 @@ var entrants = new Vue({
     },
     handleFiles: function(){
       this.files = this.$refs.files.files;
+      let formData = new FormData();
+      for( var i = 0; i < this.files.length; i++ ){
+        let file = this.files[i];
+        formData.append('files[' + i + ']', file);
+      }
+      axios.post( '/api/attachments',
+        formData,
+        {
+          headers: {
+              'Content-Type': 'multipart/form-data'
+          }
+        }
+      ).then(function(){
+        this.attachments = response.data.attachments
+      })
+      .catch(function(){
+        console.log('FAILURE!!');
+      });
     },
     confirmEmail: function () {
       axios
-        .put( this.api.protocol + this.api.host + '/api/entrant_applications/' + this.hash + '/check_pin', { hash: this.hash, pin: this.pin } )
+        .put( '/api/entrant_applications/' + this.hash + '/check_pin', { hash: this.hash, pin: this.pin } )
         .then(response => {
           console.log(response)
           if(response.data.status == 'success') {
@@ -107,7 +140,7 @@ var entrants = new Vue({
     },
     checkEmailDecline: function() {
       axios
-        .put( this.api.protocol + this.api.host + '/api/entrant_applications/' + this.hash + '/remove_pin', { hash: this.hash } )
+        .put( '/api/entrant_applications/' + this.hash + '/remove_pin', { hash: this.hash } )
         .then(response => {
           if(response.data.status == 'success') {
             this.emailConfirmed = true;

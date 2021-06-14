@@ -3,6 +3,7 @@ var entrants = new Vue({
   data: {
     api: {
       hash: window.document.location.pathname.split('/')[2],
+      current_tab: 'common',
       dictionaries: {
         campaign: null,
         countries: [],
@@ -179,7 +180,7 @@ var entrants = new Vue({
         {
           id: null,
           value: null,
-          subject_id: null,
+          subjectId: null,
           subject: '',
           form: '',
           checked: false,
@@ -413,10 +414,22 @@ var entrants = new Vue({
       e.preventDefault();
     },
     addIdentityDocument: function() {
-      this.entrantApplication.identityDocuments.push({documentType: '', documentSerie: '', documentNumber: '', documentDate: '', documentIssuer: '', altEntrantLastName: '', altEntrantFirstName: '', altEntrantMiddleName: ''});
+      this.entrantApplication.identityDocuments.push({
+        id: null,
+        identityDocumentType: '',
+        identityDocumentSeries: '',
+        identityDocumentNumber: '',
+        identityDocumentDate: '',
+        identityDocumentIssuer: '',
+        status: null,
+        identityDocumentData: '',
+        altEntrantLastName: '',
+        altEntrantFirstName: '',
+        altEntrantMiddleName: ''
+      });
     },
     deleteIdentityDocument: function() {
-      if(this.entrantApplication.identityDocuments.length > 1) this.identityDocuments.splice(-1, 1);
+      if(this.entrantApplication.identityDocuments.length > 1) this.entrantApplication.identityDocuments.splice(-1, 1);
     },
     addTargetContract: function() {
       this.entrantApplication.targetContracts.push({
@@ -467,6 +480,9 @@ var entrants = new Vue({
       });
       return message;
     },
+    setCurrentTab: function(tab) {
+      this.api.current_tab = tab
+    }
   },
   mounted: function() {
     axios

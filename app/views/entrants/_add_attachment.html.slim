@@ -1,32 +1,9 @@
-= form_tag("/api/attachments", method: 'post', multipart: true) do
-  .label.warning= message
+fieldset
+  legend= message
   .span &nbsp;
   .hide
-    = text_field_tag :entrant_application_id, @entrant_application['entrantApplication']['id']
-    = text_field_tag :document_type, document_type
+    = text_field_tag :entrant_application_id, v-bind:value': 'entrantApplicationId'
+    = text_field_tag :document_type, :document_type, 'v-model.trim': 'attachment.documentType'
+    = text_field_tag :document_id, document_id, 'v-model.trim': 'attachment.documentId'
   .filefild
-    = file_field_tag 'files[]', name: 'files[]', id: :files, multiple: true
-  - button_name = case document_type
-  - when 'recall_application'
-    - 'Прикрепить заявление об отзыве документов'
-  - when 'entrant_application'
-    - 'Прикрепить заявление о приеме'
-  - when 'consent_application'
-    - 'Прикрепить заявление о согласии на зачисление'
-  - when 'withdraw_application'
-    - 'Прикрепить заявление об отзыве согласия на зачисление'
-  - when 'identity_document'
-    - 'Прикрепить копию документа, удостоверяющего личность'
-  - when 'education_document'
-    - 'Прикрепить копию документа об образовании'
-  - when 'benefit_document'
-    - 'Прикрепить копию документа подтверждающего льготу'
-  - when 'olympic_document'
-    - 'Прикрепить копию диплома'
-  - when 'other_document'
-    - 'Прикрепить копию документа'
-  - when 'target_contract'
-    - 'Прикрепить копию целевого договора'
-  - else
-    - 'Прикрепить'
-  = submit_tag button_name, class: "button tiny"
+    = file_field_tag 'files[]', ref: :files, name: 'files[]', id: :files, multiple: true, 'v-on:change': 'handleFiles'
