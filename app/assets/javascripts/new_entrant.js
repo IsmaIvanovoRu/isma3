@@ -15,25 +15,12 @@ var entrants = new Vue({
     emailConfirmed: false,
     hash: '',
     errors: [],
-    attachments: [
-    {
-      id: null,
-      documentType: '',
-      mimeType: '',
-      dataHash: '',
-      status: null,
-      merged: false,
-      template: false,
-      documentId: null,
-      filename: ''
-    }
-    ]
+    attachments: []
   },
   computed: {
     isNextDisabled: function() {
-      if(this.emailConfirmed && this.files && this.hash) {
+      if(this.emailConfirmed && this.attachments.length > 0 && this.hash) {
         return false
-
       }
       else {
         return true
@@ -45,15 +32,6 @@ var entrants = new Vue({
     }
   },
   methods: {
-    checkPin: function() {
-      if(this.pin.length == 4) {
-        console.log(this.pin);
-        this.confirmEmail();
-      };
-    },
-    changeCampaign: function() {
-      console.log(this.campaign_id)
-    },
     findCampaign: function(campaignId) {
       var find_campaign = null;
       this.api.campaigns.find(function(element) {
@@ -63,11 +41,16 @@ var entrants = new Vue({
       });
       return find_campaign;
     },
+    checkPin: function() {
+      if(this.pin.length == 4) {
+        console.log(this.pin);
+        this.confirmEmail();
+      };
+    },
     checkForm: function(e) {
       this.errors = [];
-      if(this.files == '') this.errors.push({element: 'files', message: 'Необходимо прикрепить сканы согласий на обработку персональных данных', level: 'red'});
+      if(this.attachments == []) this.errors.push({element: 'attachments', message: 'Необходимо прикрепить сканы согласий на обработку персональных данных', level: 'red'});
       if(this.email == '') this.errors.push({element: 'email', message: 'Необходимо указать адрес электронной почты', level: 'red'});
-      if(this.pin == '' && !this.skip) this.errors.push({element: 'pin', message: 'Необходимо ввести код', level: 'red'});
       if(this.campaign_id == '') this.errors.push({element: 'campaign_id', message: 'Необходимо выбрать приемную кампанию', level: 'red'});
       if(this.errors.length == 0) return true;
       e.preventDefault();
@@ -101,17 +84,25 @@ var entrants = new Vue({
       let formData = new FormData();
       for( var i = 0; i < this.files.length; i++ ){
         let file = this.files[i];
-        formData.append('files[' + i + ']', file);
+        formData.append('entrant_application_id', this.entrantApplicationId);
+        formData.append('document_type', this.$refs.files.dataset.documentType);
+        formData.append('document_id', this.entrantApplicationId);
+        formData.append('files[]', file);
       }
-      axios.post( '/api/attachments',
+      axios
+      .post( '/api/attachments',
         formData,
         {
           headers: {
               'Content-Type': 'multipart/form-data'
           }
         }
-      ).then(function(){
-        this.attachments = response.data.attachments
+      )
+      .then(
+        response => {
+        this.attachments = response.data.attachments;
+        console.log(response.data.message);
+        this.$refs.files.value = null
       })
       .catch(function(){
         console.log('FAILURE!!');
@@ -121,7 +112,6 @@ var entrants = new Vue({
       axios
         .put( '/api/entrant_applications/' + this.hash + '/check_pin', { hash: this.hash, pin: this.pin } )
         .then(response => {
-          console.log(response)
           if(response.data.status == 'success') {
             this.emailConfirmed = true;
             this.message = 'код подтверждения успешно проверен';

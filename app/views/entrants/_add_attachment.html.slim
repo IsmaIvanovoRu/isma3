@@ -1,9 +1,6 @@
 fieldset
   legend= message
-  .span &nbsp;
-  .hide
-    = text_field_tag :entrant_application_id, v-bind:value': 'entrantApplicationId'
-    = text_field_tag :document_type, :document_type, 'v-model.trim': 'attachment.documentType'
-    = text_field_tag :document_id, document_id, 'v-model.trim': 'attachment.documentId'
-  .filefild
-    = file_field_tag 'files[]', ref: :files, name: 'files[]', id: :files, multiple: true, 'v-on:change': 'handleFiles'
+  .row
+    .large-12.small-12.columns
+      .filefild
+        = file_field_tag 'files[]', ref: :files, name: 'files[]', id: :files, multiple: true, 'v-on:change': 'handleFiles', data: {document_type: 'data_processing_consent'}

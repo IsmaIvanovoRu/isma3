@@ -47,7 +47,6 @@ class Api::EntrantApplicationsController < ApplicationController
     http.use_ssl = true if Rails.env == 'production'
     headers = {"Content-Type" => "application/json", "Accept" => "application/json"}
     response = http.put(http_params[:uri_path] + method, params.to_json, headers)
-    puts response.body
     render json: response.body
   end
 end

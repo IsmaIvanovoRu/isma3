@@ -1,3 +1,5 @@
+= javascript_include_tag 'https://unpkg.com/axios/dist/axios.min.js'
+= javascript_include_tag 'https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js'
 section.panel#entrant_application
   ul.tabs.vertical(data-tab)
     li.tab-title v-bind:class = "[api.current_tab == 'start' ? 'active' : '']"= link_to 'Важное', '#start'
@@ -9,21 +11,19 @@ section.panel#entrant_application
     li.tab-title v-bind:class = "[api.current_tab == 'applications' ? 'active' : '']"= link_to 'Заявления', '#applications'
   .tabs-content
     .content#start v-bind:class = "[api.current_tab == 'start' ? 'active' : '']"
-      = render partial: 'start'
+      /= render partial: 'start'
     .content#common v-bind:class = "[api.current_tab == 'common' ? 'active' : '']"
-      = render partial: 'common_form'
-      = link_to 'Назад', '#', class: 'button tiny', '@click': 'setCurrentTab("start")'
-      = link_to 'Далее', '#', class: 'button tiny', '@click': 'setCurrentTab("benefits")'
+      /= render partial: 'common_form'
+      /= link_to 'Назад', '#', class: 'button tiny', '@click': 'setCurrentTab("start")'
+      /= link_to 'Далее', '#', class: 'button tiny', '@click': 'setCurrentTab("benefits")'
     .content#benefits v-bind:class = "[api.current_tab == 'benefits' ? 'active' : '']"
-      = render partial: 'benefits_form'
+      /= render partial: 'benefits_form'
     .content#target v-bind:class = "[api.current_tab == 'target' ? 'active' : '']"
-      = render partial: 'target_form'
+      /= render partial: 'target_form'
     .content#competitions v-bind:class = "[api.current_tab == 'competitions' ? 'active' : '']"
-      = render partial: 'competitions_form'
+      /= render partial: 'competitions_form'
     .content#others v-bind:class = "[api.current_tab == 'others' ? 'active' : '']"
-      = render partial: 'others_form'
+      /= render partial: 'others_form'
     .content#applications v-bind:class = "[api.current_tab == 'applications' ? 'active' : '']"
-      = render partial: 'applications_form'
-= javascript_include_tag 'https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js'
-= javascript_include_tag 'https://unpkg.com/axios/dist/axios.min.js'
+      /= render partial: 'applications_form'
 = javascript_include_tag 'entrants'

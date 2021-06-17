@@ -5,7 +5,7 @@ fieldset
       label
         span При поступлении на первый курс для получения диплома врача необходимо выбрать Специалитет,
         br для последипломного обучения в ординатуре - Кадры высшей квалификации
-        select.error#campaign_id(name="campaign_id" v-model='campaignId' v-on:change='changeCampaign')
+        select.error#campaign_id(name="campaign_id" v-model='campaignId' v-bind:disabled='emailConfirmed')
           option(value = '')
           option(v-for="campaign_item in api.campaigns" v-bind:value="campaign_item.id") {{ campaign_item.name }}
         small.error v-if="findErrorMessage('campaignId')" == "{{ findErrorMessage('campaignId') }}"
@@ -14,18 +14,19 @@ fieldset
   .row
     .large-12.small-12.columns
       p Перед переходом непосредственно к подаче заявления о поступлении в ИвГМА, нам необходимо убедиться в корректности адреса электронной почты. На указанный адрес Вам будет отправлен код проверки, который будет необходимо внести в соответствующее поле.
-      = email_field_tag :email, nil, placeholder: 'user@example.com', 'v-model.trim': 'email', class: 'error', required: true
+      = email_field_tag :email, nil, placeholder: 'user@example.com', 'v-model.trim': 'email', class: 'error', required: true, 'v-bind:disabled': 'emailConfirmed'
       small.error v-if="findErrorMessage('email')" == "{{ findErrorMessage('email') }}"
       br
-      = link_to 'Отправить код проверки', '#', class: 'button tiny', '@click': 'sendCode', 'v-bind:disabled': 'isSendCodeDisabled'
-.
-  fieldset
-    legend Прикрепите копию согласия на обработку персональных данных
-    .row
-      .large-12.small-12.columns.label.warning
-        = render partial: 'add_attachment', locals: {message: 'Прикрепите копию согласия на обработку персональных данных', document_type: 'data_processing_consent', document_id: "{{ 'entrantApplicationId' }}"}
-        small.error v-if="findErrorMessage('files')" == "{{ findErrorMessage('files') }}"
-fieldset
+      = submit_tag 'Получить код проверки', class: 'button tiny', '@click': 'sendCode', 'v-bind:disabled': 'isSendCodeDisabled', 'v-if': '!emailConfirmed'
+= render partial: 'add_attachment', locals: {document_type: 'data_processing_conset', message: 'Прикрепите копию согласия на обработку персональных данных'}
+fieldset(v-if="attachments.length > 0")
+  legend Прикрепленные файлы
+  .row
+    .large-12.small-12.columns
+      ul.no-bullet
+        li(v-for="attachment in attachments")
+          a v-bind:href = "'/api/attachments/' + attachment.data_hash + '?filename=' + attachment.filename" target = '_blank' {{ attachment.filename }}
+fieldset(v-if='!isNextDisabled')
   legend(v-if="errors.length") Исправьте ошибки и повторно нажмите кнопку Отправить
   .row(v-if="errors.length")
     .large-12.small-12.columns.label.warning
@@ -33,7 +34,7 @@ fieldset
         li v-for='error in errors' v-if='error.level == "red"' == '{{ error.message }}'
   .row
     .large-12.small-12.columns
-    a.button.tiny v-bind:href="hash"  v-bind:disabled="isNextDisabled" Перейти к заполнению анкеты
+      a.button.tiny v-bind:href="hash" Перейти к заполнению анкеты
 
 .reveal-modal.full id = 'email_code_field' data-reveal = true
   .row
@@ -45,4 +46,4 @@ fieldset
       p Если Вы не получили на почту в течение нескольких минут код проверки, проверьте папку Спам. В случае технических трудностей с получением кода, если Вы полностью уверены в корректности указанного адреса электронной почты, Вы можете отказаться от проверки и продолжить подачу заявления о поступлении, нажав на кнопку ниже.
   .row
     .large-12.small-12.columns
-      = link_to 'Отказаться от проверки', '#', class: 'button tiny', '@click': 'checkEmailDecline'
+      = submit_tag 'Отказаться от проверки', class: 'button tiny', '@click': 'checkEmailDecline'
