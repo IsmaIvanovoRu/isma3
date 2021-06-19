@@ -1,72 +1,98 @@
-fieldset(v-show="entrantApplication.campaignId != ''")
+fieldset
   legend Выбор условий поступления
-  p(v-if="entrantApplication.campaignId != '' && findCampaign(entrantApplication.campaignId).campaignTypeId == 1") Вы имеете право отметить любое количество конкурсов (в том числе все) из списка, представленного ниже. Каждый абитуриент, не имеющий высшего образования, может участвовать в общем конкурсе на каждую специальность и на бюджетной, и на внебюджетной основе. Лица, имеющие высшее образование могут поступать только на внебюджетной основе. Конкурсы по особой и целевой квотам становятся активными только в том случае, если Вы заполнили соответствующие поля и прикрепили документы, подтверждающие право на участие в конкурсе по особой и/или целевой квоте.
-  p(v-if="entrantApplication.campaignId != '' && findCampaign(entrantApplication.campaignId).campaignTypeId == 4") Вы имеете право выбрать две специальности для поступления, внутри которых Вы можете отметить любое количество конкурсов при наличии оснований для участия в них. Для участия в конкурсе в пределах квоты целевого приема необходимо заключить договор с заказчиком целевого обучения.
+  .(v-if="entrantApplication.campaignId != '' && findCampaign(entrantApplication.campaignId).campaignTypeId == 1")
+    p Вы имеете право отметить любое количество конкурсов (в том числе все) из списка, представленного ниже. Каждый абитуриент, не имеющий высшего образования, может участвовать в общем конкурсе на каждую специальность и на бюджетной, и на внебюджетной основе. Лица, имеющие высшее образование могут поступать только на внебюджетной основе. Конкурсы по особой и целевой квотам становятся доступны только в том случае, если Вы заполнили соответствующие поля и прикрепили документы, подтверждающие право на участие в конкурсе по особой и/или целевой квоте.
+    p Если Вы выбрали один или несколько внебюджетных конкурсов, Вам необходимо заполнить со своей стороны договор (договоры) об оказании платных образовательных услуг. Если Вы поступите на бюджетное место, данный договор не вступит в силу и оплата обучения не потребуется. Если Вы поступите на внебюджетное место и будете зачислены в вуз, договор вступит в силу с момента начала обучения. Оплата по договору должна быть произведена до 25 сентября 2021 года (за семестр или за учебный год). То есть заранее (до зачисления) Вы платить не обязаны.
+    p Если абитуриенту исполнилось 18 лет, то он сам может быть заказчиком по данному договору и оплачивать образовательные услуги, если абитуриент несовершеннолетний, заказчиком он быть не может. Чаще всего заказчиком выступает один из родителей, кто-то из родственников или любое дееспособное лицо, согласное оплачивать обучение.
+    p
+      span Если заказчик 
+      strong ФИЗИЧЕСКОЕ ЛИЦО
+      br
+      =link_to ' Бланк договора', '/attachments/#', target: '_blank'
+    p
+      span Если заказчик 
+      strong ЮРИДИЧЕСКОЕ ЛИЦО 
+      br
+      =link_to ' Бланк договора', '/attachments/#', target: '_blank'
+
+  .(v-if="entrantApplication.campaignId != '' && findCampaign(entrantApplication.campaignId).campaignTypeId == 4") 
+    p Вы имеете право выбрать две специальности для поступления, внутри которых Вы можете отметить любое количество конкурсов при наличии оснований для участия в них. Для участия в конкурсе в пределах квоты целевого приема необходимо заключить договор с заказчиком целевого обучения.
   .row
     .large-12.small-12.columns
-      .(v-for="campaignItem in api.campaigns" v-if="campaignItem.id == entrantApplication.campaignId")
-        .(v-for="admissionVolume in campaignItem.admissionVolumes")
-          input.error(type="checkbox" v-bind:id="admissionVolume.directionId" v-bind:name="admissionVolume.directionId" v-bind:value="admissionVolume.directionId" v-model="specialities")
-          label(v-bind:for="specialityName(admissionVolume.directionId)")
-            span = "{{ specialityName(admissionVolume.directionId) }}"
-          .(v-for="competitiveGroupsItem in campaignItem.competitiveGroups" v-if="competitiveGroupsItem.directionId == admissionVolume.directionId && specialities.includes(admissionVolume.directionId)")
-            span &nbsp;&nbsp;
-            input.error(type="checkbox" v-bind:id="'competitive_group_' + competitiveGroupsItem.id" v-bind:name="'competitiveGroups[][id]'" v-model="competitions" v-bind:value="competitiveGroupsItem.id")
-            label(v-bind:for="competitiveGroupsItem.id")
-              span = "{{ competitiveGroupsItem.name }}"
-            span &nbsp;&nbsp;
-            .(v-if="competitiveGroupsItem.name.match(/Целевые/) && competitions.includes(competitiveGroupsItem.id)")
-              select.error#target_organization_name(name="competitiveGroups[][target_organization_id]")
-                option(disabled value) Выберите заказчика целевого приема
-                option(v-for="target_organization in competitiveGroupsItem.target_organizations" v-bind:value="target_organization.id") {{ target_organization.target_organization_name }}
-              small.error v-if="findErrorMessage('entrantApplication.campaignId')" == "{{ findErrorMessage('entrantApplication.campaignId') }}"
-            .(v-if="competitiveGroupsItem.name.match(/Квота особого/) && competitions.includes(competitiveGroupsItem.id)")
+      .(v-for="admissionVolume in findCampaign(entrantApplication.campaignId).admissionVolumes")
+        p = "{{ specialityName(admissionVolume.directionId) }}"
+        .row(v-for="competitiveGroup in findCampaign(entrantApplication.campaignId).competitiveGroups" v-if="competitiveGroup.directionId == admissionVolume.directionId && isApplicable(competitiveGroup)")
+          .large-1.small-1.columns
+            input.error(type="checkbox" v-bind:id="'competitive_group_' + competitiveGroup.id" v-bind:name="'competitiveGroups[][id]'" v-bind:value="competitiveGroup.id" v-model="entrantApplication.competitiveGroupIds" v-on:change="sendData('competitiveGroup', entrantApplication.competitiveGroupIds)")
+          .large-11.small-11.columns
+            label(v-bind:for="competitiveGroup.id")
+              span = "{{ competitiveGroup.name }} (количество мест: {{ competitiveGroup.number }})"
+          .large-12.small-12.columns(v-if="competitiveGroup.educationSourceId == 15 && findCompetitiveGroup(competitiveGroup.id) == competitiveGroup.id")
+            br
+            dd= render partial: 'add_attachment', locals: { message: 'Выберите и прикрепите файл(ы).', document_type: 'contract', document_id: 'competitiveGroup.id', entrant_application_id: 'entrantApplication.id', ref_name: 'contract', id: 'contract'}
+          .large-12.small-12.columns(v-if="entrantApplication.attachments.length > 0")
+            ul.no-bullet
+              li(v-for="attachment in entrantApplication.attachments" v-if="attachment.document_type == 'contract' && attachment.document_id == competitiveGroup.id")
+                a v-bind:href = "'/api/attachments/' + attachment.data_hash + '?filename=' + attachment.filename" target = '_blank' {{ attachment.filename }}
 
-fieldset(v-if="entrantApplication.campaignId != ''")
+fieldset
   legend Выбор вступительных испытаний
-  p(v-if="entrantApplication.campaignId != '' && findCampaign(entrantApplication.campaignId).campaignTypeId == 1") В качестве вступительных испытаний указывается ЕГЭ.
+  .(v-if="entrantApplication.campaignId != '' && findCampaign(entrantApplication.campaignId).campaignTypeId == 1") 
+    p Вступительные испытания, проводимые академией самостоятельно, имеют право сдавать ТОЛЬКО:
+      ul
+        li лица, поступающие на обучение на базе среднего профессионального или высшего образования;
+        li инвалиды (в том числе дети-инвалиды);
+        li иностранные граждане;
+        li по тем предметам, по которым поступающий не сдавал ЕГЭ в текущем календарном году - если поступающий получил документ о среднем общем образовании в иностранной организации.
+    p Результаты ЕГЭ будут подгружаться в нашу систему автоматически из Федеральной базы.
+
   p(v-if="entrantApplication.campaignId != '' && findCampaign(entrantApplication.campaignId).campaignTypeId == 4") В качестве вступительных испытаний указывается результат аккредитационного теста или экзамен, проводимый на базе ИвГМА. Выбранную форму (а также место сдачи теста) необходимо указывать во всех вузах, куда Вы собираетесь подавать документы. Министерство здравоохранения отслеживает, что поступающий указывает в качестве вступительного испытания.
   .row
     .large-12.small-12.columns
-      .(v-for="campaignItem in api.campaigns" v-if="campaignItem.id == entrantApplication.campaignId")
-        table
-          thead
-            tr
-              th Предмет
-              th(v-show="false")
-              th Форма экзамена
-              th(v-show="findCampaign(entrantApplication.campaignId).campaignTypeId == 4") Оценка
-              th(v-show="findCampaign(entrantApplication.campaignId).campaignTypeId == 4")
-                span(v-if="findCampaign(entrantApplication.campaignId).campaignTypeId == 4") Год сдачи
-              th(v-if="findCampaign(entrantApplication.campaignId).campaignTypeId == 4") Название организации сдачи экзамена
-          tbody
-            tr(v-for="mark in entrantApplication.marks")
-              td = "{{ mark.subjectName }} (минимальный балл {{ mark.minScore }})"
-              td(v-show="false")
-                  = text_field_tag 'marks[][subject_id]', nil, 'v-bind:value': 'mark.entranceSubjectId'
-              td
-                .(v-if="findCampaign(entrantApplication.campaignId).campaignTypeId == 1")
-                  = select_tag 'marks[][form]', options_for_select(['ЕГЭ']), include_blank: '', 'v-model.trim': 'mark.form'
-                .(v-if="findCampaign(entrantApplication.campaignId).campaignTypeId == 4")
-                  = select_tag 'marks[][form]', options_for_select(['Аккредитация', 'Экзамен']), include_blank: '', 'v-model.trim': 'mark.form'
+      table
+        thead
+          tr
+            th Предмет
+            th Форма экзамена
+            th(v-show="findCampaign(entrantApplication.campaignId).campaignTypeId == 4") Оценка
+            th(v-show="findCampaign(entrantApplication.campaignId).campaignTypeId == 4") Год сдачи
+            th(v-if="findCampaign(entrantApplication.campaignId).campaignTypeId == 4") Название организации сдачи экзамена
+        tbody
+          tr(v-for="(mark, index) in entrantApplication.marks")
+            td = "{{ findEntranceTestItem(mark.subjectId).subjectName }} (минимальный балл {{ findEntranceTestItem(mark.subjectId).minScore }})"
+            td
+              .(v-if="findCampaign(entrantApplication.campaignId).campaignTypeId == 1")
+                = select_tag 'marks[][form]', options_for_select(['ЕГЭ', 'ВИ']), include_blank: '', 'v-model.trim': 'mark.form', 'v-on:change': "sendData('mark', mark, index)"
+              .(v-if="findCampaign(entrantApplication.campaignId).campaignTypeId == 4")
+                = select_tag 'marks[][form]', options_for_select(['Аккредитация', 'Экзамен']), include_blank: '', 'v-model.trim': 'mark.form', 'v-on:change': "sendData('mark', mark, index)"
+              small.error v-if="findErrorMessage('mark.form')" == "{{ findErrorMessage('mark.form') }}"
+            td(v-show="findCampaign(entrantApplication.campaignId).campaignTypeId == 4")
+              span(v-show="mark.form == 'Аккредитация'")= number_field_tag 'marks[][value]', nil, 'v-bind:min': 'mark.minScore', max: 100, 'v-model.trim': 'mark.value'
+            td(v-show="findCampaign(entrantApplication.campaignId).campaignTypeId == 4")
+              span(v-show="mark.form == 'Аккредитация'")= number_field_tag 'marks[][year]', nil, 'v-bind:min': 'findCampaign(entrantApplication.campaignId).yearStart - 1', 'v-bind:max': 'findCampaign(entrantApplication.campaignId).yearStart', 'v-model.trim':'mark.year', 'v-on:change': "sendData('mark', mark, index)"
+              small.error v-if="findErrorMessage('mark.form')" == "{{ findErrorMessage('mark.form') }}"
+            td(v-if="findCampaign(entrantApplication.campaignId).campaignTypeId == 4")
+              = text_field_tag 'marks[][organization_uid]', nil, 'v-model.tirm': 'mark.organizationUid', 'v-on:change': "sendData('mark', mark, index)"
 
-                small.error v-if="findErrorMessage('mark.form')" == "{{ findErrorMessage('mark.form') }}"
-              td
-                span(v-show="mark.form == 'Аккредитация'")= number_field_tag 'marks[][value]', nil, 'v-bind:min': 'mark.minScore', max: 100, 'v-model.trim': 'mark.value'
-              td
-                span(v-show="mark.form == 'Аккредитация'")= number_field_tag 'marks[][year]', nil, 'v-bind:min': 'findCampaign(entrantApplication.campaignId).yearStart - 1', 'v-bind:max': 'findCampaign(entrantApplication.campaignId).yearStart', 'v-model.trim':'mark.year'
-                small.error v-if="findErrorMessage('mark.form')" == "{{ findErrorMessage('mark.form') }}"
-              td(v-if="findCampaign(entrantApplication.campaignId).campaignTypeId == 4")
-                = text_field_tag 'marks[][organization_uid]', nil, 'v-model.tirm': 'mark.organizationUid'
-
-fieldset(v-show="entrantApplication.campaignId != ''")
+fieldset
   legend Указать индивидуальные достижения
-  p(v-if="entrantApplication.campaignId != '' && findCampaign(entrantApplication.campaignId).campaignTypeId == 1") Поступающему может быть начислено за индивидуальные достижения не более 10 баллов суммарно
-  p(v-if="entrantApplication.campaignId != '' && findCampaign(entrantApplication.campaignId).campaignTypeId == 1") Обращаем Ваше внимание, что аттестаты для награжденных медалями - это аттестаты старого образца (полученные до 2014 года). Современные аттестаты - это Аттестаты с отличием.
-  .row
-    .large-12.small-12.columns
-      .(v-for="campaignItem in api.campaigns" v-if="campaignItem.id == entrantApplication.campaignId")
-        .(v-for="institutionAchievement in campaignItem.institutionAchievements")
-          input.error(type="checkbox" v-bind:id="'institutionAchievement' + institutionAchievement.id" v-bind:name="'institutionAchievement_ids[]'" v-bind:value="institutionAchievement.id" v-model="institutionAchievements")
-          label(v-bind:for="institutionAchievement.id")
-            span = "{{ institutionAchievement.name }} (дополнительные баллы: {{ institutionAchievement.max_value }})"
+  .(v-if="entrantApplication.campaignId != '' && findCampaign(entrantApplication.campaignId).campaignTypeId == 1")
+    p Необходимо подтвердить наличие индивидуального достижения, прикрепив копию соответствующего документа. 
+    p Подтверждающими документами являются: копия документа об образовании (диплома или аттестата, в которых написано, что они – с отличием), удостоверение о награждении золотым значком ГТО, диплома победителя чемпионата «Абилимпикс».
+    p Обратите внимание: начисление баллов за индивидуальные достижения происходит не сразу, а после заседания комиссии по индивидуальным достижениям.
+    p Максимальное количество баллов за индивидуальные достижения – 10.
+    p
+      strong Обращаем Ваше внимание, что аттестаты для награжденных медалями - это аттестаты старого образца (полученные до 2014 года). Современные аттестаты - это Аттестаты с отличием.
+  .row(v-for="institutionAchievement in findCampaign(entrantApplication.campaignId).institutionAchievements")
+    .large-1.small-1.columns
+      input.error(type="checkbox" v-bind:id="'institutionAchievement' + institutionAchievement.id" v-bind:name="'institutionAchievement_ids[]'" v-bind:value="institutionAchievement.id" v-model="entrantApplication.achievementIds" v-on:change="sendData('achievement', entrantApplication.achievementIds)")
+    .large-11.small-11.columns
+      label(v-bind:for="institutionAchievement.id")
+        span = "{{ institutionAchievement.name }} (дополнительные баллы: {{ institutionAchievement.maxValue }})"
+    .large-12.small-12.columns(v-if="findAchievement(institutionAchievement.id) == institutionAchievement.id")
+      br
+      dd= render partial: 'add_attachment', locals: { message: 'Выберите и прикрепите файл(ы).', document_type: 'achievement', document_id: 'institutionAchievement.id', entrant_application_id: 'entrantApplication.id', ref_name: 'achievement', id: 'achievement'}
+    .large-12.small-12.columns(v-if="entrantApplication.attachments.length > 0")
+      ul.no-bullet
+        li(v-for="attachment in entrantApplication.attachments" v-if="attachment.document_type == 'achievement' && attachment.document_id == institutionAchievement.id")
+          a v-bind:href = "'/api/attachments/' + attachment.data_hash + '?filename=' + attachment.filename" target = '_blank' {{ attachment.filename }}

@@ -18,7 +18,11 @@ fieldset
       small.error v-if="findErrorMessage('email')" == "{{ findErrorMessage('email') }}"
       br
       = submit_tag 'Получить код проверки', class: 'button tiny', '@click': 'sendCode', 'v-bind:disabled': 'isSendCodeDisabled', 'v-if': '!emailConfirmed'
-= render partial: 'add_attachment', locals: {document_type: 'data_processing_conset', message: 'Прикрепите копию согласия на обработку персональных данных'}
+fieldset
+  legend Прикрепите копию согласия на обработку персональных данных
+  .row
+    .large-12.small-12.columns
+      = render partial: 'add_attachment', locals: {document_type: 'data_processing_consent', message: 'Можно загрузить один или несколько файлов', document_id: 'entrantApplicationId', entrant_application_id: 'entrantApplicationId', ref_name: 'data_processing_consent', id: 'data_processing_consent'}
 fieldset(v-if="attachments.length > 0")
   legend Прикрепленные файлы
   .row
@@ -40,7 +44,7 @@ fieldset(v-if='!isNextDisabled')
   .row
     .large-4.small-12.columns
       label Введите код
-      = number_field_tag :pin, nil, placeholder: '1234', 'v-model.trim': 'pin', 'v-on:input': 'checkPin', class: 'error'
+      = number_field_tag :pin, nil, 'v-model.trim': 'pin', 'v-on:input': 'checkPin', class: 'error'
       small.error v-if="findErrorMessage('pin')" == "{{ findErrorMessage('pin') }}"
     .large-12.small-12.columns
       p Если Вы не получили на почту в течение нескольких минут код проверки, проверьте папку Спам. В случае технических трудностей с получением кода, если Вы полностью уверены в корректности указанного адреса электронной почты, Вы можете отказаться от проверки и продолжить подачу заявления о поступлении, нажав на кнопку ниже.

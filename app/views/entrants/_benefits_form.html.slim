@@ -1,97 +1,104 @@
 fieldset
   .row
     .large-12.small-12.columns
-      = label_tag :benefit
-        span Имею особые права, определенные федеральным законодательством, для поступления в рамках особой квоты или для поступления с преимущественным правом при прочих равных условиях
+      p Имею особые права, определенные федеральным законодательством, для поступления в рамках особой квоты или для поступления с преимущественным правом при прочих равных условиях
       p Право на прием на обучение в пределах особой квоты имеют дети-сироты и дети, оставшиеся без попечения родителей, а также лица из числа детей-сирот и детей, оставшихся без попечения родителей, дети-инвалиды, инвалиды I и II групп, инвалиды с детства, инвалиды вследствие военной травмы или заболевания, полученных в период прохождения военной службы, ветераны боевых действий. Обратите внимание – право распространяется только если сам абитуриент относится к одной из данных категорий, а не его родители или другие родственники. Необходимо представить копию документа, подтверждающего данное право.
       p Предоставляется абитуриентам, относящимся к категории лиц, указанных в пункте 4.9 Правил приема.
-      input#benefit(type="checkbox" name="benefit" v-bind:value="true" v-model="entrantApplication.benefit")
+      input#benefit(type="checkbox" name="benefit" v-bind:value="true" v-model="entrantApplication.benefit" v-on:change = "sendData('benefit', entrantApplication.benefit)")
   .(v-if="entrantApplication.benefit")
     legend Документы, подтверждающие льготу
     p Если Вы имеете особые права, определенные федеральным законодательством, то необходимо указать реквизиты документа, подтверждающего льготу. Наличие особых прав позволяет участвовать в конкурсе по особой квоте, получить преимущественное право зачисления.
-    .(v-for="document in entrantApplication.benefitDocuments")
+    .(v-for="(document, index) in entrantApplication.benefitDocuments")
       .row
         .(v-show="entrantApplication.benefitDocuments.indexOf(document) > 0") Следующий документ
         .large-4.small-12.columns
           label
             span Вид документа
-          select.error#benefit_document_type(name="benefit_documents[][benefit_document_type_id]" v-model='document.benefitDocumentTypeId')
+          select.error#benefit_document_type(name="benefit_documents[][benefit_document_type_id]" v-model='document.benefitDocumentTypeId' v-on:change="sendData('benefitDocument', document, index)")
             option(disabled value) Выберите вид документа
-            option(v-for="benefitDocumentType in api.benefitDocumentTypes" v-bind:value="benefitDocumentType.id") {{ benefitDocumentType.name }}
+            option(v-for="benefitDocumentType in api.dictionaries.benefitDocumentTypes" v-bind:value="benefitDocumentType.id") {{ benefitDocumentType.name }}
           small.error v-if="findErrorMessage('document.benefitDocumentTypeId')" == "{{ findErrorMessage('document.benefitDocumentTypeId') }}"
         .large-4.small-12.columns
           = label_tag :benefit_document_series
             span Серия документа
-            = text_field_tag 'benefit_documents[][benefit_document_series]', nil, placeholder: 'Укажите серию документа', 'v-model.trim': 'document.benefitDocumentSeries', class: 'error'
+            = text_field_tag 'benefit_documents[][benefit_document_series]', nil, placeholder: 'Укажите серию документа', 'v-model.trim': 'document.benefitDocumentSeries', class: 'error', 'v-on:change': "sendData('benefitDocument', document, index)"
           small.error v-if="findErrorMessage('document.benefitDocumentSeries')" == "{{ findErrorMessage('document.benefitDocumentSeries') }}"
         .large-4.small-12.columns
           = label_tag 'benefit_documents[][benefit_document_number]'
             span Номер документа
-            = text_field_tag 'benefit_documents[][benefit_document_number]', nil, placeholder: 'Укажите номер документа', 'v-model.trim': 'document.benefitDocumentNumber', class: 'error'
+            = text_field_tag 'benefit_documents[][benefit_document_number]', nil, placeholder: 'Укажите номер документа', 'v-model.trim': 'document.benefitDocumentNumber', class: 'error', 'v-on:change': "sendData('benefitDocument', document, index)"
           small.error v-if="findErrorMessage('document.benefitDocumentNumber')" == "{{ findErrorMessage('document.benefitDocumentNumber') }}"
       .row
         .large-4.small-12.columns
           = label_tag :benefit_document_date
             span Дата выдачи документа
-            = date_field_tag 'benefit_documents[][benefit_document_date]', nil, placeholder: 'Дата выдачи документа', 'v-model.trim': 'document.benefitDocumentDate', class: 'error'
+            = date_field_tag 'benefit_documents[][benefit_document_date]', nil, placeholder: 'Дата выдачи документа', 'v-model.trim': 'document.benefitDocumentDate', class: 'error', 'v-on:change': "sendData('benefitDocument', document, index)"
           small.error v-if="checkIdentityDocumentDate" == "{{ checkIdentityDocumentDate }}"
           small.error v-if="findErrorMessage('document.benefitDocumentDate')" == "{{ findErrorMessage('document.benefitDocumentDate') }}"
         .large-8.small-12.columns
           = label_tag :benefit_document_organization
             span Кем выдан документ
-            = text_field_tag 'benefit_documents[][benefit_document_organization]', nil, placeholder: 'Укажите, кто выдал документ', 'v-model.trim': 'document.benefitDocumentOrganization', class: 'error'
+            = text_field_tag 'benefit_documents[][benefit_document_organization]', nil, placeholder: 'Укажите, кто выдал документ', 'v-model.trim': 'document.benefitDocumentOrganization', class: 'error', 'v-on:change': "sendData('benefitDocument', document, index)"
           small.error v-if="findErrorMessage('document.benefitDocumentOrganization')" == "{{ findErrorMessage('document.benefitDocumentOrganization') }}"
-      hr
-      .row
-        .button.tiny @click="addBenefitDocument" Указать данные дополнительного документа
-        span &nbsp;
-        .button.tiny(v-if="entrantApplication.benefitDocuments.length > 1" @click="deleteBenefitDocument") Удалить документ
-  .row
-    .large-4.small-12.columns
-      br
-      dd= render partial: 'add_attachment', locals: { message: 'Выберите и прикрепите файл(ы).', document_type: 'benefit_document'}
-
+      .row(v-if="document.id")
+        .large-12.small-12.columns
+          br
+          = render partial: 'add_attachment', locals: { message: 'Выберите и прикрепите файл(ы).', document_type: 'benefit_document', document_id: 'document.id', entrant_application_id: 'entrantApplication.id', ref_name: 'benefit_document', id: 'benefit_document'}
+      .row(v-if="entrantApplication.attachments.length > 0")
+        .large-12.small-12.columns
+          h3 Прикрепленные файлы
+          ul.no-bullet
+            li(v-for="attachment in entrantApplication.attachments" v-if="attachment.document_type == 'benefit_document' && attachment.document_id == document.id")
+                a v-bind:href = "'/api/attachments/' + attachment.data_hash + '?filename=' + attachment.filename" target = '_blank' {{ attachment.filename }}
+    .row
+      .button.tiny @click="addBenefitDocument" Указать данные дополнительного документа
+      span &nbsp;
+      .button.tiny(v-if="entrantApplication.benefitDocuments.length > 1" @click="deleteBenefitDocument") Удалить документ
 
 fieldset(v-if="entrantApplication.campaignId != '' && findCampaign(entrantApplication.campaignId).campaignTypeId == 1")
   .row
-    .large-4.small-12.columns
-      = label_tag :olympionic
-        span Являюсь победителем/призером ЗАКЛЮЧИТЕЛЬНОГО этапа Всероссийской олимпиады школьников или победителем/призером олимпиад из перечня Минобрнауки за десятый и (или) одиннадцатый классы.
-        p Победители и призеры заключительного этапа Всероссийской олимпиады школьников, победители и призеры олимпиад из перечня Минобрнауки по профилю «медицина», по общеобразовательному предмету «химия» обладают правом на прием БЕЗ ВСТУПИТЕЛЬНЫХ ИСПЫТАНИЙ.
-        p Победители и призеры олимпиад из перечня Минобрнауки по химии, биологии, русскому языку обладают правом на получение 100 БАЛЛОВ по соответствующему предмету. Право предоставляется при наличии результатов ЕГЭ по данному предмету не ниже 75 баллов.
-        = check_box_tag :olympionic, nil, 'v-model.trim': 'entrantApplication.olympionic'
+    .large-12.small-12.columns
+      p Являюсь победителем/призером ЗАКЛЮЧИТЕЛЬНОГО этапа Всероссийской олимпиады школьников или победителем/призером олимпиад из перечня Минобрнауки за десятый и (или) одиннадцатый классы.
+      p Победители и призеры заключительного этапа Всероссийской олимпиады школьников, победители и призеры олимпиад из перечня Минобрнауки по профилю «медицина», по общеобразовательному предмету «химия» обладают правом на прием БЕЗ ВСТУПИТЕЛЬНЫХ ИСПЫТАНИЙ.
+      p Победители и призеры олимпиад из перечня Минобрнауки по химии, биологии, русскому языку обладают правом на получение 100 БАЛЛОВ по соответствующему предмету. Право предоставляется при наличии результатов ЕГЭ по данному предмету не ниже 75 баллов.
+      input#olympionic(type="checkbox" name="olympionic" v-bind:value="true" v-model="entrantApplication.olympionic" v-on:change = "sendData('olympionic', entrantApplication.olympionic)")
   .(v-if="entrantApplication.olympionic")
     legend Дипломы олимпиад
-    . v-for="document in entrantApplication.olympicDocuments"
+    . v-for="(document, index) in entrantApplication.olympicDocuments"
       .row
         .(v-show="entrantApplication.olympicDocuments.indexOf(document) > 0") Следующий документ
-        .large-4.small-12.columns
+        .large-6.small-12.columns
           = label_tag :olympic_document_series
             span Серия документа
-            = text_field_tag 'olympic_documents[][olympic_document_series]', nil, placeholder: 'Укажите серию документа', 'v-model.trim': 'document.olympicDocumentSeries', class: 'error'
+            = text_field_tag 'olympic_documents[][olympic_document_series]', nil, placeholder: 'Укажите серию документа', 'v-model.trim': 'document.olympicDocumentSeries', class: 'error', 'v-on:change': "sendData('olympicDocument', document, index)"
           small.error v-if="findErrorMessage('document.olympicDocumentSeries')" == "{{ findErrorMessage('document.olympicDocumentSeries') }}"
-        .large-4.small-12.columns
+        .large-6.small-12.columns
           = label_tag :olympic_document_number
             span Номер документа
-            = text_field_tag 'olympic_documents[][olympic_document_number]', nil, placeholder: 'Укажите номер документа', 'v-model.trim': 'document.olympicDocumentNumber', class: 'error'
+            = text_field_tag 'olympic_documents[][olympic_document_number]', nil, placeholder: 'Укажите номер документа', 'v-model.trim': 'document.olympicDocumentNumber', class: 'error', 'v-on:change': "sendData('olympicDocument', document, index)"
           small.error v-if="findErrorMessage('document.olympicDocumentNumber')" == "{{ findErrorMessage('document.olympicDocumentNumber') }}"
       .row
-        .large-4.small-12.columns
+        .large-6.small-12.columns
           = label_tag :olympic_document_date
             span Дата выдачи документа
-            = date_field_tag 'olympic_documents[][olympic_document_date]', nil, placeholder: 'Дата выдачи документа', 'v-model.trim': 'document.olympicDocumentDate', class: 'error'
+            = date_field_tag 'olympic_documents[][olympic_document_date]', nil, placeholder: 'Дата выдачи документа', 'v-model.trim': 'document.olympicDocumentDate', class: 'error', 'v-on:change': "sendData('olympicDocument', document, index)"
           small.error v-if="findErrorMessage('document.olympicDocumentDate')" == "{{ findErrorMessage('document.olympicDocumentDate') }}"
-        .large-4.small-12.columns
+        .large-6.small-12.columns
           = label_tag :class_number
             span В каком классе получен диплом
-            = number_field_tag 'olympic_documents[][class_number]', nil, placeholder: '00', min: 9, max: 11, 'v-model.trim': 'document.classNumber', class: 'error'
+            = number_field_tag 'olympic_documents[][class_number]', nil, placeholder: '00', min: 9, max: 11, 'v-model.trim': 'document.classNumber', class: 'error', 'v-on:change': "sendData('olympicDocument', document, index)"
           small.error v-if="findErrorMessage('document.classNumber')" == "{{ findErrorMessage('document.classNumber') }}"
-      hr
-      .row
-        .button.tiny @click="addOlympicDocument" Указать данные дополнительного документа
-        span &nbsp;
-        .button.tiny(v-if="entrantApplication.olympicDocuments.length > 1" @click="deleteOlympicDocument") Удалить документ
-      .row
-        .large-4.small-12.columns
+      .row(v-if="document.id")
+        .large-12.small-12.columns
           br
-          dd= render partial: 'add_attachment', locals: { message: 'Выберите и прикрепите файл(ы).', document_type: 'olympic_document'}
+          = render partial: 'add_attachment', locals: { message: 'Выберите и прикрепите файл(ы).', document_type: 'olympic_document', document_id: 'document.id', entrant_application_id: 'entrantApplication.id', ref_name: 'olympic_document', id: 'olympic_document'}
+      .row(v-if="entrantApplication.attachments.length > 0")
+        .large-12.small-12.columns
+          h3 Прикрепленные файлы
+          ul.no-bullet
+            li(v-for="attachment in entrantApplication.attachments" v-if="attachment.document_type == 'olympic_document' && attachment.document_id == document.id")
+                a v-bind:href = "'/api/attachments/' + attachment.data_hash + '?filename=' + attachment.filename" target = '_blank' {{ attachment.filename }}
+    .row
+      .button.tiny @click="addOlympicDocument" Указать данные дополнительного документа
+      span &nbsp;
+      .button.tiny(v-if="entrantApplication.olympicDocuments.length > 1" @click="deleteOlympicDocument") Удалить документ

@@ -5,84 +5,90 @@ fieldset
     .large-4.small-12.columns
       = label_tag :entrant_last_name
         span Фамилия
-        = text_field_tag :entrant_last_name, nil, placeholder: 'Как в паспорте', 'v-model.trim': 'entrantApplication.personal.entrantLastName', class: 'error'
+        = text_field_tag :entrant_last_name, nil, placeholder: 'Как в паспорте', 'v-model.trim': 'entrantApplication.personal.entrantLastName', class: 'error', 'v-on:change': 'sendData("personal", entrantApplication.personal)'
       small.error v-if="checkEntrantLastName" == "{{ checkEntrantLastName }}"
     .large-4.small-12.columns
       = label_tag :entrant_first_name
         span Имя
-        = text_field_tag :entrant_first_name, nil, placeholder: 'Как в паспорте', 'v-model.trim': 'entrantApplication.personal.entrantFirstName', class: 'error'
+        = text_field_tag :entrant_first_name, nil, placeholder: 'Как в паспорте', 'v-model.trim': 'entrantApplication.personal.entrantFirstName', class: 'error', 'v-on:change': 'sendData("personal", entrantApplication.personal)'
       small.error v-if="checkEntrantFirstName" == "{{ checkEntrantFirstName }}"
     .large-4.small-12.columns
       = label_tag :entrant_middle_name
         span Отчество
-        = text_field_tag :entrant_middle_name, nil, placeholder: 'Как в паспорте, если есть', 'v-model.trim': 'entrantApplication.personal.entrantMiddleName', class: 'error'
+        = text_field_tag :entrant_middle_name, nil, placeholder: 'Как в паспорте, если есть', 'v-model.trim': 'entrantApplication.personal.entrantMiddleName', class: 'error', 'v-on:change': 'sendData("personal", entrantApplication.personal)'
       small.error v-if="checkEntrantMiddleName" == "{{ checkEntrantMiddleName }}"
   .row
     .large-4.small-12.columns
       = label_tag :birth_date
         span Дата рождения
-        = date_field_tag :birth_date, nil, 'v-model': 'entrantApplication.personal.birthDate', class: 'error'
+        = date_field_tag :birth_date, nil, 'v-model': 'entrantApplication.personal.birthDate', class: 'error', 'v-on:change': 'sendData("personal", entrantApplication.personal)'
       small.error v-if="findErrorMessage('birthDate')" == "{{ findErrorMessage('birthDate') }}"
-    .large-4.small-12.columns
+    .large-8.small-12.columns
       = label_tag :gender_id, 'Пол'
-      br
-      = radio_button_tag :gender_id, '2', true, 'v-model': 'entrantApplication.personal.genderId'
+      = radio_button_tag :gender_id, '2', true, 'v-model': 'entrantApplication.personal.genderId', 'v-on:change': 'sendData("personal", entrantApplication.personal)'
       = label_tag :gender_id, 'женский'
-      = radio_button_tag :gender_id, '1', false, 'v-model': 'entrantApplication.personal.genderId'
+      = radio_button_tag :gender_id, '1', false, 'v-model': 'entrantApplication.personal.genderId', 'v-on:change': 'sendData("personal", entrantApplication.personal)'
       = label_tag :gender_id, 'мужской'
       small.error v-if="findErrorMessage('genderId')" == "{{ findErrorMessage('genderId') }}"
 fieldset
   legend Документы, удостоверяющие личность
   p Указываются данные действующего документа, удостоверяющего личность.
-  p (v-if="entrantApplication.campaignId != '' && api.campaign.campaignTypeId == 1") Если паспорт меняли после сдачи ЕГЭ, то необходимо также указать данные ранее выданного паспорта, нажав на кнопку "Указать данные дополнительного документа". Эти сведения используются при проверке результатов ЕГЭ.
-  p (v-if="entrantApplication.campaignId != '' && api.campaign.campaignTypeId == 4") Если сдавали аккредитацию и сменили паспорт после ее сдачи, то необходимо также указать данные ранее выданного паспорта, нажав на кнопку "Указать данные дополнительного документа". Эти сведения используются при проверке результатов теста.
-  . v-for="document in entrantApplication.identityDocuments"
+  p (v-if="entrantApplication.campaignId != '' && findCampaign(entrantApplication.campaignId).campaignTypeId == 1") Если паспорт меняли после сдачи ЕГЭ, то необходимо также указать данные ранее выданного паспорта, нажав на кнопку "Указать данные дополнительного документа". Эти сведения используются при проверке результатов ЕГЭ.
+  p (v-if="entrantApplication.campaignId != '' && findCampaign(entrantApplication.campaignId).campaignTypeId == 4") Если сдавали аккредитацию и сменили паспорт после ее сдачи, то необходимо также указать данные ранее выданного паспорта, нажав на кнопку "Указать данные дополнительного документа". Эти сведения используются при проверке результатов теста.
+  . v-for="(document, index) in entrantApplication.identityDocuments"
     .row
       .(v-show="entrantApplication.identityDocuments.indexOf(document) > 0") Предыдущий документ
       .large-4.small-12.columns
         label
           span Вид документа
-        select.error#identityDocumentType(name="identityDocuments[][identityDocumentType]" v-model='document.identityDocumentType')
+        select.error#identityDocumentType(name="identityDocuments[][identityDocumentType]" v-model='document.identityDocumentType' v-on:change="sendData('identityDocument', document, index)")
           option(disabled value) Выберите вид документа
-          option(v-for="identityDocumentType in api.identityDocumentTypes" v-bind:value="identityDocumentType.id") {{ identityDocumentType.name }}
+          option(v-for="identityDocumentType in api.dictionaries.identityDocumentTypes" v-bind:value="identityDocumentType.id") {{ identityDocumentType.name }}
       .large-4.small-12.columns
-        = label_tag :identity_document_seriess
+        = label_tag :identity_document_series
           span Серия документа
-          = text_field_tag 'identity_documents[][identity_document_series]', nil, placeholder: 'Укажите серию документа', 'v-model.trim': 'document.identityDocumentSeries', class: 'error'
+          = text_field_tag 'identity_documents[][identity_document_series]', nil, placeholder: 'Укажите серию документа', 'v-model.trim': 'document.identityDocumentSeries', class: 'error', 'v-on:change': "sendData('identityDocument', document, index)"
       .large-4.small-12.columns
         = label_tag :identity_document_number
           span Номер документа
-          = text_field_tag 'identity_documents[][identity_document_number]', nil, placeholder: 'Укажите номер документа', 'v-model.trim': 'document.identityDocumentNumber', class: 'error'
+          = text_field_tag 'identity_documents[][identity_document_number]', nil, placeholder: 'Укажите номер документа', 'v-model.trim': 'document.identityDocumentNumber', class: 'error', 'v-on:change': "sendData('identityDocument', document, index)"
     .row
       .large-4.small-12.columns
         = label_tag :identity_document_date
           span Дата выдачи документа
-          = date_field_tag 'identity_documents[][identity_document_Date]', nil, placeholder: 'Дата выдачи документа', 'v-model.trim': 'document.identityDocumentDate', class: 'error'
+          = date_field_tag 'identity_documents[][identity_document_Date]', nil, placeholder: 'Дата выдачи документа', 'v-model.trim': 'document.identityDocumentDate', class: 'error', 'v-on:change': "sendData('identityDocument', document, index)"
         small.error v-if="checkIdentityDocumentDate" == "{{ checkIdentityDocumentDate }}"
       .large-8.small-12.columns(v-show="entrantApplication.identityDocuments.indexOf(document) < 1")
         = label_tag :identity_document_issuer
           span Кем выдан документ
-          = text_field_tag 'identity_documents[][identity_documentIssuer]', nil, placeholder: 'Укажите, кто выдал документ', 'v-model.trim': 'document.identityDocumentIssuer', class: 'error'
+          = text_field_tag 'identity_documents[][identity_documentIssuer]', nil, placeholder: 'Укажите, кто выдал документ', 'v-model.trim': 'document.identityDocumentIssuer', class: 'error', 'v-on:change': "sendData('identityDocument', document, index)"
     .row
       .large-4.small-12.columns(v-show="entrantApplication.identityDocuments.indexOf(document) > 0")
         = label_tag :alt_entrant_last_name
           span Прежняя фамилия
-          = text_field_tag 'identity_documents[][alt_entrant_last_name]', nil, placeholder: 'Как в паспорте, если меняли', 'v-model.trim': 'document.altEntrantLastName', class: 'error'
+          = text_field_tag 'identity_documents[][alt_entrant_last_name]', nil, placeholder: 'Как в паспорте, если меняли', 'v-model.trim': 'document.altEntrantLastName', class: 'error', 'v-on:change': "sendData('identityDocument', document, index)"
         small.error v-if="checkEntrantLastName" == "{{ checkEntrantLastName }}"
       .large-4.small-12.columns(v-show="entrantApplication.identityDocuments.indexOf(document) > 0")
         = label_tag :alt_entrant_first_name
           span Прежнее имя
-          = text_field_tag 'identity_documents[][alt_entrant_first_name]', nil, placeholder: 'Как в паспорте, если меняли', 'v-model.trim': 'document.altEntrantFirstName', class: 'error'
+          = text_field_tag 'identity_documents[][alt_entrant_first_name]', nil, placeholder: 'Как в паспорте, если меняли', 'v-model.trim': 'document.altEntrantFirstName', class: 'error', 'v-on:change': "sendData('identityDocument', document, index)"
         small.error v-if="checkEntrantFirstName" == "{{ checkEntrantFirstName }}"
       .large-4.small-12.columns(v-show="entrantApplication.identityDocuments.indexOf(document) > 0")
         = label_tag :alt_entrant_middle_name
           span Прежнее отчество
-          = text_field_tag 'identity_documents[][alt_entrant_middle_name]', nil, placeholder: 'Как в паспорте, если есть', 'v-model.trim': 'document.altEntrantMiddleName', class: 'error'
+          = text_field_tag 'identity_documents[][alt_entrant_middle_name]', nil, placeholder: 'Как в паспорте, если есть', 'v-model.trim': 'document.altEntrantMiddleName', class: 'error', 'v-on:change': "sendData('identityDocument', document, index)"
         small.error v-if="checkEntrantMiddleName" == "{{ checkEntrantMiddleName }}"
-    .row
+    .row(v-if="document.id")
       .large-12.small-12.columns
         br
-        = render partial: 'add_attachment', locals: { message: 'Необходимо прикрепить отсканированные или сфотографированные электронные копии документа, удостоверяющего личность. Прикрепляются страницы паспорта с персональными данными, сведениями об организации, выдавшей паспорт (разворот 2 и 3 страницы), с данными о регистрации, с данными о ранее выданных паспортах (при наличии). Если в паспорте отсутствуют сведения о регистрации, можно прикрепить копию справки о регистрации по месту жительства. Если в качестве документа, удостоверяющего личность, указан другой документ, прикрепляются копии всех страниц, содержащих информацию.', document_type: 'identity_document'}
+        = render partial: 'add_attachment', locals: { message: 'Необходимо прикрепить отсканированные или сфотографированные электронные копии документа, удостоверяющего личность. Прикрепляются страницы паспорта с персональными данными, сведениями об организации, выдавшей паспорт (разворот 2 и 3 страницы), с данными о регистрации, с данными о ранее выданных паспортах (при наличии). Если в паспорте отсутствуют сведения о регистрации, можно прикрепить копию справки о регистрации по месту жительства. Если в качестве документа, удостоверяющего личность, указан другой документ, прикрепляются копии всех страниц, содержащих информацию.', document_type: 'identity_document', document_id: 'document.id', entrant_application_id: 'entrantApplication.id', ref_name: 'identity_document', id: 'identity_document'}
+    .row(v-if="entrantApplication.attachments.length > 0")
+      .large-12.small-12.columns
+        h3 Прикрепленные файлы
+        ul.no-bullet
+          li(v-for="attachment in entrantApplication.attachments")
+            span v-if="attachment.document_type == 'identity_document' && attachment.document_id == document.id"
+              a v-bind:href = "'/api/attachments/' + attachment.data_hash + '?filename=' + attachment.filename" target = '_blank' {{ attachment.filename }}
   .row
     .button.tiny @click="addIdentityDocument" Указать данные дополнительного документа
     span &nbsp;
@@ -94,50 +100,62 @@ fieldset
     .large-6.small-12.columns
       label
         span Вид документа
-      select.error#educationDocumentType(name="education_document[education_document_type]" v-model='entrantApplication.educationDocument.educationDocumentType')
+      select.error#educationDocumentType(name="education_document[education_document_type]" v-model='entrantApplication.educationDocument.educationDocumentType' v-on:change = "sendData('educationDocument', entrantApplication.educationDocument)")
         option(disabled value) Выберите вид документа
-        option(v-for="educationDocumentType in api.educationDocumentTypes" v-bind:value="educationDocumentType.id") {{ educationDocumentType.name }}
+        option(v-for="educationDocumentType in api.dictionaries.educationDocumentTypes" v-bind:value="educationDocumentType.id") {{ educationDocumentType.name }}
       small.error v-if="findErrorMessage('educationDocument.educationDocumentType')" == "{{ findErrorMessage('educationDocument.educationDocumentType') }}"
     .large-6.small-12.columns
       = label_tag :education_document_number
         span Серия и номер документа
-        = text_field_tag 'education_document[education_document_number]', nil, placeholder: 'Укажите серию и номер документа', 'v-model.trim': 'entrantApplication.educationDocument.educationDocumentNumber', class: 'error'
+        = text_field_tag 'education_document[education_document_number]', nil, placeholder: 'Укажите серию и номер документа', 'v-model.trim': 'entrantApplication.educationDocument.educationDocumentNumber', class: 'error', 'v-on:change': "sendData('educationDocument', entrantApplication.educationDocument)"
       small.error v-if="findErrorMessage('educationDocument.educationDocumentNumber')" == "{{ findErrorMessage('educationDocument.educationDocumentNumber') }}"
   .row
     .large-4.small-12.columns
       = label_tag :education_document_date
         span Дата выдачи документа
-        = date_field_tag 'education_document[education_document_date]', nil, placeholder: 'Дата выдачи документа', 'v-model.trim': 'entrantApplication.educationDocument.educationDocumentDate', class: 'error'
+        = date_field_tag 'education_document[education_document_date]', nil, placeholder: 'Дата выдачи документа', 'v-model.trim': 'entrantApplication.educationDocument.educationDocumentDate', class: 'error', 'v-on:change': "sendData('educationDocument', entrantApplication.educationDocument)"
       small.error v-if="checkEducationDocumentDate" == "{{ checkEducationDocumentDate }}"
       small.error v-if="findErrorMessage('educationDocument.educationDocumentDate')" == "{{ findErrorMessage('educationDocument.educationDocumentDate') }}"
     .large-4.small-12.columns
       = label_tag :education_document_issuer
         span Кем выдан документ
-        = text_field_tag 'education_document[education_document_issuer]', nil, placeholder: 'Укажите, кто выдал документ', 'v-model.trim': 'entrantApplication.educationDocument.educationDocumentIssuer', class: 'error'
+        = text_field_tag 'education_document[education_document_issuer]', nil, placeholder: 'Укажите, кто выдал документ', 'v-model.trim': 'entrantApplication.educationDocument.educationDocumentIssuer', class: 'error', 'v-on:change': "sendData('educationDocument', entrantApplication.educationDocument)"
       small.error v-if="findErrorMessage('educationDocument.educationDocumentIssuer')" == "{{ findErrorMessage('educationDocument.educationDocumentIssuer') }}"
     .large-4.small-12.columns(v-if="entrantApplication.campaignId != '' && findCampaign(entrantApplication.campaignId).campaignTypeId == 4")
       label
         span Специальность по диплому
-      select.error#educationSpecialityCode(name="education_document[education_speciality_code]" v-model='entrantApplication.educationDocument.educationSpecialityCode')
+      select.error#educationSpecialityCode(name="education_document[education_speciality_code]" v-model='entrantApplication.educationDocument.educationSpecialityCode' v-on:change = "sendData('educationDocument', entrantApplication.educationDocument)")
         option(disabled value) Выберите специальность
-        option(v-for="educationSpecialityCode in api.educationSpecialityCodes" v-bind:value="educationSpecialityCode.code") {{ educationSpecialityCode.name }}
-  .row
+        option(v-for="educationSpecialityCode in api.dictionaries.educationSpecialityCodes" v-bind:value="educationSpecialityCode.code") {{ educationSpecialityCode.name }}
+  .row(v-if="entrantApplication.educationDocument.id")
     .large-12.small-12.columns
       br
-      dd= render partial: 'add_attachment', locals: { message: 'Выберите и прикрепите файл(ы). Сканируются / фотографируются и прикрепляются ВСЕ страницы аттестата или диплома и ВСЕ страницы приложения.', document_type: 'educationDocument'}
+      dd= render partial: 'add_attachment', locals: { message: 'Выберите и прикрепите файл(ы). Сканируются / фотографируются и прикрепляются ВСЕ страницы аттестата или диплома и ВСЕ страницы приложения.', document_type: 'education_document', document_id: 'entrantApplication.id', entrant_application_id: 'entrantApplication.id', ref_name: 'education_document', id: 'education_document'}
+  .row(v-if="entrantApplication.attachments.length > 0")
+    .large-12.small-12.columns
+      h3 Прикрепленные файлы
+      ul.no-bullet
+        li(v-for="attachment in entrantApplication.attachments" v-if="attachment.document_type == 'education_document'")
+          a v-bind:href = "'/api/attachments/' + attachment.data_hash + '?filename=' + attachment.filename" target = '_blank' {{ attachment.filename }}
 fieldset
   legend Страховое свидетельство обязательного пенсионного страхования (СНИЛС)
   .row
     .large-4.small-12.columns
       = label_tag :snils
         span Укажите только цифры
-        = text_field_tag :snils, nil, 'v-model': 'entrantApplication.snils', class: 'error', maxlength: 11, placeholder: '00000000000'
+        = text_field_tag :snils, nil, 'v-model': 'entrantApplication.snils', class: 'error', maxlength: 11, placeholder: '00000000000', 'v-on:change': "sendData('snils', entrantApplication.snils)"
       small.error v-if="findErrorMessage('snils')" == "{{ findErrorMessage('snils') }}"
     .large-4.small-12.columns(v-if="entrantApplication.snils == ''")
       = label_tag :snils_absent
         span Подтверждаю отсутствие страхового свидетельства обязательного пенсионного страхования (СНИЛС)
-        = check_box_tag :snils_absent, nil, 'v-model.trim': 'entrantApplication.snilsAbsent'
-  .row
+        input#snils(type="checkbox" name="snils" v-bind:value="true" v-model="entrantApplication.snilsAbsent")
+  .row(v-if="entrantApplication.snils")
     .large-12.small-12.columns
       br
-      dd= render partial: 'add_attachment', locals: { message: 'Выберите и прикрепите файл(ы).', document_type: 'snils'}
+      dd= render partial: 'add_attachment', locals: { message: 'Выберите и прикрепите файл(ы).', document_type: 'snils', document_id: 'entrantApplication.id', entrant_application_id: 'entrantApplication.id', ref_name: 'snils', id: 'snils'}
+  .row(v-if="entrantApplication.attachments.length > 0")
+    .large-12.small-12.columns
+      h3 Прикрепленные файлы
+      ul.no-bullet
+        li(v-for="attachment in entrantApplication.attachments" v-if="attachment.document_type == 'snils'")
+          a v-bind:href = "'/api/attachments/' + attachment.data_hash + '?filename=' + attachment.filename" target = '_blank' {{ attachment.filename }}

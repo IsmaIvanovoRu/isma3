@@ -5,11 +5,15 @@ var entrants = new Vue({
       hash: window.document.location.pathname.split('/')[2],
       current_tab: 'common',
       dictionaries: {
-        campaign: null,
         countries: [],
         campaigns: [],
         identityDocumentTypes: [],
-        specialities: [],
+        specialitiesDictionary: [],
+        languages: [
+          'Английский',
+          'Французский',
+          'Немецкий',
+        ],
         benefitDocumentTypes: [
           {
             id: 11,
@@ -117,8 +121,12 @@ var entrants = new Vue({
       }
     },
     errors: [],
+    files: '',
+    dataset: '',
     entrantApplication: {
-      applicationNumber: '',
+      id: null,
+      applicationNumber: null,
+      registrationNumber: null,
       campaignId: '',
       nationalityTypeId: false,
       personal: {
@@ -150,6 +158,7 @@ var entrants = new Vue({
       hash: '',
       snils: '',
       snilsAbsent: false,
+      language: '',
       identityDocuments: [
         {
           id: null,
@@ -183,6 +192,7 @@ var entrants = new Vue({
           subjectId: null,
           subject: '',
           form: '',
+          year: null,
           checked: false,
           organizationUid: ''
         }
@@ -198,6 +208,7 @@ var entrants = new Vue({
           status: null
         }
       ],
+      achievementsIds: [],
       olympicDocuments: [
         {
           id: null,
@@ -246,6 +257,7 @@ var entrants = new Vue({
           directionId: null
         }
       ],
+      competitiveGroupIds: [],
       targetContracts: [
         {
           id: null,
@@ -263,19 +275,7 @@ var entrants = new Vue({
           status: null
         }
       ],
-      attachments: [
-        {
-          id: null,
-          documentType: '',
-          mimeType: '',
-          dataHash: '',
-          status: null,
-          merged: false,
-          template: false,
-          documentId: null,
-          filename: ''
-        }
-      ],
+      attachments: [],
     }
   },
   computed: {
@@ -360,6 +360,226 @@ var entrants = new Vue({
     },
   },
   methods: {
+    isApplicable: function(competitiveGroup) {
+      if(competitiveGroup.educationSourceId == 14 || competitiveGroup.educationSourceId == 15) {
+        return true;
+      };
+      if(competitiveGroup.educationSourceId == 20 && this.entrantApplication.benefit) {
+        return true;
+      };
+      if(competitiveGroup.educationSourceId == 16) {
+        for( var i = 0; i < this.entrantApplication.targetContracts.length; i++ ) {
+          if(competitiveGroup.id == this.entrantApplication.targetContracts[i].competitiveGroupId){
+            return true;
+          };
+        };
+      };
+      return false;
+    },
+    findEntranceTestItem: function(subjectId) {
+      var findEntranceTestItem = {
+        subjectId: null,
+        minScore: null,
+        subjectName: ''
+      };
+      this.findCampaign(this.entrantApplication.campaignId).entranceTestItems.find(function(element) {
+        if(element.subjectId == subjectId){
+          findEntranceTestItem = element;
+        };
+      });
+      return findEntranceTestItem;
+    },
+    findAchievement: function(institutionAchievementId) {
+      var findAchievement = null;
+      this.entrantApplication.achievementIds.find(function(element) {
+        if(element == institutionAchievementId){
+          findAchievement = element;
+        };
+      });
+      return findAchievement;
+    },
+    findCompetitiveGroup: function(competitiveGroupId) {
+      var findCompetitiveGroup = null;
+      this.entrantApplication.competitiveGroupIds.find(function(element) {
+        if(element == competitiveGroupId){
+          findCompetitiveGroup = element;
+        };
+      });
+      return findCompetitiveGroup;
+    },
+    sendData: function(sub, subData, index) {
+      let data = {};
+      data[sub] = subData;
+      axios
+      .put('/api/entrant_applications/' + this.entrantApplication.hash, data)
+      .then(response => {
+        if(response.data.status == 'success') {
+          if(sub == 'identityDocument') {
+            this.entrantApplication.identityDocuments[index].id = response.data.identityDocument.id;
+          };
+          if(sub == 'educationDocument') {
+            this.entrantApplication.educationDocument.id = response.data.educationDocument.id;
+          };
+          if(sub == 'benefitDocument') {
+            this.entrantApplication.benefitDocuments[index].id = response.data.benefitDocument.id;
+          };
+          if(sub == 'otherDocument') {
+            this.entrantApplication.otherDocuments[index].id = response.data.otherDocument.id;
+          };
+          if(sub == 'olympicDocument') {
+            this.entrantApplication.olympicDocuments[index].id = response.data.olympicDocument.id;
+          };
+          if(sub == 'targetContract') {
+            this.entrantApplication.targetContracts[index].id = response.data.targetContract.id;
+          };
+          if(sub == 'mark') {
+            this.entrantApplication.marks[index].id = response.data.mark.id;
+          };
+          if(sub == 'competitiveGroup') {
+            this.entrantApplication.competitiveGroupIds = response.data.competitiveGroup.ids;
+          };
+          if(sub == 'achievement') {
+            this.entrantApplication.achievementsIds = response.data.achievement.ids;
+          };
+          console.log('успешно обновлено');
+        }
+        else
+        {
+          console.log('что-то пошло не так');
+        }
+      });
+    },
+    handleFiles: function(e){
+      if(this.$refs.snils && this.$refs.snils.files.length > 0) {
+        this.files = this.$refs.snils.files;
+        this.dataset = this.$refs.snils.dataset;
+      }
+      if(this.$refs.education_document && this.$refs.education_document.files.length > 0) {
+        this.files = this.$refs.education_document.files;
+        this.dataset = this.$refs.education_document.dataset;
+      }
+      if(this.$refs.identity_document && this.$refs.identity_document.length > 0) {
+        for(var i = 0; i < this.$refs.identity_document.length; i++) {
+          if(this.$refs.identity_document[i].files.length > 0) {
+          this.files = this.$refs.identity_document[i].files;
+          this.dataset = this.$refs.identity_document[i].dataset;
+          }
+        }
+      }
+      if(this.$refs.benefit_document && this.$refs.benefit_document.length > 0) {
+        for(var i = 0; i < this.$refs.benefit_document.length; i++) {
+          if(this.$refs.benefit_document[i].files.length > 0) {
+          this.files = this.$refs.benefit_document[i].files;
+          this.dataset = this.$refs.benefit_document[i].dataset;
+          }
+        }
+      }
+      if(this.$refs.other_document && this.$refs.other_document.length > 0) {
+        for(var i = 0; i < this.$refs.other_document.length; i++) {
+          if(this.$refs.other_document[i].files.length > 0) {
+          this.files = this.$refs.other_document[i].files;
+          this.dataset = this.$refs.other_document[i].dataset;
+          }
+        }
+      }
+      if(this.$refs.olympic_document && this.$refs.olympic_document.length > 0) {
+        for(var i = 0; i < this.$refs.olympic_document.length; i++) {
+          if(this.$refs.olympic_document[i].files.length > 0) {
+          this.files = this.$refs.olympic_document[i].files;
+          this.dataset = this.$refs.olympic_document[i].dataset;
+          }
+        }
+      }
+      if(this.$refs.target_contract && this.$refs.target_contract.length > 0) {
+        for(var i = 0; i < this.$refs.target_contract.length; i++) {
+          if(this.$refs.target_contract[i].files.length > 0) {
+          this.files = this.$refs.target_contract[i].files;
+          this.dataset = this.$refs.target_contract[i].dataset;
+          }
+        }
+      }
+      if(this.$refs.achievement && this.$refs.achievement.length > 0) {
+        for(var i = 0; i < this.$refs.achievement.length; i++) {
+          if(this.$refs.achievement[i].files.length > 0) {
+          this.files = this.$refs.achievement[i].files;
+          this.dataset = this.$refs.achievement[i].dataset;
+          }
+        }
+      }
+      if(this.$refs.contract && this.$refs.contract.length > 0) {
+        for(var i = 0; i < this.$refs.contract.length; i++) {
+          if(this.$refs.contract[i].files.length > 0) {
+          this.files = this.$refs.contract[i].files;
+          this.dataset = this.$refs.contract[i].dataset;
+          }
+        }
+      }
+      let formData = new FormData();
+      for( var i = 0; i < this.files.length; i++ ){
+        let file = this.files[i];
+        formData.append('entrant_application_id', this.dataset.entrantApplicationId);
+        formData.append('document_type', this.dataset.documentType);
+        formData.append('document_id', this.dataset.documentId);
+        formData.append('files[]', file);
+      }
+      axios
+      .post( '/api/attachments',
+        formData,
+        {
+          headers: {
+              'Content-Type': 'multipart/form-data'
+          }
+        }
+      )
+      .then(
+        response => {
+        this.entrantApplication.attachments = response.data.attachments;
+        console.log(response.data.message);
+        if(this.dataset.documentType == 'snils') {
+          this.$refs.snils.value = null
+        }
+        if(this.dataset.documentType == 'education_document') {
+          this.$refs.education_document.value = null
+        }
+        if(this.dataset.documentType == 'identity_document') {
+          for(var i = 0; i < this.$refs.identity_document.length; i++) {
+            this.$refs.identity_document[i].value = null
+          }
+        }
+        if(this.dataset.documentType == 'benefit_document') {
+          for(var i = 0; i < this.$refs.benefit_document.length; i++) {
+            this.$refs.benefit_document[i].value = null
+          }
+        }
+        if(this.dataset.documentType == 'other_document') {
+          for(var i = 0; i < this.$refs.other_document.length; i++) {
+            this.$refs.other_document[i].value = null
+          }
+        }
+        if(this.dataset.documentType == 'olympic_document') {
+          for(var i = 0; i < this.$refs.olympic_document.length; i++) {
+            this.$refs.olympic_document[i].value = null
+          }
+        }
+        if(this.dataset.documentType == 'target_contract') {
+          for(var i = 0; i < this.$refs.target_contract.length; i++) {
+            this.$refs.target_contract[i].value = null
+          }
+        }
+        if(this.dataset.documentType == 'achievement') {
+          for(var i = 0; i < this.$refs.achievement.length; i++) {
+            this.$refs.achievement[i].value = null
+          }
+        }
+        if(this.dataset.documentType == 'contract') {
+          for(var i = 0; i < this.$refs.contract.length; i++) {
+            this.$refs.contract[i].value = null
+          }
+        }
+        this.files = '';
+        this.dataset = '';
+      })
+    },
     fillMarks: function(entranceTestItems) {
       var marks = [];
       entranceTestItems.forEach(function(element){
@@ -368,9 +588,18 @@ var entrants = new Vue({
       return this.marks = marks;
     },
     findCampaign: function(campaignId) {
-      var findCampaign = null;
+      var findCampaign = {
+        name: '',
+        id: null,
+        campaignTypeId: null,
+        yearStart: null,
+        admissionVolumens: [],
+        competitiveGroups: [],
+        institutionAchievements: [],
+        entranceTestItems: []
+      };
       this.api.dictionaries.campaigns.find(function(element) {
-        if(campaignId == element.id){
+        if(element.id == campaignId){
           findCampaign = element;
         };
       });
@@ -462,10 +691,10 @@ var entrants = new Vue({
     deleteOtherDocument: function() {
       if(this.entrantApplication.otherDocuments.length > 1) this.entrantApplication.otherDocuments.splice(-1, 1);
     },
-    specialityName: function(direction_id) {
+    specialityName: function(directionId) {
       var name = '';
-      this.api.specialities_dictionary.find(function(element) {
-        if(element.id == direction_id) {
+      this.api.dictionaries.specialitiesDictionary.find(function(element) {
+        if(element.id == directionId) {
           name = element.name;
         }
       });
@@ -489,20 +718,10 @@ var entrants = new Vue({
       .get('/api/campaigns')
       .then(response => (this.api.dictionaries.campaigns = response.data.campaigns));
     axios
-      .get('/api/dictionaries/10')
-      .then(response => (this.api.dictionaries.specialitiesDictionary = response.data.dictionary.items));
-    axios
-      .get('/api/dictionaries/21')
-      .then(response => (this.api.dictionaries.countries = response.data.dictionary.items));
-    axios
-      .get('/api/dictionaries/22')
-      .then(response => (this.api.dictionaries.identityDocumentTypes = response.data.dictionary.items));
-    axios
       .get('/api/entrant_applications/' + this.api.hash)
       .then(
         response => {
           this.entrantApplication = response.data.entrantApplication;
-          if(this.entrantApplication.campaignId) this.api.campaign = this.findCampaign(this.entrantApplication.campaignId);
           if(this.entrantApplication.identityDocuments.length == 0) this.entrantApplication.identityDocuments.push({
             id: null,
             identityDocumentType: '',
@@ -588,5 +807,14 @@ var entrants = new Vue({
             status: null
           });
         });
+    axios
+      .get('/api/dictionaries/10')
+      .then(response => (this.api.dictionaries.specialitiesDictionary = response.data.dictionary.items));
+    axios
+      .get('/api/dictionaries/21')
+      .then(response => (this.api.dictionaries.countries = response.data.dictionary.items));
+    axios
+      .get('/api/dictionaries/22')
+      .then(response => (this.api.dictionaries.identityDocumentTypes = response.data.dictionary.items));
   }
 })

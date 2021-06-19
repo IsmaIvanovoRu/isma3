@@ -11,6 +11,7 @@ var entrants = new Vue({
     response: null,
     error: null,
     files: '',
+    dataset: '',
     message: '',
     emailConfirmed: false,
     hash: '',
@@ -80,13 +81,14 @@ var entrants = new Vue({
       return message;
     },
     handleFiles: function(){
-      this.files = this.$refs.files.files;
+      this.files = this.$refs.data_processing_consent.files;
+      this.dataset = this.$refs.data_processing_consent.dataset
       let formData = new FormData();
       for( var i = 0; i < this.files.length; i++ ){
         let file = this.files[i];
-        formData.append('entrant_application_id', this.entrantApplicationId);
-        formData.append('document_type', this.$refs.files.dataset.documentType);
-        formData.append('document_id', this.entrantApplicationId);
+        formData.append('entrant_application_id', this.dataset.entrantApplicationId);
+        formData.append('document_type', this.dataset.documentType);
+        formData.append('document_id', this.dataset.entrantApplicationId);
         formData.append('files[]', file);
       }
       axios
@@ -102,7 +104,9 @@ var entrants = new Vue({
         response => {
         this.attachments = response.data.attachments;
         console.log(response.data.message);
-        this.$refs.files.value = null
+        this.$refs.data_processing_consent.value = null
+        this.files = '';
+        this.dataset = '';
       })
       .catch(function(){
         console.log('FAILURE!!');
