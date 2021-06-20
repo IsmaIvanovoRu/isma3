@@ -288,17 +288,19 @@ var entrants = new Vue({
       if(this.entrant_application.personal.entrant_middle_name.charAt(0).toUpperCase() + this.entrant_application.personal.entrant_middle_name.slice(1).toLowerCase() != this.entrant_application.personal.entrant_middle_name) return 'Обычно отчество начинается с заглавной буквы, за которой следуют строчные';
     },
     checkBirthDate: function() {
-      var numbers = this.entrant_application.personal.birth_date.split('-');
-      var birthYear = Number(numbers[0]);
-      var birthMonth = Number(numbers[1]);
-      var birthDay = Number(numbers[2]);
-      var message = [];
-      var year = (new Date()).getFullYear();
-      if(birthYear + birthMonth + birthDay) {
-        if(!(Number(numbers[0]) > 0 && Number(numbers[0]) < Number(year))) message.push('Неверный год');
-        if(!(Number(numbers[1]) > 0 && Number(numbers[1]) < 13)) message.push('Неверный месяц');
-        if(!(Number(numbers[2]) > 0 && Number(numbers[2]) < 32)) message.push('Неверный день');
-        return message.join(', ')
+      if(this.entrant_application.personal.birth_date){
+        var numbers = this.entrant_application.personal.birth_date.split('-');
+        var birthYear = Number(numbers[0]);
+        var birthMonth = Number(numbers[1]);
+        var birthDay = Number(numbers[2]);
+        var message = [];
+        var year = (new Date()).getFullYear();
+        if(birthYear + birthMonth + birthDay) {
+          if(!(Number(numbers[0]) > 0 && Number(numbers[0]) < Number(year))) message.push('Неверный год');
+          if(!(Number(numbers[1]) > 0 && Number(numbers[1]) < 13)) message.push('Неверный месяц');
+          if(!(Number(numbers[2]) > 0 && Number(numbers[2]) < 32)) message.push('Неверный день');
+          return message.join(', ')
+        }
       }
     },
     checkIdentityDocumentSerie: function() {
@@ -317,32 +319,36 @@ var entrants = new Vue({
     },
     checkIdentityDocumentDate: function() {
       if(this.entrant_application.identity_documents.find(function(element) {
-        var numbers = element.identity_document_data.split('-');
+        if(element.identity_document_date){
+          var numbers = element.identity_document_date.split('-');
+          var birthYear = Number(numbers[0]);
+          var birthMonth = Number(numbers[1]);
+          var birthDay = Number(numbers[2]);
+          var message = [];
+          var year = (new Date()).getFullYear();
+          if(birthYear + birthMonth + birthDay) {
+            if(!(Number(numbers[0]) > 0 && Number(numbers[0]) < Number(year))) message.push('Неверный год');
+            if(!(Number(numbers[1]) > 0 && Number(numbers[1]) < 13)) message.push('Неверный месяц');
+            if(!(Number(numbers[2]) > 0 && Number(numbers[2]) < 32)) message.push('Неверный день');
+          };
+          return message.join(', ')
+        }
+      }));
+    },
+    checkEducationDocumentDate: function() {
+      if(this.entrant_application.education_document.education_document_date){
+        var numbers = this.entrant_application.education_document.education_document_date.split('-');
         var birthYear = Number(numbers[0]);
         var birthMonth = Number(numbers[1]);
         var birthDay = Number(numbers[2]);
         var message = [];
-        var year = (new Date()).getFullYear();
+        var year = (new Date()).getFullYear() + 1;
         if(birthYear + birthMonth + birthDay) {
           if(!(Number(numbers[0]) > 0 && Number(numbers[0]) < Number(year))) message.push('Неверный год');
           if(!(Number(numbers[1]) > 0 && Number(numbers[1]) < 13)) message.push('Неверный месяц');
           if(!(Number(numbers[2]) > 0 && Number(numbers[2]) < 32)) message.push('Неверный день');
-        };
-        return message.join(', ')
-      }));
-    },
-    checkEducationDocumentDate: function() {
-      var numbers = this.entrant_application.education_document.education_document_date.split('-');
-      var birthYear = Number(numbers[0]);
-      var birthMonth = Number(numbers[1]);
-      var birthDay = Number(numbers[2]);
-      var message = [];
-      var year = (new Date()).getFullYear() + 1;
-      if(birthYear + birthMonth + birthDay) {
-        if(!(Number(numbers[0]) > 0 && Number(numbers[0]) < Number(year))) message.push('Неверный год');
-        if(!(Number(numbers[1]) > 0 && Number(numbers[1]) < 13)) message.push('Неверный месяц');
-        if(!(Number(numbers[2]) > 0 && Number(numbers[2]) < 32)) message.push('Неверный день');
-        return message.join(', ')
+          return message.join(', ')
+        }
       }
     },
     checkContactInformationZipCode: function() {
