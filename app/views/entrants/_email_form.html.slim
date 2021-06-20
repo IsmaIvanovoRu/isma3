@@ -38,7 +38,7 @@ fieldset(v-if='!isNextDisabled')
         li v-for='error in errors' v-if='error.level == "red"' == '{{ error.message }}'
   .row
     .large-12.small-12.columns
-      a.button.tiny v-bind:href="hash" Перейти к заполнению анкеты
+      a.button.tiny @click="sendWelcomeEmail" v-bind:href="hash" Перейти к заполнению анкеты
 
 .reveal-modal.full id = 'email_code_field' data-reveal = true
   .row

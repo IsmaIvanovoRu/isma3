@@ -33,6 +33,13 @@ var entrants = new Vue({
     }
   },
   methods: {
+    sendWelcomeEmail: function() {
+      axios
+        .put('/api/entrant_applications/' + this.hash + '/send_welcome_email', {id: this.hash})
+        .then(response => {
+          console.log(response.data.message);
+        })
+    },
     findCampaign: function(campaignId) {
       var find_campaign = null;
       this.api.campaigns.find(function(element) {
