@@ -45,7 +45,7 @@ var entrants = new Vue({
     checkPin: function() {
       if(this.pin.length == 4) {
         console.log(this.pin);
-        this.email_confirmed();
+        this.confirmEmail();
       };
     },
     checkForm: function(e) {
