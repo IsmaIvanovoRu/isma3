@@ -117,13 +117,13 @@ var entrants = new Vue({
         .put( '/api/entrant_applications/' + this.hash + '/check_pin', { hash: this.hash, pin: this.pin } )
         .then(response => {
           if(response.data.status == 'success') {
-            this.emailConfirmed = true;
+            this.email_confirmed = true;
             this.message = 'код подтверждения успешно проверен';
             $('#email_code_field').foundation('reveal', 'close');
           }
           else
           {
-            this.emailConfirmed = false;
+            this.email_confirmed = false;
             this.message = 'код подтверждения введен неверно';
             this.errors.push({element: 'pin', message: 'Код подтверждения введен неверно', level: 'red'});
           }
