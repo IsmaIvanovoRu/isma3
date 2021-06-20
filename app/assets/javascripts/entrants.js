@@ -145,7 +145,6 @@ var entrants = new Vue({
       benefit: false,
       olympionic: false,
       budget_agr: null,
-      paid_agr: null,
       status_id: null,
       comment: '',
       status: '',
@@ -433,7 +432,7 @@ var entrants = new Vue({
       axios
       .put('/api/entrant_applications/' + this.entrant_application.hash, data)
       .then(response => {
-        if(response.data.status == 'success') {
+        if(response.data.result == 'success') {
           if(sub == 'identity_document') {
             this.entrant_application.identity_documents[index].id = response.data.identity_document.id;
           };
@@ -462,7 +461,8 @@ var entrants = new Vue({
             this.entrant_application.achievements = response.data.achievements;
           };
           if(sub == 'status_id') {
-            this.entrant_application.status_id = 2;
+            this.entrant_application.status_id = response.data.status_id;
+            this.entrant_application.status = response.data.status;
           };
           console.log('успешно обновлено');
         }
