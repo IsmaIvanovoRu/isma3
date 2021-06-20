@@ -1,0 +1,41 @@
+fieldset
+  legend Заявление о поступлении
+  .(v-if="entrant_application.campaign_id != '' && findCampaign(entrant_application.campaign_id).campaign_type_id == 1")
+    p Необходимо скачать бланк сгенерированного Вам заявления, распечатать его, проверить, подписать, отсканировать или сфотографировать и прикрепить в соответствующее поле
+    .large-12.small-12.columns(v-if="entrant_application.attachments.length > 0")
+      ul.no-bullet
+        li(v-for="attachment in entrant_application.attachments" v-if="attachment.document_type == 'entrant_application' && attachment.template")
+          span Скачать&nbsp;
+          a v-bind:href = "'/api/attachments/' + attachment.data_hash + '?filename=' + attachment.filename" target = '_blank' {{ attachment.filename }}
+    .large-12.small-12.columns
+      = render partial: 'add_attachment', locals: { message: 'Выберите и прикрепите файл(ы).', document_type: 'entrant_application', document_id: 'entrant_application.id', entrant_application_id: 'entrant_application.id', ref_name: 'entrant_application', id: 'entrant_application'}
+    .large-12.small-12.columns(v-if="entrant_application.attachments.length > 0")
+      h3 Прикрепленные файлы
+      ul.no-bullet
+        li(v-for="attachment in entrant_application.attachments" v-if="attachment.document_type == 'entrant_application' && !attachment.template")
+          span Загружено&nbsp;
+          a v-bind:href = "'/api/attachments/' + attachment.data_hash + '?filename=' + attachment.filename" target = '_blank' {{ attachment.filename }}
+fieldset
+  legend Заявление о согласии на зачисление
+  .(v-if="entrant_application.campaign_id != '' && findCampaign(entrant_application.campaign_id).campaign_type_id == 1")
+    p Вы можете участвовать в нескольких конкурсах на поступление в наш вуз. Но зачислены Вы будете лишь на одну специальность и либо на бюджетные места, либо на места по договору об оказании платных образовательных услуг. Поэтому, оценив конкурсную ситуацию, Вы должны будете сделать свой выбор и подать заявление о согласии на зачисление. Это не обязательно делать сейчас, то есть сразу при подаче документов, но необходимо перед изданием приказов о зачислении.
+    p Если Вы не предоставите заявление о согласии на зачисление в установленные сроки (пункты 10.10, 10.11 Правил приема), Вы не будете зачислены в наш вуз, даже если пройдете по конкурсу. Если Вы считаете, что окончательно определились со своим выбором, Вы можете сразу при подаче документов представить заявление о согласии. Для этого отметьте тот конкурс, по результатам которого Вы согласны быть зачислены. В последующем (но обязательно ДО истечения вышеуказанных сроков) Вы сможете изменить свое мнение и переписать заявление о согласии на зачисление (переписать три раза - если поступаете на бюджетные места, неограниченное число раз - если поступаете по внебюджету).
+  .row(v-for="competitive_group in entrant_application.competitive_groups")
+    .large-1.small-1.columns
+      = radio_button_tag :competitive_group, nil, false, 'v-bind:value': 'competitive_group.id', 'v-model': 'competitive_group.education_source_id == 15 ? entrant_application.paid_agr : entrant_application.budget_agr', 'v-on:change': 'sendData("consent", {budget_agr: entrant_application.budget_agr, paid_agr: entrant_application.paid_agr})', 'v-bind:checked': 'competitive_group.education_source_id == 15 ? entrant_application.paid_agr : entrant_application.budget_agr'
+    .large-11.small-11.columns
+      label
+        span= "{{competitive_group.name}}"
+    .row(v-if="entrant_application.budget_agr == competitive_group.id || entrant_application.paid_agr == competitive_group.id")
+      .large-12.small-12.columns(v-if="entrant_application.attachments.length > 0")
+        ul.no-bullet
+          li(v-for="attachment in entrant_application.attachments" v-if="attachment.document_type == 'consent_application' && attachment.document_id == competitive_group.id && attachment.template")
+            span Скачать&nbsp;
+            a v-bind:href = "'/api/attachments/' + attachment.data_hash + '?filename=' + attachment.filename" target = '_blank' {{ attachment.filename }}
+        br
+        dd= render partial: 'add_attachment', locals: { message: 'Выберите и прикрепите файл(ы).', document_type: 'consent_application', document_id: 'competitive_group.id', entrant_application_id: 'entrant_application.id', ref_name: 'consent_application', id: 'consent_application'}
+      .large-12.small-12.columns(v-if="entrant_application.attachments.length > 0")
+        ul.no-bullet
+          li(v-for="attachment in entrant_application.attachments" v-if="attachment.document_type == 'consent_application' && attachment.document_id == competitive_group.id && !attachment.template")
+            span Загружено&nbsp;
+            a v-bind:href = "'/api/attachments/' + attachment.data_hash + '?filename=' + attachment.filename" target = '_blank' {{ attachment.filename }}

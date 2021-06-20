@@ -1,18 +1,22 @@
 = javascript_include_tag 'https://unpkg.com/axios/dist/axios.min.js'
 = javascript_include_tag 'https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js'
 section.panel#entrant_application
-  . v-if="entrantApplication.id"
+  . v-if="entrant_application.id"
+    .row(v-if="errors.length")
+      .large-12.small-12.columns.label.warning
+        ul.no-bullet
+          li v-for='error in errors' v-if='error.level == "red"' == '{{ error.message }}'
     ul.tabs.vertical(data-tab)
-      li.tab-title v-bind:class = "[api.current_tab == 'start' ? 'active' : '']"= link_to 'Важное', '#start', 'v-on:click': 'setCurrentTab("start")'
-      li.tab-title v-bind:class = "[api.current_tab == 'common' ? 'active' : '']"= link_to 'Общие сведения', '#common', 'v-on:click': 'setCurrentTab("common")'
-      li.tab-title v-bind:class = "[api.current_tab == 'benefits' ? 'active' : '']"= link_to 'Льготы', '#benefits', 'v-on:click': 'setCurrentTab("benefits")'
-      li.tab-title v-bind:class = "[api.current_tab == 'target' ? 'active' : '']"= link_to 'Целевой прием', '#target', 'v-on:click': 'setCurrentTab("target")'
-      li.tab-title v-bind:class = "[api.current_tab == 'competitions' ? 'active' : '']"= link_to 'Условия поступления', '#competitions', 'v-on:click': 'setCurrentTab("competitions")'
-      li.tab-title v-bind:class = "[api.current_tab == 'others' ? 'active' : '']"= link_to 'Прочие сведения', '#others', 'v-on:click': 'setCurrentTab("others")'
-      li.tab-title v-bind:class = "[api.current_tab == 'applications' ? 'active' : '']"= link_to 'Заявления', '#applications', 'v-on:click': 'setCurrentTab("applications")'
+      li.tab-title v-bind:class = "[api.current_tab == 'start' ? 'active' : '']"= link_to 'Важное', '#', 'v-on:click': 'setCurrentTab("start")', 'v-if': 'entrant_application.status_id != 0'
+      li.tab-title v-bind:class = "[api.current_tab == 'common' ? 'active' : '']"= link_to 'Общие сведения', '#', 'v-on:click': 'setCurrentTab("common")'
+      li.tab-title v-bind:class = "[api.current_tab == 'benefits' ? 'active' : '']"= link_to 'Льготы', '#', 'v-on:click': 'setCurrentTab("benefits")'
+      li.tab-title v-bind:class = "[api.current_tab == 'target' ? 'active' : '']"= link_to 'Целевой прием', '#', 'v-on:click': 'setCurrentTab("target")'
+      li.tab-title v-bind:class = "[api.current_tab == 'competitions' ? 'active' : '']"= link_to 'Условия поступления', '#', 'v-on:click': 'setCurrentTab("competitions")'
+      li.tab-title v-bind:class = "[api.current_tab == 'others' ? 'active' : '']"= link_to 'Прочие сведения', '#', 'v-on:click': 'setCurrentTab("others")'
+      li.tab-title v-bind:class = "[api.current_tab == 'applications' ? 'active' : '']"= link_to 'Заявления', '#', 'v-on:click': 'setCurrentTab("applications")'
     .tabs-content
       .content#start v-bind:class = "[api.current_tab == 'start' ? 'active' : '']"
-        /= render partial: 'start'
+        = render partial: 'start'
       .content#common v-bind:class = "[api.current_tab == 'common' ? 'active' : '']"
         = render partial: 'common_form'
         = link_to 'Назад', '#', class: 'button tiny', '@click': 'setCurrentTab("start")'
@@ -39,7 +43,10 @@ section.panel#entrant_application
         span &nbsp;
         = link_to 'Далее', '#', class: 'button tiny', '@click': 'setCurrentTab("applications")'
       .content#applications v-bind:class = "[api.current_tab == 'applications' ? 'active' : '']"
-        /= render partial: 'applications_form'
-  . v-if="!entrantApplication.id"
+        = render partial: 'applications_form'
+        = link_to 'Назад', '#', class: 'button tiny', '@click': 'setCurrentTab("others")'
+        span &nbsp;
+        = link_to 'Отправить заявление', '#', class: 'button tiny', '@click': 'setCurrentTab("start")', 'v-if': 'entrant_application.status_id == 0'
+  . v-if="!entrant_application.id"
     h1 Идет загрузка...
 = javascript_include_tag 'entrants'

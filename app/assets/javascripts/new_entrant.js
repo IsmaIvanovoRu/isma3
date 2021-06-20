@@ -4,8 +4,8 @@ var entrants = new Vue({
     api: {
       campaigns: null
     },
-    campaignId: '',
-    entrantApplicationId: null,
+    campaign_id: '',
+    entrant_application_id: null,
     email: '',
     pin: '',
     response: null,
@@ -13,14 +13,14 @@ var entrants = new Vue({
     files: '',
     dataset: '',
     message: '',
-    emailConfirmed: false,
+    email_confirmed: false,
     hash: '',
     errors: [],
     attachments: []
   },
   computed: {
     isNextDisabled: function() {
-      if(this.emailConfirmed && this.attachments.length > 0 && this.hash) {
+      if(this.email_confirmed && this.attachments.length > 0 && this.hash) {
         return false
       }
       else {
@@ -45,7 +45,7 @@ var entrants = new Vue({
     checkPin: function() {
       if(this.pin.length == 4) {
         console.log(this.pin);
-        this.confirmEmail();
+        this.email_confirmed();
       };
     },
     checkForm: function(e) {
@@ -59,11 +59,11 @@ var entrants = new Vue({
     sendCode: function() {
       this.errors = [];
       axios
-        .post('/api/entrant_applications', {campaignId: this.campaignId, email: this.email})
+        .post('/api/entrant_applications', {campaign_id: this.campaign_id, email: this.email})
         .then(response => {
           if(response.data.status == 'success') {
             this.hash = response.data.hash;
-            this.entrantApplicationId = response.data.id
+            this.entrant_application_id = response.data.id
             $('#email_code_field').foundation('reveal', 'open');
           }
           if(response.data.status == 'faild') {
@@ -137,7 +137,7 @@ var entrants = new Vue({
         .put( '/api/entrant_applications/' + this.hash + '/remove_pin', { hash: this.hash } )
         .then(response => {
           if(response.data.status == 'success') {
-            this.emailConfirmed = true;
+            this.email_confirmed = true;
             this.message = 'отказ от проверки подтвержден';
             $('#email_code_field').foundation('reveal', 'close');
           }

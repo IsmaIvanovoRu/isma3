@@ -1,24 +1,55 @@
 fieldset
-  . v-if="entrantApplication.id"
-    .row
-      .large-12.small-12.columns
-        .label.right Ваше заявление зарегистрировано под номером {{ entrantApplication.registrationNumber}}
   .row
     .large-12.small-12.columns
-      h2.right
-        span Номер личного дела:
-        span= @entrant_application['entrantApplication']['application_number'] ? "#{"%04d" % @entrant_application['entrantApplication']['applicationNumber']}" : "еще не присвоен"
-      h2= [@entrant_application['entrantApplication']['entrantLastName'], @entrant_application['entrantApplication']['entrantFirstName'], @entrant_application['entrantApplication']['entrantMiddleName']].compact.join(' ')
-      - case @entrant_application['entrantApplication']['statusId']
-      - when 2
-        .label.info= 'Ваше заявление находится на рассмотрении'
-      - when 4
-        .label.success= 'Ваше заявление допущено к участию в конкурсе'
-      - when 6
-        .label.alert= 'Ваше заявление отзвано'
-  .row
+      .label.info(v-if="entrant_application.status_id == 2") Ваше заявление зарегистрировано под номером {{entrant_application.registration_number}} и находится на рассмотрении
+      .label.success(v-if="entrant_application.status_id == 4") Ваше заявление допущено к участию в конкурсе. Номер личного дела {{entrant_application.application_number}}.
+      .label.alert(v-if="entrant_application.status_id == 6") Ваше заявление отзвано
+  .row(v-if="entrant_application.comment")
     .large-12.small-12.columns
-      - if @entrant_application['entrantApplication']['comment']
-        h3 Внимание! При рассмотрении Вашего дела выявлены следующие замечания
-        p
-          strong= @entrant_application['entrantApplication']['comment']
+      h3 Внимание! При рассмотрении Вашего дела выявлены следующие замечания
+      p
+        strong entrant_application.comment
+fieldset(v-if="entrant_application.status_id == 4")
+  legend Действия с заявлениями
+  h3 Отзыв согласия на зачисление
+  p Для отзыва заявления о согласии на зачисление, необходимо скачать бланк, распечатать, подписать и прикрепить в соответствующее поле. Заявление будет обработано приемной комиссией, после чего согласие в базе будет удалено. Вы продолжаете участвовать в заявленных Вами конкурсах, но без подачи нового заявления о согласии не сможете быть зачисленными в ИвГМА.
+  .(v-for="competitive_group in entrant_application.competitive_groups")
+    .(v-if="entrant_application.budget_agr == competitive_group.id || entrant_application.paid_agr == competitive_group.id")
+      .row(v-if="entrant_application.attachments.length > 0")
+        .large-12.small-12.columns
+          ul.no-bullet
+            li(v-for="attachment in entrant_application.attachments" v-if="attachment.document_type == 'withdraw_application' && attachment.document_id == competitive_group.id && attachment.template")
+              span Скачать&nbsp;
+              a v-bind:href = "'/api/attachments/' + attachment.data_hash + '?filename=' + attachment.filename" target = '_blank' {{ attachment.filename }}
+          br
+          dd= render partial: 'add_attachment', locals: { message: 'Выберите и прикрепите файл(ы).', document_type: 'withdraw_application', document_id: 'competitive_group.id', entrant_application_id: 'entrant_application.id', ref_name: 'withdraw_application', id: 'withdraw_application'}
+        .large-12.small-12.columns(v-if="entrant_application.attachments.length > 0")
+          ul.no-bullet
+            li(v-for="attachment in entrant_application.attachments" v-if="attachment.document_type == 'withdraw_application' && attachment.document_id == competitive_group.id && !attachment.template")
+              span Загружено&nbsp;
+              a v-bind:href = "'/api/attachments/' + attachment.data_hash + '?filename=' + attachment.filename" target = '_blank' {{ attachment.filename }}
+  
+  h3 Отзыв пакета документов
+  p Для отзыва документов из ИвГМА необходимо скачать, распечатать, подписать и прикрепить заявление об отзыве документов в соответствующее поле. Заявление будет обработано приемной комиссией, после чего Вы будете исключены из списков поступающих.
+  .row(v-if="entrant_application.attachments.length > 0")
+    .large-12.small-12.columns
+      ul.no-bullet
+        li(v-for="attachment in entrant_application.attachments" v-if="attachment.document_type == 'recall_application' && attachment.template")
+          span Скачать&nbsp;
+          a v-bind:href = "'/api/attachments/' + attachment.data_hash + '?filename=' + attachment.filename" target = '_blank' {{ attachment.filename }}
+    .large-12.small-12.columns
+      = render partial: 'add_attachment', locals: { message: 'Выберите и прикрепите файл(ы).', document_type: 'recall_application', document_id: 'entrant_application.id', entrant_application_id: 'entrant_application.id', ref_name: 'recall_application', id: 'recall_application'}
+    .large-12.small-12.columns(v-if="entrant_application.attachments.length > 0")
+      ul.no-bullet
+        li(v-for="attachment in entrant_application.attachments" v-if="attachment.document_type == 'recall_application' && !attachment.template")
+          span Загружено&nbsp;
+          a v-bind:href = "'/api/attachments/' + attachment.data_hash + '?filename=' + attachment.filename" target = '_blank' {{ attachment.filename }}
+
+/  h3 Добавить конкурсы
+/  p Если Вы уже подали заявление, но желаете добавить конкурсы, которые не добавили ранее, выберите новый конкурс из списка ниже и поставьте галочку. После этого Вам будет сгенерировано новое заявление на поступление, которое нужно скачать, распечатать, подписать, отсканировать или сфотографировать и снова загрузить в соответствующее поле (ниже). Новое заявление будет рассмотрено приемной комиссией, и если все правильно, будет одобрено.
+  
+/fieldset
+/  legend Поле для переписки с приемной комиссией
+  
+fieldset
+  =link_to 'Список лиц, подавших документы', '/storage/data/entrants/current_entrants_spec.html', target: '_blank'

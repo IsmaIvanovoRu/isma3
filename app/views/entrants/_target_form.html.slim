@@ -1,27 +1,27 @@
 fieldset
   p Прием по целевой квоте осуществляется при наличии договора о целевом обучении. Необходимо представить копию договора о целевом обучении (подписанного всеми сторонами). Вы можете выбрать ту специальность (специальности), по которой (которым) у Вас заключен договор о целевом обучении.
   legend Целевой договор
-  .(v-for="(document, index) in entrantApplication.targetContracts")
+  .(v-for="(document, index) in entrant_application.target_contracts")
     .row
-      .(v-show="entrantApplication.targetContracts.indexOf(document) > 0") Следующий документ
+      .(v-show="entrant_application.target_contracts.indexOf(document) > 0") Следующий документ
       .large-12.small-12.columns
         label
           span Конкурс
-        select.error#competitive_group_id(name="target_contracts[][competitive_group_id]" v-model='document.competitiveGroupId' v-on:change="sendData('targetContract', document, index)")
+        select.error#competitive_group_id(name="target_contracts[][competitive_group_id]" v-model='document.competitive_group_id' v-on:change="sendData('target_contract', document, index)")
           option(value)
-          option(v-for="competitiveGroup in findCampaign(entrantApplication.campaignId).competitiveGroups" v-if="competitiveGroup.educationSourceId == 16" v-bind:value="competitiveGroup.id") {{ competitiveGroup.name }}
-        small.error v-if="findErrorMessage('document.competitiveGroupId')" == "{{ findErrorMessage('document.competitiveGroupId') }}"
+          option(v-for="competitive_group in findCampaign(entrant_application.campaign_id).competitive_groups" v-if="competitive_group.education_source_id == 16" v-bind:value="competitive_group.id") {{ competitive_group.name }}
+        small.error v-if="findErrorMessage('document.competitive_group_id')" == "{{ findErrorMessage('document.competitive_group_id') }}"
     .row(v-if="document.id")
       .large-4.small-12.columns
         br
-        dd= render partial: 'add_attachment', locals: { message: 'Выберите и прикрепите файл(ы).', document_type: 'target_contract', document_id: 'document.id', entrant_application_id: 'entrantApplication.id', ref_name: 'target_contract', id: 'target_contract'}
-    .row(v-if="entrantApplication.attachments.length > 0")
+        = render partial: 'add_attachment', locals: { message: 'Выберите и прикрепите файл(ы).', document_type: 'target_contract', document_id: 'document.id', entrant_application_id: 'entrant_application.id', ref_name: 'target_contract', id: 'target_contract'}
+    .row(v-if="entrant_application.attachments.length > 0")
         .large-12.small-12.columns
           h3 Прикрепленные файлы
           ul.no-bullet
-            li(v-for="attachment in entrantApplication.attachments" v-if="attachment.document_type == 'benefit_document' && attachment.document_id == document.id")
+            li(v-for="attachment in entrant_application.attachments" v-if="attachment.document_type == 'target_contract' && attachment.document_id == document.id")
                 a v-bind:href = "'/api/attachments/' + attachment.data_hash + '?filename=' + attachment.filename" target = '_blank' {{ attachment.filename }}
   .row
     .button.tiny @click="addTargetContract" Указать данные другого договора
     span &nbsp;
-    .button.tiny(v-if="entrantApplication.targetContracts.length > 1" @click="deleteTargetContract") Удалить договор
+    .button.tiny(v-if="entrant_application.target_contracts.length > 1" @click="deleteTargetContract") Удалить договор
