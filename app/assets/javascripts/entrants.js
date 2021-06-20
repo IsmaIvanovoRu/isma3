@@ -455,11 +455,11 @@ var entrants = new Vue({
           if(sub == 'mark') {
             this.entrant_application.marks[index].id = response.data.mark.id;
           };
-          if(sub == 'competitiveGroup') {
-            this.entrant_application.competitive_group_ids = response.data.competitive_group.ids;
+          if(sub == 'competitive_group') {
+            this.entrant_application.competitive_groups = response.data.competitive_groups;
           };
           if(sub == 'achievement') {
-            this.entrant_application.achievements_ids = response.data.achievement.ids;
+            this.entrant_application.achievements = response.data.achievements;
           };
           if(sub == 'status_id') {
             this.entrant_application.status_id = 2;
@@ -809,7 +809,7 @@ var entrants = new Vue({
       this.checkForm(tab);
       if(this.errors.length == 0){
         this.api.current_tab = tab;
-        if(this.api.current_tab == 'applications'){
+        if(this.api.current_tab == 'applications' && this.entrant_application.status_id == 0){
           this.generateTemplates();
         }
         if(this.api.current_tab == 'start'){
