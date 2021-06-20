@@ -6,9 +6,10 @@ fieldset
       .label.alert(v-if="entrant_application.status_id == 6") Ваше заявление отзвано
   .row(v-if="entrant_application.comment")
     .large-12.small-12.columns
+      br
       h3 Внимание! При рассмотрении Вашего дела выявлены следующие замечания
       p
-        strong entrant_application.comment
+        strong= "{{entrant_application.comment}}"
 fieldset(v-if="entrant_application.status_id == 4")
   legend Действия с заявлениями
   h3 Отзыв согласия на зачисление
