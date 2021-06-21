@@ -1,6 +1,6 @@
 fieldset
   legend Контактные данные
-  p Необходимо указать место проживания в соответствии с регистрацией (по паспорту).  В интересах абитуриента указать тот контактный телефон, по которому можно будет дозвониться в любое время. Он будет использоваться для экстренной связи с абитуриентом, если у приемной комиссии возникнут вопросы по документам или зачислению.
+  p Необходимо указать место проживания в соответствии с регистрацией (по паспорту).
   .row
     .large-12.small-12.columns
       = label_tag :address
@@ -8,21 +8,16 @@ fieldset
         = text_field_tag :address, nil, placeholder: 'Адрес (регион РФ, населенный пункт, улица, дом, квартира.)', 'v-model.trim': 'entrant_application.contact_information.address', class: 'error', 'v-on:change': "sendData('contact_information', entrant_application.contact_information)"
       small.error v-if="findErrorMessage('entrant_application.contact_information.address')" == "{{ findErrorMessage('entrant_application.contact_information.address') }}"
   .row
-    .large-4.small-12.columns
+    .large-6.small-12.columns
       = label_tag :zip_code
         span Почтовый индекс
         = number_field_tag :zip_code, nil, min: 0, max: 999999, placeholder: '000000', 'v-model.trim': 'entrant_application.contact_information.zip_code', class: 'error', 'v-on:change': "sendData('contact_information', entrant_application.contact_information)"
       small.error v-if="findErrorMessage('entrant_application.contact_information.zip_code')" == "{{ findErrorMessage('entrant_application.contact_information.zip_code') }}"
-    .large-4.small-12.columns
+    .large-6.small-12.columns
       = label_tag :email
         span Адрес электронной почты
         = email_field_tag :email, nil, placeholder: 'user@domain.com', 'v-model.trim': 'entrant_application.contact_information.email', class: 'error', disabled: true
       small.error v-if="findErrorMessage('entrant_application.contact_information.email')" == "{{ findErrorMessage('entrant_application.contact_information.email') }}"
-    .large-4.small-12.columns
-      = label_tag :phone
-        span Мобильный телефон
-        = phone_field_tag :phone, nil, placeholder: '+79999999999', 'v-model.trim': 'entrant_application.contact_information.phone', class: 'error', 'v-on:change': "sendData('contact_information', entrant_application.contact_information)"
-      small.error v-if="findErrorMessage('entrant_application.contact_information.phone')" == "{{ findErrorMessage('entrant_application.contact_information.phone') }}"
 fieldset
   legend Прочие документы
   p(v-if="entrant_application.campaign_id != '' && findCampaign(entrant_application.campaign_id).campaign_type_id == 1") Можно указать реквизиты и прикрепить копии других документов, которые вы считаете необходимыми для передачи в приемную комиссию. Например, это может быть свидетельство о браке, если документ об образовании получен до смены фамилии.

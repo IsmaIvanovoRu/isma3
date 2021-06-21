@@ -5,10 +5,9 @@ fieldset
     .large-12.small-12.columns(v-if="entrant_application.attachments.length > 0")
       ul.no-bullet
         li(v-for="attachment in entrant_application.attachments" v-if="attachment.document_type == 'entrant_application' && attachment.template")
-          span Скачать&nbsp;
-          a v-bind:href = "'/api/attachments/' + attachment.data_hash + '?filename=' + attachment.filename" target = '_blank' {{ attachment.filename }}
+          a v-bind:href = "'/api/attachments/' + attachment.data_hash + '?filename=' + attachment.filename" target = '_blank' Скачать бланк заявления о поступлении
     .large-12.small-12.columns
-      = render partial: 'add_attachment', locals: { message: 'Выберите и прикрепите файл(ы).', document_type: 'entrant_application', document_id: 'entrant_application.id', entrant_application_id: 'entrant_application.id', ref_name: 'entrant_application', id: 'entrant_application'}
+      = render partial: 'add_attachment', locals: { message: 'Прикрепите подписанное заявление о поступлении.', document_type: 'entrant_application', document_id: 'entrant_application.id', entrant_application_id: 'entrant_application.id', ref_name: 'entrant_application', id: 'entrant_application'}
     .large-12.small-12.columns(v-if="entrant_application.attachments.length > 0")
       h3 Прикрепленные файлы
       ul.no-bullet

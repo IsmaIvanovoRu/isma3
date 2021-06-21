@@ -26,13 +26,18 @@ fieldset
         span Дата рождения
         = date_field_tag :birth_date, nil, 'v-model': 'entrant_application.personal.birth_date', class: 'error', 'v-on:change': 'sendData("personal", entrant_application.personal)'
       small.error v-if="findErrorMessage('birth_date')" == "{{ findErrorMessage('birth_date') }}"
-    .large-8.small-12.columns
+    .large-4.small-12.columns
       = label_tag :gender_id, 'Пол'
       = radio_button_tag :gender_id, '2', true, 'v-model': 'entrant_application.personal.gender_id', 'v-on:change': 'sendData("personal", entrant_application.personal)'
       = label_tag :gender_id, 'женский'
       = radio_button_tag :gender_id, '1', false, 'v-model': 'entrant_application.personal.gender_id', 'v-on:change': 'sendData("personal", entrant_application.personal)'
       = label_tag :gender_id, 'мужской'
       small.error v-if="findErrorMessage('gender_id')" == "{{ findErrorMessage('gender_id') }}"
+    .large-4.small-12.columns
+      = label_tag :phone
+        span Мобильный телефон
+        = phone_field_tag :phone, nil, placeholder: '+79999999999', 'v-model.trim': 'entrant_application.contact_information.phone', class: 'error', 'v-on:change': "sendData('contact_information', entrant_application.contact_information)"
+      small.error v-if="findErrorMessage('entrant_application.contact_information.phone')" == "{{ findErrorMessage('entrant_application.contact_information.phone') }}"
 fieldset
   legend Документы, удостоверяющие личность
   p Указываются данные действующего документа, удостоверяющего личность.

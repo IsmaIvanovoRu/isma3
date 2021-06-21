@@ -676,6 +676,7 @@ var entrants = new Vue({
         if(this.entrant_application.personal.entrant_first_name == '') this.errors.push({element: 'entrant_first_name', message: 'Необходимо указать имя', level: 'red'});
         if(this.entrant_application.personal.birth_date == '') this.errors.push({element: 'birth_date', message: 'Необходимо указать дату рождения', level: 'red'});
         if(this.entrant_application.personal.gender_id == '') this.errors.push({element: 'gender_id', message: 'Необходимо указать пол', level: 'red'});
+        if(this.entrant_application.contact_information.phone == '') this.errors.push({element: 'phone', message: 'Необходимо контактный телефон', level: 'red'});
         if(this.entrant_application.identity_documents.find(function(element) {
           if(element.identity_document_type == ''){
             entrants.errors.push({element: 'identity_document_type', message: 'Необходимо выбрать тип документа, удостоверяющего личность', level: 'red'});
@@ -739,7 +740,6 @@ var entrants = new Vue({
       }
       if(tab == 'applications'){
         if(this.entrant_application.contact_information.address == '') this.errors.push({element: 'address', message: 'Необходимо указать адрес', level: 'red'});
-        if(this.entrant_application.contact_information.phone == '') this.errors.push({element: 'phone', message: 'Необходимо контактный телефон', level: 'red'});
         if(this.entrant_application.special_entrant && !this.entrant_application.benefit) this.errors.push({element: 'special_entrant', message: 'Указана необходимость создания специальных условий для сдачи вступительных испытаний, но не указано наличие льготы на вкладке Льготы', level: 'red'});
         if(this.entrant_application.special_entrant && this.entrant_application.special_conditions == '') this.errors.push({element: 'special_conditions', message: 'Указана необходимость создания специальных условий для сдачи вступительных испытаний, но не указан перечень условий', level: 'red'});
       }
