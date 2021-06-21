@@ -2,10 +2,6 @@ fieldset
   legend Выбор условий поступления
   .(v-if="entrant_application.campaign_id != '' && findCampaign(entrant_application.campaign_id).campaign_type_id == 1")
     p Вы имеете право отметить любое количество конкурсов (в том числе все) из списка, представленного ниже. Каждый абитуриент, не имеющий высшего образования, может участвовать в общем конкурсе на каждую специальность и на бюджетной, и на внебюджетной основе. Лица, имеющие высшее образование могут поступать только на внебюджетной основе. Конкурсы по особой и целевой квотам становятся доступны только в том случае, если Вы заполнили соответствующие поля и прикрепили документы, подтверждающие право на участие в конкурсе по особой и/или целевой квоте.
-    p Если Вы выбрали один или несколько внебюджетных конкурсов, Вам необходимо заполнить со своей стороны договор (договоры) об оказании платных образовательных услуг. Если Вы поступите на бюджетное место, данный договор не вступит в силу и оплата обучения не потребуется. Если Вы поступите на внебюджетное место и будете зачислены в вуз, договор вступит в силу с момента начала обучения. Оплата по договору должна быть произведена до 25 сентября 2021 года (за семестр или за учебный год). То есть заранее (до зачисления) Вы платить не обязаны.
-    p Если абитуриенту исполнилось 18 лет, то он сам может быть заказчиком по данному договору и оплачивать образовательные услуги, если абитуриент несовершеннолетний, заказчиком он быть не может. Чаще всего заказчиком выступает один из родителей, кто-то из родственников или любое дееспособное лицо, согласное оплачивать обучение.
-    p=link_to ' Бланк договора', '/attachments/55187', target: '_blank'
-
   .(v-if="entrant_application.campaign_id != '' && findCampaign(entrant_application.campaign_id).campaign_type_id == 4") 
     p Вы имеете право выбрать две специальности для поступления, внутри которых Вы можете отметить любое количество конкурсов при наличии оснований для участия в них. Для участия в конкурсе в пределах квоты целевого приема необходимо заключить договор с заказчиком целевого обучения.
   .row
@@ -18,14 +14,6 @@ fieldset
           .large-11.small-11.columns
             label(v-bind:for="competitive_group.id")
               span = "{{ competitive_group.name }} (количество мест: {{ competitive_group.number }})"
-          .large-12.small-12.columns(v-if="competitive_group.education_source_id == 15 && findCompetitiveGroup(competitive_group.id) == competitive_group.id")
-            br
-            dd= render partial: 'add_attachment', locals: { message: 'Выберите и прикрепите файл(ы).', document_type: 'contract', document_id: 'competitive_group.id', entrant_application_id: 'entrant_application.id', ref_name: 'contract', id: 'contract'}
-          .large-12.small-12.columns(v-if="entrant_application.attachments.length > 0")
-            ul.no-bullet
-              li(v-for="attachment in entrant_application.attachments" v-if="attachment.document_type == 'contract' && attachment.document_id == competitive_group.id")
-                a v-bind:href = "'/api/attachments/' + attachment.data_hash + '?filename=' + attachment.filename" target = '_blank' {{ attachment.filename }}
-
 fieldset
   legend Выбор вступительных испытаний
   .(v-if="entrant_application.campaign_id != '' && findCampaign(entrant_application.campaign_id).campaign_type_id == 1") 

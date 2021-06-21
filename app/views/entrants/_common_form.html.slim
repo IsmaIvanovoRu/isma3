@@ -135,7 +135,7 @@ fieldset
   .row(v-if="entrant_application.education_document.id")
     .large-12.small-12.columns
       br
-      dd= render partial: 'add_attachment', locals: { message: 'Выберите и прикрепите файл(ы). Сканируются / фотографируются и прикрепляются ВСЕ страницы аттестата или диплома и ВСЕ страницы приложения.', document_type: 'education_document', document_id: 'entrant_application.id', entrant_application_id: 'entrant_application.id', ref_name: 'education_document', id: 'education_document'}
+      dd= render partial: 'add_attachment', locals: { message: 'Выберите и прикрепите файл(ы). Сканируются / фотографируются и прикрепляются ВСЕ страницы аттестата или диплома и ВСЕ страницы приложения.', document_type: 'education_document', document_id: 'entrant_application.education_document.id', entrant_application_id: 'entrant_application.id', ref_name: 'education_document', id: 'education_document'}
   .row(v-for="attachment in entrant_application.attachments")
     .large-12.small-12.columns
       p(v-if="attachment.document_type == 'education_document'")
