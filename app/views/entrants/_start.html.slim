@@ -1,7 +1,7 @@
 fieldset
   .row
     .large-12.small-12.columns
-      .label.info(v-if="entrant_application.status_id == 2") Ваше заявление зарегистрировано под номером {{entrant_application.registration_number}} и находится на рассмотрении
+      .label.info(v-if="entrant_application.status_id == 2") Ваше обращение зарегистрировано и находится на рассмотрении
       .label.success(v-if="entrant_application.status_id == 4") Ваше заявление допущено к участию в конкурсе. Номер личного дела {{entrant_application.application_number}}.
       .label.alert(v-if="entrant_application.status_id == 6") Ваше заявление отзвано
   .row(v-if="entrant_application.comment")
@@ -10,6 +10,26 @@ fieldset
       h3 Внимание! При рассмотрении Вашего дела выявлены следующие замечания
       p
         strong= "{{entrant_application.comment}}"
+fieldset
+  legend Вступительные испытания
+  .row
+    .large-12.small-12.columns
+      table.table
+        caption Конкурсные баллы
+        thead
+          tr
+            th(v-for="mark in entrant_application.marks") = "{{ mark.subject }}"
+            th Сумма
+            th С учетом достижений
+        tbody
+          tr
+            td(v-for="mark in entrant_application.marks")
+              span(v-if="mark.value == 0") {{ mark.form }}
+              span(v-else) 
+                span= "{{ mark.value }}"
+                sup= "{{ mark.form }}"
+            td= "{{ entrant_application.sum }}"
+            td= "{{ entrant_application.full_sum }}"
 fieldset(v-if="entrant_application.status_id == 4")
   legend Действия с заявлениями
   h3 Отзыв согласия на зачисление
