@@ -365,6 +365,20 @@ var entrants = new Vue({
     },
   },
   methods: {
+    consentCount: function() {
+      var consentCount = 0;
+      this.entrant_application.attachments.find(function(element) {
+        if(element.document_type == 'consent_application' && !element.template) consentCount++;
+      });
+      return consentCount;
+    },
+    withdrawCount: function() {
+      var withdrawCount = 0;
+      this.entrant_application.attachments.find(function(element) {
+        if(element.document_type == 'withdraw_application' && !element.template) withdrawCount++;
+      });
+      return withdrawCount;
+    },
     generateTemplates: function(){
       axios
       .put('/api/entrant_applications/' + this.entrant_application.hash + '/generate_entrant_application', {id: this.entrant_application.id})
@@ -504,6 +518,14 @@ var entrants = new Vue({
         this.files = this.$refs.education_document.files;
         this.dataset = this.$refs.education_document.dataset;
       }
+      if(this.$refs.consent_application && this.$refs.consent_application.files.length > 0) {
+        this.files = this.$refs.consent_application.files;
+        this.dataset = this.$refs.consent_application.dataset;
+      }
+      if(this.$refs.withdraw_application && this.$refs.withdraw_application.files.length > 0) {
+        this.files = this.$refs.withdraw_application.files;
+        this.dataset = this.$refs.withdraw_application.dataset;
+      }
       if(this.$refs.identity_document && this.$refs.identity_document.length > 0) {
         for(var i = 0; i < this.$refs.identity_document.length; i++) {
           if(this.$refs.identity_document[i].files.length > 0) {
@@ -560,22 +582,6 @@ var entrants = new Vue({
           }
         }
       }
-      if(this.$refs.consent_application && this.$refs.consent_application.length > 0) {
-        for(var i = 0; i < this.$refs.consent_application.length; i++) {
-          if(this.$refs.consent_application[i].files.length > 0) {
-          this.files = this.$refs.consent_application[i].files;
-          this.dataset = this.$refs.consent_application[i].dataset;
-          }
-        }
-      }
-      if(this.$refs.withdraw_application && this.$refs.withdraw_application.length > 0) {
-        for(var i = 0; i < this.$refs.withdraw_application.length; i++) {
-          if(this.$refs.withdraw_application[i].files.length > 0) {
-          this.files = this.$refs.withdraw_application[i].files;
-          this.dataset = this.$refs.withdraw_application[i].dataset;
-          }
-        }
-      }
       let formData = new FormData();
       for( var i = 0; i < this.files.length; i++ ){
         let file = this.files[i];
@@ -605,6 +611,12 @@ var entrants = new Vue({
         }
         if(this.dataset.documentType == 'education_document') {
           this.$refs.education_document.value = null
+        }
+        if(this.dataset.documentType == 'consent_application') {
+          this.$refs.consent_application.value = null
+        }
+        if(this.dataset.documentType == 'withdraw_application') {
+          this.$refs.withdraw_application.value = null
         }
         if(this.dataset.documentType == 'identity_document') {
           for(var i = 0; i < this.$refs.identity_document.length; i++) {
@@ -641,19 +653,9 @@ var entrants = new Vue({
             this.$refs.contract[i].value = null
           }
         }
-        if(this.dataset.documentType == 'consent_application') {
-          for(var i = 0; i < this.$refs.consent_application.length; i++) {
-            this.$refs.consent_application[i].value = null
-          }
-        }
         if(this.dataset.documentType == 'recall_application') {
           for(var i = 0; i < this.$refs.recall_application.length; i++) {
             this.$refs.recall_application[i].value = null
-          }
-        }
-        if(this.dataset.documentType == 'withdraw_application') {
-          for(var i = 0; i < this.$refs.withdraw_application.length; i++) {
-            this.$refs.withdraw_application[i].value = null
           }
         }
         this.files = '';
