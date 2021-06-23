@@ -423,6 +423,15 @@ var entrants = new Vue({
       });
       return findAchievement;
     },
+    findAttachment: function(document_id, document_type, template) {
+      var findAttachment = null;
+      this.entrant_application.attachments.find(function(element) {
+        if(element.document_id == document_id && element.document_type == document_type && element.template == template){
+          findAttachment = element;
+        };
+      });
+      return findAttachment;
+    },
     findCompetitiveGroup: function(competitiveGgroupId) {
       var findCompetitiveGroup = null;
       this.entrant_application.competitive_group_ids.find(function(element) {
@@ -690,58 +699,63 @@ var entrants = new Vue({
           if(element.identity_document_date == ''){
             entrants.errors.push({element: 'identity_document_date', message: 'Необходимо указать дату выдачи документа, удостоверяющего личность', level: 'red'});
           };
+          if(!entrants.findAttachment(element.id, 'identity_document', false)) entrants.errors.push({element: 'identity_document_attachment', message: 'Необходимо прикрепить копию документа, удостоверяющего личность', level: 'red'});
         }));
         if(this.entrant_application.education_document.education_document_type == '') this.errors.push({element: 'education_document_type', message: 'Необходимо выбрать тип документа об образовании', level: 'red'});
         if(this.entrant_application.education_document.education_document_number == '') this.errors.push({element: 'education_document_number', message: 'Необходимо указать номер документа об образовании', level: 'red'});
         if(this.entrant_application.education_document.education_document_date == '') this.errors.push({element: 'education_document_date', message: 'Необходимо указать дату выдачи документа об образовании', level: 'red'});
         if(this.entrant_application.education_document.education_document_issuer == '') this.errors.push({element: 'education_document_issuer', message: 'Необходимо указать кем выдан документ об образовании', level: 'red'});
+        if(!this.findAttachment(this.entrant_application.education_document.id, 'education_document', false)) this.errors.push({element: 'education_document_attachment', message: 'Необходимо прикрепить документ об образовании', level: 'red'});
         if(this.entrant_application.snils == '' && !this.entrant_application.snils_absent) this.errors.push({element: 'snils', message: 'Необходимо указать номер СНИЛС, либо отметить, что он отсутствует', level: 'red'});
+        if(!this.findAttachment(this.entrant_application.id, 'snils', false) && !this.entrant_application.snils_absent) this.errors.push({element: 'snils_attachment', message: 'Необходимо прикрепить копию СНИЛСа', level: 'red'});
       }
       if(tab == 'target'){
         if(this.entrant_application.benefit_documents.find(function(element) {
-          if(element.benefit_document_type == '' && this.entrant_application.benefit){
+          if(element.benefit_document_type == '' && entrants.entrant_application.benefit){
             entrants.errors.push({element: 'benefit_document_type', message: 'Необходимо выбрать тип документа, подтверждающего льготу', level: 'red'});
           };
-          if(element.benefit_document_series == '' && this.entrant_application.benefit){
+          if(element.benefit_document_series == '' && entrants.entrant_application.benefit){
             entrants.errors.push({element: 'benefit_document_series', message: 'Не указана серия документа, подтверждающего льготу. Если серия отсутствует, напишите "нет"', level: 'red'});
           };
-          if(element.benefit_document_number == '' && this.entrant_application.benefit){
+          if(element.benefit_document_number == '' && entrants.entrant_application.benefit){
             entrants.errors.push({element: 'benefit_document_number', message: 'Не указан номер документа, подтверждающего льготу. Если номер отсутствует, напишите "нет"', level: 'red'});
           };
-          if(element.benefit_document_date == '' && this.entrant_application.benefit){
+          if(element.benefit_document_date == '' && entrants.entrant_application.benefit){
             entrants.errors.push({element: 'benefit_document_date', message: 'Необходимо указать дату выдачи документа, подтверждающего льготу', level: 'red'});
           };
-          if(element.benefit_document_organization == '' && this.entrant_application.benefit){
+          if(element.benefit_document_organization == '' && entrants.entrant_application.benefit){
             entrants.errors.push({element: 'benefit_document_organization', message: 'Необходимо указать кем выдан документ, подтверждающий льготу', level: 'red'});
           };
+          if(!entrants.findAttachment(element.id, 'benefit_document', false) && entrants.entrant_application.benefit) entrants.errors.push({element: 'benefit_document', message: 'Необходимо прикрепить копию документа, подтверждающего льготу', level: 'red'});
         }));
         if(this.entrant_application.olympic_documents.find(function(element) {
-          if(element.olympic_document_series == '' && this.entrant_application.olympionic){
+          if(element.olympic_document_series == '' && entrants.entrant_application.olympionic){
             entrants.errors.push({element: 'olympic_document_series', message: 'Не указана серия диплома олимпиады. Если серия отсутствует, напишите "нет"', level: 'red'});
           };
-          if(element.olympic_document_number == '' && this.entrant_application.olympionic){
+          if(element.olympic_document_number == '' && entrants.entrant_application.olympionic){
             entrants.errors.push({element: 'olympic_document_number', message: 'Не указан номер диплома олимпиады. Если номер отсутствует, напишите "нет"', level: 'red'});
           };
-          if(element.olympic_document_date == '' && this.entrant_application.olympionic){
-            entrants.errors.push({element: 'olympic_document_date', message: 'Необходимо указать дату диплома олимпиады', level: 'yellow'});
-          };
-          if(element.class_number == '' && this.entrant_application.olympionic){
+          if(element.class_number == '' && entrants.entrant_application.olympionic){
             entrants.errors.push({element: 'class_number', message: 'Необходимо указать в каком классе получен диплом олимпиады', level: 'red'});
           };
+          if(!entrants.findAttachment(element.id, 'olympic_document', false) && entrants.entrant_application.olympionic) entrants.errors.push({element: 'olympic_document', message: 'Необходимо прикрепить копию диплома олимпиады', level: 'red'});
         }));
       }
       if(tab == 'others'){
         if(this.entrant_application.competitive_group_ids.length == 0) this.errors.push({element: 'competitive_group_ids', message: 'Необходимо отметить участие хотя бы в одном конкурсе', level: 'red'});
         if(this.entrant_application.marks.find(function(element) {
-          if(element.form == ''){
+          if(!element.form){
             entrants.errors.push({element: 'form', message: 'Не выбрана форма вступительного испытания', level: 'red'});
           };
         }));
       }
       if(tab == 'applications'){
-        if(this.entrant_application.contact_information.address == '') this.errors.push({element: 'address', message: 'Необходимо указать адрес', level: 'red'});
+        if(!this.entrant_application.contact_information.address) this.errors.push({element: 'address', message: 'Необходимо указать адрес', level: 'red'});
         if(this.entrant_application.special_entrant && !this.entrant_application.benefit) this.errors.push({element: 'special_entrant', message: 'Указана необходимость создания специальных условий для сдачи вступительных испытаний, но не указано наличие льготы на вкладке Льготы', level: 'red'});
         if(this.entrant_application.special_entrant && this.entrant_application.special_conditions == '') this.errors.push({element: 'special_conditions', message: 'Указана необходимость создания специальных условий для сдачи вступительных испытаний, но не указан перечень условий', level: 'red'});
+      }
+      if(tab == 'start'){
+        if(!this.findAttachment(this.entrant_application.id, 'entrant_application', false)) this.errors.push({element: 'entrant_application_attachment', message: 'Необходимо прикрепить заявление о поступлении', level: 'red'});
       }
     },
     addIdentityDocument: function() {
