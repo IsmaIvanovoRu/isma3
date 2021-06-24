@@ -47,7 +47,6 @@ fieldset
       p(v-if="findAttachment(entrant_application.budget_agr, 'consent_application', true)")
         a v-bind:href = "'/api/attachments/' + findAttachment(entrant_application.budget_agr, 'consent_application', true).data_hash + '?filename=' + findAttachment(entrant_application.budget_agr, 'consent_application', true).filename" target = '_blank' Скачать бланк заявления о согласии на зачисление
       .(v-if="entrant_application.budget_agr")
-        br
         = render partial: 'add_attachment', locals: { message: 'Загрузите подписанное заявление о согласии на зачисление.', document_type: 'consent_application', document_id: 'entrant_application.budget_agr', entrant_application_id: 'entrant_application.id', ref_name: 'consent_application', id: 'consent_application'}
     .large-12.small-12.columns(v-if="consentCount() > 0")
       p
