@@ -16,7 +16,8 @@ var entrants = new Vue({
     email_confirmed: false,
     hash: '',
     errors: [],
-    attachments: []
+    attachments: [],
+    clerk: '',
   },
   computed: {
     isNextDisabled: function() {
@@ -66,7 +67,7 @@ var entrants = new Vue({
     sendCode: function() {
       this.errors = [];
       axios
-        .post('/api/entrant_applications', {campaign_id: this.campaign_id, email: this.email})
+        .post('/api/entrant_applications', {campaign_id: this.campaign_id, email: this.email, clerk: this.$refs.clerk.dataset.clerk})
         .then(response => {
           if(response.data.status == 'success') {
             this.hash = response.data.hash;
