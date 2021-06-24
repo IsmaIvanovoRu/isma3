@@ -3,6 +3,8 @@
 section.panel#entrant_application
   - if current_user && current_user.groups.map(&:name).include?('priem')
     = hidden_field_tag :clerk, '', ref: 'clerk', data: {clerk: current_user.login}
+  - else
+    = hidden_field_tag :clerk, '', ref: 'clerk', data: {clerk: ''}
   h1 Заполнение заявления в электронном виде
   p Уважаемый поступающий!
   p На этой странице Вам доступна форма подачи заявления и копий документов для поступления в Ивановскую медицинскую академию на образовательные программы специалитете (лечебное дело, педиатрия и стоматология) и ординатуры (29 программ подготовки кадров высшей квалификации).
