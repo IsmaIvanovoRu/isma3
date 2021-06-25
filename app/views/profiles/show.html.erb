@@ -95,11 +95,11 @@
           <% mean_string = "#{educational_program.name} (#{educational_program.code} - #{educational_program.level}) - cредний балл зачетной книжки #{values[:mean]}" %>
           <% if @administrator_permission || current_user == @user %>
             <dl class="accordion" data-accordion>
-              <dd>
-                <%= link_to("#marks-#{educational_program.id}") do %>
+              <dd class="active">
+                <%= link_to("#marks-#{educational_program.id}", aria: {expanded: true}) do %>
                   <%= mean_string %>
                 <% end %>
-                <div id=<%= "marks-#{educational_program.id}" %> class="content">
+                <div id=<%= "marks-#{educational_program.id}" %> class="content active">
                 <table class="table">
                   <thead>
                     <tr>
