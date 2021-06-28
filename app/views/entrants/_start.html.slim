@@ -38,16 +38,24 @@ fieldset
     p Если Вы не предоставите заявление о согласии на зачисление в установленные сроки (пункты 10.10, 10.11 Правил приема), Вы не будете зачислены в наш вуз, даже если пройдете по конкурсу. Если Вы считаете, что окончательно определились со своим выбором, Вы можете сразу при подаче документов представить заявление о согласии. Для этого отметьте тот конкурс, по результатам которого Вы согласны быть зачислены. В последующем (но обязательно ДО истечения вышеуказанных сроков) Вы сможете изменить свое мнение и переписать заявление о согласии на зачисление (переписать три раза - если поступаете на бюджетные места, неограниченное число раз - если поступаете по внебюджету).
   .row
     .large-12.small-1.columns
+      p 
+        strong Шаг 1. Выберите конкурс.
       select.error#competitive_group_id(name="competitive_group_id" v-model='entrant_application.budget_agr' v-bind:disabled="consentCount() > withdrawCount() ? 'disabled' : false")
         option(value)
         option(v-for="competitive_group in entrant_application.competitive_groups" v-bind:value="competitive_group.id") {{ competitive_group.name }}
   .row
     br
     .large-12.small-12.columns(v-if="!findAttachment(entrant_application.budget_agr, 'consent_application', false)")
-      p(v-if="findAttachment(entrant_application.budget_agr, 'consent_application', true)")
-        a v-bind:href = "'/api/attachments/' + findAttachment(entrant_application.budget_agr, 'consent_application', true).data_hash + '?filename=' + findAttachment(entrant_application.budget_agr, 'consent_application', true).filename" target = '_blank' Скачать бланк заявления о согласии на зачисление
+      .(v-if="findAttachment(entrant_application.budget_agr, 'consent_application', true)")
+        p 
+          strong Шаг 2. Скачайте бланк
+        p
+          a v-bind:href = "'/api/attachments/' + findAttachment(entrant_application.budget_agr, 'consent_application', true).data_hash + '?filename=' + findAttachment(entrant_application.budget_agr, 'consent_application', true).filename" target = '_blank' Скачать бланк заявления о согласии на зачисление
       .(v-if="entrant_application.budget_agr")
+        p 
+          strong Шаг 3. Распечатайте и подпишите
         = render partial: 'add_attachment', locals: { message: 'Загрузите подписанное заявление о согласии на зачисление.', document_type: 'consent_application', document_id: 'entrant_application.budget_agr', entrant_application_id: 'entrant_application.id', ref_name: 'consent_application', id: 'consent_application'}
+  .row
     .large-12.small-12.columns(v-if="consentCount() > 0")
       p
         strong Поданные согласия на зачисление
@@ -58,9 +66,15 @@ fieldset
   p Для отзыва заявления о согласии на зачисление, необходимо скачать бланк, распечатать, подписать и прикрепить в соответствующее поле. Заявление будет обработано приемной комиссией, после чего согласие в базе будет удалено. Вы продолжаете участвовать в заявленных Вами конкурсах, но без подачи нового заявления о согласии не сможете быть зачисленными в ИвГМА.
   .row(v-if="entrant_application.budget_agr")
     .large-12.small-12.columns(v-if="!findAttachment(entrant_application.budget_agr, 'withdraw_application', false)")
-      p(v-if="findAttachment(entrant_application.budget_agr, 'withdraw_application', true)")
-        a v-bind:href = "'/api/attachments/' + findAttachment(entrant_application.budget_agr, 'withdraw_application', true).data_hash + '?filename=' + findAttachment(entrant_application.budget_agr, 'withdraw_application', true).filename" target = '_blank' Скачать бланк заявления об отзыве согласия на зачисление
-      = render partial: 'add_attachment', locals: { message: 'Загрузите подписанное заявление об отказе от согласия на зачисление.', document_type: 'withdraw_application', document_id: 'entrant_application.budget_agr', entrant_application_id: 'entrant_application.id', ref_name: 'withdraw_application', id: 'withdraw_application'}
+      .(v-if="findAttachment(entrant_application.budget_agr, 'withdraw_application', true) && findAttachment(entrant_application.budget_agr, 'consent_application', false)")
+        p 
+          strong Шаг 1. Скачайте бланк
+        p
+          a v-bind:href = "'/api/attachments/' + findAttachment(entrant_application.budget_agr, 'withdraw_application', true).data_hash + '?filename=' + findAttachment(entrant_application.budget_agr, 'withdraw_application', true).filename" target = '_blank' Скачать бланк заявления об отзыве согласия на зачисление
+        p 
+          strong Шаг 2. Распечатайте и подпишите
+        = render partial: 'add_attachment', locals: { message: 'Загрузите подписанное заявление об отказе от согласия на зачисление.', document_type: 'withdraw_application', document_id: 'entrant_application.budget_agr', entrant_application_id: 'entrant_application.id', ref_name: 'withdraw_application', id: 'withdraw_application'}
+  .row
     .large-12.small-12.columns(v-if="withdrawCount() > 0")
       p 
         strong Поданные отзывы согласия на зачисление

@@ -1,4 +1,4 @@
-fieldset
+fieldset(v-if="entrant_application.campaign_id != '' && findCampaign(entrant_application.campaign_id).campaign_type_id == 1" v-bind:disabled = 'isDisabled')
   .row
     .large-12.small-12.columns
       p Имею особые права, определенные федеральным законодательством, для поступления в рамках особой квоты или для поступления с преимущественным правом при прочих равных условиях
@@ -50,12 +50,12 @@ fieldset
           ul.no-bullet
             li(v-for="attachment in entrant_application.attachments" v-if="attachment.document_type == 'benefit_document' && attachment.document_id == document.id")
                 a v-bind:href = "'/api/attachments/' + attachment.data_hash + '?filename=' + attachment.filename" target = '_blank' {{ attachment.filename }}
-    .row
+    .row v-if="entrant_application.status_id == 0"
       .button.tiny @click="addBenefitDocument" Указать данные дополнительного документа
       span &nbsp;
       .button.tiny(v-if="entrant_application.benefit_documents.length > 1" @click="deleteBenefitDocument") Удалить документ
 
-fieldset(v-if="entrant_application.campaign_id != '' && findCampaign(entrant_application.campaign_id).campaign_type_id == 1")
+fieldset(v-if="entrant_application.campaign_id != '' && findCampaign(entrant_application.campaign_id).campaign_type_id == 1" v-bind:disabled = 'isDisabled')
   .row
     .large-12.small-12.columns
       p Являюсь победителем/призером ЗАКЛЮЧИТЕЛЬНОГО этапа Всероссийской олимпиады школьников или победителем/призером олимпиад из перечня Минобрнауки за десятый и (или) одиннадцатый классы.
@@ -98,7 +98,7 @@ fieldset(v-if="entrant_application.campaign_id != '' && findCampaign(entrant_app
           ul.no-bullet
             li(v-for="attachment in entrant_application.attachments" v-if="attachment.document_type == 'olympic_document' && attachment.document_id == document.id")
                 a v-bind:href = "'/api/attachments/' + attachment.data_hash + '?filename=' + attachment.filename" target = '_blank' {{ attachment.filename }}
-    .row
+    .row v-if="entrant_application.status_id == 0"
       .button.tiny @click="addOlympicDocument" Указать данные дополнительного документа
       span &nbsp;
       .button.tiny(v-if="entrant_application.olympic_documents.length > 1" @click="deleteOlympicDocument") Удалить документ

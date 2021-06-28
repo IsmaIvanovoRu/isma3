@@ -2,6 +2,8 @@ fieldset
   legend Выбор условий поступления
   .(v-if="entrant_application.campaign_id != '' && findCampaign(entrant_application.campaign_id).campaign_type_id == 1")
     p Вы имеете право отметить любое количество конкурсов (в том числе все) из списка, представленного ниже. Каждый абитуриент, не имеющий высшего образования, может участвовать в общем конкурсе на каждую специальность и на бюджетной, и на внебюджетной основе. Лица, имеющие высшее образование могут поступать только на внебюджетной основе. Конкурсы по особой и целевой квотам становятся доступны только в том случае, если Вы заполнили соответствующие поля и прикрепили документы, подтверждающие право на участие в конкурсе по особой и/или целевой квоте.
+  . v-if = "findAttachment(entrant_application.id, 'entrant_application', false)"
+    strong Вы уже загрузили заявление о поступлении, поэтому после добавления нового конкурса Вам будет необходимо заново скачать бланк заявления, подписать его и загрузить на вкладке Заявления
   .(v-if="entrant_application.campaign_id != '' && findCampaign(entrant_application.campaign_id).campaign_type_id == 4") 
     p Вы имеете право выбрать две специальности для поступления, внутри которых Вы можете отметить любое количество конкурсов при наличии оснований для участия в них. Для участия в конкурсе в пределах квоты целевого приема необходимо заключить договор с заказчиком целевого обучения.
   .row
@@ -10,11 +12,11 @@ fieldset
         p = "{{ specialityName(admission_volume.direction_id) }}"
         .row(v-for="competitive_group in findCampaign(entrant_application.campaign_id).competitive_groups" v-if="competitive_group.direction_id == admission_volume.direction_id && isApplicable(competitive_group)")
           .large-1.small-1.columns
-            input.error(type="checkbox" v-bind:id="'competitive_group_' + competitive_group.id" v-bind:name="'competitive_groups[][id]'" v-bind:value="competitive_group.id" v-model="entrant_application.competitive_group_ids" v-on:change="sendData('competitive_group', entrant_application.competitive_group_ids)")
+            input.error(type="checkbox" v-bind:id="'competitive_group_' + competitive_group.id" v-bind:name="'competitive_groups[][id]'" v-bind:value="competitive_group.id" v-model="entrant_application.competitive_group_ids" v-on:change="sendData('competitive_group', entrant_application.competitive_group_ids)" v-bind:disabled == "findCompetitiveGroup(competitive_group.id)")
           .large-11.small-11.columns
             label(v-bind:for="competitive_group.id")
               span = "{{ competitive_group.name }} (количество мест: {{ competitive_group.number }})"
-fieldset
+fieldset(v-bind:disabled = 'isDisabled')
   legend Выбор вступительных испытаний
   .(v-if="entrant_application.campaign_id != '' && findCampaign(entrant_application.campaign_id).campaign_type_id == 1") 
     p Вступительные испытания, проводимые академией самостоятельно, имеют право сдавать ТОЛЬКО:
@@ -53,7 +55,7 @@ fieldset
             td(v-if="findCampaign(entrant_application.campaign_id).campaign_type_id == 4")
               = text_field_tag 'marks[][organization_uid]', nil, 'v-model.tirm': 'mark.organization_uid', 'v-on:change': "sendData('mark', mark, index)"
 
-fieldset
+fieldset(v-bind:disabled = 'isDisabled')
   legend Указать индивидуальные достижения
   .(v-if="entrant_application.campaign_id != '' && findCampaign(entrant_application.campaign_id).campaign_type_id == 1")
     p Необходимо подтвердить наличие индивидуального достижения, прикрепив копию соответствующего документа. 

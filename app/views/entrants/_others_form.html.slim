@@ -5,13 +5,13 @@ fieldset
     .large-12.small-12.columns
       = label_tag :address
         span Адрес проживания
-        = text_field_tag :address, nil, placeholder: 'Адрес (регион РФ, населенный пункт, улица, дом, квартира.)', 'v-model.trim': 'entrant_application.contact_information.address', class: 'error', 'v-on:change': "sendData('contact_information', entrant_application.contact_information)"
+        = text_field_tag :address, nil, placeholder: 'Адрес (регион РФ, населенный пункт, улица, дом, квартира.)', 'v-model.trim': 'entrant_application.contact_information.address', class: 'error', 'v-on:change': "sendData('contact_information', entrant_application.contact_information)", 'v-bind:disabled': 'isDisabled'
       small.error v-if="findErrorMessage('entrant_application.contact_information.address')" == "{{ findErrorMessage('entrant_application.contact_information.address') }}"
   .row
     .large-6.small-12.columns
       = label_tag :zip_code
         span Почтовый индекс
-        = number_field_tag :zip_code, nil, min: 0, max: 999999, placeholder: '000000', 'v-model.trim': 'entrant_application.contact_information.zip_code', class: 'error', 'v-on:change': "sendData('contact_information', entrant_application.contact_information)"
+        = number_field_tag :zip_code, nil, min: 0, max: 999999, placeholder: '000000', 'v-model.trim': 'entrant_application.contact_information.zip_code', class: 'error', 'v-on:change': "sendData('contact_information', entrant_application.contact_information)", 'v-bind:disabled': 'isDisabled'
       small.error v-if="findErrorMessage('entrant_application.contact_information.zip_code')" == "{{ findErrorMessage('entrant_application.contact_information.zip_code') }}"
     .large-6.small-12.columns
       = label_tag :email
@@ -28,31 +28,31 @@ fieldset
       .large-4.small-12.columns
         label
           span Вид документа
-        select.error#other_document_name(name="other_documents[][name]" v-model='document.name' v-if="entrant_application.campaign_id != '' && findCampaign(entrant_application.campaign_id).campaign_type_id == 4" v-on:change="sendData('otherDocument', document, index)")
+        select.error#other_document_name(name="other_documents[][name]" v-model='document.name' v-if="entrant_application.campaign_id != '' && findCampaign(entrant_application.campaign_id).campaign_type_id == 4" v-on:change="sendData('otherDocument', document, index)" v-bind:disabled='isDisabled')
           option(disabled value) Выберите вид документа
           option(v-for="other_document_type in api.dictionaries.other_document_types" v-bind:value="other_document_type") {{ other_document_type }}
-        = text_field_tag 'other_documents[][other_document_name]', nil, placeholder: 'Укажите название документа', 'v-model.trim': 'document.name', class: 'error', 'v-if': "entrant_application.campaign_id != '' && findCampaign(entrant_application.campaign_id).campaign_type_id == 1", 'v-on:change': "sendData('other_document_type', document, index)"
+        = text_field_tag 'other_documents[][other_document_name]', nil, placeholder: 'Укажите название документа', 'v-model.trim': 'document.name', class: 'error', 'v-if': "entrant_application.campaign_id != '' && findCampaign(entrant_application.campaign_id).campaign_type_id == 1", 'v-on:change': "sendData('other_document_type', document, index)", 'v-bind:disabled': 'isDisabled'
         small.error v-if="findErrorMessage('document.document_type')" == "{{ findErrorMessage('document.document_type') }}"
       .large-4.small-12.columns
         = label_tag :other_document_series
           span Серия документа
-          = text_field_tag 'other_documents[][other_document_series]', nil, placeholder: 'Укажите серию документа', 'v-model.trim': 'document.other_document_series', class: 'error', 'v-on:change': "sendData('other_document_type', document, index)"
+          = text_field_tag 'other_documents[][other_document_series]', nil, placeholder: 'Укажите серию документа', 'v-model.trim': 'document.other_document_series', class: 'error', 'v-on:change': "sendData('other_document_type', document, index)", 'v-bind:disabled': 'isDisabled'
         small.error v-if="findErrorMessage('document.other_document_series')" == "{{ findErrorMessage('document.other_document_series') }}"
       .large-4.small-12.columns
         = label_tag :other_document_number
           span Номер документа
-          = text_field_tag 'other_documents[][other_document_number]', nil, placeholder: 'Укажите номер документа', 'v-model.trim': 'document.other_document_number', class: 'error', 'v-on:change': "sendData('other_document_type', document, index)"
+          = text_field_tag 'other_documents[][other_document_number]', nil, placeholder: 'Укажите номер документа', 'v-model.trim': 'document.other_document_number', class: 'error', 'v-on:change': "sendData('other_document_type', document, index)", 'v-bind:disabled': 'isDisabled'
         small.error v-if="findErrorMessage('document.other_document_number')" == "{{ findErrorMessage('document.other_document_number') }}"
     .row
       .large-4.small-12.columns
         = label_tag :other_document_date
           span Дата выдачи документа
-          = date_field_tag 'other_documents[][other_document_date]', nil, placeholder: 'Дата выдачи документа', 'v-model.trim': 'document.other_document_date', class: 'error', 'v-on:change': "sendData('other_document', document, index)"
+          = date_field_tag 'other_documents[][other_document_date]', nil, placeholder: 'Дата выдачи документа', 'v-model.trim': 'document.other_document_date', class: 'error', 'v-on:change': "sendData('other_document', document, index)", 'v-bind:disabled': 'isDisabled'
         small.error v-if="findErrorMessage('document.other_document_date')" == "{{ findErrorMessage('document.other_document_date') }}"
       .large-8.small-12.columns
         = label_tag :other_document_issuer
           span Кем выдан документ
-          = text_field_tag 'other_documents[][other_document_issuer]', nil, placeholder: 'Кем выдан документ', 'v-model.trim': 'document.other_document_issuer', class: 'error', 'v-on:change': "sendData('other_document', document, index)"
+          = text_field_tag 'other_documents[][other_document_issuer]', nil, placeholder: 'Кем выдан документ', 'v-model.trim': 'document.other_document_issuer', class: 'error', 'v-on:change': "sendData('other_document', document, index)", 'v-bind:disabled': 'isDisabled'
         small.error v-if="findErrorMessage('document.other_document_issuer')" == "{{ findErrorMessage('document.other_document_issuer') }}"
     .row(v-if="document.id")
       .large-12.small-12.columns
@@ -64,7 +64,7 @@ fieldset
         ul.no-bullet
           li(v-for="attachment in entrant_application.attachments" v-if="attachment.document_type == 'other_document' && attachment.document_id == document.id")
               a v-bind:href = "'/api/attachments/' + attachment.data_hash + '?filename=' + attachment.filename" target = '_blank' {{ attachment.filename }}
-  .row
+  .row v-if="entrant_application.status_id == 0"
     .button.tiny @click="addOtherDocument" Добавить документ
     span &nbsp;
     .button.tiny(v-if="entrant_application.other_documents.length > 1" @click="deleteOtherDocument") Удалить документ
@@ -72,21 +72,21 @@ fieldset
   legend Выбор иностранного языка, желаемого для изучения в вузе
   .row
     .large-12.small-12.columns
-      select.error#language(name="language" v-model='entrant_application.language' v-on:change="sendData('language', entrant_application.language)")
+      select.error#language(name="language" v-model='entrant_application.language' v-on:change="sendData('language', entrant_application.language)" v-bind:disabled='isDisabled')
         option(disabled value) Выберите язык
         option(v-for="language in api.dictionaries.languages" v-bind:value="language") {{ language }}
 fieldset
   .row
     .large-12.small-12.columns
       p Пункт "Нуждаюсь в предоставлении общежития" необходимо отметить, если Вы в процессе обучения собираетесь проживать в общежитии академии. Если Вам требуется общежитие на время сдачи внутренних вступительных испытаний, галочку в данном поле Вы не ставите - этот вопрос решается только при личном обращении в приемную комиссию. Количество мест в общежитиях, предоставляемых поступившим на первый курс - 100.
-      input#need_hostel(type="checkbox" name="need_hostel" v-model.trim="entrant_application.need_hostel" v-on:change="sendData('need_hostel', entrant_application.need_hostel)")
+      input#need_hostel(type="checkbox" name="need_hostel" v-model.trim="entrant_application.need_hostel" v-on:change="sendData('need_hostel', entrant_application.need_hostel)" v-bind:disabled='isDisabled')
       label(for='need_hostel')
         span Нуждаюсь в предоставлении общежития на период обучения
   .row(v-if="entrant_application.campaign_id != '' && findCampaign(entrant_application.campaign_id).campaign_type_id == 1")
     .large-12.small-12.columns
-      input#special_entrant(type="checkbox" name="special_entrant" v-model.trim="entrant_application.special_entrant" v-on:change="sendData('special_entrant', entrant_application.special_entrant)")
+      input#special_entrant(type="checkbox" name="special_entrant" v-model.trim="entrant_application.special_entrant" v-on:change="sendData('special_entrant', entrant_application.special_entrant)" v-bind:disabled='isDisabled')
       label(for='special_entrant')
         span Нуждаюсь в предоставлении особых условий при прохождении вступительных испытаний
       p Если вы отметили этот пункт, необходимо прикрепить копию документа, подтверждающего инвалидность или ограниченные возможности здоровья, требующие создания специальных условий на вкладке Льготы.
     .large-12.small-12.columns(v-if="entrant_application.special_entrant")
-      = text_area_tag :special_conditions, nil, placeholder: 'Укажите особые условия', 'v-model.trim':'entrant_application.special_conditions', 'v-on:change': "sendData('special_conditions', entrant_application.special_conditions)"
+      = text_area_tag :special_conditions, nil, placeholder: 'Укажите особые условия', 'v-model.trim':'entrant_application.special_conditions', 'v-on:change': "sendData('special_conditions', entrant_application.special_conditions)", 'v-bind:disabled': 'isDisabled'

@@ -1,4 +1,4 @@
-fieldset
+fieldset(v-bind:disabled = 'isDisabled')
   legend Персональные данные
   p Фамилию, имя и отчество следует писать в именительном падеже в строгом соответствии с паспортными данными. Особое внимание стоит обратить на наличие или отсутствие буквы Ё, вариантное написание имен типа НаталЬЯ/НаталИЯ и т.д. При наличии составных имени, фамилии или отчества также необходимо ориентироваться на написание в паспорте - поставить пробел или дефис. Перед дефисом и после него пробел не ставится.
   .row
@@ -49,42 +49,42 @@ fieldset
       .large-4.small-12.columns
         label
           span Вид документа
-        select.error#identity_document_type(name="identity_documents[][identity_document_type]" v-model='document.identity_document_type' v-on:change="sendData('identity_document', document, index)")
+        select.error#identity_document_type(name="identity_documents[][identity_document_type]" v-model='document.identity_document_type' v-on:change="sendData('identity_document', document, index)" v-bind:disabled = 'isDisabled')
           option(disabled value) Выберите вид документа
           option(v-for="identity_document_type in api.dictionaries.identity_document_types" v-bind:value="identity_document_type.id") {{ identity_document_type.name }}
       .large-4.small-12.columns
         = label_tag :identity_document_series
           span Серия документа
-          = text_field_tag 'identity_documents[][identity_document_series]', nil, placeholder: 'Укажите серию документа', 'v-model.trim': 'document.identity_document_series', class: 'error', 'v-on:change': "sendData('identity_document', document, index)"
+          = text_field_tag 'identity_documents[][identity_document_series]', nil, placeholder: 'Укажите серию документа', 'v-model.trim': 'document.identity_document_series', class: 'error', 'v-on:change': "sendData('identity_document', document, index)", 'v-bind:disabled': 'isDisabled'
       .large-4.small-12.columns
         = label_tag :identity_document_number
           span Номер документа
-          = text_field_tag 'identity_documents[][identity_document_number]', nil, placeholder: 'Укажите номер документа', 'v-model.trim': 'document.identity_document_number', class: 'error', 'v-on:change': "sendData('identity_document', document, index)"
+          = text_field_tag 'identity_documents[][identity_document_number]', nil, placeholder: 'Укажите номер документа', 'v-model.trim': 'document.identity_document_number', class: 'error', 'v-on:change': "sendData('identity_document', document, index)", 'v-bind:disabled': 'isDisabled'
     .row
       .large-4.small-12.columns
         = label_tag :identity_document_date
           span Дата выдачи документа
-          = date_field_tag 'identity_documents[][identity_document_date]', nil, placeholder: 'Дата выдачи документа', 'v-model.trim': 'document.identity_document_date', class: 'error', 'v-on:change': "sendData('identity_document', document, index)"
+          = date_field_tag 'identity_documents[][identity_document_date]', nil, placeholder: 'Дата выдачи документа', 'v-model.trim': 'document.identity_document_date', class: 'error', 'v-on:change': "sendData('identity_document', document, index)", 'v-bind:disabled': 'isDisabled'
         small.error v-if="checkIdentityDocumentDate" == "{{ checkIdentityDocumentDate }}"
       .large-8.small-12.columns(v-show="entrant_application.identity_documents.indexOf(document) < 1")
         = label_tag :identity_document_issuer
           span Кем выдан документ
-          = text_field_tag 'identity_documents[][identity_document_issuer]', nil, placeholder: 'Укажите, кто выдал документ', 'v-model.trim': 'document.identity_document_issuer', class: 'error', 'v-on:change': "sendData('identity_document', document, index)"
+          = text_field_tag 'identity_documents[][identity_document_issuer]', nil, placeholder: 'Укажите, кто выдал документ', 'v-model.trim': 'document.identity_document_issuer', class: 'error', 'v-on:change': "sendData('identity_document', document, index)", 'v-bind:disabled': 'isDisabled'
     .row
       .large-4.small-12.columns(v-show="entrant_application.identity_documents.indexOf(document) > 0")
         = label_tag :alt_entrant_last_name
           span Прежняя фамилия
-          = text_field_tag 'identity_documents[][alt_entrant_last_name]', nil, placeholder: 'Как в паспорте, если меняли', 'v-model.trim': 'document.alt_entrant_last_name', class: 'error', 'v-on:change': "sendData('identity_document', document, index)"
+          = text_field_tag 'identity_documents[][alt_entrant_last_name]', nil, placeholder: 'Как в паспорте, если меняли', 'v-model.trim': 'document.alt_entrant_last_name', class: 'error', 'v-on:change': "sendData('identity_document', document, index)", 'v-bind:disabled': 'isDisabled'
         small.error v-if="checkEntrantLastName" == "{{ checkEntrantLastName }}"
       .large-4.small-12.columns(v-show="entrant_application.identity_documents.indexOf(document) > 0")
         = label_tag :alt_entrant_first_name
           span Прежнее имя
-          = text_field_tag 'identity_documents[][alt_entrant_first_name]', nil, placeholder: 'Как в паспорте, если меняли', 'v-model.trim': 'document.alt_entrant_first_name', class: 'error', 'v-on:change': "sendData('identity_document', document, index)"
+          = text_field_tag 'identity_documents[][alt_entrant_first_name]', nil, placeholder: 'Как в паспорте, если меняли', 'v-model.trim': 'document.alt_entrant_first_name', class: 'error', 'v-on:change': "sendData('identity_document', document, index)", 'v-bind:disabled': 'isDisabled'
         small.error v-if="checkEntrantFirstName" == "{{ checkEntrantFirstName }}"
       .large-4.small-12.columns(v-show="entrant_application.identity_documents.indexOf(document) > 0")
         = label_tag :alt_entrant_middle_name
           span Прежнее отчество
-          = text_field_tag 'identity_documents[][alt_entrant_middle_name]', nil, placeholder: 'Как в паспорте, если есть', 'v-model.trim': 'document.alt_entrant_middle_name', class: 'error', 'v-on:change': "sendData('identity_document', document, index)"
+          = text_field_tag 'identity_documents[][alt_entrant_middle_name]', nil, placeholder: 'Как в паспорте, если есть', 'v-model.trim': 'document.alt_entrant_middle_name', class: 'error', 'v-on:change': "sendData('identity_document', document, index)", 'v-bind:disabled': 'isDisabled'
         small.error v-if="checkEntrantMiddleName" == "{{ checkEntrantMiddleName }}"
     .row(v-if="document.id")
       .large-12.small-12.columns
@@ -94,7 +94,7 @@ fieldset
       .large-12.small-12.columns
         p(v-if="attachment.document_type == 'identity_document' && attachment.document_id == document.id")
           a v-bind:href = "'/api/attachments/' + attachment.data_hash + '?filename=' + attachment.filename" target = '_blank' {{ attachment.filename }}
-  .row
+  .row v-if="entrant_application.status_id == 0"
     .button.tiny @click="addIdentityDocument" Указать данные дополнительного документа
     span &nbsp;
     .button.tiny(v-if="entrant_application.identity_documents.length > 1" @click="deleteIdentityDocument") Удалить документ
@@ -105,26 +105,26 @@ fieldset
     .large-6.small-12.columns
       label
         span Вид документа
-      select.education_document_type(name="education_document[education_document_type]" v-model='entrant_application.education_document.education_document_type' v-on:change = "sendData('education_document', entrant_application.education_document)")
+      select.education_document_type(name="education_document[education_document_type]" v-model='entrant_application.education_document.education_document_type' v-on:change = "sendData('education_document', entrant_application.education_document)" v-bind:disabled = 'isDisabled')
         option(disabled value) Выберите вид документа
         option(v-for="education_document_type in api.dictionaries.education_document_types" v-bind:value="education_document_type.id") {{ education_document_type.name }}
       small.error v-if="findErrorMessage('education_document_type')" == "{{ findErrorMessage('education_document_type') }}"
     .large-6.small-12.columns
       = label_tag :education_document_number
         span Серия и номер документа
-        = text_field_tag 'education_document[education_document_number]', nil, placeholder: 'Укажите серию и номер документа', 'v-model.trim': 'entrant_application.education_document.education_document_number', class: 'error', 'v-on:change': "sendData('education_document', entrant_application.education_document)"
+        = text_field_tag 'education_document[education_document_number]', nil, placeholder: 'Укажите серию и номер документа', 'v-model.trim': 'entrant_application.education_document.education_document_number', class: 'error', 'v-on:change': "sendData('education_document', entrant_application.education_document)", 'v-bind:disabled': 'isDisabled'
       small.error v-if="findErrorMessage('education_document_number')" == "{{ findErrorMessage('education_document_number') }}"
   .row
     .large-4.small-12.columns
       = label_tag :education_document_date
         span Дата выдачи документа
-        = date_field_tag 'education_document[education_document_date]', nil, placeholder: 'Дата выдачи документа', 'v-model.trim': 'entrant_application.education_document.education_document_date', class: 'error', 'v-on:change': "sendData('education_document', entrant_application.education_document)"
+        = date_field_tag 'education_document[education_document_date]', nil, placeholder: 'Дата выдачи документа', 'v-model.trim': 'entrant_application.education_document.education_document_date', class: 'error', 'v-on:change': "sendData('education_document', entrant_application.education_document)", 'v-bind:disabled': 'isDisabled'
       small.error v-if="checkEducationDocumentDate" == "{{ checkEducationDocumentDate }}"
       small.error v-if="findErrorMessage('education_document_date')" == "{{ findErrorMessage('education_document_date') }}"
     .large-8.small-12.columns
       = label_tag :education_document_issuer
         span Кем выдан документ
-        = text_field_tag 'education_document[education_document_issuer]', nil, placeholder: 'Укажите, кто выдал документ', 'v-model.trim': 'entrant_application.education_document.education_document_issuer', class: 'error', 'v-on:change': "sendData('education_document', entrant_application.education_document)"
+        = text_field_tag 'education_document[education_document_issuer]', nil, placeholder: 'Укажите, кто выдал документ', 'v-model.trim': 'entrant_application.education_document.education_document_issuer', class: 'error', 'v-on:change': "sendData('education_document', entrant_application.education_document)", 'v-bind:disabled': 'isDisabled'
       small.error v-if="findErrorMessage('education_document_issuer')" == "{{ findErrorMessage('education_document_issuer') }}"
     .large-4.small-12.columns(v-if="entrant_application.campaign_id != '' && findCampaign(entrant_application.campaign_id).campaign_type_id == 4")
       label
@@ -146,13 +146,13 @@ fieldset
     .large-4.small-12.columns
       = label_tag :snils
         span Укажите только цифры без дефисов и пробелов
-        = text_field_tag :snils, nil, 'v-model': 'entrant_application.snils', class: 'error', maxlength: 11, placeholder: '00000000000', 'v-on:change': "sendData('snils', entrant_application.snils)"
+        = text_field_tag :snils, nil, 'v-model': 'entrant_application.snils', class: 'error', maxlength: 11, placeholder: '00000000000', 'v-on:change': "sendData('snils', entrant_application.snils)", 'v-bind:disabled': 'isDisabled'
       small.error v-if="findErrorMessage('snils')" == "{{ findErrorMessage('snils') }}"
     .large-7.small-12.columns(v-if="entrant_application.snils == ''")
       = label_tag :snils_absent
         span Подтверждаю отсутствие страхового свидетельства обязательного пенсионного страхования (СНИЛС)
     .large-1.small-12.columns(v-if="entrant_application.snils == ''")
-      input#snils(type="checkbox" name="snils" v-bind:value="true" v-model="entrant_application.snils_absent" v-on:change="sendData('snils_absent', entrant_application.snils_absent)")
+      input#snils(type="checkbox" name="snils" v-bind:value="true" v-model="entrant_application.snils_absent" v-on:change="sendData('snils_absent', entrant_application.snils_absent)" v-bind:disabled = 'isDisabled')
   .row(v-if="entrant_application.snils")
     .large-12.small-12.columns
       br

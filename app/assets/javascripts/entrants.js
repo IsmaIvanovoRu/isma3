@@ -363,6 +363,14 @@ var entrants = new Vue({
     checkContactInformationPhone: function() {
       if(this.entrant_application.contact_information.phone == '') return 'Необходимо указать контактный телефон';
     },
+    isDisabled: function() {
+      if(this.entrant_application.status_id == 0) {
+        return false;
+      }
+      else {
+        return true;
+      }
+    },
   },
   methods: {
     consentCount: function() {
@@ -485,6 +493,8 @@ var entrants = new Vue({
           };
           if(sub == 'competitive_group') {
             this.entrant_application.competitive_groups = response.data.competitive_groups;
+            this.entrant_application.status_id = response.data.status_id;
+            this.entrant_application.status = response.data.status;
           };
           if(sub == 'achievement') {
             this.entrant_application.achievements = response.data.achievements;
@@ -831,10 +841,10 @@ var entrants = new Vue({
       this.checkForm(tab);
       if(this.errors.length == 0){
         this.api.current_tab = tab;
-        if(this.api.current_tab == 'applications' && this.entrant_application.status_id == 0){
+        if(this.api.current_tab == 'applications' && this.entrant_application.status_id < 4){
           this.generateTemplates();
         }
-        if(this.api.current_tab == 'start'){
+        if(this.api.current_tab == 'start' && this.entrant_application.status_id == 0){
           this.sendData('status_id', this.entrant_application.status_id);
         }
       };
