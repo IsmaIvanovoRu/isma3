@@ -21,7 +21,7 @@ var entrants = new Vue({
   },
   computed: {
     isNextDisabled: function() {
-      if(this.email_confirmed && this.attachments.length > 0 && this.hash) {
+      if(this.email_confirmed && this.hash) {
         return false
       }
       else {
@@ -58,7 +58,6 @@ var entrants = new Vue({
     },
     checkForm: function(e) {
       this.errors = [];
-      if(this.attachments == []) this.errors.push({element: 'attachments', message: 'Необходимо прикрепить сканы согласий на обработку персональных данных', level: 'red'});
       if(this.email == '') this.errors.push({element: 'email', message: 'Необходимо указать адрес электронной почты', level: 'red'});
       if(this.campaign_id == '') this.errors.push({element: 'campaign_id', message: 'Необходимо выбрать приемную кампанию', level: 'red'});
       if(this.errors.length == 0) return true;
@@ -87,38 +86,6 @@ var entrants = new Vue({
         }
       });
       return message;
-    },
-    handleFiles: function(){
-      this.files = this.$refs.data_processing_consent.files;
-      this.dataset = this.$refs.data_processing_consent.dataset
-      let formData = new FormData();
-      for( var i = 0; i < this.files.length; i++ ){
-        let file = this.files[i];
-        formData.append('entrant_application_id', this.dataset.entrantApplicationId);
-        formData.append('document_type', this.dataset.documentType);
-        formData.append('document_id', this.dataset.entrantApplicationId);
-        formData.append('files[]', file);
-      }
-      axios
-      .post( '/api/attachments',
-        formData,
-        {
-          headers: {
-              'Content-Type': 'multipart/form-data'
-          }
-        }
-      )
-      .then(
-        response => {
-        this.attachments = response.data.attachments;
-        console.log(response.data.message);
-        this.$refs.data_processing_consent.value = null
-        this.files = '';
-        this.dataset = '';
-      })
-      .catch(function(){
-        console.log('FAILURE!!');
-      });
     },
     confirmEmail: function () {
       axios

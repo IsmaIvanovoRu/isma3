@@ -1,3 +1,29 @@
+fieldset
+  .row
+    .large-12.small-12.columns
+      p Непосредственно перед заполнением анкеты поступающего, необходимо выполнить два формальных шага - скачать и заполнить согласие на обработку и распространение персональных данных и подтвердить адрес электронной почты, который будет использован для взаимодействия с Вами сотрудников приемной комиссии.
+      p
+        span Если Вам 
+        strong НЕТ 
+        span 18 лет:
+        br
+        =link_to ' Бланк согласия на обработку и распространние персональных данных', '/attachments/61367', target: '_blank'
+      p
+        span Если Вам 
+        strong ЕСТЬ 
+        span 18 лет:
+        br
+        =link_to ' Бланк согласия на обработку и распространние персональных данных', '/attachments/61368', target: '_blank'
+fieldset(v-if="entrant_application.id")
+  legend Прикрепите копию согласия на обработку персональных данных
+  .row
+    .large-12.small-12.columns
+      = render partial: 'add_attachment', locals: {document_type: 'data_processing_consent', message: 'Можно загрузить один или несколько файлов', document_id: 'entrant_application.id', entrant_application_id: 'entrant_application.id', ref_name: 'data_processing_consent', id: 'data_processing_consent'}
+  .row(v-for="attachment in entrant_application.attachments")
+    .large-12.small-12.columns
+      p(v-if="attachment.document_type == 'data_processing_consent'")
+        a v-bind:href = "'/api/attachments/' + attachment.data_hash + '?filename=' + attachment.filename" target = '_blank' {{ attachment.filename }}
+
 fieldset(v-bind:disabled = 'isDisabled')
   legend Персональные данные
   p Фамилию, имя и отчество следует писать в именительном падеже в строгом соответствии с паспортными данными. Особое внимание стоит обратить на наличие или отсутствие буквы Ё, вариантное написание имен типа НаталЬЯ/НаталИЯ и т.д. При наличии составных имени, фамилии или отчества также необходимо ориентироваться на написание в паспорте - поставить пробел или дефис. Перед дефисом и после него пробел не ставится.

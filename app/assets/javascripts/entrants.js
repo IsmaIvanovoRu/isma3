@@ -516,6 +516,10 @@ var entrants = new Vue({
         this.files = this.$refs.snils.files;
         this.dataset = this.$refs.snils.dataset;
       }
+      if(this.$refs.data_processing_consent && this.$refs.data_processing_consent.files.length > 0) {
+        this.files = this.$refs.data_processing_consent.files;
+        this.dataset = this.$refs.data_processing_consent.dataset;
+      }
       if(this.$refs.entrant_application && this.$refs.entrant_application.files.length > 0) {
         this.files = this.$refs.entrant_application.files;
         this.dataset = this.$refs.entrant_application.dataset;
@@ -616,6 +620,9 @@ var entrants = new Vue({
         if(this.dataset.documentType == 'snils') {
           this.$refs.snils.value = null
         }
+        if(this.dataset.documentType == 'data_processing_consent') {
+          this.$refs.data_processing_consent.value = null
+        }
         if(this.dataset.documentType == 'entrant_application') {
           this.$refs.entrant_application.value = null
         }
@@ -693,6 +700,7 @@ var entrants = new Vue({
     checkForm: function(tab) {
       this.errors = [];
       if(tab == 'benefits'){
+        if(!this.findAttachment(this.entrant_application.id, 'data_processing_consent', false)) this.errors.push({element: 'data_processing_consent', message: 'Необходимо прикрепить сканы согласий на обработку и распространение персональных данных', level: 'red'});
         if(this.entrant_application.personal.entrant_last_name == '') this.errors.push({element: 'entrant_last_name', message: 'Необходимо указать фамилию', level: 'red'});
         if(this.entrant_application.personal.entrant_first_name == '') this.errors.push({element: 'entrant_first_name', message: 'Необходимо указать имя', level: 'red'});
         if(this.entrant_application.personal.birth_date == '') this.errors.push({element: 'birth_date', message: 'Необходимо указать дату рождения', level: 'red'});
