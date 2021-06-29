@@ -4,6 +4,12 @@ fieldset
       .label.info(v-if="entrant_application.status_id == 2") Ваше обращение зарегистрировано и находится на рассмотрении
       .label.success(v-if="entrant_application.status_id == 4") Ваше заявление допущено к участию в конкурсе. Номер личного дела {{entrant_application.application_number}}.
       .label.alert(v-if="entrant_application.status_id == 6") Ваше заявление отзвано
+  .row
+    .large-12.small-12.columns
+      br
+      =link_to 'Список лиц, подавших документы', '/storage/data/entrants/current_entrants_spec.html', target: '_blank'
+    .large-12.small-12.columns
+      p= "(обновляется не реже, чем раз в сутки)"
   .row(v-if="entrant_application.comment")
     .large-12.small-12.columns
       br
@@ -103,6 +109,3 @@ fieldset
   
 /fieldset
 /  legend Поле для переписки с приемной комиссией
-  
-fieldset
-  =link_to 'Список лиц, подавших документы', '/storage/data/entrants/current_entrants_spec.html', target: '_blank'
