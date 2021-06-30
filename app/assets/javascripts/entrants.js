@@ -246,16 +246,6 @@ var entrants = new Vue({
           name: ''
         }
       ],
-      competitive_groups: [
-        {
-          id: null,
-          name: '',
-          education_level_id: null,
-          education_source_id: null,
-          education_form_id: null,
-          direction_id: null
-        }
-      ],
       competitive_group_ids: [],
       target_contracts: [
         {
@@ -699,7 +689,7 @@ var entrants = new Vue({
     },
     checkForm: function(tab) {
       this.errors = [];
-      if(tab == 'benefits'){
+      if(tab == 'benefits' || tab == 'target' || tab == 'competitions' || tab == 'others' || tab == 'applications'){
         if(!this.findAttachment(this.entrant_application.id, 'data_processing_consent', false)) this.errors.push({element: 'data_processing_consent', message: 'Необходимо прикрепить сканы согласий на обработку и распространение персональных данных', level: 'red'});
         if(this.entrant_application.personal.entrant_last_name == '') this.errors.push({element: 'entrant_last_name', message: 'Необходимо указать фамилию', level: 'red'});
         if(this.entrant_application.personal.entrant_first_name == '') this.errors.push({element: 'entrant_first_name', message: 'Необходимо указать имя', level: 'red'});
@@ -729,7 +719,7 @@ var entrants = new Vue({
         if(this.entrant_application.snils == '' && !this.entrant_application.snils_absent) this.errors.push({element: 'snils', message: 'Необходимо указать номер СНИЛС, либо отметить, что он отсутствует', level: 'red'});
         if(!this.findAttachment(this.entrant_application.id, 'snils', false) && !this.entrant_application.snils_absent) this.errors.push({element: 'snils_attachment', message: 'Необходимо прикрепить копию СНИЛСа', level: 'red'});
       }
-      if(tab == 'target'){
+      if(tab == 'target' || tab == 'others' || tab == 'applications'){
         if(this.entrant_application.benefit_documents.find(function(element) {
           if(element.benefit_document_type == '' && entrants.entrant_application.benefit){
             entrants.errors.push({element: 'benefit_document_type', message: 'Необходимо выбрать тип документа, подтверждающего льготу', level: 'red'});
@@ -761,7 +751,7 @@ var entrants = new Vue({
           if(!entrants.findAttachment(element.id, 'olympic_document', false) && entrants.entrant_application.olympionic) entrants.errors.push({element: 'olympic_document', message: 'Необходимо прикрепить копию диплома олимпиады', level: 'red'});
         }));
       }
-      if(tab == 'others'){
+      if(tab == 'others' || tab == 'applications'){
         if(this.entrant_application.competitive_group_ids.length == 0) this.errors.push({element: 'competitive_group_ids', message: 'Необходимо отметить участие хотя бы в одном конкурсе', level: 'red'});
         if(this.entrant_application.marks.find(function(element) {
           if(!element.form){

@@ -9,10 +9,11 @@ fieldset
   .row
     .large-12.small-12.columns
       .(v-for="admission_volume in findCampaign(entrant_application.campaign_id).admission_volumes")
-        p = "{{ specialityName(admission_volume.direction_id) }}"
+        p 
+          strong= "{{ specialityName(admission_volume.direction_id) }}"
         .row(v-for="competitive_group in findCampaign(entrant_application.campaign_id).competitive_groups" v-if="competitive_group.direction_id == admission_volume.direction_id && isApplicable(competitive_group)")
           .large-1.small-1.columns
-            input.error(type="checkbox" v-bind:id="'competitive_group_' + competitive_group.id" v-bind:name="'competitive_groups[][id]'" v-bind:value="competitive_group.id" v-model="entrant_application.competitive_group_ids" v-on:change="sendData('competitive_group', entrant_application.competitive_group_ids)" v-bind:disabled == "findCompetitiveGroup(competitive_group.id)")
+            input.error(type="checkbox" v-bind:id="'competitive_group_' + competitive_group.id" v-bind:name="'competitive_groups[][id]'" v-bind:value="competitive_group.id" v-model="entrant_application.competitive_group_ids" v-on:change="sendData('competitive_group', entrant_application.competitive_group_ids)" v-bind:disabled == "findCompetitiveGroup(competitive_group.id) && entrant_application.status_id != 0")
           .large-11.small-11.columns
             label(v-bind:for="competitive_group.id")
               span = "{{ competitive_group.name }} (количество мест: {{ competitive_group.number }})"
@@ -27,7 +28,7 @@ fieldset(v-bind:disabled = 'isDisabled')
       li по тем предметам, по которым поступающий не сдавал ЕГЭ в текущем календарном году - если поступающий получил документ о среднем общем образовании в иностранной организации.
     p Результаты ЕГЭ будут подгружаться в нашу систему автоматически из Федеральной базы.
 
-  p(v-if="entrant_application.campaign_id != '' && findCampaign(entrant_application.campaign_id).campaign_type_id == 4") В качестве вступительных испытаний указывается результат аккредитационного теста или экзамен, проводимый на базе ИвГМА. Выбранную форму (а также место сдачи теста) необходимо указывать во всех вузах, куда Вы собираетесь подавать документы. Министерство здравоохранения отслеживает, что поступающий указывает в качестве вступительного испытания.
+  p(v-if="entrant_application.campaign_id != '' && findCampaign(entrant_application.campaign_id).campaign_type_id == 4") В качестве вступительных испытаний указывается результат аккредитационного теста (Аккредитация) или вступительное испытание (ВИ), проводимое на базе ИвГМА. Выбранную форму (а также место сдачи теста) необходимо указывать ОДИНАКОВО во всех вузах, куда Вы собираетесь подавать документы. Министерство здравоохранения отслеживает, что поступающий указывает в качестве вступительного испытания.
   .row
     .large-12.small-12.columns
       table
@@ -45,7 +46,7 @@ fieldset(v-bind:disabled = 'isDisabled')
               .(v-if="findCampaign(entrant_application.campaign_id).campaign_type_id == 1")
                 = select_tag 'marks[][form]', options_for_select(['ЕГЭ', 'ВИ']), include_blank: '', 'v-model.trim': 'mark.form', 'v-on:change': "sendData('mark', mark, index)"
               .(v-if="findCampaign(entrant_application.campaign_id).campaign_type_id == 4")
-                = select_tag 'marks[][form]', options_for_select(['Аккредитация', 'Экзамен']), include_blank: '', 'v-model.trim': 'mark.form', 'v-on:change': "sendData('mark', mark, index)"
+                = select_tag 'marks[][form]', options_for_select(['Аккредитация', 'ВИ']), include_blank: '', 'v-model.trim': 'mark.form', 'v-on:change': "sendData('mark', mark, index)"
               small.error v-if="findErrorMessage('mark.form')" == "{{ findErrorMessage('mark.form') }}"
             td(v-show="findCampaign(entrant_application.campaign_id).campaign_type_id == 4")
               span(v-show="mark.form == 'Аккредитация'")= number_field_tag 'marks[][value]', nil, 'v-bind:min': 'mark.minScore', max: 100, 'v-model.trim': 'mark.value'

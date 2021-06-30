@@ -68,7 +68,7 @@ fieldset
     .button.tiny @click="addOtherDocument" Добавить документ
     span &nbsp;
     .button.tiny(v-if="entrant_application.other_documents.length > 1" @click="deleteOtherDocument") Удалить документ
-fieldset
+fieldset(v-if="findCampaign(entrant_application.campaign_id).campaign_type_id == 1")
   legend Выбор иностранного языка, желаемого для изучения в вузе
   .row
     .large-12.small-12.columns

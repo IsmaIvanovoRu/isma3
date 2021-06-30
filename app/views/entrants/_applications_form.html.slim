@@ -1,16 +1,15 @@
 fieldset
   legend Заявление о поступлении
-  .(v-if="entrant_application.campaign_id != '' && findCampaign(entrant_application.campaign_id).campaign_type_id == 1")
-    p Вы заполнили все необходимые поля. Вам сгенерирован бланк заявления на поступление в ИвГМА. Необходимо скачать бланк сгенерированного Вам заявления, распечатать его, проверить, подписать, отсканировать или сфотографировать и прикрепить в соответствующее поле. Если Вы считаете, что Вы все заполнили и прикрепили правильно - нажмите кнопку "Отправить заявление" внизу страницы. После этого приемная комиссия рассмотрит Ваши документы и допустит Вас к участию в конкурсе или напишет замечание.
-    .large-12.small-12.columns(v-if="entrant_application.attachments.length > 0")
-      ul.no-bullet
-        li(v-for="attachment in entrant_application.attachments" v-if="attachment.document_type == 'entrant_application' && attachment.template")
-          a v-bind:href = "'/api/attachments/' + attachment.data_hash + '?filename=' + attachment.filename" target = '_blank' Скачать бланк заявления о поступлении
-    .large-12.small-12.columns
-      = render partial: 'add_attachment', locals: { message: 'Прикрепите подписанное заявление о поступлении.', document_type: 'entrant_application', document_id: 'entrant_application.id', entrant_application_id: 'entrant_application.id', ref_name: 'entrant_application', id: 'entrant_application'}
-    .large-12.small-12.columns(v-if="entrant_application.attachments.length > 0")
-      h3 Прикрепленные файлы
-      ul.no-bullet
-        li(v-for="attachment in entrant_application.attachments" v-if="attachment.document_type == 'entrant_application' && !attachment.template")
-          span Загружено&nbsp;
-          a v-bind:href = "'/api/attachments/' + attachment.data_hash + '?filename=' + attachment.filename" target = '_blank' {{ attachment.filename }}
+  p Вы заполнили все необходимые поля. Вам сгенерирован бланк заявления на поступление в ИвГМА. Необходимо скачать бланк сгенерированного Вам заявления, распечатать его, проверить, подписать, отсканировать или сфотографировать и прикрепить в соответствующее поле. Если Вы считаете, что Вы все заполнили и прикрепили правильно - нажмите кнопку "Отправить заявление" внизу страницы. После этого приемная комиссия рассмотрит Ваши документы и допустит Вас к участию в конкурсе или напишет замечание.
+  .large-12.small-12.columns(v-if="entrant_application.attachments.length > 0")
+    ul.no-bullet
+      li(v-for="attachment in entrant_application.attachments" v-if="attachment.document_type == 'entrant_application' && attachment.template")
+        a v-bind:href = "'/api/attachments/' + attachment.data_hash + '?filename=' + attachment.filename" target = '_blank' Скачать бланк заявления о поступлении
+  .large-12.small-12.columns
+    = render partial: 'add_attachment', locals: { message: 'Прикрепите подписанное заявление о поступлении.', document_type: 'entrant_application', document_id: 'entrant_application.id', entrant_application_id: 'entrant_application.id', ref_name: 'entrant_application', id: 'entrant_application'}
+  .large-12.small-12.columns(v-if="entrant_application.attachments.length > 0")
+    h3 Прикрепленные файлы
+    ul.no-bullet
+      li(v-for="attachment in entrant_application.attachments" v-if="attachment.document_type == 'entrant_application' && !attachment.template")
+        span Загружено&nbsp;
+        a v-bind:href = "'/api/attachments/' + attachment.data_hash + '?filename=' + attachment.filename" target = '_blank' {{ attachment.filename }}
