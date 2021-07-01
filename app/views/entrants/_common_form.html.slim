@@ -147,8 +147,7 @@ fieldset
         = date_field_tag 'education_document[education_document_date]', nil, placeholder: 'Дата выдачи документа', 'v-model.trim': 'entrant_application.education_document.education_document_date', class: 'error', 'v-on:change': "sendData('education_document', entrant_application.education_document)", 'v-bind:disabled': 'isDisabled'
       small.error v-if="checkEducationDocumentDate" == "{{ checkEducationDocumentDate }}"
       small.error v-if="findErrorMessage('education_document_date')" == "{{ findErrorMessage('education_document_date') }}"
-    .large-8.small-12.columns(v-if="findCampaign(entrant_application.campaign_id).campaign_type_id == 1")
-    .large-4.small-12.columns(v-if="findCampaign(entrant_application.campaign_id).campaign_type_id == 4")
+    .large-8.small-12.columns(v-if="findCampaign
       = label_tag :education_document_issuer
         span Кем выдан документ
         = text_field_tag 'education_document[education_document_issuer]', nil, placeholder: 'Укажите, кто выдал документ', 'v-model.trim': 'entrant_application.education_document.education_document_issuer', class: 'error', 'v-on:change': "sendData('education_document', entrant_application.education_document)", 'v-bind:disabled': 'isDisabled'
