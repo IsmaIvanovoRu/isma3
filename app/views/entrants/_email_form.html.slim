@@ -17,7 +17,7 @@ fieldset
       = email_field_tag :email, nil, placeholder: 'user@example.com', 'v-model.trim': 'email', class: 'error', required: true, 'v-bind:disabled': 'email_confirmed'
       small.error v-if="findErrorMessage('email')" == "{{ findErrorMessage('email') }}"
       br
-      = submit_tag 'Получить код проверки', class: 'button tiny', '@click': 'sendCode', 'v-bind:disabled': 'isSendCodeDisabled', 'v-if': '!email_confirmed'
+      = submit_tag 'Получить код проверки', class: 'button tiny', '@click': 'checkEmail', 'v-bind:disabled': 'isSendCodeDisabled', 'v-if': '!email_confirmed'
 fieldset(v-if='!isNextDisabled')
   legend(v-if="errors.length") Исправьте ошибки и повторно нажмите кнопку Отправить
   .row(v-if="errors.length")

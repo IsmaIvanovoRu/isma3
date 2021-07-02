@@ -63,18 +63,30 @@ var entrants = new Vue({
       if(this.errors.length == 0) return true;
       e.preventDefault();
     },
-    sendCode: function() {
+    checkEmail: function() {
       this.errors = [];
+      axios
+        .post('/api/entrant_applications/check_email', {campaign_id: this.campaign_id, email: this.email})
+        .then(response => {
+          if(response.data.status == 'faild') {
+            this.errors.push({element: 'email', message: 'Заявление с таким адресом электронной почты уже подано', level: 'red'});
+          }
+          if(response.data.status == 'success'){
+            $('#email_code_field').foundation('reveal', 'open');
+            this.sendCode();
+          }
+        })
+    },
+    sendCode: function() {
       axios
         .post('/api/entrant_applications', {campaign_id: this.campaign_id, email: this.email, clerk: this.$refs.clerk.dataset.clerk})
         .then(response => {
           if(response.data.status == 'success') {
             this.hash = response.data.hash;
             this.entrant_application_id = response.data.id
-            $('#email_code_field').foundation('reveal', 'open');
           }
           if(response.data.status == 'faild') {
-            this.errors.push({element: 'email', message: 'Заявление с таким адресом электронной почты уже подано', level: 'red'});
+            console.log('что-то пошло не так')
           }
       })
     },
