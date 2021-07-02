@@ -144,7 +144,7 @@ class ApplicationController < ActionController::Base
     case Rails.env
       when 'development'
         protocol = 'http://'
-        url = '10.245.150.67:3000'
+        url = "#{ENV['API_HOST']}:3000"
         proxy_ip = nil
         proxy_port = nil
       when 'production'
