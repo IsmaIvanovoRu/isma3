@@ -107,6 +107,7 @@ var entrants = new Vue({
             this.email_confirmed = true;
             this.message = 'код подтверждения успешно проверен';
             $('#email_code_field').foundation('reveal', 'close');
+            this.sendWelcomeEmail();
           }
           else
           {
@@ -127,6 +128,7 @@ var entrants = new Vue({
             this.email_confirmed = true;
             this.message = 'отказ от проверки подтвержден';
             $('#email_code_field').foundation('reveal', 'close');
+            this.sendWelcomeEmail();
           }
         })
         .catch(function (error) {
