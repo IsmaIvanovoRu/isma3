@@ -56,7 +56,7 @@ fieldset(v-bind:disabled = 'isDisabled')
             td(v-if="findCampaign(entrant_application.campaign_id).campaign_type_id == 4")
               = text_field_tag 'marks[][organization_uid]', nil, 'v-model.tirm': 'mark.organization_uid', 'v-on:change': "sendData('mark', mark, index)"
 
-fieldset(v-bind:disabled = 'isDisabled')
+fieldset
   legend Указать индивидуальные достижения
   .(v-if="entrant_application.campaign_id != '' && findCampaign(entrant_application.campaign_id).campaign_type_id == 1")
     p Необходимо подтвердить наличие индивидуального достижения, прикрепив копию соответствующего документа. 
@@ -67,7 +67,7 @@ fieldset(v-bind:disabled = 'isDisabled')
       strong Обращаем Ваше внимание, что аттестаты для награжденных медалями - это аттестаты старого образца (полученные до 2014 года). Современные аттестаты - это Аттестаты с отличием.
   .row(v-for="institution_achievement in findCampaign(entrant_application.campaign_id).institution_achievements")
     .large-1.small-1.columns
-      input.error(type="checkbox" v-bind:id="'institution_achievement' + institution_achievement.id" v-bind:name="'institution_achievement_ids[]'" v-bind:value="institution_achievement.id" v-model="entrant_application.achievement_ids" v-on:change="sendData('achievement', entrant_application.achievement_ids)")
+      input.error(type="checkbox" v-bind:id="'institution_achievement' + institution_achievement.id" v-bind:name="'institution_achievement_ids[]'" v-bind:value="institution_achievement.id" v-model="entrant_application.achievement_ids" v-on:change="sendData('achievement', entrant_application.achievement_ids)" v-bind:disabled = 'isDisabled')
     .large-11.small-11.columns
       label(v-bind:for="institution_achievement.id")
         span = "{{ institution_achievement.name }} (дополнительные баллы: {{ institution_achievement.max_value }})"
