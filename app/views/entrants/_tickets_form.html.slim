@@ -1,0 +1,26 @@
+fieldset
+  legend Сообщить о проблеме или задать вопрос
+  .row
+    . v-for="(ticket, index) in entrant_application.tickets"
+      .large-12.small-12.columns
+        .panel.callout.radius.large-10.small-10.columns(v-if="ticket.id")
+          p
+            span= "{{ ticket.message }}"
+            sup(v-if="ticket.solved")= " РЕШЕНО!"
+        .(v-if="!ticket.id")
+          = label_tag :message
+            span В поле ниже кратко опишите проблему или сформулируйте интересующий Вас вопрос.
+            = text_area_tag 'ticket', nil, 'v-model.trim': 'ticket.message', class: 'error'
+          small.error v-if="findErrorMessage('ticket.message')" == "{{ findErrorMessage('ticket.message') }}"
+          br
+          = link_to 'Отправить', '#', 'v-on:click': 'sendData("ticket", ticket, index)', class: 'button tiny'
+        .large-10.large-offset-2.small-10.small-offset-2.columns(v-if="!ticket.solved")
+          .panel.radius v-for="child in ticket.children"
+            p= "{{ child.message }}"
+  /        .large-12.small-12.columns
+  /        = label_tag :message
+  /          span Новое сообщение.
+  /          = text_area_tag 'entrant_application.ticket', nil, 'v-model.trim': 'child', class: 'error'
+  /        small.error v-if="findErrorMessage('clild.message')" == "{{ findErrorMessage('clild.message') }}"
+  /        br
+  /        = link_to 'Отправить', '#', 'v-on:click': 'sendData("ticket", child, index)', class: 'button tiny'

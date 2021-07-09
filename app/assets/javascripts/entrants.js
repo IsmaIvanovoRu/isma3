@@ -264,6 +264,17 @@ var entrants = new Vue({
           status: null
         }
       ],
+      tickets: [
+        {
+          id: null,
+          entrant_application_id: null,
+          parent_ticket: null,
+          message: '',
+          solved: false,
+          created_at: null,
+          children: []
+        }
+      ],
       attachments: [],
     }
   },
@@ -471,6 +482,17 @@ var entrants = new Vue({
           };
           if(sub == 'other_document') {
             this.entrant_application.other_documents[index].id = response.data.other_document.id;
+          };
+          if(sub == 'ticket') {
+            this.entrant_application.tickets = response.data.tickets;
+            this.entrant_application.tickets.push({
+            id: null,
+            entrant_application_id: this.entrant_application.id,
+            parent_ticket: null,
+            message: '',
+            solved: false,
+            chidlren: []
+          });
           };
           if(sub == 'olympic_document') {
             this.entrant_application.olympic_documents[index].id = response.data.olympic_document.id;
@@ -817,6 +839,20 @@ var entrants = new Vue({
     deleteOtherDocument: function() {
       if(this.entrant_application.other_documents.length > 1) this.entrant_application.other_documents.splice(-1, 1);
     },
+    addTicket: function() {
+      this.entrant_application.tickets.push({
+        id: null,
+        entrant_application_id: null,
+        parent_ticket: null,
+        message: '',
+        solved: false,
+        created_at: null,
+        chidlren: []
+      });
+    },
+    deleteTicket: function() {
+      if(this.entrant_application.tickets.length > 1) this.entrant_application.tickets.splice(-1, 1);
+    },
     specialityName: function(directionId) {
       var name = '';
       this.api.dictionaries.specialities_dictionary.find(function(element) {
@@ -941,6 +977,14 @@ var entrants = new Vue({
             competitive_group_id:  null,
             competitive_group_name: '',
             status: null
+          });
+          this.entrant_application.tickets.push({
+            id: null,
+            entrant_application_id: this.entrant_application.id,
+            parent_ticket: null,
+            message: '',
+            solved: false,
+            chidlren: []
           });
         });
     axios
