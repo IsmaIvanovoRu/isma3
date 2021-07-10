@@ -485,14 +485,6 @@ var entrants = new Vue({
           };
           if(sub == 'ticket') {
             this.entrant_application.tickets = response.data.tickets;
-            this.entrant_application.tickets.push({
-            id: null,
-            entrant_application_id: this.entrant_application.id,
-            parent_ticket: null,
-            message: '',
-            solved: false,
-            chidlren: []
-          });
           };
           if(sub == 'olympic_document') {
             this.entrant_application.olympic_documents[index].id = response.data.olympic_document.id;
@@ -977,14 +969,6 @@ var entrants = new Vue({
             competitive_group_id:  null,
             competitive_group_name: '',
             status: null
-          });
-          this.entrant_application.tickets.push({
-            id: null,
-            entrant_application_id: this.entrant_application.id,
-            parent_ticket: null,
-            message: '',
-            solved: false,
-            chidlren: []
           });
         });
     axios
