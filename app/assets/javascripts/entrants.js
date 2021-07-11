@@ -873,6 +873,7 @@ var entrants = new Vue({
         if(this.api.current_tab == 'start' && this.entrant_application.status_id == 0){
           this.sendData('status_id', this.entrant_application.status_id);
         }
+        window.scrollTo({ top: 0, behavior: 'smooth' });
       };
     }
   },
