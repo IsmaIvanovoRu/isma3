@@ -20,6 +20,9 @@ fieldset
       h3 Внимание! При рассмотрении Вашего дела выявлены следующие замечания
       p
         strong= "{{entrant_application.comment}}"
+      p(v-if="entrant_application.status != 'прошу проверить'")
+        = link_to 'Сообщить об исправлении замечаний', '#', class: 'button tiny', '@click.prevent': 'sendData("status", "прошу проверить")'
+      .label.warning(v-if="entrant_application.status == 'прошу проверить'") Исправления находятся на рассмотрении
 fieldset
   legend Вступительные испытания
   .row

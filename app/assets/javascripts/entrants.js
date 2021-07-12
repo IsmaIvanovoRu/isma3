@@ -507,6 +507,9 @@ var entrants = new Vue({
             this.entrant_application.status_id = response.data.status_id;
             this.entrant_application.status = response.data.status;
           };
+          if(sub == 'status') {
+            this.entrant_application.status = response.data.status;
+          };
           console.log('успешно обновлено');
         }
         else
