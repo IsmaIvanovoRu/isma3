@@ -90,6 +90,16 @@ class Api::EntrantApplicationsController < ApplicationController
     render json: response.body
   end
   
+  def generate_contracts
+    method = "entrant_applications/#{params[:id]}/generate_contracts"
+    http_params = http_params()
+    http = Net::HTTP.new(http_params[:uri_host], http_params[:uri_port], http_params[:proxy_ip], http_params[:proxy_port])
+    http.use_ssl = true if Rails.env == 'production'
+    headers = {"Content-Type" => "application/json", "Accept" => "application/json"}
+    response = http.put(http_params[:uri_path] + method, params.to_json, headers)
+    render json: response.body
+  end
+  
   def send_welcome_email
     method = "entrant_applications/#{params[:id]}/send_welcome_email"
     http_params = http_params()

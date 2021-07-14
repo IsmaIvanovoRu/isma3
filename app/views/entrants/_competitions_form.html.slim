@@ -44,7 +44,8 @@ fieldset(v-bind:disabled = 'isDisabled')
             td = "{{ findEntranceTestItem(mark.subject_id).subject_name }} (минимальный балл {{ findEntranceTestItem(mark.subject_id).min_score }})"
             td
               .(v-if="findCampaign(entrant_application.campaign_id).campaign_type_id == 1")
-                = select_tag 'marks[][form]', options_for_select(['ЕГЭ', 'ВИ']), include_blank: '', 'v-model.trim': 'mark.form', 'v-on:change': "sendData('mark', mark, index)"
+                = select_tag 'marks[][form]', options_for_select(['ЕГЭ', 'ВИ']), include_blank: '', 'v-model.trim': 'mark.form', 'v-on:change': "sendData('mark', mark, index)", 'v-if': 'examDate'
+                = select_tag 'marks[][form]', options_for_select(['ЕГЭ', 'ВИ'], disabled: 'ВИ'), include_blank: '', 'v-model.trim': 'mark.form', 'v-on:change': "sendData('mark', mark, index)", 'v-if': '!examDate'
               .(v-if="findCampaign(entrant_application.campaign_id).campaign_type_id == 4")
                 = select_tag 'marks[][form]', options_for_select(['Аккредитация', 'ВИ']), include_blank: '', 'v-model.trim': 'mark.form', 'v-on:change': "sendData('mark', mark, index)"
               small.error v-if="findErrorMessage('mark.form')" == "{{ findErrorMessage('mark.form') }}"

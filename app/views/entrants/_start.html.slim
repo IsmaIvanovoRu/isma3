@@ -110,6 +110,3 @@ fieldset
           li(v-for="attachment in entrant_application.attachments" v-if="attachment.document_type == 'recall_application' && !attachment.template")
             span Загружено&nbsp;
             a v-bind:href = "'/api/attachments/' + attachment.data_hash + '?filename=' + attachment.filename" target = '_blank' {{ attachment.filename }}
-  
-/fieldset
-/  legend Поле для переписки с приемной комиссией
