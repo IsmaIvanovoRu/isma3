@@ -264,6 +264,32 @@ var entrants = new Vue({
           status: null
         }
       ],
+      contragent: {
+          id: null,
+          last_name: '',
+          first_name: '', 
+          middle_name: '',
+          birth_date: '',
+          identity_document_serie: '',
+          identity_document_number: '',
+          identity_document_date: '',
+          identity_document_issuer: '',
+          identity_document_data: '',
+          email: '',
+          phone: '',
+          address: ''
+      },
+      tickets: [
+        {
+          id: null,
+          entrant_application_id: null,
+          parent_ticket: null,
+          message: '',
+          solved: false,
+          created_at: null,
+          children: []
+        }
+      ],
       attachments: [],
     }
   },
@@ -275,6 +301,15 @@ var entrants = new Vue({
       if(this.entrant_application.personal.entrant_first_name.charAt(0).toUpperCase() + this.entrant_application.personal.entrant_first_name.slice(1).toLowerCase() != this.entrant_application.personal.entrant_first_name) return 'Обычно имя начинается с заглавной буквы, за которой следуют строчные';
     },
     checkEntrantMiddleName: function() {
+      if(this.entrant_application.personal.entrant_middle_name.charAt(0).toUpperCase() + this.entrant_application.personal.entrant_middle_name.slice(1).toLowerCase() != this.entrant_application.personal.entrant_middle_name) return 'Обычно отчество начинается с заглавной буквы, за которой следуют строчные';
+    },
+    checkLastName: function() {
+      if(this.entrant_application.personal.entrant_last_name.charAt(0).toUpperCase() + this.entrant_application.personal.entrant_last_name.slice(1).toLowerCase() != this.entrant_application.personal.entrant_last_name) return 'Обычно фамилия начинается с заглавной буквы, за которой следуют строчные';
+    },
+    checkFirstName: function() {
+      if(this.entrant_application.personal.entrant_first_name.charAt(0).toUpperCase() + this.entrant_application.personal.entrant_first_name.slice(1).toLowerCase() != this.entrant_application.personal.entrant_first_name) return 'Обычно имя начинается с заглавной буквы, за которой следуют строчные';
+    },
+    checkMiddleName: function() {
       if(this.entrant_application.personal.entrant_middle_name.charAt(0).toUpperCase() + this.entrant_application.personal.entrant_middle_name.slice(1).toLowerCase() != this.entrant_application.personal.entrant_middle_name) return 'Обычно отчество начинается с заглавной буквы, за которой следуют строчные';
     },
     checkBirthDate: function() {
@@ -361,6 +396,40 @@ var entrants = new Vue({
         return true;
       }
     },
+    checkPaidCompetitiveGroups: function(){
+      var checkPaidCompetitiveGroups = false;
+      this.entrant_application.competitive_groups.find(function(element){
+        if(element.education_source_id == 15) { 
+          checkPaidCompetitiveGroups = true;
+        }
+      })
+      return checkPaidCompetitiveGroups;
+    },
+    checkAge: function() {
+      var minAge = 18;
+      var numbers = this.entrant_application.personal.birth_date.split('-');
+      var birthYear = Number(numbers[0]);
+      var birthMonth = Number(numbers[1]);
+      var birthDay = Number(numbers[2]);
+      var birthDate = new Date(birthYear, birthMonth, birthDay)
+      var tempDate = new Date(birthDate.getFullYear() + minAge, birthDate.getMonth(), birthDate.getDate());
+      return (tempDate <= new Date());
+    },
+    examDate: function() {
+      var examDate = true;
+      var currentDate = new Date();
+      this.findCampaign(this.entrant_application.campaign_id).competitive_groups.find(function(element){
+        var numbers = element.application_end_exam_date.split('-');
+        var year = Number(numbers[0]);
+        var month = Number(numbers[1]);
+        var day = Number(numbers[2]);
+        var date = new Date(year, month, day)
+        if(date < currentDate) {
+          examDate = false;
+        }
+      })
+      return examDate;
+    },
   },
   methods: {
     consentCount: function() {
@@ -369,6 +438,20 @@ var entrants = new Vue({
         if(element.document_type == 'consent_application' && !element.template) consentCount++;
       });
       return consentCount;
+    },
+    fillContragent: function() {
+      this.entrant_application.contragent.last_name = this.entrant_application.personal.entrant_last_name;
+      this.entrant_application.contragent.first_name = this.entrant_application.personal.entrant_first_name;
+      this.entrant_application.contragent.middle_name = this.entrant_application.personal.entrant_middle_name;
+      this.entrant_application.contragent.birth_date = this.entrant_application.personal.birth_date;
+      this.entrant_application.contragent.email = this.entrant_application.contact_information.email;
+      this.entrant_application.contragent.phone = this.entrant_application.contact_information.phone;
+      this.entrant_application.contragent.address = this.entrant_application.contact_information.address;
+      this.entrant_application.contragent.identity_document_number = this.entrant_application.identity_documents[this.entrant_application.identity_documents.length - 1].identity_document_number;
+      this.entrant_application.contragent.identity_document_serie = this.entrant_application.identity_documents[this.entrant_application.identity_documents.length - 1].identity_document_series;
+      this.entrant_application.contragent.identity_document_date = this.entrant_application.identity_documents[this.entrant_application.identity_documents.length - 1].identity_document_date;
+      this.entrant_application.contragent.identity_document_issuer = this.entrant_application.identity_documents[this.entrant_application.identity_documents.length - 1].identity_document_issuer;
+      this.sendData('contragent', this.entrant_application.contragent);
     },
     withdrawCount: function() {
       var withdrawCount = 0;
@@ -453,6 +536,18 @@ var entrants = new Vue({
       });
       return findCompetitiveGroup;
     },
+    openContragentModal: function(){
+      $('#contragent').foundation('reveal', 'open');
+    },
+    generateContracts: function(){
+      $('#contragent').foundation('reveal', 'close');
+      axios
+      .put('/api/entrant_applications/' + this.entrant_application.hash + '/generate_contracts', {id: this.entrant_application.id})
+      .then(response => {
+        console.log(response.data.message);
+        this.entrant_application.attachments = response.data.attachments
+      })
+    },
     sendData: function(sub, subData, index) {
       let data = {};
       data[sub] = subData;
@@ -471,6 +566,9 @@ var entrants = new Vue({
           };
           if(sub == 'other_document') {
             this.entrant_application.other_documents[index].id = response.data.other_document.id;
+          };
+          if(sub == 'ticket') {
+            this.entrant_application.tickets = response.data.tickets;
           };
           if(sub == 'olympic_document') {
             this.entrant_application.olympic_documents[index].id = response.data.olympic_document.id;
@@ -492,6 +590,12 @@ var entrants = new Vue({
           if(sub == 'status_id') {
             this.entrant_application.status_id = response.data.status_id;
             this.entrant_application.status = response.data.status;
+          };
+          if(sub == 'status') {
+            this.entrant_application.status = response.data.status;
+          };
+          if(sub == 'contragent') {
+            this.entrant_application.contragent.id = response.data.contragent.id;
           };
           console.log('успешно обновлено');
         }
@@ -817,6 +921,20 @@ var entrants = new Vue({
     deleteOtherDocument: function() {
       if(this.entrant_application.other_documents.length > 1) this.entrant_application.other_documents.splice(-1, 1);
     },
+    addTicket: function() {
+      this.entrant_application.tickets.push({
+        id: null,
+        entrant_application_id: null,
+        parent_ticket: null,
+        message: '',
+        solved: false,
+        created_at: null,
+        chidlren: []
+      });
+    },
+    deleteTicket: function() {
+      if(this.entrant_application.tickets.length > 1) this.entrant_application.tickets.splice(-1, 1);
+    },
     specialityName: function(directionId) {
       var name = '';
       this.api.dictionaries.specialities_dictionary.find(function(element) {
@@ -845,6 +963,7 @@ var entrants = new Vue({
         if(this.api.current_tab == 'start' && this.entrant_application.status_id == 0){
           this.sendData('status_id', this.entrant_application.status_id);
         }
+        window.scrollTo({ top: 0, behavior: 'smooth' });
       };
     }
   },
@@ -937,6 +1056,21 @@ var entrants = new Vue({
             target_organization_name: '',
             status: null
           });
+          if(!this.entrant_application.contragent) this.entrant_application.contragent = {
+            id: null,
+            last_name: '',
+            first_name: '', 
+            middle_name: '',
+            birth_date: '',
+            identity_document_serie: '',
+            identity_document_number: '',
+            identity_document_date: '',
+            identity_document_issuer: '',
+            identity_document_data: '',
+            email: '',
+            phone: '',
+            address: ''
+          };
           if(this.entrant_application.contracts.length == 0) this.entrant_application.contracts.push({
             competitive_group_id:  null,
             competitive_group_name: '',

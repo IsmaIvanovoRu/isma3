@@ -1,6 +1,9 @@
 fieldset
   .row
     .large-12.small-12.columns
+      h3.right
+        = "{{ entrant_application.personal.entrant_first_name + ' ' + entrant_application.personal.entrant_last_name }}"
+    .large-12.small-12.columns
       .label.info(v-if="entrant_application.status_id == 2") Ваше обращение зарегистрировано и находится на рассмотрении
       .label.success(v-if="entrant_application.status_id == 4") Ваше заявление допущено к участию в конкурсе. Номер личного дела {{entrant_application.application_number}}.
       .label.alert(v-if="entrant_application.status_id == 6") Ваше заявление отзвано
@@ -17,6 +20,9 @@ fieldset
       h3 Внимание! При рассмотрении Вашего дела выявлены следующие замечания
       p
         strong= "{{entrant_application.comment}}"
+      p(v-if="entrant_application.status != 'прошу проверить'")
+        = link_to 'Сообщить об исправлении замечаний', '#', class: 'button tiny', '@click.prevent': 'sendData("status", "прошу проверить")'
+      .label.warning(v-if="entrant_application.status == 'прошу проверить'") Исправления находятся на рассмотрении
 fieldset
   legend Вступительные испытания
   .row
@@ -104,6 +110,3 @@ fieldset
           li(v-for="attachment in entrant_application.attachments" v-if="attachment.document_type == 'recall_application' && !attachment.template")
             span Загружено&nbsp;
             a v-bind:href = "'/api/attachments/' + attachment.data_hash + '?filename=' + attachment.filename" target = '_blank' {{ attachment.filename }}
-  
-/fieldset
-/  legend Поле для переписки с приемной комиссией

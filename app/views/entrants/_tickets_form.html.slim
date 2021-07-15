@@ -1,0 +1,35 @@
+fieldset
+  legend Сообщить о проблеме или задать вопрос
+  .row
+    . v-for="(ticket, index) in entrant_application.tickets"
+      .large-12.small-12.columns
+        .panel.callout.radius.large-12.small-12.columns(v-if="ticket.id")
+          p
+            strong= "{{ ticket.message }}"
+            sup
+              strong(v-if="ticket.solved")= " РЕШЕНО!"
+        . v-if="!ticket.id && !ticket.solved"
+          = label_tag :message
+            span В поле ниже кратко опишите проблему или сформулируйте интересующий Вас вопрос. Сообщение будет рассмотрено приемной комиссией, переписка по проблеме будет расположена ниже.
+            = text_area_tag 'ticket', nil, 'v-model.trim': 'ticket.message', class: 'error'
+          small.error v-if="findErrorMessage('ticket.message')" == "{{ findErrorMessage('ticket.message') }}"
+          br
+          = link_to 'Отправить', '#', 'v-on:click.prevent': 'sendData("ticket", ticket, index)', class: 'button tiny', 'v-if': 'ticket.message'
+        . v-for="(child, index) in ticket.children"
+          .large-10.large-offset-2.small-10.small-offset-2.columns(v-if="child.user_id")
+            .panel.radius(v-if="child.id")
+              p= "{{ child.message }}"
+              p.right
+                small Приемная комиссия
+          .large-10.small-10.columns(v-if="!child.user_id")
+            .panel.callout.radius(v-if="child.id")
+              p= "{{ child.message }}"
+              p.right
+                small= "{{ entrant_application.personal.entrant_first_name + ' ' + entrant_application.personal.entrant_last_name }}"
+            . v-if="!child.id && ticket.id && !ticket.solved"
+              = label_tag :message
+                span Добавить сообщение к текущей проблеме
+                = text_area_tag 'child', nil, 'v-model.trim': 'child.message', class: 'error'
+              small.error v-if="findErrorMessage('child.message')" == "{{ findErrorMessage('child.message') }}"
+              br
+              = link_to 'Отправить', '#', 'v-on:click.prevent': 'sendData("ticket", child, index)', class: 'button tiny', 'v-if': 'child.message'

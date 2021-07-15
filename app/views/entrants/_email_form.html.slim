@@ -17,7 +17,7 @@ fieldset
       = email_field_tag :email, nil, placeholder: 'user@example.com', 'v-model.trim': 'email', class: 'error', required: true, 'v-bind:disabled': 'email_confirmed'
       small.error v-if="findErrorMessage('email')" == "{{ findErrorMessage('email') }}"
       br
-      = submit_tag 'Получить код проверки', class: 'button tiny', '@click': 'sendCode', 'v-bind:disabled': 'isSendCodeDisabled', 'v-if': '!email_confirmed'
+      = submit_tag 'Получить код проверки', class: 'button tiny', '@click': 'checkEmail', 'v-bind:disabled': 'isSendCodeDisabled', 'v-if': '!email_confirmed'
 fieldset(v-if='!isNextDisabled')
   legend(v-if="errors.length") Исправьте ошибки и повторно нажмите кнопку Отправить
   .row(v-if="errors.length")
@@ -26,7 +26,7 @@ fieldset(v-if='!isNextDisabled')
         li v-for='error in errors' v-if='error.level == "red"' == '{{ error.message }}'
   .row
     .large-12.small-12.columns
-      a.button.tiny @click="sendWelcomeEmail" v-bind:href="hash" Перейти к заполнению анкеты
+      a.button.tiny v-bind:href="hash" Перейти к заполнению анкеты
 
 .reveal-modal.full id = 'email_code_field' data-reveal = true
   .row
