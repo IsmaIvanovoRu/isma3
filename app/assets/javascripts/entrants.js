@@ -416,7 +416,7 @@ var entrants = new Vue({
       return (tempDate <= new Date());
     },
     examDate: function() {
-      var examDate = true;
+      var examDate = false;
       var currentDate = new Date();
       this.findCampaign(this.entrant_application.campaign_id).competitive_groups.find(function(element){
         var numbers = element.application_end_exam_date.split('-');
@@ -424,8 +424,8 @@ var entrants = new Vue({
         var month = Number(numbers[1]);
         var day = Number(numbers[2]);
         var date = new Date(year, month, day)
-        if(date < currentDate) {
-          examDate = false;
+        if(currentDate >= date) {
+          examDate = true;
         }
       })
       return examDate;
