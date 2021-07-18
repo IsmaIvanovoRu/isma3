@@ -388,6 +388,9 @@ var entrants = new Vue({
     checkContactInformationPhone: function() {
       if(this.entrant_application.contact_information.phone == '') return 'Необходимо указать контактный телефон';
     },
+    checkContragent: function() {
+      if(!this.entrant_application.contragent.id || !this.entrant_application.congtragent.last_name || !this.entrant_application.congtragent.first_name || !this.entrant_application.congtragent.middle_name || !this.entrant_application.congtragent.birth_date || !this.entrant_application.congtragent.identity_document_serie || !this.entrant_application.congtragent.identity_document_number || !this.entrant_application.congtragent.identity_document_date || !this.entrant_application.congtragent.identity_document_issuer || !this.entrant_application.congtragent.identity_document_data || !this.entrant_application.congtragent.email || !this.entrant_application.congtragent.phone || !this.entrant_application.congtragent.address) return 'Необходимо заполнить данные заказчика договора на платную образовательную услугу';
+    },
     isDisabled: function() {
       if(this.entrant_application.status_id == 0) {
         return false;
@@ -529,8 +532,8 @@ var entrants = new Vue({
     },
     findCompetitiveGroup: function(competitiveGgroupId) {
       var findCompetitiveGroup = null;
-      this.entrant_application.competitive_group_ids.find(function(element) {
-        if(element == competitiveGgroupId){
+      this.entrant_application.competitive_groups.find(function(element) {
+        if(element.id == competitiveGgroupId){
           findCompetitiveGroup = element;
         };
       });
@@ -539,10 +542,12 @@ var entrants = new Vue({
     openContragentModal: function(){
       $('#contragent').foundation('reveal', 'open');
     },
-    generateContracts: function(){
+    closeContragentModal: function(){
       $('#contragent').foundation('reveal', 'close');
+    },
+    generateContract: function(competitive_group_id) {
       axios
-      .put('/api/entrant_applications/' + this.entrant_application.hash + '/generate_contracts', {id: this.entrant_application.id})
+      .put('/api/entrant_applications/' + this.entrant_application.hash + '/generate_contracts', {id: this.entrant_application.id, competitive_group_id: competitive_group_id})
       .then(response => {
         console.log(response.data.message);
         this.entrant_application.attachments = response.data.attachments
@@ -634,6 +639,10 @@ var entrants = new Vue({
         this.files = this.$refs.withdraw_application.files;
         this.dataset = this.$refs.withdraw_application.dataset;
       }
+      if(this.$refs.contract && this.$refs.contract.files.length > 0) {
+        this.files = this.$refs.contract.files;
+        this.dataset = this.$refs.contract.dataset;
+      }
       if(this.$refs.identity_document && this.$refs.identity_document.length > 0) {
         for(var i = 0; i < this.$refs.identity_document.length; i++) {
           if(this.$refs.identity_document[i].files.length > 0) {
@@ -682,14 +691,6 @@ var entrants = new Vue({
           }
         }
       }
-      if(this.$refs.contract && this.$refs.contract.length > 0) {
-        for(var i = 0; i < this.$refs.contract.length; i++) {
-          if(this.$refs.contract[i].files.length > 0) {
-          this.files = this.$refs.contract[i].files;
-          this.dataset = this.$refs.contract[i].dataset;
-          }
-        }
-      }
       let formData = new FormData();
       for( var i = 0; i < this.files.length; i++ ){
         let file = this.files[i];
@@ -729,6 +730,9 @@ var entrants = new Vue({
         if(this.dataset.documentType == 'withdraw_application') {
           this.$refs.withdraw_application.value = null
         }
+        if(this.dataset.documentType == 'contract') {
+          this.$refs.contract.value = null
+        }
         if(this.dataset.documentType == 'identity_document') {
           for(var i = 0; i < this.$refs.identity_document.length; i++) {
             this.$refs.identity_document[i].value = null
@@ -757,11 +761,6 @@ var entrants = new Vue({
         if(this.dataset.documentType == 'achievement') {
           for(var i = 0; i < this.$refs.achievement.length; i++) {
             this.$refs.achievement[i].value = null
-          }
-        }
-        if(this.dataset.documentType == 'contract') {
-          for(var i = 0; i < this.$refs.contract.length; i++) {
-            this.$refs.contract[i].value = null
           }
         }
         if(this.dataset.documentType == 'recall_application') {
