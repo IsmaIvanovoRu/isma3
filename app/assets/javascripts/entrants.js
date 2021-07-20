@@ -389,7 +389,7 @@ var entrants = new Vue({
       if(this.entrant_application.contact_information.phone == '') return 'Необходимо указать контактный телефон';
     },
     checkContragent: function() {
-      if(!this.entrant_application.contragent.id || !this.entrant_application.congtragent.last_name || !this.entrant_application.congtragent.first_name || !this.entrant_application.congtragent.middle_name || !this.entrant_application.congtragent.birth_date || !this.entrant_application.congtragent.identity_document_serie || !this.entrant_application.congtragent.identity_document_number || !this.entrant_application.congtragent.identity_document_date || !this.entrant_application.congtragent.identity_document_issuer || !this.entrant_application.congtragent.identity_document_data || !this.entrant_application.congtragent.email || !this.entrant_application.congtragent.phone || !this.entrant_application.congtragent.address) return 'Необходимо заполнить данные заказчика договора на платную образовательную услугу';
+      if(!this.entrant_application.contragent.id || !this.entrant_application.contragent.last_name || !this.entrant_application.contragent.first_name || !this.entrant_application.contragent.birth_date || !this.entrant_application.contragent.identity_document_serie || !this.entrant_application.contragent.identity_document_number || !this.entrant_application.contragent.identity_document_date || !this.entrant_application.contragent.identity_document_issuer || !this.entrant_application.contragent.email || !this.entrant_application.contragent.phone || !this.entrant_application.contragent.address) return 'Необходимо заполнить данные заказчика договора на платную образовательную услугу';
     },
     isDisabled: function() {
       if(this.entrant_application.status_id == 0) {
@@ -450,10 +450,10 @@ var entrants = new Vue({
       this.entrant_application.contragent.email = this.entrant_application.contact_information.email;
       this.entrant_application.contragent.phone = this.entrant_application.contact_information.phone;
       this.entrant_application.contragent.address = this.entrant_application.contact_information.address;
-      this.entrant_application.contragent.identity_document_number = this.entrant_application.identity_documents[this.entrant_application.identity_documents.length - 1].identity_document_number;
-      this.entrant_application.contragent.identity_document_serie = this.entrant_application.identity_documents[this.entrant_application.identity_documents.length - 1].identity_document_series;
-      this.entrant_application.contragent.identity_document_date = this.entrant_application.identity_documents[this.entrant_application.identity_documents.length - 1].identity_document_date;
-      this.entrant_application.contragent.identity_document_issuer = this.entrant_application.identity_documents[this.entrant_application.identity_documents.length - 1].identity_document_issuer;
+      this.entrant_application.contragent.identity_document_number = this.entrant_application.identity_documents[0].identity_document_number;
+      this.entrant_application.contragent.identity_document_serie = this.entrant_application.identity_documents[0].identity_document_series;
+      this.entrant_application.contragent.identity_document_date = this.entrant_application.identity_documents[0].identity_document_date;
+      this.entrant_application.contragent.identity_document_issuer = this.entrant_application.identity_documents[0].identity_document_issuer;
       this.sendData('contragent', this.entrant_application.contragent);
     },
     withdrawCount: function() {
@@ -546,6 +546,8 @@ var entrants = new Vue({
       $('#contragent').foundation('reveal', 'close');
     },
     generateContract: function(competitive_group_id) {
+      $('#contract_button').addClass('hide');
+      $('#contract_link').removeClass('hide');
       axios
       .put('/api/entrant_applications/' + this.entrant_application.hash + '/generate_contracts', {id: this.entrant_application.id, competitive_group_id: competitive_group_id})
       .then(response => {

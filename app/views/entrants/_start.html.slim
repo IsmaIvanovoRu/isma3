@@ -82,14 +82,15 @@ fieldset
         li(v-for="attachment in entrant_application.attachments" v-if="attachment.document_type == 'consent_application' && !attachment.template")
           a v-bind:href = "'/api/attachments/' + attachment.data_hash + '?filename=' + attachment.filename" target = '_blank' {{ attachment.filename }}
   .row
-    br
     .large-12.small-12.columns(v-if="entrant_application.budget_agr && findCompetitiveGroup(entrant_application.budget_agr).education_source_id == 15")
       p Вы решили подать согласие на зачисление на внебюджетный конкурс. Вторым обязательным условием зачисления, кроме согласия, является подписание договора на оказание платных образовательных услуг.
-      .(v-if="!checkContragent")
+      .(v-if="checkContragent")
         p= "{{ checkContragent }}"
         =link_to 'Указать данные заказчика', '#', '@click.prevent': 'openContragentModal', class: 'button tiny'
-      .(v-if="checkContragent")
-        =link_to 'Сформировать бланк договора', '#', class: 'button tiny', '@click.prevent': 'generateContract(entrant_application.budget_agr)', 'v-if': '!findAttachment(entrant_application.budget_agr, "contract", true)'
+      .(v-if="!checkContragent && !findAttachment(entrant_application.budget_agr, 'contract', true)")
+        #contract_button
+          =link_to 'Сформировать бланк договора', '#', class: 'button tiny', '@click.prevent': 'generateContract(entrant_application.budget_agr)'
+        p.hide#contract_link Формируется договор...
       .(v-if="findAttachment(entrant_application.budget_agr, 'contract', true)")
         p
           strong Шаг 4. Скачайте бланк
