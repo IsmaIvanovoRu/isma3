@@ -1,0 +1,30 @@
+- content_for :title do
+  |  Сведения об образовательной организации. Международное сотрудничество.
+section.panel
+  h1 Международное сотрудничество
+  p= autosub_details("&amp;[Навигация сведений об образовательной организации]").html_safe
+  - if @moderator_permission
+      = form_tag import_international_contracts_path, multipart: true do
+        = file_field_tag :file
+        = submit_tag "Загрузить", class: 'button'
+  table
+    caption Сведения о заключенных и планируемых к заключению договорах с иностранными и (или) международными организациями по вопросам образования и науки
+    - n = 0
+    thead
+      tr
+        th № п/п
+        th Государство
+        th Наименование организации
+        th Реквизиты договора (наименование, дата, номер, срок действия)
+        - if @moderator_permission
+          th Удалить
+    tbody
+      - @international_contracts.each do |international_contract|
+        tr(itemprop='internationalDog')
+          - n += 1
+          td=  n
+          td(itemprop='stateName')= international_contract.state_name
+          td(itemprop='orgName')= international_contract.org_name
+          td(itemprop='dogReg')= international_contract.dog_reg
+          - if @moderator_permission
+            td= link_to 'Удалить', international_contract, method: :delete

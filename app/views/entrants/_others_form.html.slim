@@ -1,0 +1,115 @@
+fieldset
+  legend Контактные данные
+  p Необходимо указать место проживания в соответствии с регистрацией (по паспорту).
+  .row
+    .large-12.small-12.columns
+      = label_tag :address
+        span Адрес проживания
+        = text_field_tag :address, nil, placeholder: 'Адрес (регион РФ, населенный пункт, улица, дом, квартира.)', 'v-model.trim': 'entrant.contact_information.address', class: 'error', 'v-on:change': "sendData('contact_information', entrant.contact_information)", 'v-bind:disabled': 'isDisabled'
+      small.error v-if="findErrorMessage('entrant.contact_information.address')" == "{{ findErrorMessage('entrant.contact_information.address') }}"
+  .row
+    .large-6.small-12.columns
+      = label_tag :zip_code
+        span Почтовый индекс
+        = number_field_tag :zip_code, nil, min: 0, max: 999999, placeholder: '000000', 'v-model.trim': 'entrant.contact_information.zip_code', class: 'error', 'v-on:change': "sendData('contact_information', entrant.contact_information)", 'v-bind:disabled': 'isDisabled'
+      small.error v-if="findErrorMessage('entrant.contact_information.zip_code')" == "{{ findErrorMessage('entrant.contact_information.zip_code') }}"
+    .large-6.small-12.columns
+      = label_tag :email
+        span Адрес электронной почты
+        = email_field_tag :email, nil, placeholder: 'user@domain.com', 'v-model.trim': 'entrant.contact_information.email', class: 'error', disabled: true
+      small.error v-if="findErrorMessage('entrant.contact_information.email')" == "{{ findErrorMessage('entrant.contact_information.email') }}"
+fieldset(v-if="entrant.id && entrant.campaign.campaign_type == 'Прием на обучение по ОП бакалавриата/специалитета'")
+  legend Прикрепите копию медицинского заключения (при наличии. Например, справку по форме 086/у)
+  .row
+    .large-12.small-12.columns
+      = render partial: 'add_attachment', locals: {document_type: 'medical_document', message: 'Можно загрузить один или несколько файлов', document_id: 'entrant.id', entrant_id: 'entrant.id', ref_name: 'medical_document', id: 'medical_document'}
+  .row(v-for="attachment in entrant.attachments")
+    .large-12.small-12.columns
+      p(v-if="attachment.document_type == 'medical_document'")
+        a v-bind:href = "'/api/attachments/' + attachment.data_hash + '?filename=' + attachment.filename" target = '_blank' {{ attachment.filename }}
+fieldset
+  legend Прочие документы
+  p(v-if="entrant.campaign.campaign_type == 'Прием на обучение по ОП бакалавриата/специалитета'") Можно указать реквизиты и прикрепить копии других документов, которые вы считаете необходимыми для передачи в приемную комиссию. Например, это может быть свидетельство о браке, если документ об образовании получен до смены фамилии.
+  p(v-if="entrant.campaign.campaign_type == 'Прием на подготовку кадров высшей квалификации'") Необходимо указать данные дополнительных документов, таких как свидетельство об аккредитации специалиста, сертификат специалиста, военный билет (при их наличии).
+  . v-for="(document, index) in entrant.other_documents"
+    .row
+      .(v-show="entrant.other_documents.indexOf(document) > 0") Следующий документ
+      .large-4.small-12.columns
+        label
+          span Вид документа
+        select.error#other_document_name(name="other_documents[][document_category]" v-model='document.document_category' v-if="entrant.campaign.campaign_type == 'Прием на подготовку кадров высшей квалификации'" v-on:change="sendData('other_document', document, index)" v-bind:disabled='isDisabled')
+          option(disabled value) Выберите вид документа
+          option(v-for="other_document_category in api.dictionaries.other_document_categories" v-bind:value="other_document_category") {{ other_document_category }}
+        = text_field_tag 'other_documents[][document_category]', nil, placeholder: 'Укажите название документа', 'v-model.trim': 'document.document_category', class: 'error', 'v-if': "entrant.campaign.campaign_type == 'Прием на обучение по ОП бакалавриата/специалитета'", 'v-on:change': "sendData('other_document', document, index)", 'v-bind:disabled': 'isDisabled'
+        small.error v-if="findErrorMessage('document.other_document_category')" == "{{ findErrorMessage('document.other_document_category') }}"
+      .large-4.small-12.columns
+        = label_tag :other_document_series
+          span Серия документа
+          = text_field_tag 'other_documents[][serie]', nil, placeholder: 'Укажите серию документа', 'v-model.trim': 'document.serie', class: 'error', 'v-on:change': "sendData('other_document', document, index)", 'v-bind:disabled': 'isDisabled'
+        small.error v-if="findErrorMessage('document.other_document_serie')" == "{{ findErrorMessage('document.other_document_serie') }}"
+      .large-4.small-12.columns
+        = label_tag :other_document_number
+          span Номер документа
+          = text_field_tag 'other_documents[][number]', nil, placeholder: 'Укажите номер документа', 'v-model.trim': 'document.number', class: 'error', 'v-on:change': "sendData('other_document', document, index)", 'v-bind:disabled': 'isDisabled'
+        small.error v-if="findErrorMessage('document.other_document_number')" == "{{ findErrorMessage('document.other_document_number') }}"
+    .row
+      .large-4.small-12.columns
+        = label_tag :other_document_date
+          span Дата выдачи документа
+          = date_field_tag 'other_documents[][date]', nil, placeholder: 'Дата выдачи документа', 'v-model.trim': 'document.date', class: 'error', 'v-on:change': "sendData('other_document', document, index)", 'v-bind:disabled': 'isDisabled'
+        small.error v-if="findErrorMessage('document.other_document_date')" == "{{ findErrorMessage('document.other_document_date') }}"
+      .large-8.small-12.columns
+        = label_tag :other_document_issuer
+          span Кем выдан документ
+          = text_field_tag 'other_documents[][issuer]', nil, placeholder: 'Кем выдан документ', 'v-model.trim': 'document.issuer', class: 'error', 'v-on:change': "sendData('other_document', document, index)", 'v-bind:disabled': 'isDisabled'
+        small.error v-if="findErrorMessage('document.other_document_issuer')" == "{{ findErrorMessage('document.other_document_issuer') }}"
+    .row(v-if="document.id")
+      .large-12.small-12.columns
+        br
+        = render partial: 'add_attachment', locals: { message: 'Выберите и прикрепите файл(ы).', document_type: 'other_document', document_id: 'document.id', entrant_id: 'entrant.id', ref_name: 'other_document', id: 'other_document'}
+    .row(v-for="attachment in entrant.attachments")
+      .large-12.small-12.columns
+        p(v-if="attachment.document_type == 'other_document' && attachment.document_id == document.id")
+          a v-bind:href = "'/api/attachments/' + attachment.data_hash + '?filename=' + attachment.filename" target = '_blank' {{ attachment.filename }}
+  br
+  .row v-if="entrant.stage == 0"
+    .large-12.small-12.columns
+      .button.tiny @click="addOtherDocument" Добавить документ
+      span &nbsp;
+      .button.tiny(v-if="entrant.other_documents.length > 1" @click="deleteOtherDocument") Удалить документ
+fieldset(v-if="entrant.campaign.campaign_type == 'Прием на обучение по ОП бакалавриата/специалитета'")
+  legend Выбор иностранного языка, желаемого для изучения в вузе
+  .row
+    .large-12.small-12.columns
+      select.error#language(name="language" v-model='entrant.language' v-on:change="sendData('language', entrant.language)" v-bind:disabled='isDisabled')
+        option(disabled value) Выберите язык
+        option(v-for="language in api.dictionaries.languages" v-bind:value="language") {{ language }}
+fieldset
+  .row(v-if="entrant.campaign.campaign_type == 'Прием на обучение по ОП бакалавриата/специалитета'")
+    .large-12.small-12.columns
+      p Пункт "Согласен на передачу заявления на ЕПГУ" необходимо отметить, если у Вас имеется подтвержденная учетная запись на Едином портале государственных услуг и Вы желаете получить доступ к своему заявлению из личного кабинета на портале.
+  .row(v-if="entrant.campaign.campaign_type == 'Прием на обучение по ОП бакалавриата/специалитета'")
+    .large-1.small-1.columns
+      input#benefit(type="checkbox" name="epgu" v-bind:value="true" v-model="entrant.questionnaire['epgu']" v-on:change = "sendData('questionnaire', entrant.questionnaire)" v-bind:disabled = 'isDisabled')
+    .large-11.small-11.columns
+      label
+        span Согласен на передачу заявления на ЕПГУ
+  .row
+    .large-12.small-12.columns
+      p Пункт "Нуждаюсь в предоставлении общежития" необходимо отметить, если Вы в процессе обучения собираетесь проживать в общежитии академии. Если Вам требуется общежитие на время сдачи внутренних вступительных испытаний, галочку в данном поле Вы не ставите - этот вопрос решается только при личном обращении в приемную комиссию. Количество мест в общежитиях, предоставляемых поступившим на первый курс - 100.
+  .row
+    .large-1.small-1.columns
+      input#benefit(type="checkbox" name="need_hostel" v-bind:value="true" v-model="entrant.questionnaire['need_hostel']" v-on:change = "sendData('questionnaire', entrant.questionnaire)" v-bind:disabled = 'isDisabled')
+    .large-11.small-11.columns
+      label
+        span Нуждаюсь в предоставлении общежития на период обучения
+  .row(v-if="entrant.campaign.campaign_type == 'Прием на обучение по ОП бакалавриата/специалитета'")
+    .large-12.small-12.columns
+      p Если Вы отметите нижеследующий пункт, Вам будет необходимо прикрепить на вкладке Льготы копию документа, подтверждающего инвалидность или ограниченные возможности здоровья, требующие создания специальных условий.
+    .large-1.small-1.columns
+      input#benefit(type="checkbox" name="special_entrant" v-bind:value="true" v-model="entrant.questionnaire['special_entrant']" v-on:change = "sendData('questionnaire', entrant.questionnaire)" v-bind:disabled = 'isDisabled')
+    .large-11.small-11.columns
+      label
+        span Нуждаюсь в предоставлении особых условий при прохождении вступительных испытаний
+    .large-12.small-12.columns(v-if="entrant.questionnaire['special_entrant']")
+      = text_area_tag :special_conditions, nil, placeholder: 'Укажите особые условия', 'v-model.trim':'entrant.special_conditions', 'v-on:change': "sendData('special_conditions', entrant.special_conditions)", 'v-bind:disabled': 'isDisabled'

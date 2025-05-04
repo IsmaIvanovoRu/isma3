@@ -25,13 +25,20 @@
         = f.select :academic_title_id, options_for_select= @academic_titles.collect {|p| [t(p.name, :scope => [:academic_titles]), p.id] }, {:include_blank => ''}
     .row
       .large-4.small-12.columns
-        = f.label :discipline, 'Дисциплины'
+        = f.label :discipline, 'Перечень преподаваемых дисциплин'
         = f.text_field :discipline
+      .large-4.small-12.columns
+        = f.label :teaching_level, 'Уровень образования'
+        = f.text_field :teaching_level
       .large-4.small-12.columns
         = f.label :qualification, 'Квалификация'
         = f.text_field :qualification
-      .large-4.small-12.columns
-        = f.label :development, 'Повышение квалификации'
+    .row
+      .large-6.small-12.columns
+        = f.label :employee_qualification, 'Наименование направления подготовки и (или) специальности педагогического работника'
+        = f.text_field :employee_qualification
+      .large-6.small-12.columns
+        = f.label :development, 'Данные о повышении квалификации и (или) профессиональной переподготовке педагогического работника'
         = f.text_field :development
     .row
       .large-6.small-12.columns

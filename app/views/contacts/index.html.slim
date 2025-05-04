@@ -1,0 +1,131 @@
+- content_for :title do
+  'Контакты и реквизиты
+section.panel.clearfix
+  h1 Реквизиты и контакты
+  dl
+    .(itemscope itemtype="http://schema.org/Organization")
+      dt Наименование университета
+      dd
+        strong полное: 
+        span(itemprop="name")= @details_hash['Полное наименование академии'][:value].html_safe
+      dd
+        strong сокращенное: 
+        span(itemprop="name")= @details_hash['Сокращенное наименование академии'][:value].html_safe
+      dd
+        strong международное: 
+        span(itemprop="name")= @details_hash['Международное наименование академии'][:value].html_safe
+  - if @details_hash['Адрес']
+    .(itemprop="address" itemscope itemtype="http://schema.org/PostalAddress")
+      dl
+        dt Адрес
+        dd
+          span(itemprop="streetAddress")= @details_hash['Адрес'][:value].html_safe
+        - if @details_hash['Электронная почта']
+          dt Электронная почта
+          dd
+            span(itemprop="email")= mail_to @details_hash['Электронная почта'][:value].html_safe
+        - if @details_hash['Телефон']
+          dt Телефон
+          dd
+            span(itemprop="telephone")= multi_number_to_phone(@details_hash['Телефон'][:value].html_safe, country_code: 7, area_code: true)
+          dd= link_to 'Положение об организации рассмотрения обращений граждан', '/attachments/67831', target: '_blank'
+    dl
+      dt Реквизиты
+      - if @details_hash['ИНН']
+        dd
+          strong ИНН: 
+          span= @details_hash['ИНН'][:value].html_safe
+      - if @details_hash['КПП']
+        dd
+          strong КПП: 
+          span= @details_hash['КПП'][:value].html_safe
+      - if @details_hash['Получатель платежа']
+        dd
+          strong Получатель платежа: 
+          span= @details_hash['Получатель платежа'][:value].html_safe
+      - if @details_hash['Номер казначейского счета']
+        dd
+          strong Номер казначейского счета: 
+          span= @details_hash['Номер казначейского счета'][:value].html_safe
+      - if @details_hash['БИК ТОФК']
+        dd
+          strong БИК ТОФК: 
+          span= @details_hash['БИК ТОФК'][:value].html_safe
+      - if @details_hash['ЕКС']
+        dd
+          strong ЕКС: 
+          span= @details_hash['ЕКС'][:value].html_safe
+      - if @details_hash['Наименование банка']
+        dd
+          strong Наименование банка: 
+          span= @details_hash['Наименование банка'][:value].html_safe
+      - if @details_hash['ОКАТО']
+        dd
+          strong ОКАТО: 
+          span= @details_hash['ОКАТО'][:value].html_safe
+      - if @details_hash['ОКТМО']
+        dd
+          strong ОКТМО: 
+          span= @details_hash['ОКТМО'][:value].html_safe
+  table
+    tr
+      td Оплатить предоставленные университетом образовательные и иные услуги можно посредством электронного платежа через СБЕР
+      td= link_to 'https://www.sberbank.com/sms/mybill?cs=1613967226603', target: '_blank' do
+        = image_tag 'sber_button.svg', width: '100%'
+    tr
+      td Оплатить предоставленные университетом образовательные услуги можно посредством электронного платежа через ВТБ
+      td= link_to 'https://online.vtb.ru/i/pay/id/a659d23d-11d6-4cba-8850-37bdf9862b1a', target: '_blank' do
+        = image_tag 'VTB_Pay_button_color.svg', width: '100%'
+  
+
+  h3 В университете устанавливаются следующие часы приема по личным вопросам сотрудников и студентов:
+  table.table
+    thead
+      tr
+        th
+        th Должность
+        th Приемный день
+        th Часы
+    tbody
+      tr
+        td
+          strong 1.   
+        td И.&nbsp;о.&nbsp;ректора университета
+        td четверг
+        td 14.00&ndash;16.00
+      tr
+        td
+          strong 2.   
+        td Проректор по учебной работе
+        td четверг
+        td 14.00&ndash;16.00
+      tr
+        td 
+          strong 3.
+        td Проректор по научной работе и международному сотрудничеству
+        td понедельник, четверг
+        td 15.00&ndash;17.00
+      tr
+        td
+          strong 4.
+        td Проректор по последипломному образованию и клинической работе
+        td вторник, четверг
+        td 15.00&ndash;17.00
+      tr
+        td
+          strong 5.
+        td Проректор по воспитательной работе
+        td понедельник, среда
+        td 15.00&ndash;17.00
+      tr
+        td
+          strong 6.   
+        td Проректор по развитию регионального здравоохранения
+        td понедельник, среда
+        td 15.00&ndash;17.00
+      tr
+        td
+          strong 7.
+        td Деканы и заместители деканов факультетов
+        td ежедневно
+        td 16.00&ndash;17.00

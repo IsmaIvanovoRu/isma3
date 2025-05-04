@@ -1,7 +1,7 @@
 class User < ActiveRecord::Base
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
-  devise :database_authenticatable, :registerable, :rememberable, :trackable
+  devise :database_authenticatable, :rememberable, :trackable
   
   validates :login, :presence => true, 
             :length => { :maximum => 50 }, 
@@ -57,18 +57,25 @@ class User < ActiveRecord::Base
 	group.each do |i|
 	  row = Hash[[header, spreadsheet.row(i)].transpose]
 	  user = find_by_login(row["login"]) || new
-          user.attributes = row.to_hash.slice('login', 'password', 'password_confirmation')
+          user.attributes = row.to_hash.slice('login', 'password', 'password_confirmation') if row['password']
           user_groups = row.to_hash.slice('groups')['groups'].split(',') if row.to_hash.slice('groups')['groups']
           user_post = row.to_hash.slice('post')['post']
-          if user.save!
-            user.profile.import(row)
-            if user_groups
-              user.groups = []
-              user_groups.each{|group| user.groups << Group.where(name: group)}
+          if row['password']
+            if user.save!
+              user.profile.import(row)
+              if row['name']
+                Division.import_from_row(row, user)
+              end
             end
+          else
+            user.profile.import(row)
             if row['name']
               Division.import_from_row(row, user)
             end
+          end
+          if user_groups
+            user.groups = []
+            user_groups.each{|group| user.groups << Group.where(name: group)}
           end
 	end
       end

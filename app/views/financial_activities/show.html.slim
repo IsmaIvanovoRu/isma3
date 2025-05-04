@@ -26,3 +26,15 @@ section.panel
         td(itemprop='finBMVolume')= @financial_activity.municipal_volume
         td(itemprop='finPVolume')= @financial_activity.personal_volume
         td= @financial_activity.year
+        
+  table
+    caption  Сведения о поступлении финансовых и материальных средств и об их расходовании
+    thead
+      tr
+        th Год
+        th Поступившие финансовые и материальные средства
+        th Расходованные финансовые и материальные средства
+      tr(itemprop='volume')
+        td(itemprop = 'finYear')= @financial_activity.year
+        td(itemprop = 'finPost')= @financial_activity.fin_post
+        td(itemprop = 'finRas')= @financial_activity.fin_ras

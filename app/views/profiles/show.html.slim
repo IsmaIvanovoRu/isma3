@@ -1,0 +1,134 @@
+= render partial: 'title'
+= render partial: 'description'
+.row
+  - if @administrator_permission 
+    - wide_class = 'large-10'
+  -else 
+    - wide_class = 'small-12'
+  .columns(class = wide_class)
+    section.panel.clearfix[itemscope itemtype="http://schema.org/Person"]
+      - if @administrator_permission || current_user == @user
+        = link_to edit_user_profile_path(@user), title: 'Редактировать профиль', class: 'right' do
+          i.fi-page-edit
+        - if @administrator_permission
+          span
+            = link_to published_toggle_user_profile_path(@user), title: 'Опубликовать', class: 'right', method: :put do
+              i.fi-eye
+      - unless @profile.full_name.empty?
+        h1
+          span[itemprop="name"]
+            = @profile.full_name
+        = render partial: 'articles/first_image_attachment', locals: {image_attachment: @last_image_attachment, dimension: '150x150' } if @last_image_attachment
+        p
+          = [(@profile.degree.name if @profile.degree), (@profile.academic_title.name if @profile.academic_title)].compact.join(', ')
+          - if @profile.published || current_user == @user || @administrator_permission
+            - if @profile.published
+              .text-justify 
+            - else
+              .text-justify.pink
+            = sanitize_full(autosub_details @profile.about) if @profile.about
+      dl
+        - if @posts.count > 0
+          dt Занимаемые должности
+          dd
+            ul
+              - @posts.each do |post|
+                li
+                  span[itemprop="jobTitle"]
+                    = link_to (post.division.name == post.name ? "#{post.name}" : "#{post.division.name} - #{post.name}"), division_post_path(post.division, post)
+        - else
+          h1 Профиль пользователя не заполнен
+        - if @administrator_permission || current_user == @user
+          h2 Прикрепить аватар
+          = form_for(@attachment) do |f|
+            div[style="display: none;"]
+              = text_field_tag :user_id, @user.id
+            .filefild
+              = f.file_field :file, name: 'attachment[files][]', id: :files, multiple: true
+            .actions
+              = f.submit 'Прикрепить файл'
+  - if @administrator_permission
+    .large-2.columns
+      section.panel.clearfix
+        - if @profile.user.groups.count > 0
+          dl
+            dt Членство в группах
+            dd
+              ul.no-bullet
+                - @user_groups.each do |group|
+                  li
+                    = group.name
+                    - if @administrator_permission
+                      = link_to remove_from_group_path(group) + "?user_id=#{@user.id}", title: 'Удалить статью', method: :delete, data: { confirm: 'Are you sure?' } do
+                        i.fi-x
+              ul.no-bullet
+                - @not_user_groups.each do |group|
+                  li
+                    = group.name
+                    = link_to add_to_group_path(group) + "?user_id=#{@user.id}", title: 'Добавить в группу' do
+                      i.fi-plus
+  - unless @marks_hash.empty?
+    .small-12.large-12.columns
+      section.panel.clearfix
+        h2 Результаты освоения основной образовательной программы (по данным промежуточной аттестации) 
+        - @marks_hash.each do |educational_program, values|
+          - mean_string = "#{educational_program.name} (#{educational_program.code} - #{educational_program.level}) - cредний балл зачетной книжки #{values[:mean]}"
+          - if @administrator_permission || current_user == @user
+            dl.accordion[data-accordion]
+              dd
+                = link_to("#marks-#{educational_program.id}") do
+                  = mean_string
+                .content(id= "marks-#{educational_program.id}")
+                  table.table
+                    thead
+                      tr
+                        th Дисциплина
+                        th Результат освоения
+                    tbody
+                      - values[:marks].each do |mark|
+                        - mark_text = case mark.value
+                        - when 1
+                          - 'зачтено'
+                        - when 2
+                          - 'неудовлетворительно'
+                        - when 3
+                          - 'удовлетворительно'
+                        - when 4
+                          - 'хорошо'
+                        - when 5
+                          - 'отлично'
+                        - else
+                          - 'нет оценки'
+                        tr
+                          td
+                            = "#{mark.subject}"
+                          td
+                            = "#{mark_text}"
+          - else
+            = mean_string
+  - if !@achievements.empty? || current_user == @user
+    .small-12.large-12.columns
+      section.panel.clearfix
+        - if @user.groups.map(&:id).include?(9)
+          = link_to 'Добавить достижение', new_achievement_path, class: "button tiny" if current_user == @user
+        - unless @achievements.empty?
+          h2  Перечень достижений 
+          table.table
+            thead
+              th Название мероприятия
+              th Категория
+              th Дата
+              th Результат
+              th Учитывается для стипендии
+              th Подтверждено документом
+              - if @administrator_permission || current_user == @user
+                th Действия
+            tbody
+              = render partial: 'achievements/achievement', collection: @achievements
+  - unless @articles.empty?
+    .small-12.large-12.columns
+      section.panel.clearfix
+        h2 Публикации на сайте
+        = render partial: 'articles/article', collection: @articles, locals: { dimension: '75x75', composition: {header: true, content: false, footer: false, truncate: true} }
+        hr
+        = will_paginate @articles, next_label: "Вперед", previous_label: 'Назад'

@@ -8,7 +8,7 @@ module ApplicationHelper
                                      attributes: {'a' => Sanitize::Config::RELAXED[:attributes]['a'] + ["target"], 'iframe' => ['width', 'height', 'src', 'frameborder', 'allowfullscreen', 'style'], all: Sanitize::Config::RELAXED[:attributes][:all] + ['itemprop', 'itemscope', 'itemtype']},
 	                             elements: Sanitize::Config::RELAXED[:elements] + ['iframe'])
     end
-    if text =~ /(youtu.be|youtube.com)/ 
+    if text =~ /(youtu.be|youtube.com)/ && text !~ /playlist/
       if action_name == 'show'
 	options = Sanitize::Config.merge(Sanitize::Config::RELAXED,
                                      attributes: {'a' => Sanitize::Config::RELAXED[:attributes]['a'] + ["target"], 'iframe' => ['width', 'height', 'src', 'frameborder', 'allowfullscreen', 'style'], all: Sanitize::Config::RELAXED[:attributes][:all] + ['itemprop', 'itemscope', 'itemtype']},
@@ -16,6 +16,16 @@ module ApplicationHelper
 	insert_youtube(text)
       else
         remove_youtube(text)
+      end
+    end
+    if text =~ /rutube.ru/ && text !~ /playlist/
+      if action_name == 'show'
+	options = Sanitize::Config.merge(Sanitize::Config::RELAXED,
+                                     attributes: {'a' => Sanitize::Config::RELAXED[:attributes]['a'] + ["target"], 'iframe' => ['width', 'height', 'src', 'frameborder', 'allowfullscreen', 'style'], all: Sanitize::Config::RELAXED[:attributes][:all] + ['itemprop', 'itemscope', 'itemtype']},
+	                             elements: Sanitize::Config::RELAXED[:elements] + ['iframe'])
+	insert_rutube(text)
+      else
+        remove_rutube(text)
       end
     end
 #     if text =~ /(docs.google.com\/forms)/ 
@@ -49,6 +59,24 @@ module ApplicationHelper
     text
   end
   
+  def insert_rutube(text)
+    matches = text.scan(/(\S*)(rutube.ru)(\S*)/)
+    matches.each do |m|
+      id = /^.*(rutube.ru\/video\/)([^<#\&\?]*).*\//.match(m.join(''))[2]
+      iframe = "<iframe width='50%' style='float:right; padding-left: 10px;' src='//rutube.ru/play/embed/#{id}' frameBorder='0' allow='clipboard-write; autoplay' webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>"
+      text.gsub!(m.join(''), iframe)
+    end
+    text
+  end
+  
+  def remove_rutube(text)
+    matches = text.scan(/(\S*)(rutube.ru)(\S*)/)
+    matches.each do |m|
+      text.gsub!(m.join(''), '')
+    end
+    text
+  end
+  
   def insert_googleform(text)
     matches = text.scan(/(\S*)(docs.google.com\/forms)(\S*)/)
     matches.each do |m|
@@ -69,7 +97,7 @@ module ApplicationHelper
   def sanitize_truncate(text)
     remove_youtube(text)
     remove_googleform(text)
-    truncate(Sanitize.clean(text), :length => 300, :omission => '... ', :separator => ' ')
+    truncate(Sanitize.clean(text), :length => 300, :omission => '... ', :separator => ' ', escape: false)
   end
   
   def first_letter_upcase(string)

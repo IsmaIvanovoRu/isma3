@@ -1,0 +1,15 @@
+= form_tag efficient_path(efficient), method: :put do
+  - if criterium.max == 0 
+    - value = criterium.min
+  - else
+    - value = 0
+  .row 
+    .large-2.columns
+      = label_tag :value, 'Балл'
+      = number_field_tag :value, efficient.value, in: 0..1000, step: 0.01, value: value, class: 'form-control'
+    .large-10.columns
+      = label_tag :comment, 'Комментарий, если необходимо'
+      = text_area_tag :comment, efficient.comment, class: 'form-control'
+  .row
+    .large-4.columns
+      = submit_tag 'Сохранить', class: 'button tiny'

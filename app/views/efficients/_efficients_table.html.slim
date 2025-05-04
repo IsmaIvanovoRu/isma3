@@ -1,0 +1,30 @@
+table.table(style="width: 100%; table-layout: fixed;")
+  thead 
+    tr
+      th(style="width: 40%;") Название пункта
+      th(style="width: 20%;") Ссылки/текст
+      th(style="width: 20%;") Файлы
+      th(style="width: 10%;") Баллы
+      th(style="width: 10%;") Действия
+  tbody
+    - efficients.each do |efficient|
+      tr 
+        td
+          p= efficient.criterium.point
+          - if efficient.comment.present?
+            .label.alert.rounded= efficient.comment
+        td(style="word-wrap: break-word; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;")
+          - if efficient.link.present?
+            - if efficient.criterium.criterium_type == 'none'
+              = efficient.link
+            - else 
+              = link_to efficient.link, efficient.link, target: '_blank'
+        td
+          ul.no-bullet
+            - efficient.attachments.each do |attachment|
+              li= link_to attachment.title_sen_dot, attachment_path(attachment), target: '_blank'
+        td
+          = efficient.value 
+        td
+          - unless efficient.checked
+            = link_to 'Удалить', efficient_path(efficient), method: :delete 

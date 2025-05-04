@@ -1,0 +1,78 @@
+= javascript_include_tag 'axios.min.js'
+- if Rails.env == 'production'
+  = javascript_include_tag 'vue@2.7.14.js'
+- else
+  = javascript_include_tag 'vue.js'
+- data_acceptor_type = ''
+- if @teacher_permission
+  - data_acceptor_type = 'teacher'
+- if @student_permission
+  - data_acceptor_type = 'student'
+section.panel#efficient[data-acceptor-type=data_acceptor_type]
+  - if @efficient_writer_permission || @deansoffice_permission || @administrator_permission
+    ul.tabs[data-tab role="tablist"]
+      li.tab-title.active[role="presentation"]
+        a[href="#member" role="tab" tabindex="0" aria-selected="true" aria-controls="member"] Член комиссии
+      li.tab-title[role="presentation"]
+        a[href="#person" role="tab" tabindex="0" aria-selected="false" aria-controls="person"] Преподаватель
+    div.tabs-content
+      section[role="tabpanel" aria-hidden="false" class="content active" id="member"]
+        .row 
+          .large-4.columns
+            h3 
+              = "Всего пунктов #{@all_efficients.count}"
+          .large-4.columns
+            h3 
+              = "Не проверено #{@all_efficients.where(checked: false).count}"
+          .large-4.columns
+        - if @all_efficients.present?
+          - @all_efficients.each do |efficient|
+            - criterium = efficient.criterium
+            .panel.callout
+              - if efficient.checked
+                span.label.success.rounded.right Проверено
+              h3= criterium.point
+              p
+                strong= link_to "#{efficient.profile.full_name} (#{efficient.divisions.where(division_type_id: [3, 6]).map(&:name).join(", ")})", user_path(efficient.user), target: '_blank'
+              p= "Подтверждающий документ: #{criterium.comment}"
+              p= criterium.max == 0 ? "Баллы за критерий: #{criterium.min}" : "Баллы за критерий: от #{criterium.min} до #{criterium.max}"
+              - if efficient.link.present?
+                .row
+                  .large-1.columns
+                    p Ссылка:
+                  .large-11.columns
+                    p
+                      = link_to efficient.link, efficient.link, target: '_blank'
+              - if efficient.attachments.present?
+                .row
+                  .large-1.columns
+                    p Файлы:
+                  .large-11.columns
+                    ul.no-bullet
+                      - efficient.attachments.each do |attachment|
+                        li
+                          p= link_to attachment.title_sen_dot, attachment_path(attachment), target: '_blank'
+              - if efficient.checked
+                .row
+                  .large-4.columns
+                    p= "Начисленно баллов: #{efficient.value }"
+                  .large-8.columns
+                    p= "Комментарий: #{efficient.comment.present? ? efficient.comment : 'нет'}"
+                .row 
+                  .large-12.columns 
+                    =link_to 'Отправить на проверку', uncheck_efficient_path(efficient), method: :put, class: 'button tiny'
+              - else
+                = render partial: 'update_form', locals: { efficient: efficient, criterium: criterium }
+      section[role="tabpanel" aria-hidden="true" class="content" id="person"]
+        = render partial: 'form'
+        - if @efficients.present?
+          = render partial: 'efficients_table', locals: { efficients: @efficients }
+  - else
+    = render partial: 'form'
+    - if @efficients.present?
+      h3 Текущий сбор
+      = render partial: 'efficients_table', locals: { efficients: @efficients }
+    - if @archived_efficients.present?
+      h3 Предыдущие сборы
+      = render partial: 'efficients_table', locals: { efficients: @archived_efficients }
+= javascript_include_tag 'efficient'

@@ -12,6 +12,8 @@
         <Cell><Data ss:Type="String">Кафедра</Data></Cell>
         <Cell><Data ss:Type="String">Занимаемая должность</Data></Cell>
         <Cell><Data ss:Type="String">Преподаваемые дисциплины</Data></Cell>
+        <Cell><Data ss:Type="String">Уровень образования</Data></Cell>
+        <Cell><Data ss:Type="String">Квалификация</Data></Cell>
         <Cell><Data ss:Type="String">Ученая степень</Data></Cell>
 	<Cell><Data ss:Type="String">Ученое звание</Data></Cell>
 	<Cell><Data ss:Type="String">Наименование направления подготовки и (или) специальность</Data></Cell>
@@ -19,16 +21,18 @@
         <Cell><Data ss:Type="String">Общий стаж работы</Data></Cell>
         <Cell><Data ss:Type="String">Стаж работы по специальности</Data></Cell>
       </Row>
-    <% @employees.each do |employee| %>
+    <% @employees_all.each do |employee| %>
       <Row>
         <Cell><Data ss:Type="String"><%= employee.user.login %></Data></Cell>
         <Cell><Data ss:Type="String"><%= employee.full_name %></Data></Cell>
         <Cell><Data ss:Type="String"><%= employee.posts.includes(:division).joins(:division).where(divisions: {division_type_id: 3}).map{|p| [p.division.name]}.join(", ") %></Data></Cell>
         <Cell><Data ss:Type="String"><%= employee.posts.includes(:division).joins(:division).where(divisions: {division_type_id: 3}).map{|p| [p.name]}.join(", ") %></Data></Cell>
         <Cell><Data ss:Type="String"><%= employee.discipline ? employee.discipline : '' %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= employee.teaching_level ? employee.teaching_level : '' %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= employee.qualification ? employee.qualification : '' %></Data></Cell>
         <Cell><Data ss:Type="String"><%= employee.degree ? employee.degree.name : '' %></Data></Cell>
         <Cell><Data ss:Type="String"><%= employee.academic_title.name if employee.academic_title %></Data></Cell>
-        <Cell><Data ss:Type="String"><%= employee.qualification %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= employee.employee_qualification %></Data></Cell>
         <Cell><Data ss:Type="String"><%= employee.development %></Data></Cell>
         <Cell><Data ss:Type="Number"><%= employee.general_experience %></Data></Cell>
         <Cell><Data ss:Type="Number"><%= employee.special_experience %></Data></Cell>

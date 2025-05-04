@@ -19,13 +19,10 @@
     = f.label 'За счет частных лиц'
     = f.number_field :personal_volume, step: :any
   .field
-    = f.label 'Ссылка на страницу вуза на официальном сайте РФ'
-    = f.text_field :bus_gov_link
+    = f.label 'Поступление средств'
+    = f.number_field :fin_post, step: :any
   .field
-    = f.label 'Ссылка на план ФХД'
-    = f.text_field :financial_plan_link
-  .field
-    = f.label 'Ссылка на отчет ФХД'
-    = f.text_field :financial_report_link
+    = f.label 'Расходование средств'
+    = f.number_field :fin_ras, step: :any
   .actions
     = f.submit 'Добавить', class: 'button tiny'

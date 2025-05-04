@@ -7,14 +7,24 @@ tr
     = time_tag achievement.event_date, :pubdate => true, :format => '%e.%m.%Y'
   td class = ('pink' unless achievement.published)
     = achievement.achievement_result.name
+  / td class = ('pink' unless achievement.published)
+  /   = achievement.grant ? 'Да' : ''
   td class = ('pink' unless achievement.published)
-    = achievement.attachments.count > 0 ? "Да" : "Нет"
+    - if achievement.attachments.present? && @deansoffice_permission
+      ul.no-bullet
+        - achievement.attachments.each do |attachment|
+          li= link_to attachment.title.first(15), attachment, target: '_blank'
+    - else
+      = achievement.attachments.present? ? "Да" : ''
   - if @administrator_permission || current_user == @user
     td class = ('pink' unless achievement.published)
       - if @administrator_permission
         = link_to published_toggle_achievement_path(achievement), title: (achievement.published ? 'Снять с публикации' : 'Опубликовать'), method: :put do
           i.fi-eye
           span &nbsp;
+      = link_to grant_toggle_achievement_path(achievement), title: (achievement.grant ? 'Не учитывать для стипендии' : 'Учитывать для стипендии'), method: :put do
+        i.fi-dollar
+        span &nbsp;
       = link_to edit_achievement_path(achievement), title: 'Редактировать' do
         i.fi-page-edit
         span &nbsp;

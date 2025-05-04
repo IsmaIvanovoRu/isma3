@@ -11,6 +11,22 @@
 
 // Allows the use of rem-calc() or lower-bound() in your settings
 @import "foundation/functions";
+@font-face {
+  font-family:'Open Sans';
+  src:font-url('OpenSans-Bold.ttf') format('truetype');
+}
+@font-face {
+  font-family:'Open Sans';
+  src:font-url('OpenSans-Italic.ttf') format('truetype');
+}
+@font-face {
+  font-family:'Open Sans';
+  src:font-url('OpenSans-BoldItalic.ttf') format('truetype');
+}
+@font-face {
+  font-family:'Open Sans';
+  src:font-url('OpenSans-Regular.ttf') format('truetype');
+}
 $namespace : false;
 $body-font-family: 'Open Sans', Arial, sans-serif;
 $paragraph-font-size: 1rem;

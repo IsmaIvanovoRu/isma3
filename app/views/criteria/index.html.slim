@@ -1,0 +1,45 @@
+section.panel
+  h2 Импорт критериев эффективного контракта
+  = form_tag import_criteria_path, multipart: true do
+    = file_field_tag :file
+    = submit_tag "Загрузить", class: 'button tiny'
+  table.table 
+    caption Критерии эффективного контракта
+    thead
+      th Категория
+      th Критерий
+      th Минимальный балл
+      th Максимальный балл
+      th Комментарий
+      th Тип
+      th Актуально
+      th Действия
+    tbody 
+      - @criteria.each do |criterium|
+        tr 
+          td 
+            = criterium.chapter 
+          td
+            = criterium.point 
+          td 
+            = criterium.min 
+          td
+            = criterium.max 
+          td
+            = criterium.comment 
+          td
+            - case criterium.criterium_type 
+            - when 'file'
+              = 'Файл'
+            - when 'link'
+              = 'Ссылка'
+            - when 'both'
+              = 'Файл и ссылка'
+            - when 'none' 
+              = 'Текстовое поле'
+          td
+            = criterium.actual 
+          td 
+            = criterium.acceptor_type
+          td 
+            = link_to 'Удалить', criterium_path(criterium), method: :delete, data: { confirm: 'Are you sure?' }

@@ -1,0 +1,33 @@
+- content_for :title do
+  |  Сведения об образовательной организации. Образовательные стандарты и требования.
+section.panel
+  h1 Образовательные стандарты и требования
+  p= autosub_details("&amp;[Навигация сведений об образовательной организации]").html_safe
+  table
+    thead
+      tr
+        th Специальность/направление подготовки
+        th Копии документов федеральных государственных стандартов и образовательных стандартов
+    tbody
+      - @educational_programs.each do |educational_program|
+        tr(itemprop='eduAccred')
+          - amp = educational_program.adaptive ? '*' : ''
+          td= "#{educational_program.full_name}#{amp}"
+          - case educational_program.educational_standart.level
+          - when 'ФГОС' 
+            - standart_level = 'eduFedDoc'
+          - when 'ГОС'
+            - standart_level = 'eduStandartDoc'
+          - when 'ФГТ'
+            - standart_level = 'eduFedTreb'
+          td(itemprop="#{standart_level}")= link_to "#{educational_program.educational_standart.name}", educational_program.educational_standart.url, target: :blank if educational_program.educational_standart
+      tr(itemprop='eduStandartTreb')
+        td -
+        td -
+      tr(itemprop='eduStandartDoc')
+        td -
+        td -
+      tr(itemprop='eduFedDoc')
+        td -
+        td -
+  p.sub * - адаптированная образовательная программа

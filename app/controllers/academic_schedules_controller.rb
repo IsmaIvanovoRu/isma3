@@ -50,6 +50,6 @@ class AcademicSchedulesController < ApplicationController
   
   def options_for_select
     @educational_programs = EducationalProgram.order(:level, :name).load
-    @attachments = Attachment.order(:title).select(:id, :title).select{|a| a.title =~ /pdf/}
+    @attachments = Attachment.order(:title).select(:id, :title).select{|a| a.title =~ /учебный график/}
   end
 end

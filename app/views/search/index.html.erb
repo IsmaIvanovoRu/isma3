@@ -24,7 +24,11 @@
       <li><i class="fi-page" title="Статья">&nbsp;</i><%= link_to search.title, article_path(search) %>
   <% end %>
   <% if search.class == Profile %>
+    <% if @moderator_permission || @isma_permission %>
       <li><i class="fi-torso" title="Пользователь">&nbsp;</i><%= link_to search.full_name, user_profile_path(search.user) %>
+    <% else %>
+      <li><i class="fi-torso" title="Пользователь">&nbsp;</i><%= search.full_name %>
+    <% end %>
   <% end %>
   <%  if search.class == Division %>
       <li><i class="fi-torsos-all" title="Подразделение">&nbsp;</i><%= link_to search.name, division_path(search) %>

@@ -1,0 +1,43 @@
+- content_for :title do
+  | Сведения об образовательной организации. Руководство.
+section.panel
+  h1 Руководство
+  p= autosub_details("&amp;[Навигация сведений об образовательной организации]").html_safe
+  table
+    caption Информация о руководителе образовательной организации/заместителях руководителя образовательной организации
+    thead
+      tr
+        th Ф.И.О.
+        th width='30%' Занимаемая должность
+        th Телефон
+        th Электронная почта
+    tbody
+      - @posts_head.each do |post|
+        tr(itemprop='rucovodstvo')
+          td= link_to post.profile.full_name, user_profile_path(post.user), itemprop: 'fio' if post.user
+          td itemprop='post'= post.name
+          td itemprop='telephone'= number_to_phone(post.phone, country_code: 7, area_code: true) if post && !post.phone.empty?
+          td itemprop='email'= mail_to post.division.email, post.division.email, itemprop: 'e-mail' if post.division.email
+      - @posts_vice.each do |post|
+        - if post.profile&.full_name.present?
+          tr(itemprop='rucovodstvoZam')
+            td= link_to post.profile.full_name, user_profile_path(post.user), itemprop: 'fio' if post.user
+            td itemprop='post'= post.name
+            td itemprop='telephone'= number_to_phone(post.phone, country_code: 7, area_code: true) if post && !post.phone.empty?
+            td itemprop='email'= mail_to post.division.email, post.division.email, itemprop: 'e-mail' if post.division.email
+  table
+    caption Информация о руководителях филиалов образовательной организации
+    thead
+      tr
+        th Наименование филиала
+        th Ф.И.О.
+        th width='30%' Занимаемая должность
+        th Телефон
+        th Электронная почта
+    tbody
+      tr(itemprop='rucovodstvoFil')
+        td(itemprop='nameFil') филиалы отсутствуют
+        td(itemprop='fio') филиалы отсутствуют
+        td(itemprop='post') филиалы отсутствуют
+        td(itemprop='telephone') филиалы отсутствуют
+        td(itemprop='email') филиалы отсутствуют

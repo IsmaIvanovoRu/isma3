@@ -1,0 +1,62 @@
+fieldset
+  p Прием по целевой квоте осуществляется при наличии договора о целевом обучении. Необходимо представить копию договора о целевом обучении (подписанного всеми сторонами).
+  legend Целевой договор
+  .(v-for="(document, index) in entrant.target_contracts")
+    .row
+      .(v-show="entrant.target_contracts.indexOf(document) > 0") Следующий документ
+      .large-12.small-12.columns
+        label
+          span Специальность и заказчик целевого обучения
+        select.error#competitive_group_id(name="target_contracts[][competitive_group_id]" v-model='document.competitive_group_id' v-on:change="sendData('target_contract', document, index)" v-bind:disabled = "isDisabled && document.competitive_group_id != ''")
+          option(value)
+          option(v-for="competitive_group in api.dictionaries.campaign.competitive_groups" v-if="competitive_group.education_source == 'Целевая квота'" v-bind:value="competitive_group.id") {{ competitive_group.name }}
+    .row
+      .large-6.small-12.columns
+        = label_tag :target_contract_number
+          span Номер договора
+          = text_field_tag 'target_contracts[][number]', nil, 'v-model.trim': 'document.number', class: 'error', 'v-on:focusout': "sendData('target_contract', document, index)", 'v-bind:disabled': "entrant.stage == 4 && document.number != null"
+        small.error v-if="findErrorMessage('target_contract_number')" == "{{ findErrorMessage('target_contract_number') }}"
+      .large-6.small-12.columns
+        = label_tag :target_contract_date
+          span Дата заключения договора
+          = date_field_tag 'target_contracts[][date]', nil, 'v-model.trim': 'document.date', class: 'error', 'v-on:focusout': "sendData('target_contract', document, index)", 'v-bind:disabled': "entrant.stage == 4 && document.date != null"
+        small.error v-if="findErrorMessage('target_contract_date')" == "{{ findErrorMessage('target_contract_date') }}"
+    .row
+      .large-12.small-12.columns
+        = label_tag :target_contract_employer
+          span Наименование работодателя (если указано в договоре)
+          = text_field_tag 'target_contracts[][employer]', nil, 'v-model.trim': 'document.employer', class: 'error', 'v-on:focusout': "sendData('target_contract', document, index)", 'v-bind:disabled': "entrant.stage == 4 && document.employer != null"
+        small.error v-if="findErrorMessage('target_contract_employer')" == "{{ findErrorMessage('target_contract_employer') }}"
+    .row
+      .large-6.small-12.columns
+        = label_tag :target_contract_employer_ogrn
+          span ОГРН работодателя (если указано в договоре)
+          = text_field_tag 'target_contracts[][employer_ogrn]', nil, 'v-model.trim': 'document.employer_ogrn', class: 'error', 'v-on:focusout': "sendData('target_contract', document, index)", 'v-bind:disabled': "entrant.stage == 4 && document.employer_ogrn != null"
+        small.error v-if="findErrorMessage('target_contract_employer_ogrn')" == "{{ findErrorMessage('target_contract_employer_ogrn') }}"
+      .large-6.small-12.columns
+        = label_tag :target_contract_employer_kpp
+          span КПП работодателя (если указано в договоре)
+          = text_field_tag 'target_contracts[][employer_kpp]', nil, 'v-model.trim': 'document.employer_kpp', class: 'error', 'v-on:focusout': "sendData('target_contract', document, index)", 'v-bind:disabled': "entrant.stage == 4 && document.employer_kpp != null"
+        small.error v-if="findErrorMessage('target_contract_employer_kpp')" == "{{ findErrorMessage('target_contract_employer_kpp') }}"
+    .row
+      .large-12.small-12.columns
+        label
+          span Регион трудоустройства (если работодатель определен заказчиком)
+        select.error#employer_region(name="target_contracts[][employer_region]" v-model='document.employer_region' v-on:change="sendData('target_contract', document, index)" v-bind:disabled = "isDisabled && document.employer_region != ''")
+          option(value)
+          option(v-for="region in api.dictionaries.regions" v-bind:value="region.Name") {{ region.Name }}
+        small.error v-if="findErrorMessage('target_contract_employer_region')" == "{{ findErrorMessage('target_contract_employer_region') }}"
+    .row(v-if="document.id")
+      .large-12.small-12.columns
+        br
+        = render partial: 'add_attachment', locals: { message: 'Выберите и прикрепите файл(ы).', document_type: 'target_contract', document_id: 'document.id', entrant_id: 'entrant.id', ref_name: 'target_contract', id: 'target_contract'}
+    .row(v-for="attachment in entrant.attachments")
+        .large-12.small-12.columns
+          p(v-if="attachment.document_type == 'target_contract' && attachment.document_id == document.id")
+            a v-bind:href = "'/api/attachments/' + attachment.data_hash + '?filename=' + attachment.filename" target = '_blank' {{ attachment.filename }}
+  br
+  .row
+    .large-12.small-12.columns
+      .button.tiny @click="addTargetContract" Указать данные другого договора
+      span &nbsp;
+      .button.tiny(v-if="entrant.target_contracts.length > 1 && entrant.stage == 0" @click="deleteTargetContract") Удалить договор

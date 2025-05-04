@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20191031114518) do
+ActiveRecord::Schema.define(version: 20250131091615) do
 
   create_table "academic_plans", force: :cascade do |t|
     t.string   "name",                   limit: 255
@@ -75,6 +75,7 @@ ActiveRecord::Schema.define(version: 20191031114518) do
     t.boolean  "published",                                default: false
     t.datetime "created_at",                                               null: false
     t.datetime "updated_at",                                               null: false
+    t.boolean  "grant",                                    default: false
   end
 
   add_index "achievements", ["achievement_category_id"], name: "index_achievements_on_achievement_category_id", using: :btree
@@ -129,12 +130,19 @@ ActiveRecord::Schema.define(version: 20191031114518) do
     t.integer  "score",          limit: 4,        default: 0
     t.string   "file_name",      limit: 255
     t.string   "thumbnail_name", limit: 255
+    t.integer  "user_id",        limit: 4
   end
 
   add_index "attachments", ["article_id"], name: "index_attachments_on_article_id", using: :btree
+  add_index "attachments", ["user_id"], name: "index_attachments_on_user_id", using: :btree
 
   create_table "attachments_divisions", id: false, force: :cascade do |t|
     t.integer "division_id",   limit: 4, null: false
+    t.integer "attachment_id", limit: 4, null: false
+  end
+
+  create_table "attachments_efficients", id: false, force: :cascade do |t|
+    t.integer "efficient_id",  limit: 4, null: false
     t.integer "attachment_id", limit: 4, null: false
   end
 
@@ -150,6 +158,7 @@ ActiveRecord::Schema.define(version: 20191031114518) do
     t.text     "equipment",   limit: 16777215
     t.datetime "created_at",                   null: false
     t.datetime "updated_at",                   null: false
+    t.text     "ovz",         limit: 65535
   end
 
   add_index "classrooms", ["subject_id"], name: "index_classrooms_on_subject_id", using: :btree
@@ -165,6 +174,19 @@ ActiveRecord::Schema.define(version: 20191031114518) do
 
   add_index "comments", ["article_id"], name: "index_comments_on_article_id", using: :btree
   add_index "comments", ["user_id"], name: "index_comments_on_user_id", using: :btree
+
+  create_table "criteria", force: :cascade do |t|
+    t.string   "chapter",        limit: 255
+    t.text     "point",          limit: 16777215
+    t.float    "min",            limit: 24,       default: 0.0
+    t.float    "max",            limit: 24,       default: 0.0
+    t.text     "comment",        limit: 16777215
+    t.string   "criterium_type", limit: 255
+    t.boolean  "actual",                          default: false
+    t.datetime "created_at",                                      null: false
+    t.datetime "updated_at",                                      null: false
+    t.string   "acceptor_type",  limit: 255
+  end
 
   create_table "degrees", force: :cascade do |t|
     t.string   "name",       limit: 255, default: "", null: false
@@ -215,6 +237,8 @@ ActiveRecord::Schema.define(version: 20191031114518) do
     t.date     "date"
     t.datetime "created_at",                                   null: false
     t.datetime "updated_at",                                   null: false
+    t.integer  "number_foreign_paid",    limit: 4, default: 0
+    t.integer  "number_foreign_budget",  limit: 4, default: 0
   end
 
   add_index "educational_program_numbers", ["educational_program_id"], name: "index_educational_program_numbers_on_educational_program_id", using: :btree
@@ -262,6 +286,7 @@ ActiveRecord::Schema.define(version: 20191031114518) do
     t.date     "date"
     t.datetime "created_at",                                          null: false
     t.datetime "updated_at",                                          null: false
+    t.text     "result_nir",             limit: 65535
   end
 
   add_index "educational_program_researches", ["educational_program_id"], name: "educational_program_researches_index", using: :btree
@@ -294,6 +319,8 @@ ActiveRecord::Schema.define(version: 20191031114518) do
     t.boolean  "active",                              default: true
     t.string   "language",                limit: 255
     t.boolean  "adaptive",                            default: false
+    t.integer  "year_start",              limit: 4
+    t.integer  "employee_list_id",        limit: 4
   end
 
   add_index "educational_programs", ["accreditation_id"], name: "index_educational_programs_on_accreditation_id", using: :btree
@@ -307,6 +334,21 @@ ActiveRecord::Schema.define(version: 20191031114518) do
     t.datetime "created_at",             null: false
     t.datetime "updated_at",             null: false
   end
+
+  create_table "efficients", force: :cascade do |t|
+    t.integer  "criterium_id", limit: 4
+    t.integer  "user_id",      limit: 4
+    t.text     "link",         limit: 65535
+    t.float    "value",        limit: 24,    default: 0.0
+    t.boolean  "checked",                    default: false
+    t.datetime "created_at",                                 null: false
+    t.datetime "updated_at",                                 null: false
+    t.text     "comment",      limit: 65535
+    t.boolean  "archived",                   default: false
+  end
+
+  add_index "efficients", ["criterium_id"], name: "index_efficients_on_criterium_id", using: :btree
+  add_index "efficients", ["user_id"], name: "index_efficients_on_user_id", using: :btree
 
   create_table "feedbacks", force: :cascade do |t|
     t.integer  "to",         limit: 4,                     null: false
@@ -330,6 +372,8 @@ ActiveRecord::Schema.define(version: 20191031114518) do
     t.string   "bus_gov_link",          limit: 255
     t.datetime "created_at",                                                               null: false
     t.datetime "updated_at",                                                               null: false
+    t.decimal  "fin_post",                          precision: 16, scale: 2, default: 0.0
+    t.decimal  "fin_ras",                           precision: 16, scale: 2, default: 0.0
   end
 
   create_table "groups", force: :cascade do |t|
@@ -351,13 +395,24 @@ ActiveRecord::Schema.define(version: 20191031114518) do
     t.integer "group_id", limit: 4, null: false
   end
 
+  create_table "international_contracts", force: :cascade do |t|
+    t.string   "state_name",   limit: 255
+    t.string   "org_name",     limit: 255
+    t.string   "dog_name",     limit: 255
+    t.string   "dog_number",   limit: 255
+    t.date     "dog_date"
+    t.date     "dog_date_end"
+    t.datetime "created_at",               null: false
+    t.datetime "updated_at",               null: false
+  end
+
   create_table "marks", force: :cascade do |t|
     t.integer  "user_id",                limit: 4
     t.integer  "educational_program_id", limit: 4
-    t.string   "subject",                limit: 255, default: ""
-    t.integer  "value",                  limit: 4,   default: 0
-    t.datetime "created_at",                                      null: false
-    t.datetime "updated_at",                                      null: false
+    t.text     "subject",                limit: 65535
+    t.integer  "value",                  limit: 4,     default: 0
+    t.datetime "created_at",                                       null: false
+    t.datetime "updated_at",                                       null: false
   end
 
   add_index "marks", ["educational_program_id"], name: "index_marks_on_educational_program_id", using: :btree
@@ -428,23 +483,25 @@ ActiveRecord::Schema.define(version: 20191031114518) do
   add_index "practices", ["educational_program_id"], name: "index_practices_on_educational_program_id", using: :btree
 
   create_table "profiles", force: :cascade do |t|
-    t.integer  "user_id",            limit: 4
-    t.string   "first_name",         limit: 255,   default: "",   null: false
-    t.string   "middle_name",        limit: 255,   default: ""
-    t.string   "last_name",          limit: 255,   default: "",   null: false
-    t.integer  "degree_id",          limit: 4
-    t.integer  "academic_title_id",  limit: 4
-    t.string   "phone",              limit: 255,   default: ""
-    t.text     "about",              limit: 65535
+    t.integer  "user_id",                limit: 4
+    t.string   "first_name",             limit: 255,   default: "",   null: false
+    t.string   "middle_name",            limit: 255,   default: ""
+    t.string   "last_name",              limit: 255,   default: "",   null: false
+    t.integer  "degree_id",              limit: 4
+    t.integer  "academic_title_id",      limit: 4
+    t.string   "phone",                  limit: 255,   default: ""
+    t.text     "about",                  limit: 65535
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "email",              limit: 255,   default: ""
-    t.string   "discipline",         limit: 255,   default: ""
-    t.string   "qualification",      limit: 255,   default: ""
-    t.text     "development",        limit: 65535
-    t.integer  "general_experience", limit: 4,     default: 0
-    t.integer  "special_experience", limit: 4,     default: 0
-    t.boolean  "published",                        default: true
+    t.string   "email",                  limit: 255,   default: ""
+    t.string   "discipline",             limit: 255,   default: ""
+    t.string   "qualification",          limit: 255,   default: ""
+    t.text     "development",            limit: 65535
+    t.integer  "general_experience",     limit: 4,     default: 0
+    t.integer  "special_experience",     limit: 4,     default: 0
+    t.boolean  "published",                            default: true
+    t.string   "teaching_level",         limit: 255
+    t.string   "employee_qualification", limit: 255
   end
 
   add_index "profiles", ["academic_title_id"], name: "index_profiles_on_academic_title_id", using: :btree
@@ -452,15 +509,17 @@ ActiveRecord::Schema.define(version: 20191031114518) do
   add_index "profiles", ["user_id"], name: "index_profiles_on_user_id", using: :btree
 
   create_table "subjects", force: :cascade do |t|
-    t.string   "name",                   limit: 255
-    t.integer  "attachment_id",          limit: 4
-    t.integer  "educational_program_id", limit: 4
-    t.datetime "created_at",                         null: false
-    t.datetime "updated_at",                         null: false
+    t.string   "name",                     limit: 255
+    t.integer  "annotation_attachment_id", limit: 4
+    t.integer  "educational_program_id",   limit: 4
+    t.datetime "created_at",                           null: false
+    t.datetime "updated_at",                           null: false
+    t.integer  "full_text_attachment_id",  limit: 4
   end
 
-  add_index "subjects", ["attachment_id"], name: "index_subjects_on_attachment_id", using: :btree
+  add_index "subjects", ["annotation_attachment_id"], name: "index_subjects_on_annotation_attachment_id", using: :btree
   add_index "subjects", ["educational_program_id"], name: "index_subjects_on_educational_program_id", using: :btree
+  add_index "subjects", ["full_text_attachment_id"], name: "index_subjects_on_full_text_attachment_id", using: :btree
 
   create_table "users", force: :cascade do |t|
     t.string   "encrypted_password",     limit: 255, default: "", null: false
@@ -487,6 +546,7 @@ ActiveRecord::Schema.define(version: 20191031114518) do
   add_foreign_key "achievements", "achievement_categories"
   add_foreign_key "achievements", "achievement_results"
   add_foreign_key "achievements", "users"
+  add_foreign_key "attachments", "users"
   add_foreign_key "classrooms", "subjects"
   add_foreign_key "educational_program_numbers", "educational_programs"
   add_foreign_key "educational_program_perevods", "educational_programs"
@@ -496,12 +556,14 @@ ActiveRecord::Schema.define(version: 20191031114518) do
   add_foreign_key "educational_programs", "accreditations"
   add_foreign_key "educational_programs", "attachments"
   add_foreign_key "educational_programs", "educational_standarts"
+  add_foreign_key "efficients", "criteria"
+  add_foreign_key "efficients", "users"
   add_foreign_key "marks", "educational_programs"
   add_foreign_key "marks", "users"
   add_foreign_key "methodological_supports", "attachments"
   add_foreign_key "methodological_supports", "educational_programs"
   add_foreign_key "practices", "attachments"
   add_foreign_key "practices", "educational_programs"
-  add_foreign_key "subjects", "attachments"
+  add_foreign_key "subjects", "attachments", column: "annotation_attachment_id"
   add_foreign_key "subjects", "educational_programs"
 end

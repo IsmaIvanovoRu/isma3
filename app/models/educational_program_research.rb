@@ -7,7 +7,7 @@ class EducationalProgramResearch < ActiveRecord::Base
   private
   
   def self.import(file)
-    educational_program_codes = EducationalProgram.select(:id, :code).map{|ep| [ep.code, ep.id]}.to_h
+    educational_program_codes = EducationalProgram.select(:id, :code, :adaptive).where(adaptive: false).map{|ep| [ep.code, ep.id]}.to_h
     message = ''
     spreadsheet = open_spreadsheet(file)
     header = spreadsheet.row(1)
@@ -15,11 +15,11 @@ class EducationalProgramResearch < ActiveRecord::Base
       ActiveRecord::Base.transaction do
 	group.each do |i|
 	  row = Hash[[header, spreadsheet.row(i)].transpose]
-	  educational_program_code = row["code"]
+	  educational_program_code = row["code"].strip
           educational_program_id = educational_program_codes[educational_program_code] if educational_program_codes.keys.include?(educational_program_code)
           if educational_program_id
             educational_program_research = new
-            educational_program_research.attributes = row.to_hash.slice('perechen_nir', 'base_nir', 'npr_nir', 'stud_nir', 'monograf_nir', 'article_nir', 'patent_r_nir', 'patent_z_nir', 'svid_r_nir', 'svid_z_nir', 'finance_nir', 'date')
+            educational_program_research.attributes = row.to_hash.slice('perechen_nir', 'base_nir', 'npr_nir', 'stud_nir', 'monograf_nir', 'article_nir', 'patent_r_nir', 'patent_z_nir', 'svid_r_nir', 'svid_z_nir', 'finance_nir', 'date', 'result_nir')
             educational_program_research.educational_program_id = educational_program_id
             educational_program_research.save
           end

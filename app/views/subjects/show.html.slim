@@ -1,0 +1,16 @@
+section.panel
+  .= link_to 'К списку дисциплин', subjects_path
+  .right
+    - if @moderator_permission
+      = link_to edit_subject_path(@subject), title: 'Редактировать' do
+        i.fi-page-edit
+      = link_to @subject, title: 'Удалить', method: :delete, data: { confirm: 'Are you sure?' } do
+        i.fi-x
+  h1= @subject.name
+  dl
+    dt Образовательная программа
+    dd= link_to @subject.educational_program.educational_standart ? "#{@subject.educational_program.full_name} (#{@subject.educational_program.educational_standart.level})" : "#{@subject.educational_program.full_name}", @subject.educational_program
+    dt Аннотация рабочей программы
+    dd= @subject.annotation_attachment ? (link_to @subject.annotation_attachment.title_sen_dot, @subject.annotation_attachment, target: 'blank') : 'не указана' 
+    dt Рабочая программа
+    dd= @subject.full_text_attachment ? (link_to @subject.full_text_attachment.title_sen_dot, @subject.full_text_attachment, target: 'blank') : 'не указана' 

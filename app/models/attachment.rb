@@ -4,6 +4,7 @@ class Attachment < ActiveRecord::Base
   has_and_belongs_to_many :profiles
   has_and_belongs_to_many :divisions
   has_and_belongs_to_many :achievements
+  belongs_to :user
   
   def uploaded_file(incoming_file, gravity = "default")
     self.title = incoming_file.original_filename
@@ -50,7 +51,7 @@ class Attachment < ActiveRecord::Base
   end
   
   def pdf2text(data)
-    `pdftotext #{data} -`
+    `pdftotext -enc UTF-8 #{data} -`
   end
   
   def copy_file(file_path, temp_file)

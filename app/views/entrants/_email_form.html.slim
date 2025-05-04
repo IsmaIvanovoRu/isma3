@@ -1,0 +1,75 @@
+fieldset(v-if="api.campaigns && api.campaigns.length > 1")
+  legend Выберите приемную кампанию
+  .row
+    .large-12.small-12.columns
+      label
+        span При поступлении на первый курс для получения диплома врача необходимо выбрать Специалитет/бакалавриат,
+        br для последипломного обучения в ординатуре - Ординатура
+        select.error#campaign_id(name="campaign_id" v-model='entrant.campaign_id' v-bind:disabled='entrant.email_confirmed')
+          option(value = '')
+          option(v-for="campaign_item in api.campaigns" v-bind:value="campaign_item.id") {{ campaign_item.name }}
+        small.error v-if="findErrorMessage('campaign_id')" == "{{ findErrorMessage('campaign_id') }}"
+fieldset(v-if="current_campaign.campaign_type == 'Прием на обучение по ОП бакалавриата/специалитета'")
+  legend Для подачи заявления о приеме Вам потребуются электронные копии следующих документов:
+  .row
+    .large-12.small-12.columns
+      ol
+        li СНИЛС;
+        li документ (документы), удостоверяющий личность, гражданство;
+        li документ установленного образца (аттестат или диплом с приложением);
+        li документы, подтверждающие индивидуальные достижения поступающего  (при наличии);
+        li медицинская справка (при наличии. Например, по форме 086-у);
+        li документы подтверждающие наличие льготы (при наличии права на льготу).
+fieldset(v-if="current_campaign.campaign_type == 'Прием на подготовку кадров высшей квалификации'")
+  legend Прием осуществляется только при наличии полного пакета документов:
+  .row
+    .large-12.small-12.columns
+      ol
+        li СНИЛС (для граждан Российской Федерации);
+        li документ (документы), удостоверяющий личность, гражданство;
+        li документ установленного образца (диплом с приложением);
+        li сертификат специалиста (при наличии);
+        li документы, подтверждающие индивидуальные достижения поступающего  (при наличии);
+        li военный билет (при наличии).
+- if current_user && current_user.groups.map(&:name).include?('priem')
+  fieldset(v-if="api.countries && entrant.clerk")
+    legend Выберите гражданство
+    .row
+      .large-12.small-12.columns
+        label
+          select.error#nationality(name="nationality" v-model='entrant.nationality' v-bind:disabled='entrant.email_confirmed')
+            option(value = '')
+            option(v-for="country in api.countries" v-bind:value="country.Name") {{ country.Name }}
+fieldset(v-if='entrant.campaign_id')
+  legend Укажите адрес электронной почты
+  .row
+    .large-12.small-12.columns
+      p Вам будет отправлена уникальная ссылка для доступа в личный кабинет. Не передавайте ее посторонним лицам. 
+      p Убедитесь в получении ссылки, проверьте папку Спам. Обращаем Ваше внимание, что если Вы ошиблись при указании адреса электронной почты, ссылка на Ваш кабинет может прийти другому человеку и он получит доступ к Вашему личному кабинету.
+      = email_field_tag :email, nil, placeholder: 'user@example.com', 'v-model.trim': 'entrant.email', class: 'error', required: true, 'v-bind:disabled': 'entrant.hash'
+      small.error v-if="findErrorMessage('email')" == "{{ findErrorMessage('email') }}"
+      br
+      = submit_tag 'Получить ссылку', class: 'button tiny', '@click': 'checkEmail', 'v-bind:disabled': 'isSendEmailDisabled', 'v-if': '!entrant.hash && !findErrorMessage("email")'
+      = submit_tag 'Выслать ссылку повторно', class: 'button tiny', '@click': 'resendEmail', 'v-bind:disabled': 'isSendEmailDisabled', 'v-if': 'findErrorMessage("email")'
+      p(v-if="entrant.hash") 
+        span Ваш личный кабинет успешно создан, ссылка
+        strong &nbsp; {{ api.url }} &nbsp;
+        span отправлена на указанную почту. Также Вы можете скопировать ее и сохранить.
+      p(v-if="entrant.resended") Ссылка отправлена. Если письмо не пришло, обратитесь в приемную комиссию.
+fieldset(v-if='!isNextDisabled')
+  legend(v-if="entrant.errors.length") Исправьте ошибки и повторно нажмите кнопку Отправить
+  .row(v-if="entrant.errors.length")
+    .large-12.small-12.columns.label.warning
+      ul.no-bullet
+        li v-for='error in entrant.errors' v-if='error.level == "red"' == '{{ error.message }}'
+  .row
+    .large-12.small-12.columns
+      p 
+        span Нажимая на кнопку "Перейти к заполнению анкеты", Вы подтверждаете, что ознакомились
+        span &nbsp;
+        span= link_to 'с условиями обработки и распространения персональных данных', '/attachments/76110', target: '_blank'
+        span , принятых во ФГБОУ ВО Ивановский ГМУ Минздрава России, и даете свое согласие на обработу и распространение своих персональных данных в соответствии с ними.
+  .row
+    .large-12.small-12.columns
+      a.button.tiny v-bind:href="entrant.hash" Перейти к заполнению анкеты
+= hidden_field_tag :url, '', ref: 'url', type: 'text', 'v-model.trim': 'api.url'

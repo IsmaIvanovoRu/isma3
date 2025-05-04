@@ -20,8 +20,8 @@ class PostsController < DivisionsController
     if current_user_administrator?
       @menu_title = @post.name
       if @post.division.division_type_id == 3
-        @division_subjects = @post.division.subjects.includes(:educational_program) - @post.subjects
-        @subjects = Subject.includes(:educational_program).order(:name) - @division_subjects - @post.subjects
+        @division_subjects = @post.division.subjects.includes(:educational_program).where(educational_programs: {adaptive: false}) - @post.subjects
+        @subjects = Subject.includes(:educational_program).order(:name).where(educational_programs: {adaptive: false}) - @division_subjects - @post.subjects
       end
     end
   end

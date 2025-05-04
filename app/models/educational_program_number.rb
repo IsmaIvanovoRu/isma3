@@ -18,7 +18,7 @@ class EducationalProgramNumber < ActiveRecord::Base
           educational_program_id = educational_program_codes[educational_program_code] if educational_program_codes.keys.include?(educational_program_code)
           if educational_program_id
             educational_program_number = new
-            educational_program_number.attributes = row.to_hash.slice('number_federal', 'number_regional', 'number_local', 'number_personal', 'date')
+            educational_program_number.attributes = row.to_hash.slice('number_federal', 'number_regional', 'number_local', 'number_personal', 'number_foreign', 'date')
             educational_program_number.educational_program_id = educational_program_id
             educational_program_number.save
           end

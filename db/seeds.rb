@@ -1,1 +1,2 @@
-EducationalProgram.all.each{|ep| ep.update_attributes(language: 'русский')}
+Criterium.update_all(acceptor_type: 'teacher')
+Efficient.update_all(archived: true)

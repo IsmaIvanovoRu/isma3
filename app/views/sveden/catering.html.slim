@@ -1,0 +1,27 @@
+- content_for :title do
+  |  Сведения об образовательной организации. Организация питания в образовательной организации.
+section.panel
+  h1 Организация питания в образовательной организации
+  p= autosub_details("&amp;[Навигация сведений об образовательной организации]").html_safe
+  table
+      caption Cведения  об условиях питания и охраны здоровья обучающихся
+      thead
+        tr
+          th Наименование объекта
+          th Адрес места нахождения
+          th Площадь, м2
+          th Количество мест
+          th Приспособленность для использования инвалидами и лицами с ограниченными возможностями здоровья
+      tbody
+        tr(itemprop='meals')
+          td(itemprop='objName') Столовая
+          td(itemprop='objAddress') г. Иваново, Шереметевский пр., д.8
+          td(itemprop='objSq') 829.6
+          td(itemprop='objCnt') 160
+          td(itemprop='objOvz') Приспособлена
+        tr(itemprop='health')
+          td(itemprop='objName') Медицинский пункт
+          td(itemprop='objAddress') г. Иваново, Шереметевский пр., д.8
+          td(itemprop='objSq') 36.1
+          td(itemprop='objCnt') 2
+          td(itemprop='objOvz') Приспособлен

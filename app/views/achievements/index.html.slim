@@ -1,12 +1,14 @@
 section.panel
   - unless @achievements.empty?
     h1 Перечень достижений
+    = link_to 'Одобрить все', approve_all_achievements_path, method: :put, class: 'button tiny'
     table.table
       thead
         th Название мероприятия
         th Категория
         th Дата
         th Результат
+        / th Учитывается для стипендии
         th Подтверждено документом
         th Действия
       tbody

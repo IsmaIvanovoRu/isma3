@@ -1,7 +1,7 @@
 class Classroom < ActiveRecord::Base
   belongs_to :subject
   
-  validates :subject_id, :description, :location, :equipment, presence: true
+  validates :description, :location, :equipment, presence: true
   
   def self.import(file)
     spreadsheet = open_spreadsheet(file)
@@ -9,14 +9,9 @@ class Classroom < ActiveRecord::Base
     accessible_attributes = column_names
     (2..spreadsheet.last_row).each do |i|
       row = Hash[[header, spreadsheet.row(i)].transpose]
-      educational_program = EducationalProgram.find_by_code(row["code"].strip)
-      subjects = educational_program.subjects
-      subject = subjects.find_by_name(row['subject_name'].strip) || educational_program.subjects.create(name: row['subject_name'].strip)
-      if subject
-        classrooms = subject.classrooms
-        classroom = classrooms.find_by_description(row['description'].strip) || subject.classrooms.new(row.slice(*accessible_attributes))
-        classroom.save!
-      end
+      classrooms = Classroom.all
+      classroom = classrooms.find_by_description(row['description'].strip) || classrooms.new(row.slice(*accessible_attributes))
+      classroom.save!
     end
   end
   

@@ -53,8 +53,19 @@ class ApplicationController < ActionController::Base
     end
   end 
   
+  def require_isma
+    unless current_user_moderator? || current_user_isma?
+      flash[:error] = "You must have isma`s permissions"
+      redirect_to root_path
+    end
+  end 
+  
   def current_user_groups
     current_user.groups unless current_user.nil?
+  end
+
+  def current_user_divisions
+    current_user.divisions
   end
   
   def current_user_writer?
@@ -71,6 +82,31 @@ class ApplicationController < ActionController::Base
 
   def current_user_administrator?
     current_user_groups.where(administrator: true).count > 0 unless current_user.nil?
+  end
+
+  def current_user_deansoffice?
+    current_user_groups.map(&:name).include? 'deansoffice' unless current_user.nil?
+  end
+
+  def current_user_efficient_writer?
+    current_user_groups.map(&:name).include? 'efficient_writer' unless current_user.nil?
+  end
+
+  def current_user_efficient_reader?
+    current_user_groups.map(&:name).include? 'efficient_reader' unless current_user.nil?
+  end
+  
+  def current_user_isma?
+    isma_group = Group.find_by_name('isma')
+    current_user_groups.where(parent: isma_group).count > 0 unless current_user.nil?
+  end
+
+  def current_user_teacher?
+    current_user_groups.map(&:name).include?('employees') && current_user_divisions.map(&:division_type_id).uniq.include?(3) unless current_user.nil?
+  end
+
+  def current_user_student?
+    current_user_groups.map(&:name).include?('students') && current_user_divisions.map(&:name).grep(/группа/).present? unless current_user.nil?
   end
   
   def set_menus
@@ -104,6 +140,12 @@ class ApplicationController < ActionController::Base
     @moderator_permission = current_user_moderator?
     @writer_permission = current_user_writer?
     @commentator_permission = current_user_commentator?
+    @isma_permission = current_user_isma?
+    @deansoffice_permission = current_user_deansoffice?
+    @efficient_writer_permission = current_user_efficient_writer?
+    @efficient_reader_permission = current_user_efficient_reader?
+    @teacher_permission = current_user_teacher?
+    @student_permission = current_user_student?
   end
   
   def set_details
@@ -144,12 +186,12 @@ class ApplicationController < ActionController::Base
     case Rails.env
       when 'development'
         protocol = 'http://'
-        url = '10.245.150.67:3000'
+        url = "#{ENV['API_HOST']}:3000"
         proxy_ip = nil
         proxy_port = nil
       when 'production'
         protocol = 'https://'
-        url = 'priem.isma.ivanovo.ru'
+        url = "#{ENV['API_HOST']}"
         proxy_ip = nil
         proxy_port = nil
     end

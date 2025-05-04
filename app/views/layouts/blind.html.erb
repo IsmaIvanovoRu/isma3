@@ -5,14 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <% if Rails.env.production? %>
       <meta name='yandex-verification' content='5d4cdafa940771a6' />
-      <meta name="google-site-verification" content="0Q_dWen2iLrRIDHR_F5M9T68VvJi91AMy-AWKX5yHUo" />
     <% end %>
-    <title><%= content_for?(:title) ? yield(:title) : "ИвГМА" %></title>
-    <meta name="description" content="<%= content_for?(:description)? yield(:description) : "Официальный сайт Ивановской медицинской академии" %>">
-    <%= yield(:twitter_card) if content_for?(:twitter_card) %>
-    <%= yield(:vk_card) if content_for?(:vk_card) %>
+    <title><%= content_for?(:title) ? yield(:title) : "Ивановский ГМУ" %></title>
+    <meta name="description" content="<%= content_for?(:description)? yield(:description) : "Официальный сайт Ивановского медицинского университета" %>">
     <%= favicon_link_tag 'favicon.ico' %>
-    <%= auto_discovery_link_tag(:atom, root_url + 'feed.atom', {title: "ИвГМА"}) %>
     <%= stylesheet_link_tag    "application_blind" %>
     <%= csrf_meta_tags %>
   </head>
@@ -24,7 +20,7 @@
         <li class="name">
           <h1><%= link_to 'Главная', root_path, class: "show-for-medium-up", style: 'color: rgb(0,0,0)' %></h1>
           <%= link_to root_path, class: "show-for-small-only" do %>
-            <span class="title-super">ИвГМА</span>
+            <span class="title-super">Ивановский ГМУ</span>
           <% end %>
         </li>
         <li class="toggle-topbar menu-icon"><a href="#"><span>Меню</span></a></li>
@@ -147,7 +143,7 @@
     <div class="small-6 columns">
       <ul class="side-nav">
       <li> <%= link_to "Воспитательная работа", '/divisions/107' %>
-        <li><%= link_to "Клиника ИвГМА", '/divisions/126' %>
+        <li><%= link_to "Клиника Ивановского ГМУ", '/divisions/126' %>
         <li><%= link_to "Новости", articles_path %>
       </ul>
     </div>
@@ -155,7 +151,7 @@
   <div class="row">
     <div class="large-10 columns show-for-medium-up">
     <%= image_tag('gerb.png', size: '48x48', class: "left", style: "padding-top: 7px;") %>
-          <h1 class="title" style="padding-top: 20px;" title="<%= @details_hash['Полное наименование академии'][:value] %>">Ивановская государственная медицинская академия</h1>
+          <h1 class="title" style="padding-top: 20px;" title="<%= @details_hash['Полное наименование академии'][:value].html_safe %>">Ивановский государственный медицинский университет</h1>
     </div>
     <div class="large-2 small-12 columns" style="padding-top: 20px;">
       <%= form_tag("/search", method: "get") do %>
@@ -224,17 +220,24 @@
         <div class="large-12 columns">
 	  <address>
 	  <div itemscope itemtype="https://schema.org/Organization">
-            <span itemprop="name"><%= @details_hash['Полное наименование академии'][:value] %></span>
+            <span itemprop="name"><%= @details_hash['Полное наименование академии'][:value].html_safe %></span>
             <div itemprop="address" itemscope itemtype="https://schema.org/PostalAddress">
-              <span itemprop="streetAddress"><%= @details_hash['Адрес'][:value] %>, </span>
-              телефон: <span itemprop="telephone"><%= @details_hash['Телефон'][:value] %></span>
+              <span itemprop="streetAddress"><%= @details_hash['Адрес'][:value].html_safe %>, </span>
+              телефон: <span itemprop="telephone"><%= @details_hash['Телефон'][:value].html_safe %></span>
             </div>
 	  </div>
 	  </address>
         </div>
       </div>
     </footer>
-    <%= link_to 'Задать вопрос', feedbacks_path, id: 'feedback', class: 'button tiny', style: 'background-color: rgb(70,130,180);' %>
+    <%= link_to 'Открытый вопрос', feedbacks_path, id: 'feedback', class: 'button tiny', style: 'background-color: rgb(70,130,180);' %>
+    <%= link_to 'Вопрос ректору', '#', id: 'feedback_rector', class: 'button tiny', style: 'background-color: rgb(255,215,0);',  "data-reveal-id" => "rector"%>
+    <div class="reveal-modal medium" id="rector" data-reveal="true" align="center">
+      <script src="https://yastatic.net/s3/frontend/forms/_/embed.js"></script><iframe src="https://forms.yandex.ru/cloud/65550caf50569046dd88d302/?iframe=1" frameborder="0" name="ya-form-65550caf50569046dd88d302" width="650"></iframe>
+      <a class="close-reveal-modal">
+        <i class="fi-x"></i>
+      </a>
+    </div>
 </div>
 </div>
     <% if @administrator_permission %>
@@ -243,15 +246,11 @@
         <a class="close-reveal-modal">&#215;</a>
       </div>
     <% end %>
-    <%= stylesheet_link_tag    "https://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,400,700&subset=latin,cyrillic" %>
     <%= javascript_include_tag "vendor/modernizr" %>
     <%= javascript_include_tag "application" %>
     <% if controller_name == 'divisions' && action_name == 'show' %>
         <%= javascript_include_tag "https://api-maps.yandex.ru/2.0-stable/?load=package.standard&lang=ru-RU" %>
     <%= javascript_include_tag "ymap" %>
-    <% end %>
-    <% if controller_name == 'articles' && action_name == 'show' %>
-      <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
     <% end %>
     <% if action_name == 'edit' || action_name == 'new' || action_name == 'create' || action_name == 'update' || controller_name == 'feedbacks' || controller_name == 'profile' %>
       <%= javascript_include_tag "ckeditor/ckeditor" %>
@@ -288,18 +287,6 @@
       </script>
       <noscript><div><img src="//mc.yandex.ru/watch/24099004" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
       <!-- /Yandex.Metrika counter -->
-      <!-- /Google.Analytics counter -->
-      <script>
-        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-
-        ga('create', 'UA-10854449-2', 'isma.ivanovo.ru');
-        ga('send', 'pageview');
-
-      </script>
-      <!-- /Google.Analytics counter -->
     <% end %>
   </body>
 </html>

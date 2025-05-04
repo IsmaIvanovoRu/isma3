@@ -1,0 +1,154 @@
+fieldset
+  legend Выбор условий поступления
+  .(v-if="entrant.campaign.campaign_type == 'Прием на обучение по ОП бакалавриата/специалитета'")
+    p Вы имеете право отметить любое количество конкурсов (в том числе все) из списка, представленного ниже. Лица, имеющие высшее образование могут поступать только на внебюджетной основе. 
+    p Конкурсы по особой и отдельной квотам становятся доступны только в том случае, если Вы заполнили соответствующие поля и прикрепили документы на вкладке Льготы.
+    p Для участия в конкурсе в пределах квоты целевого приема необходимо выбрать одно из предложений от заказчиков целевого обучения. Список предложений появится после выбора конкурса.
+    p 
+      strong Обращаем внимание, что единовременно можно выбрать только ОДНО предложение во всех вузах России. 
+  . v-if = "findAttachment(entrant.id, 'entrant_application', false)"
+    p 
+      strong Вы уже загрузили заявление о поступлении, поэтому после добавления нового конкурса Вам будет необходимо заново подтвердить расстановку приоритетов, перейти на вкладку Заявления и направить заявление на рассмотрение в приемную комиссию.
+  .(v-if="entrant.campaign.campaign_type == 'Прием на подготовку кадров высшей квалификации'")
+    p Вы имеете право выбрать ДВЕ специальности для поступления, внутри которых Вы можете отметить любое количество конкурсов при наличии оснований для участия в них. Для участия в конкурсе в пределах квоты целевого приема необходимо заключить договор с заказчиком целевого обучения и загрузить его на вкладке Целевой прием.
+  .row
+    .large-12.small-12.columns
+      .(v-for="direction in api.dictionaries.campaign.directions")
+        p 
+          strong= "{{ direction.name }}"
+        .row(v-for="competitive_group in api.dictionaries.campaign.competitive_groups" v-if="competitive_group.direction_name == direction.name && isApplicable(competitive_group)")
+          .large-1.small-1.columns
+            input.error(type="checkbox" v-bind:id="'competitive_group_' + competitive_group.id" v-bind:name="'competitive_groups[][id]'" v-bind:value="competitive_group.id" v-model="entrant.competitive_group_ids" v-on:change="sendData('competitive_group_ids', entrant.competitive_group_ids)" v-bind:disabled == "egeDate(competitive_group.id) || (findCompetitiveGroup(competitive_group.id) && entrant.stage > 0)")
+          .large-11.small-11.columns
+            label(v-bind:for="competitive_group.id")
+              span= "{{ competitive_group.name }} (количество мест: {{ competitive_group.admission_number }})"
+              strong(v-if="egeDate(competitive_group.id)")= " - прием документов завершен"
+          .row(v-if="competitive_group.education_source == 'Целевая квота'")
+            .large-1.small-1.columns
+              span &nbsp;
+            .large-11.small-11.columns
+              select.error(v-model="entrant.target_offer_ids[findTargetOfferIndex(competitive_group.id)].target_offer_id" v-on:change="sendData('target_offer_id', entrant.target_offer_ids[findTargetOfferIndex(competitive_group.id)].target_offer_id)" v-if="entrant.competitive_group_ids.includes(competitive_group.id)")
+                option(v-for="target_offer in api.dictionaries.campaign.target_offers" v-bind:value="target_offer.id" v-if="competitive_group.id == target_offer.competitive_group_id") {{ target_offer.employeer }} (количество договоров: {{ target_offer.contract_amount }})
+fieldset(v-if="entrant.competitive_group_ids.length > 0")
+  legend Расстановка приоритетов
+  p Перетаскиванием блоков расположите их в порядке убывания значимости
+  .(v-if="false")
+    h3 Бюджетные конкурсы
+    draggable(v-model="entrant.priorities.budget_priorities" v-bind="dragOptions" :move="checkMove" @end="entrant.questionnaire['priority'] = false; fillPriority(entrant.priorities.budget_priorities)")
+      transition-group(type="transition")
+        .(v-for="(priority, index) in entrant.priorities.budget_priorities" :key="priority.index")
+            .panel.callout
+              i.fi-list-thumbnails
+              span &nbsp;
+              span= "{{ priority.direction }}."
+              span &nbsp;
+              span(v-if="priority.target") Целевые места:
+              span(v-else) Иные места:
+              span &nbsp;
+              span= "приоритет - {{ priority.priority }}"
+  .(v-if="entrant.campaign.campaign_type == 'Прием на обучение по ОП бакалавриата/специалитета'")
+    h3 Платные конкурсы
+    draggable(v-model="entrant.priorities.paid_priorities" v-bind="dragOptions" :move="checkMove" @end="entrant.questionnaire['priority'] = false; fillPriority(entrant.priorities.paid_priorities)")
+      transition-group
+        .(v-for="(priority, index) in entrant.priorities.paid_priorities" :key="priority.index")
+          .panel.callout.radius
+            i.fi-list-thumbnails
+            span &nbsp;
+            span= "{{ priority.direction }}."
+            span &nbsp;
+            span(v-if="priority.target") Целевые места:
+            span(v-else) Иные места:
+            span &nbsp;
+            span= "приоритет - {{ priority.priority }}"
+    .row
+        .large-1.small-1.columns
+          input#exam(type="checkbox" name="priority" v-bind:value="true" v-model="entrant.questionnaire['priority']" v-on:change = "sendData('questionnaire', entrant.questionnaire); sendData('priorities', entrant.priorities)")
+        .large-11.small-11.columns
+          label
+            span Подтверждаю, что приоритеты указаны мною верно.
+fieldset
+  legend Вступительные испытания
+  .(v-if="entrant.campaign.campaign_type == 'Прием на обучение по ОП бакалавриата/специалитета'")
+    p Поступление в ИвГМА осуществляется на основании результатов ЕГЭ. В зависимости от специальности, учитываются следующие предметы: химия, биология, физика, профильная математика, обществознание и русский язык.
+    p 
+      span= link_to 'Отдельные категории поступающих', '/articles/6024', target: '_blank'
+      span &nbsp;
+      span имеют право сдавать вступительные испытания, проводимые академией самостоятельно по общеобразовательным дисциплинам, указанным выше. 
+    p Лица, имеющие среднее профессиональное образование, могут поступать по результатам ЕГЭ, либо сдавать вступительные испытания на базе профессионального образования: основы диагностической и лечебной деятельности; анатомия и физиология человека.
+    p 
+      span Минимальные баллы по каждому предмету для поступающих указаны 
+      span &nbsp;
+      span= link_to 'здесь', '/articles/7090', target: '_blank'
+  .row(v-bind:disabled = 'isDisabled')
+    .large-1.small-1.columns
+      input#exam(type="checkbox" name="exam" v-bind:value="true" v-model="entrant.questionnaire['exam']" v-on:change = "sendData('questionnaire', entrant.questionnaire)" v-bind:disabled = 'isDisabled')
+    .large-11.small-11.columns
+      label
+        span Имею право и собираюсь сдавать вступительные испытания (включая профильные), проводимые вузом самостоятельно.
+    
+  .(v-if="entrant.campaign.campaign_type == 'Прием на подготовку кадров высшей квалификации'")
+    .row
+      .large-12.small-12.columns
+        table
+          thead
+            tr
+              th Предмет
+              th Форма экзамена
+              th Оценка
+              th Год сдачи
+              th Название организации сдачи экзамена
+          tbody
+            tr(v-for="(mark, index) in entrant.marks[0].marks")
+              td Здравоохранение (минимальный балл 70)
+              td
+                .
+                  = select_tag 'marks[][test_type]', options_for_select(['Аккредитация', 'ВИ']), include_blank: '', 'v-model.trim': 'mark.test_type', 'v-on:change': "sendData('mark', mark, index)"
+                small.error v-if="findErrorMessage('mark.test_type')" == "{{ findErrorMessage('mark.test_type') }}"
+              td
+                span(v-show="mark.test_type == 'Аккредитация'")= number_field_tag 'marks[][value]', nil, min: 70, max: 100, 'v-model.trim': 'mark.value'
+              td
+                span(v-show="mark.test_type == 'Аккредитация'")= number_field_tag 'marks[][year]', nil, 'v-bind:min': 'entrant.campaign.year_start - 1', 'v-bind:max': 'entrant.campaign.year_start', 'v-model.trim':'mark.year', 'v-on:change': "sendData('mark', mark, index)"
+                small.error v-if="findErrorMessage('mark.test_type')" == "{{ findErrorMessage('mark.test_type') }}"
+              td
+                = text_field_tag 'marks[][organization_uid]', nil, 'v-model.tirm': 'mark.organization_uid', 'v-on:change': "sendData('mark', mark, index)"
+
+fieldset
+  legend Указать индивидуальные достижения
+  .(v-if="entrant.campaign.campaign_type == 'Прием на обучение по ОП бакалавриата/специалитета'")
+    p Необходимо подтвердить наличие индивидуального достижения, прикрепив копию соответствующего документа. 
+    p Подтверждающими документами являются: копия документа об образовании (диплома или аттестата, в которых написано, что они – с отличием), удостоверение о награждении значком ГТО, диплома победителя чемпионата «Абилимпикс» и т.д.
+    p
+      strong Обратите внимание, что при наличии нескольких достижений в одной категории (например, наличие нескольких документов об образовании с отличием, значков ГТО и т.д.), баллы начисляются однократно! 
+    p 
+      strong Начисление баллов за индивидуальные достижения происходит не сразу, а после заседания комиссии по индивидуальным достижениям. Результат рассмотрения будет отображен в личном кабинете поступающего.
+    p
+      strong Максимальное суммарное количество баллов за индивидуальные достижения – 10!
+    .row(v-for="institution_achievement in api.dictionaries.campaign.institution_achievements" v-if="institution_achievement.name != 'Аттестат о среднем (полном) общем образовании для награжденных золотой (серебряной) медалью'")
+      .large-1.small-1.columns
+        input.error(type="checkbox" v-bind:id="'institution_achievement' + institution_achievement.id" v-bind:name="'institution_achievement_ids[]'" v-bind:value="institution_achievement.id" v-model="entrant.achievement_ids" v-on:change="sendData('institution_achievement_ids', entrant.achievement_ids)" v-bind:disabled = 'isDisabled')
+      .large-11.small-11.columns
+        label(v-bind:for="institution_achievement.id")
+          span = "{{ institution_achievement.name }} (дополнительные баллы: {{ institution_achievement.max_value }})"
+      .large-12.small-12.columns(v-if="findAchievement(institution_achievement.id) == institution_achievement.id")
+        br
+        dd= render partial: 'add_attachment', locals: { message: 'Выберите и прикрепите файл(ы).', document_type: 'achievement', document_id: 'institution_achievement.id', entrant_id: 'entrant.id', ref_name: 'achievement', id: 'achievement'}
+      .large-12.small-12.columns(v-if="entrant.attachments.length > 0")
+        ul.no-bullet
+          li(v-for="attachment in entrant.attachments" v-if="attachment.document_type == 'achievement' && attachment.document_id == institution_achievement.id")
+            a v-bind:href = "'/api/attachments/' + attachment.data_hash + '?filename=' + attachment.filename" target = '_blank' {{ attachment.filename }}
+  .(v-if="entrant.campaign.campaign_type == 'Прием на подготовку кадров высшей квалификации'")
+    p Необходимо подтвердить наличие индивидуального достижения, прикрепив копию соответствующего документа. 
+    p Обратите внимание: начисление баллов за индивидуальные достижения происходит не сразу, а после заседания комиссии по индивидуальным достижениям. Результат рассмотрения будет 
+    .row(v-for="institution_achievement in api.dictionaries.campaign.institution_achievements")
+      .large-1.small-1.columns
+        input.error(type="checkbox" v-bind:id="'institution_achievement' + institution_achievement.id" v-bind:name="'institution_achievement_ids[]'" v-bind:value="institution_achievement.id" v-model="entrant.achievement_ids" v-on:change="sendData('institution_achievement_ids', entrant.achievement_ids)" v-bind:disabled = 'isDisabled')
+      .large-11.small-11.columns
+        label(v-bind:for="institution_achievement.id")
+          span = "{{ institution_achievement.name }} (дополнительные баллы: {{ institution_achievement.max_value }})"
+      .large-12.small-12.columns(v-if="findAchievement(institution_achievement.id) == institution_achievement.id")
+        br
+        dd= render partial: 'add_attachment', locals: { message: 'Выберите и прикрепите файл(ы).', document_type: 'achievement', document_id: 'institution_achievement.id', entrant_id: 'entrant.id', ref_name: 'achievement', id: 'achievement'}
+      .large-12.small-12.columns(v-if="entrant.attachments.length > 0")
+        ul.no-bullet
+          li(v-for="attachment in entrant.attachments" v-if="attachment.document_type == 'achievement' && attachment.document_id == institution_achievement.id")
+            a v-bind:href = "'/api/attachments/' + attachment.data_hash + '?filename=' + attachment.filename" target = '_blank' {{ attachment.filename }}

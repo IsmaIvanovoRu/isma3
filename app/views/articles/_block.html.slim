@@ -1,5 +1,11 @@
 h1.block = title
 section.panel
+  - if title == 'Анонсы'
+    = link_to 'https://calendar.yandex.ru/embed/week?private_token=f2feaf2f6b117c9f1637450a8a45b10d32a16c35&tz_id=Europe/Moscow', target: '_blank', title: 'Календарь мероприятий' do
+        = image_tag("office-calendar.svg", size: '32x32', class: "left")
+        .thumb-title
+          = "Календарь мероприятий"
+    hr
   = render partial: 'articles/article', collection: articles, locals: { dimension: '75x75', composition: composition }
   - case title
   - when 'Новости'

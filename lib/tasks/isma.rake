@@ -1,4 +1,137 @@
 namespace :isma do
+
+  # desc 'Download grants'
+  # task download_grants: :environment do
+  #   grants = Achievement.includes(:achievement_category, :achievement_result, :user => :posts).where(grant: true, event_date: Date.new(2023, 9, 1)..Date.new(2024, 8, 31))
+  #   students = User.joins(:achievements).where(achievements: {id: grants.pluck(:id)}).uniq
+  #   require 'csv'
+
+  #   CSV.open("grants_export.csv", "wb") do |csv|
+  #     csv << ["Название ИД", "Категория", "Результат", "Дата", "ФИО", "Студент"]
+      
+  #     grants.each do |grant|
+  #       csv << [
+  #         grant.event_name,
+  #         grant.achievement_category&.name,
+  #         grant.achievement_result&.name,
+  #         grant.event_date,
+  #         grant.user&.profile.full_name,
+  #         grant.user&.divisions&.where(division_type_id: 6).pluck(:name)&.join("; ")
+  #       ]
+  #     end
+  #   end
+
+  #   CSV.open("grant_students_export.csv", "wb") do |csv|
+  #     csv << ["ФИО", "Студент"]
+      
+  #     students.each do |student|
+  #       csv << [
+  #         student.profile&.full_name,
+  #         student.divisions&.where(division_type_id: 6).pluck(:name)&.join("; ")
+  #       ]
+  #     end
+  #   end
+
+  #   puts "Grants exported to grants_export.csv"
+  # end
+
+  desc 'Download efficients'
+  task download_efficients: :environment do
+    efficients = Efficient.includes(:criterium, :user => :posts).joins(:criterium).where(criteria: {acceptor_type: 'teacher'}, archived: false)
+    require 'csv'
+
+    CSV.open("efficients_export.csv", "wb") do |csv|
+      csv << ["Категория", "Критерий", "Балл", "ФИО", "Кафедра", "Комментарий", 'Статус']
+      
+      efficients.each do |efficient|
+        csv << [
+          efficient.criterium&.chapter,
+          efficient.criterium&.point,
+          efficient.value,
+          efficient.user&.profile.full_name,
+          efficient.user&.divisions&.where(division_type_id: 3).pluck(:name)&.join("; "),
+          efficient.comment,
+          efficient.checked ? 'Проверено' : 'Не проверено'
+        ]
+      end
+    end
+
+    puts "Efficients exported to efficients_export.csv"
+  end
+
+  desc 'Download grants'
+  task download_grants: :environment do
+    efficients = Efficient.includes(:criterium, :user => :posts).joins(:criterium).where(criteria: {acceptor_type: 'student'})
+    require 'csv'
+
+    CSV.open("grants_export.csv", "wb") do |csv|
+      csv << ["Специальность", "Категория", "Критерий", "Балл", "ФИО", "Курс", "Группа", "Комментарий", "Статус"]
+      
+      efficients.each do |efficient|
+        divisions = efficient.user&.divisions&.where(division_type_id: 6).pluck(:name)&.join("; ")
+        group_number = divisions[/\d+(?=\sгруппа)/]
+        grade_number = divisions[/\d+(?=\sкурса)/]
+        spec_name = case true 
+                    when divisions.include?('лечебн')
+                      'Лечебное дело'
+                    when divisions.match?(/педиатр/)
+                      'Педиатрия'
+                    when divisions.match?(/стомат/)
+                      'Стоматология'
+                    when divisions.match?(/клин/)
+                      'Клиническая психология'
+                    when divisions.match?(/сестрин/)
+                      'Сестринское дело'
+                    else
+                      'Неизвестная специальность'
+                    end
+        csv << [
+          spec_name,
+          efficient.criterium&.chapter,
+          efficient.criterium&.point,
+          efficient.value,
+          efficient.user&.profile.full_name,
+          grade_number,
+          group_number,
+          efficient.comment,
+          efficient.checked ? 'Проверено' : 'Не проверено'
+        ]
+      end
+    end
+
+    puts "Grants exported to grants_export.csv"
+  end
+
+  desc 'Transfer students from stage to stage'
+  task transfer_students: :environment do
+    division_names = ["%5 курса стомат%", "%группа 6 курса%", "Ординатура%2 год%", "Аспирантура%3 год%"]
+    division_names.each do |name|
+      users = User.joins(:divisions).where("divisions.name LIKE ?", name)
+      puts "Найдено #{users.count} обучащихся выпускного курса"
+      users.each do |user|
+        user.groups.delete(Group.find_by_name("students"))
+        user.groups.delete(Group.find_by_name("writers"))
+        user.groups << Group.find_by_name("graduates")
+      end
+      puts "Обучающиеся переведены в выпуск"
+      Division.where("divisions.name LIKE ?", name).destroy_all
+      puts "Выпускные группы удалены"
+    end
+
+    puts "Переименование студенческих групп"
+    (1..5).reverse_each do |i|
+      Division.where("name LIKE ?", "%группа #{i}%").update_all("name = replace(name, '#{i} курса', '#{i+1} курса')")
+    end
+    puts "Завершено"
+
+    puts "Переименование последипломных групп"
+    (1..2).reverse_each do |i|
+      Division.where("name LIKE ? AND name LIKE ?", "Ординатура%" , "%#{i} год%").update_all("name = replace(name, '#{i}', '#{i+1}')")
+      Division.where("name LIKE ? AND name LIKE ?", "Аспирантура%", "%#{i} год%").update_all("name = replace(name, '#{i}', '#{i+1}')")
+    end
+    puts "Завершено"
+  end
+
   desc "Convert attachments from db to filesystem"
   task convert_attachments: :environment do
     counter = 0
@@ -283,7 +416,7 @@ namespace :isma do
     filename = 'library_export.csv'
     path = [Rails.root, 'lib', 'tasks', 'data', filename].join('/')
     file = File.open(path, 'w:Windows-1251')
-    first_line = ['Фамилия', 'Имя', 'Отчество', 'Идентификатор', 'Пароль', 'Направление', 'Специальность', 'Факультет', 'Год', 'Семестр', 'Группа', 'Форма', 'Вид'].join(';') + ";\n"
+    first_line = ['Фамилия', 'Имя', 'Отчество', 'Идентификатор', 'Пароль', 'Направление', 'Специальность', 'Факультет', 'Год', 'Семестр', 'Группа', 'Форма', 'Вид', 'Электронная почта'].join(';') + ";\n"
     file.write(first_line)
     # выгрузка списка обучающихся с сайта
     students = load_users('students')
@@ -302,7 +435,6 @@ namespace :isma do
         puts "обрабатываем запись #{i} из #{students_1c.last_row - 1}"
         logins = student_login(row)
         student = nil
-        openldap_entry = nil
         logins.each do |login|
           student ||= students.find_by_login(login)
         end
@@ -313,6 +445,10 @@ namespace :isma do
                                     'педиатрический факультет'
                                   when 'Стоматология'
                                     'стоматологический факультет'
+                                  when 'Клиническая психология'
+                                    'факультет клинической психологии'
+                                  when 'Сестринское дело'
+                                    'факультет сестринского дела'
                                   else
                                     'ординатура'
                                   end
@@ -331,7 +467,8 @@ namespace :isma do
           s << row['Группа']
           s << 'очная'
           s << (faculty == 'ординатура' ? 'кадры высшей квалификации' : 'специалитет')
-          file.write((s.join(';') + ";\n").encode('Windows-1251', invalid: :replace, undef: :replace, replade: ''))
+          file.write((s.join(';') + ";\n").encode('Windows-1251', invalid: :replace, undef: :replace, replace: ''))
+          s << (student.profile.email.strip if student.profile.email)
         end
       end
     end

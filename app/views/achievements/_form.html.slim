@@ -38,5 +38,9 @@
     .large-12.small-12.columns
       = f.label 'Комментарий'
       = f.text_field :comment
+  / .row
+  /   .large-12.small-12.columns
+  /     = f.label 'Учитывать для повышенной стипендии'
+  /     = f.check_box :grant
   .actions
     = f.submit 'Добавить', class: 'button tiny'

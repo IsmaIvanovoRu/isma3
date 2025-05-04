@@ -7,6 +7,7 @@ class EducationalProgram < ActiveRecord::Base
   has_many :practices, dependent: :destroy
   has_many :methodological_supports, dependent: :destroy
   has_many :subjects, dependent: :destroy
+  has_many :posts, through: :subjects
   has_many :educational_program_numbers
   has_many :educational_program_priems
   has_many :educational_program_perevods
@@ -15,10 +16,14 @@ class EducationalProgram < ActiveRecord::Base
   has_many :classrooms, through: :subjects
   has_many :marks
   
-  validates :name, :level, :form, :duration, :attachment_id, :language, presence: true
-  validates :attachment_id, numericality: { integer_only: true }
+  validates :name, :level, :form, :duration, :attachment_id, :language, :year_start, presence: true
+  validates :attachment_id, :year_start, numericality: { integer_only: true }
   
   def full_name
-    "Основная профессиональная образовательная программа высшего образования #{code} - #{name} (#{level}, #{form} форма обучения)"
+    if year_start > 2020 && level =~ /специалитет/
+      "Образовательная программа высшего образования #{code} - #{name} (#{year_start}-#{year_start + duration.to_i})"
+    else
+      "Основная профессиональная образовательная программа высшего образования #{code} - #{name} (#{year_start}-#{year_start + duration.to_i})"
+    end
   end
 end

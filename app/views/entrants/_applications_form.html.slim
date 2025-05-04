@@ -1,0 +1,14 @@
+fieldset
+  legend Заявление о поступлении
+  p Вы заполнили все необходимые поля. Вам сгенерирован бланк заявления на поступление в Ивановский ГМУ. Перед отправкой заявления в приемную комиссию, пожалуйста, откройте бланк и проверьте внесенные данные. Затем нажмите кнопку "Отправить заявление" внизу страницы. После этого приемная комиссия рассмотрит Ваши документы и допустит Вас к участию в конкурсе или напишет замечание.
+  .large-12.small-12.columns(v-if="entrant.attachments.length > 0")
+    ul.no-bullet
+      li(v-for="attachment in entrant.attachments" v-if="attachment.document_type == 'entrant_application' && !attachment.template")
+        a v-bind:href = "'/api/attachments/' + attachment.data_hash + '?filename=' + attachment.filename" target = '_blank' Скачать бланк заявления о поступлении
+fieldset(v-if="entrant.target_offer_ids.length > 0 && entrant.campaign.campaign_type == 'Прием на подготовку кадров высшей квалификации'")
+  legend Заявка на целевое обучение
+  p Если Вы выбрали поступление по целевому конкурсу и откликнулись на предложение о целевом обучении. Ниже можно скачать для ознакомления бланк Заявки. Вуз самостоятельно передаст ее Заказчику целевого обучения.
+  .large-12.small-12.columns(v-if="entrant.attachments.length > 0")
+    ul.no-bullet
+      li(v-for="attachment in entrant.attachments" v-if="attachment.document_type == 'accept_offer' && !attachment.template")
+        a v-bind:href = "'/api/attachments/' + attachment.data_hash + '?filename=' + attachment.filename" target = '_blank' Скачать бланк заявки

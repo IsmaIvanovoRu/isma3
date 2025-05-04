@@ -1,20 +1,33 @@
 Isma::Application.routes.draw do
 
   namespace :api, defaults: {format: 'json'}, path: '/api' do
-    resources :entrant_applications, only: [:show, :create, :update, :attachment_create, :attachment_show]
-    resources :attachments, only: [:show, :create, :destroy]
-#     resources 'stats' do
-#       member do
-#         get 'entrants'
-#         get 'marks'
-#       end
-#       collection do
-#         get 'campaigns'
-#       end
-#     end
-    resources :dictionaries, only: [:index, :show]
-    resources :campaigns, only: [:index, :show]
+    resources :criteria, only: [:index]
+    # resources :entrants, only: [:show, :create, :update] do
+    #   collection do
+    #     post 'check_email'
+    #     post 'resend_email'
+    #   end
+    #   member do
+    #     put 'generate_entrant_application'
+    #     put 'generate_withdraw_applications'
+    #     put 'generate_contracts'
+    #   end
+    # end
+    # resources :attachments, only: [:show, :create, :destroy]
+    # resources 'stats' do
+    #   member do
+    #     get 'entrants'
+    #     get 'marks'
+    #   end
+    #   collection do
+    #     get 'campaigns'
+    #   end
+    # end
+    # resources :dictionaries, only: [:index, :show]
+    # resources :campaigns, only: [:index, :show]
   end
+  
+  # resources :entrants, only: [:new, :show]
   
   get "sitemaps/sitemap"
   
@@ -25,7 +38,6 @@ Isma::Application.routes.draw do
     post 'test_converters/mytest2moodle' => :mytest2moodle
   end
   
-  resources :entrants, only: [:new, :show]
   
   controller :sveden do
     get 'sveden' => :index
@@ -41,6 +53,9 @@ Isma::Application.routes.draw do
   get 'sveden/paid_edu'
   get 'sveden/budget'
   get 'sveden/vacant'
+  get 'sveden/inter'
+  get 'sveden/managers'
+  get 'sveden/catering'
   controller :abitur do
     get 'abitur' => :index
     get 'Abitur' => :index
@@ -65,6 +80,18 @@ Isma::Application.routes.draw do
     end
     collection do
       post :import
+    end
+  end
+
+  resources :criteria, only: [:index, :destroy] do
+    collection do
+      post :import
+    end
+  end
+
+  resources :efficients, only: [:index, :create, :update, :destroy] do
+    member do
+      put :uncheck
     end
   end
   
@@ -130,6 +157,12 @@ Isma::Application.routes.draw do
     end
   end
   
+  resources :international_contracts, only: [:destroy] do
+    collection do
+      post :import
+    end
+  end
+  
   resources :educational_program_researches do
     collection do
       post :import
@@ -184,9 +217,11 @@ Isma::Application.routes.draw do
   resources :achievements do
     collection do
       get :report
+      put :approve_all
     end
     member do
       put :published_toggle
+      put :grant_toggle
     end
   end
 

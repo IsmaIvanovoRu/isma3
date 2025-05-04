@@ -1,8 +1,8 @@
 class AchievementsController < ApplicationController
-  before_action :require_administrator, only: [:index, :published_toggle, :report]
-  before_action :set_achievement, only: [:edit, :update, :published_toggle, :destroy, :achievement_owner?]
+  before_action :require_administrator, only: [:index, :published_toggle, :report, :approve_all]
+  before_action :set_achievement, only: [:edit, :update, :published_toggle, :grant_toggle, :destroy, :achievement_owner?]
   before_action :set_selects, only: [:edit, :new, :update, :create]
-  before_action :can, only: [:edit, :update, :destroy]
+  before_action :can, only: [:edit, :update, :destroy, :grant_toggle]
 
   def index
     @achievements = Achievement.order(:updated_at).includes(:achievement_category, :achievement_result).where(achievement_params)
@@ -63,6 +63,16 @@ class AchievementsController < ApplicationController
     @achievement.toggle!(:published)
     redirect_to :back
   end
+
+  def grant_toggle
+    @achievement.toggle!(:grant)
+    redirect_to :back
+  end
+
+  def approve_all
+    Achievement.where(published: false).update_all(published: true)
+    redirect_to :back
+  end
   
   def destroy
     @achievement.destroy
@@ -85,7 +95,7 @@ class AchievementsController < ApplicationController
   end
   
   def achievement_params
-    params.require(:achievement).permit(:event_name, :event_date, :comment, :achievement_category_id, :achievement_result_id, :published)
+    params.require(:achievement).permit(:event_name, :event_date, :comment, :achievement_category_id, :achievement_result_id, :published, :grant)
   end
   
   def attachment_params

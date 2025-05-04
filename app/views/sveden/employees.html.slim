@@ -1,53 +1,29 @@
 - content_for :title do
-  Сведения об образовательной организации. Руководство. Педагогический (научно-педагогический) состав.
+  | Сведения об образовательной организации. Педагогический состав.
 section.panel
-  h1 Руководство. Педагогический (научно-педагогический) состав.
+  h1 Педагогический состав.
   p= autosub_details("&amp;[Навигация сведений об образовательной организации]").html_safe
-  . itemprop='rucovodstvo'
-    h2 Руководство
-    table
-      thead
-        tr
-          th Ф.И.О.
-          th width='30%' Занимаемая должность
-          th Телефон
-          th Электронная почта
-      tbody
-        - @posts.each do |post|
-          tr
-            td= link_to post.profile.full_name, user_profile_path(post.user), itemprop: 'fio' if post.user
-            td itemprop='post'= post.name
-            td itemprop='telephone'= number_to_phone(post.phone, country_code: 7, area_code: true) if post && !post.phone.empty?
-            td itemprop='email'= mail_to post.division.email, post.division.email, itemprop: 'e-mail' if post.division.email
-  . itemprop='teachingStaff'
-    h2 Педагогический (научно-педагогический) состав
-    - if @administrator_permission
-      = link_to "Скачать список ППС", "/sveden/employees.xls"
-    table
-      thead
-        tr
-          th Ф.И.О.
-          th Занимаемая должность
-          th Преподаваемые дисциплины
-          th Уровень образования
-          th Квалификация
-          th Ученая степень
-          th Ученое звание
-          th Наименование направления подготовки и (или) специальность
-          th Повышение квалификации и (или) профессиональная переподготовка
-          th Общий стаж работы
-          th Стаж работы по специальности
-      tbody
-        - @employees.each do |employee|
-            tr
-              td= link_to employee.full_name, user_profile_path(employee.user), itemprop: 'fio'
-              td itemprop='post'= @posts_hash[employee.user.id][:posts]
-              td itemprop='teachingDiscipline'= @posts_hash[employee.user.id][:subjects].empty? ? employee.discipline : @posts_hash[employee.user.id][:subjects].mb_chars.downcase.to_s
-              td itemprop='teachingLevel' высшее образование
-              td itemprop='teachingQual'
-              td itemprop='degree'= employee.degree.name if employee.degree
-              td itemprop='academStat'= employee.academic_title.name if employee.academic_title
-              td itemprop='employeeQualification'= employee.qualification
-              td itemprop='profDevelopment'= employee.development
-              td itemprop='genExperience'= employee.general_experience
-              td itemprop='specExperience'= employee.special_experience
+  - if @administrator_permission
+    = link_to "Скачать список ППС", "/sveden/employees.xls"
+  table
+    caption Информации о персональном составе педагогических работников образовательной программы
+    thead
+      tr
+        th Код
+        th Наименование профессии, специальности, направления подготовки
+        th Ссылка на страницу о персональном составе педагогических работников образовательной программы
+    tbody
+      - @educational_programs.each do |educational_program|
+        tr(itemprop='teachingOp')
+          td(itemprop='eduCode')
+            = educational_program.code
+            - if educational_program.adaptive
+              .warning.label Адаптированная
+          td(itemprop='eduName')= educational_program.name
+          td(itemprop='optRef')= link_to "Персональный состав педагогических работников образовательной программы #{educational_program.full_name}", educational_program, itemprop: 'addRef'
+  - if @administrator_permission
+    - unless @employees_not_educational_programs.empty?
+      h2 Сотрудники без привязки к дисциплинам
+      ul
+        - @employees_not_educational_programs.sort_by(&:full_name).each do |employee|
+            li= link_to employee.full_name, user_profile_path(employee.user)

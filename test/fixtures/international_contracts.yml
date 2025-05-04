@@ -1,0 +1,17 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  state_name: MyString
+  org_name: MyString
+  dog_name: MyString
+  dog_number: MyString
+  dog_date: 2020-11-05
+  dog_date_end: 2020-11-05
+
+two:
+  state_name: MyString
+  org_name: MyString
+  dog_name: MyString
+  dog_number: MyString
+  dog_date: 2020-11-05
+  dog_date_end: 2020-11-05
